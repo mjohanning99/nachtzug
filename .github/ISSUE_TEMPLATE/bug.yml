@@ -1,0 +1,63 @@
+name: Something went wrong
+description: Nachtzug crashed, made a wrong sound, lost something or did something you didn’t expect.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time! Nachtzug is still young, and every report helps make it better.
+        Don’t worry about getting the words right: just describe what you saw.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, and what did Nachtzug do?
+      placeholder: I pressed Arrange for me while the song was playing, and the window closed.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect instead?
+    validations:
+      required: false
+  - type: textarea
+    id: steps
+    attributes:
+      label: Can you make it happen again?
+      description: If you can, the steps to make it happen. If it only happened once, that’s fine too.
+      placeholder: |
+        1. Open the demo song
+        2. Press Space
+        3. …
+    validations:
+      required: false
+  - type: dropdown
+    id: system
+    attributes:
+      label: Your computer
+      options:
+        - Linux (the AppImage)
+        - Linux (built from source)
+        - Mac (the disk image)
+        - Mac (built with the script)
+        - Windows (the installer)
+        - Windows (built from source)
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Which Nachtzug?
+      description: Help → About Nachtzug shows the version.
+      placeholder: "0.1.0"
+    validations:
+      required: false
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: |
+        Screenshots help a lot. If it happens with one song, you can attach the `.nachtzug` file (drag it in here; rename it to `.txt` first, as GitHub won’t take the ending). If it crashed and you started it from a terminal, the last lines it printed help too.
+    validations:
+      required: false

@@ -1,5 +1,12 @@
 # Changes
 
+## 0.1.1 (15 November 2026)
+
+- **Ready-made downloads for Mac and Windows.** A disk image for Macs with Apple Silicon (macOS 15 or newer) and an installer for Windows 10 and 11, built and self-tested on GitHub for every release. This is the first Windows version: please tell me if anything goes wrong.
+- The Windows build script no longer deletes the program it has just built (MSYS2 counts “Nachtzug” and “Nachtzug.exe” as the same name).
+- The Mac and Windows downloads carry the licences of everything inside them.
+- Forms for bug reports and ideas on GitHub.
+
 ## 0.1.0 (15 November 2026)
 
 The first public version of Nachtzug, a little music machine for acid and Berlin School music.

@@ -4,7 +4,7 @@
 ; icon, and opens .nachtzug songs with Nachtzug.
 
 #ifndef SourceDir
-  #define SourceDir "..\..\build-windows\Nachtzug"
+  #define SourceDir "..\..\build-windows\package\Nachtzug"
 #endif
 #ifndef OutDir
   #define OutDir "..\..\build-windows"

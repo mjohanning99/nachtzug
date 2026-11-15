@@ -1,0 +1,11 @@
+name: An idea
+description: Something you’d like Nachtzug to do, or to do differently.
+labels: [idea]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Your idea
+      description: What would you like, and what would you use it for? The music you’re making helps me understand.
+    validations:
+      required: true

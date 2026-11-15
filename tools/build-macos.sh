@@ -51,6 +51,9 @@ fi
 P="$APP/Contents/PlugIns"
 rm -rf "$P/platforminputcontexts" "$P/virtualkeyboard" "$P/iconengines"
 find "$P/imageformats" -name '*.dylib' ! -name 'libqjpeg.dylib' ! -name 'libqgif.dylib' -delete 2>/dev/null || true
+# the licences: Nachtzug's own and those of Qt, SDL and the rest it carries (docs/THIRD-PARTY.md says which)
+L="$APP/Contents/Resources/licences"; rm -rf "$L"; mkdir -p "$L"
+cp LICENSE LICENSING.md docs/THIRD-PARTY.md "$L/"; cp -R LICENSES "$L/"
 echo "Signing the app for this Mac…"
 codesign --force --deep --sign - "$APP"
 
@@ -66,4 +69,4 @@ echo "Packing Nachtzug.dmg…"
 hdiutil create -volname Nachtzug -srcfolder "$APP" -ov -format UDZO build-macos/Nachtzug.dmg
 echo
 echo "Done: build-macos/Nachtzug.app and build-macos/Nachtzug.dmg"
-echo "On another Mac, the first time: right-click Nachtzug, choose Open, then Open again."
+echo "On another Mac, the first time: click Done when macOS warns, then Open Anyway in System Settings → Privacy & Security."

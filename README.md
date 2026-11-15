@@ -57,13 +57,17 @@ Nachtzug is made for the kind of music that’s built from repeating synthesiser
 
 ## Getting Nachtzug
 
-### Linux: the AppImage
+Download the file for your computer from the [latest release](https://github.com/mjohanning99/nachtzug/releases/latest):
 
-The quickest way: one file that runs on distributions from 2025 on, with nothing to install.
+| Your computer | Download | Then |
+|---|---|---|
+| **Linux**, distributions from 2025 on | `Nachtzug-x86_64.AppImage` | Make it runnable (`chmod +x Nachtzug-x86_64.AppImage`, or tick “Allow executing as program” in its properties) and double-click it. Nothing gets installed. |
+| **Mac** with Apple Silicon, macOS 15 or newer | `Nachtzug-macOS.dmg` | Open it and drag Nachtzug into Applications. The first time, macOS says it can’t check Nachtzug for malware, because it isn’t signed by a registered Apple developer: click **Done**, open **System Settings → Privacy & Security**, scroll down and click **Open Anyway**. |
+| **Windows** 10 or 11 | `Nachtzug-Windows-Setup.exe` | Run the installer. If Windows warns about an unknown publisher, choose **More info**, then **Run anyway**. |
 
-1. Download `Nachtzug-x86_64.AppImage` from the [latest release](https://github.com/mjohanning99/nachtzug/releases/latest).
-2. Make it runnable: `chmod +x Nachtzug-x86_64.AppImage`, or tick “Allow executing as program” in its properties.
-3. Double-click it.
+On a Mac, the **⌘** key does what **Ctrl** does elsewhere. The Windows version is the newest, so if anything there behaves oddly, please [tell me](https://github.com/mjohanning99/nachtzug/issues).
+
+If you’d rather build Nachtzug yourself, or your computer is older than that, read on.
 
 ### Linux: building it yourself
 
@@ -94,7 +98,7 @@ A few extras, if you’d like them:
 - To use a MIDI keyboard, your user has to be in the `audio` group: `sudo usermod -aG audio $USER`, then log out and back in.
 - To update later, run `git pull` in the `nachtzug` folder and then the `cmake --build build -j` line again.
 
-### macOS
+### Mac: building it yourself
 
 It takes about fifteen minutes.
 
@@ -110,11 +114,11 @@ It takes about fifteen minutes.
 
    The script installs everything else it needs, builds the app, checks that it works and packs it into a disk image. It goes quiet for a minute or two while it copies Qt into the app, so please let it finish!
 
-When it says `Done: build-macos/Nachtzug.app and build-macos/Nachtzug.dmg`, open the `.dmg` and drag Nachtzug into your Applications folder. The first time you open it, right-click Nachtzug, choose **Open** and then **Open** again (the app is only signed for your own Mac, not by a registered Apple developer). On a Mac, the **⌘** key does what **Ctrl** does elsewhere.
+When it says `Done: build-macos/Nachtzug.app and build-macos/Nachtzug.dmg`, open the `.dmg` and drag Nachtzug into your Applications folder. A Nachtzug you built yourself opens straight away on your own Mac.
 
-### Windows
+### Windows: building it yourself
 
-Windows support is ready but hasn’t been tried on a real Windows computer yet. If you’d like to be the first: install [MSYS2](https://www.msys2.org), open the **MSYS2 UCRT64** terminal from the Start menu and, in the `nachtzug` folder, run `tools/build-windows.sh`. It builds Nachtzug and makes an installer.
+Install [MSYS2](https://www.msys2.org), open the **MSYS2 UCRT64** terminal from the Start menu and, in the `nachtzug` folder, run `tools/build-windows.sh`. It builds Nachtzug and makes an installer.
 
 ## Your first five minutes
 
@@ -196,7 +200,7 @@ Songs are saved as `.nachtzug` files, which are plain JSON. Settings live in `~/
 
 ### Limits
 
-- Built and tested on Linux; the Mac build works on Apple Silicon. Windows is set up but untested.
+- Built and tested most on Linux. The Mac and Windows builds pass their self-tests on GitHub’s machines, but have had little use on real computers yet.
 - MIDI on macOS and Windows hasn’t been tried with real devices yet.
 - 4/4 time only, up to 12 tracks.
 - No audio tracks: samples play on the drum machine’s eight drums, and the live input is heard but not recorded into the song.

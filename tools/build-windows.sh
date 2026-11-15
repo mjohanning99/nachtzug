@@ -25,7 +25,9 @@ EXE=build-windows/Nachtzug.exe
 "$EXE" --selftest; echo "self-test passed"   # in the build folder, with MSYS2's Qt and its window-less platform
 
 # everything the program needs, in one folder: Qt (with its German texts), SDL and the compiler's own libraries
-DIST=build-windows/Nachtzug
+# not build-windows/Nachtzug: MSYS2 takes "Nachtzug" to mean Nachtzug.exe as well, so emptying that folder would
+# delete the program just built
+DIST=build-windows/package/Nachtzug
 rm -rf "$DIST"; mkdir -p "$DIST"
 cp "$EXE" "$DIST/"
 windeployqt6 --release --no-system-d3d-compiler --no-opengl-sw --translations de "$DIST/Nachtzug.exe"
@@ -39,6 +41,8 @@ for f in "$DIST"/Nachtzug.exe "$DIST"/platforms/*.dll "$DIST"/styles/*.dll; do
 done
 # MSYS2's SDL2 may be "sdl2-compat", which loads SDL3 when the program starts: it has to be there too
 if [ -f /ucrt64/bin/SDL3.dll ]; then cp -f /ucrt64/bin/SDL3.dll "$DIST/"; fi
+# the licences: Nachtzug's own and those of Qt, SDL and the rest it carries (docs/THIRD-PARTY.md says which)
+mkdir -p "$DIST/licences"; cp LICENSE LICENSING.md docs/THIRD-PARTY.md "$DIST/licences/"; cp -r LICENSES "$DIST/licences/"
 
 # the finished folder must run on its own: with MSYS2 out of the way
 ( PATH="/c/Windows/System32:/c/Windows" NZ_TEST_PLATFORM=windows "$DIST/Nachtzug.exe" --selftest ) && echo "self-test of the finished program passed" \
@@ -49,11 +53,12 @@ for c in "/c/Program Files (x86)/Inno Setup 6/ISCC.exe" "/c/Program Files/Inno S
     [ -z "$ISCC" ] && [ -f "$c" ] && ISCC="$c"
 done
 if [ -n "$ISCC" ]; then
-    "$ISCC" //Qp "//DSourceDir=$(cygpath -w "$DIST")" "//DOutDir=$(cygpath -w build-windows)" assets/windows/nachtzug.iss
+    # absolute paths: Inno Setup reads relative ones from the .iss file's own folder
+    "$ISCC" //Qp "//DSourceDir=$(cygpath -wa "$DIST")" "//DOutDir=$(cygpath -wa build-windows)" assets/windows/nachtzug.iss
     echo
     echo "Done: build-windows/Nachtzug-Setup.exe"
 else
-    ( cd build-windows && rm -f Nachtzug-windows.zip && powershell -NoProfile -Command "Compress-Archive -Path Nachtzug -DestinationPath Nachtzug-windows.zip" )
+    ( cd build-windows && rm -f Nachtzug-windows.zip && powershell -NoProfile -Command "Compress-Archive -Path package/Nachtzug -DestinationPath Nachtzug-windows.zip" )
     echo
     echo "Done: build-windows/Nachtzug-windows.zip (install Inno Setup for an installer instead)"
 fi

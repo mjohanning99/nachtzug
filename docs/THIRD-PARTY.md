@@ -27,6 +27,14 @@ The AppImage is one file that carries the libraries Nachtzug needs, taken from D
 - **Their source code** is Debian’s: [sources.debian.org](https://sources.debian.org), by the package names listed in `usr/share/doc/nachtzug/packages.txt`.
 - **Replacing a library** (as the LGPL allows): unpack the AppImage with `--appimage-extract`, swap the library in `squashfs-root/usr/lib/` for your own build, and start `squashfs-root/AppRun`.
 
+## In the macOS and Windows downloads
+
+The Mac disk image and the Windows installer carry Qt and SDL too (SDL 2 as a small layer over SDL 3), with the libraries Qt needs: on a Mac taken from [Homebrew](https://brew.sh), on Windows from [MSYS2](https://www.msys2.org). Among them are ICU, PCRE2, HarfBuzz, FreeType, libpng, libjpeg, zlib, zstd, Brotli, double-conversion, md4c, GLib on Windows, and on Windows the GCC and MinGW runtime (under the GCC Runtime Library Exception). They are under the MIT, BSD, zlib and similar licences, and Qt and GLib under the LGPL ([2.1](../LICENSES/LGPL-2.1-or-later.txt), [3.0](../LICENSES/LGPL-3.0-only.txt)).
+
+- **The licences** are inside each download: on a Mac in `Nachtzug.app/Contents/Resources/licences/`, on Windows in the `licences` folder where Nachtzug is installed.
+- **Their source code** is that of the Homebrew and MSYS2 packages of the same names (formulae.brew.sh, packages.msys2.org).
+- **Replacing a library**: on Windows, swap the DLL in Nachtzug’s folder; on a Mac, swap the library in `Nachtzug.app/Contents/Frameworks/` and sign the app again for your Mac (`codesign --force --deep --sign - Nachtzug.app`).
+
 ## The pictures
 
 The cover painting and the train pictures were made with [Z-Image Turbo](https://huggingface.co/Tongyi-MAI/Z-Image-Turbo) (Apache 2.0) and [FLUX 3 Image Klein](https://huggingface.co/black-forest-labs/flux-3-image-klein) (FLUX Kommunity License) from our own sketches, scenes and photo references, and chosen and edited by hand. Neither model claims any rights to the pictures.

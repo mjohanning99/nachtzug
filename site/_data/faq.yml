@@ -5,7 +5,7 @@
 - q: "Do I need to know music theory?"
   a: "No. You pick a key and a scale from a list (“A natural minor” is a fine start), and Nachtzug does the rest: the chords, which notes fit, and ideas when you’re stuck. You’ll pick up a bit of theory on the way, if you want to."
 - q: "Which computers does it run on?"
-  a: "Linux and macOS. On Linux, the AppImage runs on distributions from 2025 on (Debian 13, Ubuntu 25.04, Fedora 42, Arch, CachyOS and friends); on older ones you can build it yourself in about ten minutes. On a Mac, a script builds it for you. Windows is ready but hasn’t been tried on a real Windows computer yet."
+  a: "Linux, macOS and Windows. On Linux, the AppImage runs on distributions from 2025 on (Debian 13, Ubuntu 25.04, Fedora 42, Arch, CachyOS and friends); on older ones you can build it yourself in about ten minutes. The Mac version needs Apple Silicon and macOS 15 Sequoia or newer, and the Windows version Windows 10 or 11. Windows is the newest, so if anything there behaves oddly, please tell me."
 - q: "Can I use my MIDI keyboard and knobs?"
   a: "Yes. A MIDI keyboard plays the nearest note of the scale, hard notes are accented, and any knob in Nachtzug can learn a knob on your controller. Nachtzug can follow MIDI clock, too."
 - q: "Can I take my music into another program?"

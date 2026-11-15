@@ -18,7 +18,7 @@ layout: default
       <a class="keycap lit big" href="#download">Einsteigen, bitte! <small>Download Nachtzug, it’s free</small></a>
       <a class="keycap big" href="#manual">The manual <small>English · Deutsch · PDF</small></a>
     </p>
-    <p class="cat"><span>For Linux and macOS</span><span>NZ · 001</span></p>
+    <p class="cat"><span>For Linux, macOS and Windows</span><span>NZ · 001</span></p>
   </div>
 </section>
 
@@ -132,6 +132,12 @@ cmake --build build -j</code></pre>
       <p>Install Apple’s command line tools (<code>xcode-select --install</code>) and <a href="https://brew.sh">Homebrew</a>, then unpack the source code and run this in its folder:</p>
       <pre><code>tools/build-macos.sh</code></pre>
       <p>It installs everything else, builds the app and packs it into a disk image.</p>
+    </div>
+    <div class="note">
+      <p class="label">On Windows</p>
+      <p>Install <a href="https://www.msys2.org">MSYS2</a>, open the <b>MSYS2 UCRT64</b> terminal from the Start menu, then unpack the source code and run this in its folder:</p>
+      <pre><code>tools/build-windows.sh</code></pre>
+      <p>It installs the compiler and everything else, builds Nachtzug and makes an installer (with <a href="https://jrsoftware.org/isinfo.php">Inno Setup</a> installed) or a zip.</p>
     </div>
   </div>
 </section>
