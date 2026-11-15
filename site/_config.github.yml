@@ -1,0 +1,7 @@
+# Added on top of _config.yml for GitHub Pages (.github/workflows/pages.yml):
+#   bundle exec jekyll build --config _config.yml,_config.github.yml
+# The site lives under /nachtzug there, and the program and its source come from the latest GitHub release.
+url: "https://mjohanning99.github.io"
+baseurl: "/nachtzug"
+release_downloads: "https://github.com/mjohanning99/nachtzug/releases/latest/download/"
+release_api: "https://api.github.com/repos/mjohanning99/nachtzug/releases/latest"

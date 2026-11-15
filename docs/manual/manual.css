@@ -1,0 +1,280 @@
+/* Nachtzug operation manual: an A5 booklet in the manner of 1980s/90s synth and CD manuals.
+   Rendered by build.py with WeasyPrint. */
+
+@font-face { font-family: "Jost"; src: url(fonts/Jost-400.ttf); font-weight: 400; }
+@font-face { font-family: "Jost"; src: url(fonts/Jost-500.ttf); font-weight: 500; }
+@font-face { font-family: "Jost"; src: url(fonts/Jost-600.ttf); font-weight: 600; }
+@font-face { font-family: "Antiqua"; src: url(fonts/NachtzugAntiqua-Regular.ttf); font-weight: 400; }
+@font-face { font-family: "Antiqua"; src: url(fonts/NachtzugAntiqua-Bold.ttf); font-weight: 700; }
+@font-face { font-family: "Antiqua"; src: url(fonts/EBGaramond-Italic-440.ttf); font-weight: 400; font-style: italic; }
+@font-face { font-family: "NZ Rahmen"; src: url(fonts/NachtzugInitialenRahmen-Regular.ttf); }
+@font-face { font-family: "NZ Buchstabe"; src: url(fonts/NachtzugInitialenBuchstabe-Regular.ttf); }
+@font-face { font-family: "NZ Ornamente"; src: url(fonts/NachtzugOrnamente-Regular.otf); }
+@font-face { font-family: "Crimson"; src: url(fonts/CrimsonPro-400.ttf); font-weight: 400; }
+@font-face { font-family: "Crimson"; src: url(fonts/CrimsonPro-Italic-400.ttf); font-weight: 400; font-style: italic; }
+@font-face { font-family: "Crimson"; src: url(fonts/CrimsonPro-600.ttf); font-weight: 600; }
+@font-face { font-family: "Crimson"; src: url(fonts/CrimsonPro-700.ttf); font-weight: 700; }
+@font-face { font-family: "Barlow"; src: url(fonts/BarlowSemiCondensed-Medium.ttf); font-weight: 500; }
+@font-face { font-family: "Barlow"; src: url(fonts/BarlowSemiCondensed-SemiBold.ttf); font-weight: 600; }
+@font-face { font-family: "Courier"; src: url(fonts/CourierPrime-Regular.ttf); font-weight: 400; }
+@font-face { font-family: "Courier"; src: url(fonts/CourierPrime-Bold.ttf); font-weight: 700; }
+
+:root {
+  --ink: #2b2623; --soft: #6e6054; --paper: #f7f2e8; --panel: #ebe4d6; --line: #cbbfac;
+  --rust: #b4512a; --amber: #e08a2c; --ochre: #c9a24a; --brown: #2b2623; --lcd: #c9cc9a;
+}
+
+@page {
+  size: A5; margin: 17mm 15mm 17mm 17mm; background: var(--paper);
+  @bottom-center { content: none; }
+}
+@page :right {
+  margin: 17mm 15mm 17mm 18mm;
+  @top-right { content: string(chapter); font: 400 8pt "Antiqua"; font-variant-caps: all-small-caps; letter-spacing: .12em; color: var(--soft); vertical-align: bottom; padding-bottom: 3mm; }
+  @bottom-right { content: counter(page); font: 700 8.6pt "Antiqua"; font-variant-numeric: oldstyle-nums; color: var(--ink); }
+  @bottom-left { content: "NACHTZUG · OPERATION MANUAL"; font: 400 7pt "Antiqua"; font-variant-caps: all-small-caps; letter-spacing: .16em; color: var(--line); }
+}
+@page :left {
+  margin: 17mm 18mm 17mm 15mm;
+  @top-left { content: string(chapter); font: 400 8pt "Antiqua"; font-variant-caps: all-small-caps; letter-spacing: .12em; color: var(--soft); vertical-align: bottom; padding-bottom: 3mm; }
+  @bottom-left { content: counter(page); font: 700 8.6pt "Antiqua"; font-variant-numeric: oldstyle-nums; color: var(--ink); }
+  @bottom-right { content: "NACHTZUG · OPERATION MANUAL"; font: 400 7pt "Antiqua"; font-variant-caps: all-small-caps; letter-spacing: .16em; color: var(--line); }
+}
+@page :blank { @top-left { content: none; } @top-right { content: none; } @bottom-left { content: none; } @bottom-right { content: none; } }
+
+@page cover { margin: 0; background: var(--brown);
+  @top-left { content: none; } @top-right { content: none; } @bottom-left { content: none; } @bottom-right { content: none; } }
+@page plain { @top-left { content: none; } @top-right { content: none; } @bottom-right { content: none; } @bottom-left { content: none; } }
+
+html { font: 400 9.8pt/1.22 "Antiqua"; color: var(--ink); hyphens: auto; font-kerning: normal; font-variant-numeric: oldstyle-nums proportional-nums; }
+body { margin: 0; }
+/* paragraphs as in a book: no gap between them, each new one indented, except the first after a heading or picture */
+p { margin: 0; text-align: justify; orphans: 2; widows: 2; }
+p + p { text-indent: 1.4em; }
+p + ul, p + ol, p + table, p + figure, p + .note, p + .tip, p + .warn, p + div, p + h3 { margin-top: 1.8mm; }
+ul + p, ol + p, table + p, figure + p, .note + p, .tip + p, .warn + p, div + p { margin-top: 1.8mm; }
+b, strong { font-weight: 700; }
+em { font-style: italic; }
+a { color: inherit; text-decoration: none; }
+ul, ol { margin: 0 0 2.4mm; padding-left: 4.5mm; }
+li { margin-bottom: .8mm; }
+code, .mono { font-family: "Courier"; font-size: 8.4pt; }
+
+/* ---------- headings ---------- */
+.chapter { break-before: page; string-set: chapter attr(data-title); }
+.chapter.cont { break-before: page; }
+.chap-head { margin: 0 0 6mm; padding-top: 2mm; }
+.chap-num { font: 700 40pt/1 "Antiqua"; font-variant-numeric: lining-nums; color: var(--rust); float: left; margin-right: 4mm; margin-top: -2mm; }
+.chap-kicker { font: 400 9pt "Antiqua"; font-variant-caps: all-small-caps; letter-spacing: .16em; color: var(--soft); }
+h1 { font: 700 21pt/1.1 "Antiqua"; letter-spacing: .005em; margin: .2mm 0 0; }
+.stripes { clear: both; width: 46mm; height: .9mm; margin-top: 3mm; background: var(--amber); border-top: .9mm solid var(--rust); border-bottom: .9mm solid var(--ochre); }
+.flourish { display: block; clear: both; width: 66mm; height: 6.6mm; margin: 2mm 0 0 -1.5mm; }
+h2 { font: 700 11.4pt/1.2 "Antiqua"; font-variant-caps: small-caps; letter-spacing: .05em; margin: 5mm 0 2mm; padding-bottom: 1mm; border-bottom: .5pt solid var(--line); break-after: avoid; }
+h2 .n { color: var(--rust); margin-right: 1.6mm; }
+h3 { font: 700 9.8pt/1.2 "Antiqua"; letter-spacing: .01em; margin: 3.4mm 0 1.2mm; break-after: avoid; color: var(--rust); }
+.lede { font-size: 10.6pt; line-height: 1.25; font-style: italic; color: #4a403a; margin-bottom: 3mm; }
+.lede + p { text-indent: 0; }
+
+/* ---------- panel labels, keys, LCD ---------- */
+.ctl { font: 600 7pt "Jost"; letter-spacing: .1em; text-transform: uppercase; }
+.key { display: inline-block; text-indent: 0; font: 600 6.8pt/1 "Jost"; padding: .5mm 1.5mm .6mm; text-align: center;
+  background: linear-gradient(#fbf8f2, #e4dccd); border: .5pt solid #a8998a; border-bottom-width: 1.3pt; border-radius: 1mm; color: var(--ink); white-space: nowrap; vertical-align: .2mm; }
+.key.dark { background: linear-gradient(#4a413b, #2b2623); color: #f3ece0; border-color: #1a1614; }
+.lcdtxt { font: 700 7.6pt "Courier"; color: #3b2a1b; background: #f0e1ba; border: .5pt solid #8f806c; padding: .1mm 1.2mm; border-radius: .6mm; letter-spacing: .04em; }
+
+/* ---------- figures ---------- */
+figure { margin: 2.5mm 0 3.5mm; break-inside: avoid; }
+figure img { width: 100%; display: block; border: .6pt solid #b8aa96; border-radius: 1mm; box-shadow: 0 .6mm 0 #d8cfbf; }
+figure.bare img { border: none; box-shadow: none; }
+figcaption { font: italic 400 8.4pt/1.3 "Antiqua"; color: var(--soft); margin-top: 1.6mm; }
+figcaption b { font-style: normal; font-weight: 700; font-variant-caps: all-small-caps; letter-spacing: .1em; margin-right: 1.4mm; color: var(--ink); }
+figcaption b { color: var(--rust); font-weight: 600; letter-spacing: .14em; margin-right: 1mm; }
+.half { width: 56%; float: right; margin: 0 0 2mm 4mm; }
+.narrow { width: 44%; float: right; margin: .5mm 0 2mm 4mm; }
+.clear { clear: both; }
+
+/* ---------- callout panel picture ---------- */
+.panel { position: relative; margin: 2mm 0 3mm; }
+.panel img { width: 100%; display: block; border: .6pt solid #b8aa96; border-radius: 1mm; }
+.co { position: absolute; width: 4.2mm; height: 4.2mm; margin: -2.1mm 0 0 -2.1mm; border-radius: 50%; background: var(--rust); color: #fff;
+  font: 600 6.4pt/4.2mm "Jost"; text-align: center; border: .7pt solid #fff; box-shadow: 0 0 0 .4pt var(--rust); }
+.legend { columns: 2; column-gap: 5mm; font-size: 8.2pt; margin: 0; padding: 0; list-style: none; }
+.legend li { break-inside: avoid; margin-bottom: 1.4mm; padding-left: 5.6mm; text-indent: -5.6mm; line-height: 1.28; }
+.legend .dot { display: inline-block; width: 3.8mm; height: 3.8mm; border-radius: 50%; background: var(--rust); color: #fff; font: 600 6pt/3.8mm "Jost"; text-align: center; text-indent: 0; margin-right: 1.8mm; vertical-align: .1mm; }
+
+/* ---------- tables ---------- */
+table { width: 100%; border-collapse: collapse; margin: 1.5mm 0 3.5mm; font-size: 8.6pt; line-height: 1.28; break-inside: avoid; }
+/* the long reference tables may run over a page; every other table stays in one piece */
+table.keys, table.lib, table.spec { break-inside: auto; }
+tr { break-inside: avoid; }
+th { font: 700 8pt "Antiqua"; font-variant-caps: all-small-caps; letter-spacing: .1em; text-align: left; color: var(--soft); border-bottom: .8pt solid var(--ink); padding: 0 2mm 1mm 0; }
+td { border-bottom: .4pt solid var(--line); padding: 1.1mm 2mm 1.1mm 0; vertical-align: top; }
+tr { break-inside: avoid; }
+td:first-child, th:first-child { width: 34%; }
+td.c, th.c { text-align: center; }
+
+/* ---------- boxes ---------- */
+.note, .tip, .warn { break-inside: avoid; margin: 3mm 0; padding: 2mm 2.6mm 1.6mm; font-size: 8.7pt; line-height: 1.32; border-radius: 1mm; }
+.note p, .tip p, .warn p { margin-bottom: 1mm; text-align: left; }
+.note { background: var(--panel); border-left: 2.2pt solid var(--ink); }
+/* what a task is about and how long it takes, before its steps */
+.task { break-inside: avoid; margin: 3mm 0; padding: 1.8mm 2.6mm; border-top: .6pt solid var(--line); border-bottom: .6pt solid var(--line); font-size: 9pt; line-height: 1.3; }
+.task p { text-align: left; margin: 0; }
+.task p + p { text-indent: 0; margin-top: .6mm; }
+.tip { background: #f5e2c4; border-left: 2.2pt solid var(--amber); }
+.warn { background: #f1d6c8; border-left: 2.2pt solid var(--rust); }
+.note::before, .tip::before, .warn::before { display: block; font: 700 8.4pt "Antiqua"; font-variant-caps: all-small-caps; letter-spacing: .16em; margin-bottom: .6mm; }
+.note::before { content: "NOTE"; }
+.tip::before { content: "TIP"; color: #9c5a12; }
+.warn::before { content: "MIND THIS"; color: var(--rust); }
+
+/* ---------- steps ---------- */
+ol.steps { list-style: none; padding: 0; counter-reset: s; }
+ol.steps > li { counter-increment: s; position: relative; padding-left: 8mm; margin-bottom: 2.6mm; min-height: 6mm; }
+ol.steps > li::before { content: counter(s); position: absolute; left: 0; top: .2mm; width: 5.6mm; height: 5.6mm; border-radius: 50%;
+  background: var(--ink); color: var(--paper); font: 700 9pt/5.6mm "Antiqua"; font-variant-numeric: lining-nums; text-align: center; }
+ol.steps > li b.t { font: 700 9.4pt "Antiqua"; font-variant-caps: small-caps; letter-spacing: .04em; display: block; margin-bottom: .4mm; }
+
+/* ---------- keyboard map ---------- */
+.kbd { margin: 2mm 0 3mm; break-inside: avoid; }
+.kbd .row { display: flex; gap: 1mm; margin-bottom: 1mm; }
+.kbd .lab { width: 13mm; font: 600 6pt/7mm "Jost"; letter-spacing: .12em; color: var(--soft); text-transform: uppercase; text-align: right; padding-right: 1.5mm; }
+.kbd .k { width: 9.1mm; height: 7mm; border: .5pt solid #a8998a; border-bottom-width: 1.4pt; border-radius: 1mm; background: linear-gradient(#fbf8f2, #e4dccd);
+  position: relative; font: 600 7.4pt "Jost"; }
+.kbd .k span { position: absolute; left: 1.1mm; top: .7mm; }
+.kbd .k i { position: absolute; right: 1mm; bottom: .5mm; font: 400 5.6pt "Courier"; font-style: normal; color: var(--rust); }
+.kbd .k.root { background: linear-gradient(#4a413b, #2b2623); color: #f3ece0; border-color: #1a1614; }
+.kbd .k.root i { color: var(--amber); }
+.kbd .r2 { margin-left: 2.2mm; } .kbd .r3 { margin-left: 4.4mm; }
+
+/* ---------- contents ---------- */
+.toc { list-style: none; padding: 0; margin: 0; }
+.toc li { display: flex; align-items: baseline; margin-bottom: 1.05mm; font-size: 9.4pt; }
+.toc li .tn { font: 700 9.4pt "Antiqua"; font-variant-numeric: lining-nums; color: var(--rust); width: 7mm; }
+.toc li a { flex: none; }
+.toc li .dots { flex: 1; margin: 0 1.5mm; }
+.toc li { border-bottom: .4pt solid #e2d9c9; padding-bottom: .3mm; margin-bottom: .6mm !important; }
+.toc li .pg { font: 400 9.4pt "Antiqua"; font-variant-numeric: oldstyle-nums tabular-nums; }
+.toc li .pg::after { content: target-counter(attr(data-href), page); }
+.toc li.sub { font-size: 8.6pt; margin-left: 7mm; color: #4a403a; margin-bottom: .55mm; }
+
+/* ---------- index ---------- */
+.index { columns: 3; column-gap: 4mm; font-size: 7.8pt; line-height: 1.3; }
+.index .letter { font: 700 10pt "Antiqua"; color: var(--rust); margin: 2mm 0 .6mm; break-after: avoid; }
+.index div.e { break-inside: avoid; padding-left: 3mm; text-indent: -3mm; }
+.index a::after { content: ", " target-counter(attr(href), page); font: 400 7.8pt "Antiqua"; font-variant-numeric: oldstyle-nums; color: var(--soft); }
+
+/* ---------- specs ---------- */
+table.spec td:first-child { font: 700 8pt "Antiqua"; font-variant-caps: all-small-caps; letter-spacing: .1em; color: var(--soft); width: 34%; padding-top: 1.5mm; }
+
+/* ---------- notes pages ---------- */
+.notes-page { break-before: page; page: plain; }
+.sheet-page { break-before: page; page: plain; }
+.notes-page h1 { font-size: 14pt; font-variant-caps: all-small-caps; letter-spacing: .2em; margin-bottom: 6mm; }
+.ruled { height: 140mm; background: repeating-linear-gradient(to bottom, transparent 0 6.8mm, var(--line) 6.8mm 7.1mm); }
+
+/* ---------- cover ---------- */
+.cover, .back { page: cover; height: 210mm; position: relative; color: #f3ece0; overflow: hidden; }
+.back { break-before: page; }
+/* one wide print wraps around the booklet: the front shows its right half, the back its left half */
+.cover .art, .back .art { position: absolute; top: 0; width: 321.4mm; height: 125mm; object-fit: cover; }
+.cover .art { left: 0; } .back .art { left: -173.4mm; }
+.cover .band, .back .band { position: absolute; left: 0; right: 0; height: 2.6mm; }
+.b1 { top: 125mm; background: var(--rust); } .b2 { top: 128.4mm; background: var(--amber); } .b3 { top: 131.8mm; background: var(--ochre); }
+.cover .seal { position: absolute; right: 10mm; top: 117.5mm; width: 36mm; filter: drop-shadow(0 .8mm 1.5mm rgba(0, 0, 0, .45)); }
+.cover .word { position: absolute; left: 12.4mm; top: 144mm; font: 700 34pt/1 "Antiqua"; letter-spacing: .02em; }
+.cover .sub { position: absolute; left: 13.2mm; top: 160mm; font: 400 12pt "Antiqua"; letter-spacing: .01em; color: #d9c7ad; }
+.cover .om { position: absolute; left: 13mm; top: 170mm; font: 400 italic 13pt "Antiqua"; color: #e8b77a; }
+.cat, .cat2 { position: absolute; bottom: 9mm; font: 400 8.6pt "Antiqua"; letter-spacing: .01em; color: #9c8a78; }
+.cat { right: 13mm; } .cat2 { left: 13mm; }
+.back .inner { position: absolute; left: 13mm; right: 15mm; top: 143mm; }
+.back h1 { font-size: 17pt; letter-spacing: .02em; color: #f3ece0; margin-bottom: 2.4mm; }
+.back p { color: #e6d9c6; font-size: 8.8pt; text-align: left; margin-bottom: 1.6mm; }
+.back ul { color: #e6d9c6; font-size: 8.2pt; padding-left: 0; list-style: none; margin: 0; }
+.back li { margin-bottom: .5mm; padding-left: 4mm; text-indent: -4mm; }
+.back li::before { content: "■"; color: var(--amber); font-size: 5.5pt; margin-right: 2mm; vertical-align: .4mm; }
+
+/* ---------- small things ---------- */
+.signal { margin: 3mm 0 4mm; break-inside: avoid; }
+.signal svg { width: 100%; }
+.cols2 { columns: 2; column-gap: 5mm; }
+.cols2 > * { break-inside: avoid; }
+.small { font-size: 8.2pt; }
+.center { text-align: center; }
+/* a raised drop cap, as on the website: the initial is about three lines tall, but only the first two lines of text
+   wrap around it; the rest rises above the paragraph, and its foot stands on the second line's baseline. The float
+   itself is just under two lines (2 × 11.96 pt) deep, so the third line runs the full width again; the frame and the
+   letter (two fonts laid over each other, in ink and rust) hang up out of it. */
+.dc { float: left; position: relative; font-size: 34pt; line-height: 1; width: 1em; height: 22.6pt; margin: 0 1.5mm 0 -.4mm; overflow: visible; }
+.dc span { position: absolute; left: 0; top: -10.6pt; line-height: 1; }
+p.dropcap { margin-top: 6.5mm; }
+.dc .r { font-family: "NZ Rahmen"; color: var(--ink); }
+.dc .b { font-family: "NZ Buchstabe"; color: var(--rust); }
+.dropcap { text-indent: 0; }
+.sig { font-style: italic; text-align: right; margin-top: 4mm; color: var(--soft); }
+.panelch { break-before: left; }
+
+/* transport keys drawn as icons, since the text fonts carry no media symbols */
+.key.ico { width: 3.2mm; height: 2.6mm; padding: .5mm 1.2mm .6mm; background-repeat: no-repeat; background-position: center; background-size: 2.2mm 2.2mm, 100% 100%; vertical-align: -.4mm; }
+.key.ico.start { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><rect x='1.5' y='1.5' width='1.4' height='7' fill='%232b2623'/><path d='M8.5 1.5 L3.4 5 L8.5 8.5z' fill='%232b2623'/></svg>"), linear-gradient(#fbf8f2, #e4dccd); }
+.key.ico.play { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M2.5 1.2 L8.8 5 L2.5 8.8z' fill='%232b2623'/></svg>"), linear-gradient(#fbf8f2, #e4dccd); }
+.key.ico.stop { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><rect x='2' y='2' width='6' height='6' fill='%232b2623'/></svg>"), linear-gradient(#fbf8f2, #e4dccd); }
+.key.ico.rec { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><circle cx='5' cy='5' r='3.4' fill='%23c8382a'/></svg>"), linear-gradient(#fbf8f2, #e4dccd); }
+
+/* text beside a narrow picture: ragged right, so the short lines don't gape */
+.narrow ~ p, .half ~ p, .narrow ~ ul li { text-align: left; }
+thead { display: table-header-group; }
+td .key, li .key, p .key { line-height: 1; }
+.nw { white-space: nowrap; }
+
+/* ---------- contents as a railway line ---------- */
+.route { position: relative; margin-top: 2mm; }
+.route .stop::before { content: ""; position: absolute; left: 11.2mm; top: 0; bottom: 0; width: 1.5mm; background: var(--rust); }
+.route .board + .stop::before { top: 50%; }
+.route .stop.last::before { bottom: 50%; }
+.route .board { display: flex; justify-content: space-between; font: 400 8pt "Antiqua"; font-variant-caps: all-small-caps; letter-spacing: .2em; color: var(--soft);
+  border-bottom: .8pt solid var(--ink); padding: 0 0 1mm 16.5mm; margin-bottom: 1.6mm; }
+.route .stop { position: relative; display: flex; align-items: center; min-height: 4.9mm; }
+.route .no { width: 8mm; font: 700 10pt "Antiqua"; font-variant-numeric: lining-nums; color: var(--rust); text-align: right; padding-right: 1.6mm; }
+.route .dot { position: absolute; border-radius: 50%; }
+.route .major .dot { left: 9.6mm; width: 4.7mm; height: 4.7mm; margin-top: 0; background: var(--paper); border: 1.1mm solid var(--ink); box-sizing: border-box; }
+.route .minor .dot { left: 10.85mm; width: 2.2mm; height: 2.2mm; background: var(--paper); border: .45mm solid var(--ink); box-sizing: border-box; }
+.route .minor .dot::after { content: ""; }
+.route a { margin-left: 8.5mm; flex: 1; }
+.route .major a { font: 700 10pt "Antiqua"; font-variant-caps: small-caps; letter-spacing: .03em; }
+.route .minor a { font-size: 8.6pt; color: #4a403a; }
+.route .minor { min-height: 3.75mm; }
+.route .pg { font: 700 9pt "Courier"; background: var(--brown); color: #f1c27a; padding: .2mm 1.4mm; border-radius: .6mm; min-width: 6mm; text-align: center; }
+.route .minor .pg { background: none; color: var(--soft); font-weight: 400; font-size: 8pt; }
+.route .pg::after { content: target-counter(attr(data-href), page, decimal-leading-zero); }
+.route .terminus { margin: 1.4mm 0 0 16.5mm; font: italic 9pt "Antiqua"; color: var(--soft); }
+
+/* ---------- knob rows: recipes and patch sheets ---------- */
+.recipe { break-inside: avoid; margin-bottom: 3mm; }
+.recipe h2 .for { float: right; font: italic 400 8.6pt "Antiqua"; letter-spacing: 0; font-variant-caps: normal; color: var(--soft); margin-top: .8mm; }
+.panelrow { display: flex; flex-wrap: wrap; gap: 2mm; margin: 0 0 2mm; break-inside: avoid; }
+.grp { border: .6pt solid #b8aa96; border-radius: 1.4mm; background: var(--panel); padding: 1.2mm 1.6mm 1.4mm; white-space: nowrap; flex: 0 0 auto; }
+.grp .gt { display: block; font: 600 5.6pt "Jost"; letter-spacing: .18em; text-transform: uppercase; color: var(--soft); margin-bottom: .3mm; }
+.kn { display: inline-block; text-align: center; width: 11.4mm; vertical-align: bottom; white-space: normal; }
+.kn svg { width: 9.6mm; height: 9.6mm; display: block; margin: 0 auto; }
+.kl { display: block; font: 500 5.3pt/1.15 "Jost"; color: var(--ink); text-align: center; margin-top: .3mm; height: 3.4mm; }
+.sl { display: inline-block; text-align: center; vertical-align: bottom; margin-right: 1.4mm; }
+.sv { display: inline-flex; border: .6pt solid var(--ink); border-radius: .8mm; overflow: hidden; background: var(--paper); margin-bottom: 2.4mm; }
+.sv .o { font: 600 5.2pt/1 "Jost"; padding: 1mm 1.1mm; border-left: .4pt solid #b8aa96; }
+.sv .o:first-child { border-left: none; }
+.sv .o.on { background: var(--ink); color: #f1c27a; }
+.recipe ol.steps { margin-top: 2.4mm; }
+.recipe ol.steps > li { font-size: 8.8pt; margin-bottom: 1.6mm; }
+.sheet-page .sheet-head { display: flex; align-items: flex-end; justify-content: space-between; border-bottom: .8pt solid var(--ink); padding-bottom: 1.4mm; margin-bottom: 3mm; }
+.sheet-page h1 { font-size: 12pt; letter-spacing: .26em; }
+.sheet-page .fields { display: flex; gap: 3mm; }
+.sheet-page .fields span { font: 600 5.6pt "Jost"; letter-spacing: .18em; text-transform: uppercase; color: var(--soft); width: 22mm; border-bottom: .5pt solid var(--line); padding-bottom: 3.6mm; }
+.sheet-page .panelrow { margin-bottom: 2.4mm; }
+.sheet-page .grp.wide { flex: 0 0 auto; }
+.sheet-page .kn { width: 10.6mm; } .sheet-page .kn svg { width: 9mm; height: 9mm; }
+.sheet-page .panelrow { margin-bottom: 1.8mm; }
+.sheet-notes { margin-top: 2mm; height: 28mm; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='24'><rect y='23' width='10' height='1' fill='%23cbbfac'/></svg>") repeat; background-size: 4mm 6.4mm; }
+.sheet-notes span { font: 600 5.6pt "Jost"; letter-spacing: .18em; text-transform: uppercase; color: var(--soft); }
+
+/* the sample library list: a narrow column for the kind, the sounds get the room */
+table.lib td:first-child, table.lib th:first-child { width: 20mm; }

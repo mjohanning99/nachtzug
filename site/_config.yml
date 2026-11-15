@@ -1,0 +1,13 @@
+# The Nachtzug website. Built with Jekyll; on GitHub Pages with _config.github.yml on top (.github/workflows/pages.yml).
+# Locally: sh prepare.sh, then bundle exec jekyll serve (see README.md).
+title: "Nachtzug"
+description: "A little music machine for acid and Berlin School music. Every note is in the song’s scale, so you can make music without being able to play the keyboard."
+url: "https://nachtzug.audio"     # change when the domain is decided
+baseurl: ""
+lang: en-GB
+timezone: Europe/Berlin
+markdown: kramdown
+sass:
+  style: compressed
+exclude: [Gemfile, Gemfile.lock, prepare.sh, README.md, vendor, .bundle, _config.github.yml]
+include: [downloads]

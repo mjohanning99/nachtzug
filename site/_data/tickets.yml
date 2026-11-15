@@ -1,0 +1,40 @@
+# The download tickets, drawn as Edmondson card tickets. "file" is looked for in downloads/ (the build puts it there);
+# downloads/latest.json adds the version, size and date. "card" is the short line printed on the card, "colour" the
+# card's colour: first (green, first class), second (brown), white (the plain card used when the coloured ones ran out),
+# striped (brown with a red stripe).
+- id: linux
+  system: Linux
+  what: AppImage, one file
+  file: Nachtzug-x86_64.AppImage
+  valid: "64-bit PCs · distributions from 2025 on"
+  how: "Download it, make it runnable (right-click → Properties → Allow executing, or <code>chmod +x Nachtzug-x86_64.AppImage</code>) and double-click it. Nothing gets installed."
+  class: "1"
+  card: "Linux · AppImage"
+  colour: first
+- id: mac
+  system: macOS
+  what: built on your Mac
+  file: ""
+  valid: "Macs with Apple Silicon"
+  how: "A script builds Nachtzug and packs it into a disk image for you. It takes about fifteen minutes, most of it waiting; the steps are in the README."
+  class: "2"
+  card: "macOS · built on your Mac"
+  colour: second
+- id: windows
+  system: Windows
+  what: on its way
+  file: ""
+  valid: "Windows 10 and 11 · not tried on a real PC yet"
+  how: "Everything is ready for Windows, but nobody has run it on a real Windows computer yet. If you’d like to be the first, the README says how to build it."
+  class: "2"
+  card: "Windows · on its way"
+  colour: white
+- id: source
+  system: Source code
+  what: for tinkerers
+  file: Nachtzug-source.tar.gz
+  valid: "Linux, macOS, Windows · <span class=\"nw\">C++20</span>, Qt 6, SDL2"
+  how: "A handful of commands and you have the very newest Nachtzug. The steps are below, and in the README inside."
+  class: "2"
+  card: "Source code · C++20"
+  colour: striped

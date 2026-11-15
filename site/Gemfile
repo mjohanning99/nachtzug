@@ -1,0 +1,10 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+gem "jekyll", "~> 4.3"
+gem "jekyll-sass-converter", "~> 3.0"   # Dart Sass, prebuilt: nothing to compile
+gem "csv"
+gem "base64"
+gem "logger"
+gem "bigdecimal"

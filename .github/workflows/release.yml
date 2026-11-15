@@ -1,0 +1,47 @@
+# For every version tag (v0.1.0 ...): builds the Linux AppImage in Debian 13, checks it with its self-test, and puts
+# it on the version's GitHub release with the source code and both manuals. The website's download tickets point
+# at the latest release.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  appimage:
+    runs-on: ubuntu-latest
+    container: debian:13
+    steps:
+      - name: Tools
+        run: |
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            build-essential pkg-config cmake qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-l10n-tools qt6-qpa-plugins qt6-wayland \
+            libsdl2-dev libasound2-dev libgl-dev file curl git ca-certificates
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: The AppImage
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          sh tools/build-appimage.sh
+      - name: The source code
+        run: git archive --format=tar.gz --prefix=nachtzug/ -o dist/Nachtzug-source.tar.gz HEAD
+      - name: The release notes
+        run: |
+          v="${GITHUB_REF_NAME#v}"
+          awk -v v="$v" '$0 ~ "^## "v"( |$)" {on=1; next} on && /^## / {exit} on {print}' CHANGELOG.md > dist/notes.md
+          printf '\n**Linux:** download the AppImage, make it runnable (`chmod +x Nachtzug-x86_64.AppImage`) and start it. **macOS and Windows:** build from the source code; the README explains how.\n' >> dist/notes.md
+      - name: Onto the release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Nachtzug ${{ github.ref_name }}
+          body_path: dist/notes.md
+          files: |
+            dist/Nachtzug-x86_64.AppImage
+            dist/Nachtzug-source.tar.gz
+            docs/Nachtzug-Manual.pdf
+            docs/Nachtzug-Handbuch.pdf

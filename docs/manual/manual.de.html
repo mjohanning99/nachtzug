@@ -1,0 +1,1032 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Nachtzug · Bedienungsanleitung</title>
+<meta name="author" content="Nachtzug">
+<meta name="description" content="Bedienungsanleitung für Nachtzug, einen Sequencer und Synthesizer für Acid und Berliner Schule">
+<link rel="stylesheet" href="manual.css">
+<link rel="stylesheet" href="tabs.css">
+<style>
+  @page :right { @bottom-left { content: "NACHTZUG · BEDIENUNGSANLEITUNG"; } }
+  @page :left { @bottom-right { content: "NACHTZUG · BEDIENUNGSANLEITUNG"; } }
+  .note::before { content: "HINWEIS"; }
+  .tip::before { content: "TIPP"; }
+  .warn::before { content: "ACHTUNG"; }
+  .legend { font-size: 7.9pt; }
+  .legend li { margin-bottom: 1mm; }
+</style>
+</head>
+<body>
+
+<!-- ======================= UMSCHLAG ======================= -->
+<section class="cover">
+  <img class="art" src="img/cover-wrap.jpg" alt="">
+  <div class="band b1"></div><div class="band b2"></div><div class="band b3"></div>
+  <img class="seal" src="../../assets/logo/enamel.svg" alt="">
+  <div class="word">Nachtzug</div>
+  <div class="sub">Sequencer · Synthesizer</div>
+  <div class="om">Bedienungsanleitung</div>
+  <div class="cat2">Für Linux und macOS</div>
+  <div class="cat">NZ · 001</div>
+</section>
+
+<!-- ======================= WILLKOMMEN ======================= -->
+<section class="chapter" data-title="Willkommen" style="page: plain">
+  <div class="chap-head">
+    <div class="chap-kicker">Bevor es losgeht</div>
+    <h1>Einsteigen, bitte!</h1>
+    <div class="stripes"></div>
+  </div>
+  <p>Willkommen im Nachtzug! Nachtzug ist eine kleine Musikmaschine für Musik aus sich wiederholenden Synthesizer-Patterns: quietschende Acid-Basslines, rollende Sequenzen der Berliner Schule, langsame Klangflächen und einfache Melodien obendrauf, getragen von einem Drummer, der nie müde wird.</p>
+  <p>Man muss dafür weder Keyboard spielen können noch Musiktheorie kennen, denn jede Note, die sich in Nachtzug setzen lässt, gehört zur Tonleiter des Songs – falsch klingen kann also eigentlich nichts. Jede Spur kann sich außerdem eigene Ideen ausdenken, der Drummer spielt ganz von selbst, und jede Änderung wartet, während die Musik läuft, höflich auf den nächsten Takt.</p>
+  <p>Kaputt machen kann man übrigens nichts: Jede Änderung lässt sich (so oft wie nötig) rückgängig machen, und Nachtzug legt nebenbei eine Ersatzkopie an.</p>
+  <p>Dieses Heft folgt der Maschine von der Frontplatte nach innen. Es empfiehlt sich, zuallererst <a href="#quick">Kapitel 1</a> zu lesen, denn dort läuft – nach gerade einmal zehn Minuten – bereits ein ganz eigener Song. Die übrigen Kapitel können übrigens – abhängig davon, über welchen Teil des Programmes man mehr wissen möchte – in praktisch komplett beliebiger Reihenfolge gelesen werden.</p>
+  <div class="note"><p>Fast jeder Knopf, jeder Regler und jede Ecke des Fensters erklärt sich übrigens selbst: Ruht die Maus darauf, erscheint eine kurze Beschreibung – sowohl neben dem Zeiger als auch in der Statuszeile unten im Fenster.</p></div>
+  <h2>Zu dieser Anleitung</h2>
+  <ul>
+    <li>Bedienelemente stehen so da, wie sie auf dem Gerät beschriftet sind: <span class="ctl">Neu würfeln</span>.</li>
+    <li>Tasten der Computertastatur sehen so aus: <span class="key">Leertaste</span> <span class="nw"><span class="key">Strg</span>+<span class="key">Z</span></span> (auf dem Mac <span class="key">⌘</span> statt <span class="key">Strg</span>).</li>
+    <li>Was die Anzeige zeigt, steht so da: <span class="lcdtxt">TAKT 1 · SCHLAG 1</span>.</li>
+    <li>Menüeinträge sind mit Pfeilen verbunden: <b>Datei → Export: Audiodatei, Spuren oder MIDI…</b></li>
+  </ul>
+  <p class="sig">Gute Reise!</p>
+</section>
+
+<!-- ======================= INHALT ======================= -->
+<section class="chapter cont" data-title="Inhalt" style="page: plain">
+  <div class="chap-head">
+    <div class="chap-kicker">Inhalt</div>
+    <h1>Fahrplan</h1>
+    <div class="stripes"></div>
+  </div>
+  <div class="route">
+  <div class="board"><span>Bahnhof</span><span>Seite</span></div>
+  <div class="stop major"><span class="no"></span><span class="dot"></span><a href="#panel">Gerätebeschreibung</a><span class="pg" data-href="#panel"></span></div>
+  <div class="stop major"><span class="no">1</span><span class="dot"></span><a href="#quick">Der erste Song</a><span class="pg" data-href="#quick"></span></div>
+  <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#lessons">Lektionen</a><span class="pg" data-href="#lessons"></span></div>
+  <div class="stop major"><span class="no">2</span><span class="dot"></span><a href="#topbar">Die obere Leiste</a><span class="pg" data-href="#topbar"></span></div>
+  <div class="stop major"><span class="no">3</span><span class="dot"></span><a href="#notes">Spuren und Patterns</a><span class="pg" data-href="#notes"></span></div>
+  <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#ideas">Ideen holen</a><span class="pg" data-href="#ideas"></span></div>
+  <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#editing">Noten bearbeiten</a><span class="pg" data-href="#editing"></span></div>
+  <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#playing">Mitspielen und aufnehmen</a><span class="pg" data-href="#playing"></span></div>
+  <div class="stop major"><span class="no">4</span><span class="dot"></span><a href="#drummer">Der Auto-Drummer</a><span class="pg" data-href="#drummer"></span></div>
+  <div class="stop major"><span class="no">5</span><span class="dot"></span><a href="#sound">Der Synthesizer</a><span class="pg" data-href="#sound"></span></div>
+  <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#simple">Einfach oder Komplett</a><span class="pg" data-href="#simple"></span></div>
+  <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#osc">Oszillatoren</a><span class="pg" data-href="#osc"></span></div>
+  <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#filter">Filter</a><span class="pg" data-href="#filter"></span></div>
+  <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#kit">Drum-Kit und eigene Samples</a><span class="pg" data-href="#kit"></span></div>
+  <div class="stop major"><span class="no">6</span><span class="dot"></span><a href="#lines">Klänge in Bewegung</a><span class="pg" data-href="#lines"></span></div>
+  <div class="stop major"><span class="no">7</span><span class="dot"></span><a href="#timeline">Die Song-Zeitleiste</a><span class="pg" data-href="#timeline"></span></div>
+  <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#chords">Akkorde</a><span class="pg" data-href="#chords"></span></div>
+  <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#arrange">Arrangieren lassen</a><span class="pg" data-href="#arrange"></span></div>
+  <div class="stop major"><span class="no">8</span><span class="dot"></span><a href="#loops">Das Loop-Raster</a><span class="pg" data-href="#loops"></span></div>
+  <div class="stop major"><span class="no">9</span><span class="dot"></span><a href="#mixer">Mixer, Export, Einstellungen</a><span class="pg" data-href="#mixer"></span></div>
+  <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#export">Exportieren</a><span class="pg" data-href="#export"></span></div>
+  <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#settings">Einstellungen und Audio</a><span class="pg" data-href="#settings"></span></div>
+  <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#samples">Samples: Bibliothek und eigene</a><span class="pg" data-href="#samples"></span></div>
+  <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#midi">MIDI</a><span class="pg" data-href="#midi"></span></div>
+  <div class="stop major"><span class="no">10</span><span class="dot"></span><a href="#recipes">Klangrezepte</a><span class="pg" data-href="#recipes"></span></div>
+  <div class="stop major"><span class="no">A</span><span class="dot"></span><a href="#appendix">Anhang</a><span class="pg" data-href="#appendix"></span></div>
+  <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#shortcuts">Tastenkürzel</a><span class="pg" data-href="#shortcuts"></span></div>
+  <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#trouble">Wenn etwas nicht klappt</a><span class="pg" data-href="#trouble"></span></div>
+  <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#spec">Technische Daten</a><span class="pg" data-href="#spec"></span></div>
+  <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#library">Die Sample-Bibliothek</a><span class="pg" data-href="#library"></span></div>
+  <div class="stop minor last"><span class="no"></span><span class="dot"></span><a href="#index">Stichwortverzeichnis</a><span class="pg" data-href="#index"></span></div>
+  <div class="terminus">Endstation · Patch-Bögen hinten im Heft</div>
+</div>
+</section>
+
+<!-- ======================= GERÄTEBESCHREIBUNG ======================= -->
+<section class="chapter panelch" id="panel" data-title="Gerätebeschreibung" style="page: ch0">
+  <div class="chap-head">
+    <div class="chap-kicker">Frontplatte</div>
+    <h1>Gerätebeschreibung</h1>
+    <div class="stripes"></div>
+  </div>
+  <p>Nachtzug öffnet sich als ein einziges Fenster, das – ganz ähnlich wie die Front eines Hardware-Instruments – in feste Bereiche aufgeteilt ist. Oben liegt die Hauptbedienung. Darunter zeigt der <b>Inspektor</b> links die Spur, an der gerade gearbeitet wird, die <b>Zeitleiste</b> zeigt den ganzen Song, und die Reiter <b>Noten</b>, <b>Sound</b> und <b>Mixer</b> darunter zeigen schließlich alle Einzelheiten.</p>
+  <div class="panel">
+    <img src="img-de/full-notes.png" alt="Das Nachtzug-Fenster">
+    <div class="co" style="left:15.0%; top:4.2%">1</div>
+    <div class="co" style="left:44.0%; top:4.2%">2</div>
+    <div class="co" style="left:77.7%; top:4.2%">3</div>
+    <div class="co" style="left:5.8%; top:19.0%">4</div>
+    <div class="co" style="left:38.6%; top:19.4%">5</div>
+    <div class="co" style="left:33.2%; top:24.3%">6</div>
+    <div class="co" style="left:71.4%; top:36.0%">7</div>
+    <div class="co" style="left:51.9%; top:53.0%">8</div>
+    <div class="co" style="left:69.8%; top:56.5%">9</div>
+    <div class="co" style="left:54.0%; top:82.7%">10</div>
+    <div class="co" style="left:63.0%; top:96.0%">11</div>
+    <div class="co" style="left:40.0%; top:98.7%">12</div>
+  </div>
+  <ul class="legend">
+    <li><span class="dot">1</span><b>Transport</b>: die Anzeige, Rückgängig und Wiederholen, die Abspieltasten und die Schalter Loop, Klick und Im Takt.&nbsp;<a href="#transport">→&nbsp;2</a></li>
+    <li><span class="dot">2</span><b>Song</b>: Tempo, Tap, Tonart, Tonleiter und Swing.&nbsp;<a href="#songunit">→&nbsp;2</a></li>
+    <li><span class="dot">3</span><b>Ausgang</b>: die Pegelanzeigen, die Lautstärke, die Taste <span class="ctl">Export</span>, die Einstellungen <span class="key">⚙</span> und die Anleitung <span class="key">?</span>.&nbsp;<a href="#output">→&nbsp;2</a></li>
+    <li><span class="dot">4</span><b>Inspektor</b>: Lautstärke und Sends der ausgewählten Spur, ihr Sound, wie ihre Noten gespielt werden und bei Drum-Clips der Auto-Drummer.&nbsp;<a href="#inspector">→&nbsp;3</a></li>
+    <li><span class="dot">5</span><b>Song / Loops</b> und die <b>Clip-Werkzeuge</b>: Spur hinzufügen, duplizieren, loopen, teilen, löschen und <b>Arrangieren lassen</b>.&nbsp;<a href="#timeline">→&nbsp;7</a></li>
+    <li><span class="dot">6</span><b>Zeilen Takte, Loop und Akkorde</b> der Zeitleiste.&nbsp;<a href="#timeline">→&nbsp;7</a></li>
+    <li><span class="dot">7</span><b>Spuren und Clips</b>: eine Zeile pro Instrument.&nbsp;<a href="#timeline">→&nbsp;7</a></li>
+    <li><span class="dot">8</span><b>Reiter</b>: Noten und Sound der ausgewählten Spur, dazu der Mixer. <span class="key">⧉</span> öffnet sie in einem eigenen Fenster.&nbsp;<a href="#room">→&nbsp;unten</a></li>
+    <li><span class="dot">9</span><b>Ideen, Pattern, Noten</b>: Knöpfe, die das Pattern schreiben und ändern.&nbsp;<a href="#ideas">→&nbsp;3</a></li>
+    <li><span class="dot">10</span><b>Notenraster</b>: eine Zeile pro Ton der Tonleiter.&nbsp;<a href="#editing">→&nbsp;3</a></li>
+    <li><span class="dot">11</span><b>Tasten spielen</b>: ob die Buchstabentasten Noten oder Akkorde spielen.&nbsp;<a href="#playing">→&nbsp;3</a></li>
+    <li><span class="dot">12</span><b>Statuszeile</b>: Hilfe zu allem, was unter der Maus liegt.</li>
+  </ul>
+  <h2 id="room">Platz schaffen</h2>
+  <p>Auf einem großen Bildschirm passt alles bequem nebeneinander, auf einem Laptop kann es dagegen mitunter etwas eng werden. Das Fenster lässt sich deshalb ganz nach Bedarf aufräumen (Nachtzug merkt sich übrigens alles für das nächste Mal).</p>
+  <ul>
+    <li id="fold"><b>Bereiche zuklappen.</b> Wird der Name eines Bereichs angeklickt (im Inspektor oder im Reiter Sound), klappt er zu einer einzigen Zeile mit einer kurzen Zusammenfassung zusammen, z.&#x202F;B. <i>Sägezahn · Sägezahn · Unisono</i>. Ein weiterer Klick auf den Namen klappt ihn wieder auf.</li>
+    <li id="inspectoraway"><b>Den Inspektor wegklappen.</b> Mit der Taste <span class="key">«</span> oben rechts im Inspektor wird er weggeklappt; der schmale Reiter <span class="key">»</span> am linken Fensterrand holt ihn zurück. <span class="nw"><span class="key">Strg</span>+<span class="key">I</span></span> erledigt beides. Solange der Inspektor weggeklappt ist, wandern seine Bereiche zurück in die Reiter Noten und Sound. Es geht also nichts verloren.</li>
+    <li id="ownwindow"><b>Den Reitern ein eigenes Fenster geben.</b> Die Taste <span class="key">⧉</span> am Ende der Reiter öffnet Noten, Sound und Mixer in einem eigenen Fenster, z.&#x202F;B. für einen zweiten Bildschirm. Wird dieses Fenster geschlossen, kehren die Reiter zurück.</li>
+    <li><b>Trennlinien ziehen.</b> Zwischen Inspektor, Zeitleiste und Reitern lassen sich die Trennlinien verschieben, um jedem Teil so viel Platz zu geben wie gewünscht.</li>
+    <li>Im Menü <b>Ansicht</b> findet sich all das ebenfalls: <b>Inspektor</b>, <b>Zeitleiste oben</b> (ohne Haken liegen die Reiter über der Zeitleiste), <b>Noten, Sound und Mixer im eigenen Fenster</b> sowie <b>Anordnung zurücksetzen</b>, womit alles wieder so angeordnet wird wie beim ersten Start.</li>
+  </ul>
+  <p>Ist das ganze Fenster trotzdem zu groß oder zu klein, hilft die Einstellung <span class="ctl">Größe</span> (<a href="#size">9.3</a>).</p>
+</section>
+
+<!-- ======================= 1 SCHNELLSTART ======================= -->
+<section class="chapter" id="quick" data-title="1 · Der erste Song" style="page: ch1">
+  <div class="chap-head">
+    <div class="chap-num">1</div>
+    <div class="chap-kicker">Schnellstart</div>
+    <h1>Der erste Song</h1>
+    <div class="stripes"></div>
+  </div>
+  <p class="lede">Sechs Schritte, etwa zehn Minuten. Sobald Nachtzug startet, wartet bereits ein Demo-Song – zuallererst wird also einfach zugehört, danach wird der Song Stück für Stück verändert.</p>
+  <p id="welcome">Beim allerersten Start fragt Nachtzug zwei Dinge: welche <b>Sprache</b> benutzt werden soll und wie man anfangen möchte. <b>Ich bin neu dabei</b> gibt dem Reiter Sound wenige große Regler in klaren Worten und öffnet eine kurze Anleitung, während <b>Ich kenne mich mit Synthesizern aus</b> jeden einzelnen Regler zeigt. Beides lässt sich – falls man es sich später anders überlegt – jederzeit in den Einstellungen ändern.</p>
+  <figure style="width:62%; margin-left:auto; margin-right:auto"><img src="img-de/dlg-welcome.png" alt="Die Begrüßung"><figcaption><b>ABB 1</b>Die Begrüßung. Sie erscheint nur beim allerersten Start.</figcaption></figure>
+  <div class="task"><p><b>Worum es geht:</b> den Demo-Song anhören, ihm eine neue Bassline und einen neuen Sound geben, eine Melodie hinzufügen, daraus einen ganzen Song machen und ihn speichern.</p><p><b>Dauer:</b> etwa zehn Minuten.</p></div>
+  <ol class="steps">
+    <li><b class="t">Zuhören</b>Mit der <span class="key">Leertaste</span> oder der Taste <span class="key ico play"></span> wird der Song gestartet. Drums, eine Bassline, eine rollende Sequenz und ein Pad setzen ein. Die Anzeige sollte daraufhin <span class="lcdtxt">TAKT 2 · SCHLAG 3</span> zählen, und die Nadeln im Ausgang sollten ausschlagen.</li>
+    <li><b class="t">Eine neue Bassline</b>In der Zeitleiste wird der orangefarbene Clip der Spur <b>Bass</b> angeklickt. Der Reiter <span class="ctl">Noten</span> zeigt nun sein Pattern. Nun wird <span class="ctl">Neue Idee</span> gedrückt und <b>Acid-Kurve</b> gewählt; das neue Pattern beginnt am nächsten Takt. Mit <span class="ctl">Variieren</span> werden bei jedem Druck ein, zwei Noten geändert. Das kann so lange wiederholt werden, bis es passt.</li>
+    <li><b class="t">Den Sound ändern</b>Im Inspektor links wird <span class="ctl">Neu würfeln</span> gedrückt, bis ein Sound gefällt. Anschließend werden <span class="ctl">Cutoff</span> und <span class="ctl">Resonanz</span> gedreht, während der Song läuft: Das ist das klassische Acid-Quietschen! (Auf der einfachen Sound-Seite heißen dieselben zwei Regler <span class="ctl">Helligkeit</span> und <span class="ctl">Squelch</span>.)</li>
+    <li><b class="t">Eine Melodie dazu</b>In der Zeitleiste wird der Name <b>Lead</b> angeklickt, <span class="ctl">Neue Idee</span> gedrückt und <b>Melodie</b> gewählt. Alternativ lässt sich auf den Buchstabentasten selbst eine Melodie spielen: Die Reihe <span class="key">A</span> … <span class="key">Ö</span> ist die mittlere Oktave, und jede Taste passt.</li>
+    <li><b class="t">Ein Song daraus machen</b>Über der Zeitleiste wird <span class="ctl">Arrangieren lassen</span> gedrückt und <b>Mittel</b> gewählt. Aus den Patterns werden Intro, Build-up, Hauptteil, Break und Outro. Mit <span class="key ico start"></span> geht es zurück an den Anfang, um den Song von vorn zu hören. (Das geht auch von Hand: Wird die rechte Kante eines Clips weitergezogen, wiederholt sich sein Pattern, solange der Clip dauert.)</li>
+    <li><b class="t">Behalten</b>Mit <span class="nw"><span class="key">Strg</span>+<span class="key">S</span></span> wird der Song gespeichert. Für eine Audiodatei, die überall läuft, wird oben rechts <span class="ctl">Export</span> gedrückt. Daraufhin sollte <i>Dein Song ist fertig</i> erscheinen, mit einem Knopf <b>Abspielen</b>, der die Datei im Player öffnet.</li>
+  </ol>
+  <div class="tip"><p>Eine Änderung gefällt nicht? Die Taste <span class="key">↶</span> neben der Anzeige nimmt sie zurück, so oft wie nötig. Soll es lieber ganz frisch losgehen, schreibt <b>Datei → Neuer Song mit frischen Ideen</b> (<span class="nw"><span class="key">Strg</span>+<span class="key">N</span></span>) einen neuen Song mit Drums, Bass, Sequenz und Pad und einer zufälligen Akkordfolge. Es lohnt sich, das ein paar Mal auszuprobieren: Jeder Song ist anders!</p></div>
+  <figure><img src="img-de/guide.png" alt="Die Anleitung im Programm"><figcaption><b>ABB 2</b>Dieselben Schritte stecken auch im Programm: Sie werden mit <span class="key">?</span> oder <span class="key">F1</span> geöffnet. Wurde <b>Ich bin neu dabei</b> gewählt, öffnet sich die Anleitung nach der Begrüßung von selbst.</figcaption></figure>
+  <h3 id="lessons">Lektionen: lernen durch Tun</h3>
+  <p>Unter <b>Hilfe → Lektionen</b> finden sich fünf kurze geführte Touren: <b>Deine erste Acid-Line</b>, <b>Einen Beat bauen</b>, <b>Bewegung hineinbringen</b>, <b>Berliner Schule: die Akkorde spielen</b> und <b>Vom Loop zum Song</b>. Ein weicher Schatten legt sich dabei über das Fenster, aus dem nur das, was als Nächstes dran ist, hell herausleuchtet, und eine Karte daneben erklärt, was zu tun ist. Gearbeitet wird übrigens die ganze Zeit im echten Programm (jeder Klick geht also durch), und die Lektion geht von selbst weiter, sobald der Schritt erledigt ist. <span class="ctl">Überspringen</span> macht ohne ihn weiter, <span class="ctl">Lektion beenden</span> hört auf. Auch die Anleitung (<span class="key">F1</span>) hat einen Knopf <span class="ctl">Erste Lektion starten</span>.</p>
+  <figure><img src="img-de/lesson.png" alt="Ein Schritt einer Lektion"><figcaption><b>ABB 0</b>Eine Lektion zeigt auf <span class="ctl">Neue Idee</span> und wartet, bis es ausprobiert wurde.</figcaption></figure>
+</section>
+
+<!-- ======================= 2 OBERE LEISTE ======================= -->
+<section class="chapter" id="topbar" data-title="2 · Die obere Leiste" style="page: ch2">
+  <div class="chap-head">
+    <div class="chap-num">2</div>
+    <div class="chap-kicker">Hauptbedienung</div>
+    <h1>Die obere Leiste</h1>
+    <div class="stripes"></div>
+  </div>
+  <p>Die obere Leiste besteht aus drei Einheiten, die – wie die Module eines Rack-Geräts – in die Frontplatte geschraubt sind: Der <b>Transport</b> fährt den Song, <b>Song</b> bestimmt Tempo und Töne, und der <b>Ausgang</b> zeigt und regelt, was letztendlich aus den Lautsprechern kommt.</p>
+  <figure class="bare"><img src="img-de/topbar.png" alt="Die obere Leiste"></figure>
+
+  <h2 id="transport"><span class="n">2.1</span>Transport</h2>
+  <figure style="width:84%"><img src="img-de/transport.png" alt="Der Transport-Bereich"><figcaption><b>ABB 3</b>Der Transport-Bereich: Anzeige, Tasten und Schalter.</figcaption></figure>
+  <p>Die beleuchtete <b>Anzeige</b> zeigt oben, wo der Song gerade ist. Darunter steht, welche Spur die Buchstabentasten spielen, oder es erscheinen kurze Meldungen wie <span class="lcdtxt">ÄNDERUNG KOMMT AM NÄCHSTEN TAKT</span>. Die kleine Linie links ist übrigens der Klang selbst (eine Art winziges Oszilloskop).</p>
+  <table>
+    <thead><tr><th>Bedienelement</th><th>Was es tut</th></tr></thead>
+    <tr><td><span class="key ico start"></span></td><td>Zurück zum Anfang des Loops, oder des Songs, wenn Loop aus ist. <span class="key">Pos1</span></td></tr>
+    <tr><td><span class="key ico play"></span></td><td>Abspielen. Die <span class="key">Leertaste</span> startet und stoppt.</td></tr>
+    <tr><td><span class="key ico stop"></span></td><td>Stopp.</td></tr>
+    <tr><td><span class="key ico rec"></span></td><td id="record">Aufnahme. Solange sie leuchtet und der Song läuft, werden gespielte Noten und gedrehte Regler in den Song geschrieben. <span class="nw"><span class="key">Strg</span>+<span class="key">R</span></span></td></tr>
+    <tr><td><span class="ctl">Loop</span></td><td>Wiederholt den Abschnitt, der in der Loop-Zeile der Zeitleiste markiert ist. Ist Loop aus, spielt der ganze Song. <span class="nw"><span class="key">Strg</span>+<span class="key">L</span></span></td></tr>
+    <tr><td><span class="ctl">Klick</span></td><td id="metronome">Metronom: ein Klick auf jedem Schlag, ein höherer am Anfang jedes Takts. <span class="nw"><span class="key">Strg</span>+<span class="key">K</span></span></td></tr>
+    <tr><td><span class="ctl">Im Takt</span></td><td>Zieht von Hand gespielte Noten auf den Schlag, während der Song läuft.</td></tr>
+    <tr><td><span class="key">↶</span> <span class="key">↷</span></td><td id="undokeys">Rückgängig und Wiederholen, neben der Anzeige. Ruht die Maus darauf, ist zu sehen, was sie zurücknehmen würden, etwa <i>Rückgängig: Neue Idee</i>. <span class="nw"><span class="key">Strg</span>+<span class="key">Z</span></span>, <span class="nw"><span class="key">Strg</span>+<span class="key">Umschalt</span>+<span class="key">Z</span></span></td></tr>
+  </table>
+  <p>Nach einer großen Änderung – etwa einer neuen Idee, einem gewürfelten Sound oder einer gelöschten Spur – erscheint unten im Fenster ein kleiner Hinweis mit der Taste <span class="ctl">Rückgängig</span>. Er verschwindet nach kurzer Zeit von selbst und lässt sich, falls er eher stört, in den Einstellungen auch ganz abschalten.</p>
+
+  <h2 id="songunit"><span class="n">2.2</span>Song</h2>
+  <figure style="width:70%"><img src="img-de/song-unit.png" alt="Die Einheit Song"><figcaption><b>ABB 4</b>Die Einheit Song. Tonart und Tonleiter sind Anzeigen, die zum Ändern angeklickt werden.</figcaption></figure>
+  <table>
+    <thead><tr><th>Bedienelement</th><th>Was es tut</th></tr></thead>
+    <tr><td><span class="ctl">Tempo</span></td><td id="tempo">Geschwindigkeit in Beats pro Minute (BPM), 40 bis 240. Zum Ändern wird das Feld angeklickt und der Wert eingetippt, oder das Mausrad wird darüber gedreht.</td></tr>
+    <tr><td><span class="ctl">Tap</span></td><td id="tap">Wird mindestens viermal im Beat mitgetippt, folgt das Tempo.</td></tr>
+    <tr><td><span class="ctl">Tonart</span>, <span class="ctl">Tonleiter</span></td><td id="key">Die Töne, die der ganze Song benutzt. Jedes Pattern wird ihnen angepasst; eine neue Tonart verschiebt deshalb den ganzen Song. Läuft der Song, kommt die Änderung am nächsten Takt.</td></tr>
+    <tr><td><span class="ctl">Swing</span></td><td id="swing">Spielt jede zweite Sechzehntel etwas später, für ein rollendes Feeling.</td></tr>
+  </table>
+  <p id="scales">Acht Tonleitern sind eingebaut: Natürliches Moll, Dorisch, Phrygisch, Harmonisches Moll, Phrygisch-dominant, Moll-Pentatonik, Dur und Lydisch.</p>
+  <div class="tip"><p>Für dunklen Acid und Berliner Schule empfiehlt es sich, mit <b>Natürliches Moll</b>, <b>Dorisch</b> oder <b>Phrygisch</b> anzufangen. <b>Phrygisch-dominant</b> klingt orientalisch, <b>Lydisch</b> hell und schwebend.</p></div>
+
+  <h2 id="output"><span class="n">2.3</span>Ausgang</h2>
+  <figure class="narrow"><img src="img-de/output.png" alt="Der Ausgang"><figcaption><b>ABB 5</b>Ausgang.</figcaption></figure>
+  <p>Zwei Zeiger-<b>Pegelanzeigen</b> zeigen den linken und den rechten Kanal. Erreicht eine Nadel die rote Marke, hält der Limiter (er sitzt ganz am Ende der Kette) den Klang zurück, damit er niemals knackt.</p>
+  <p><span class="ctl">Lautstärke</span> regelt alles, was zu hören ist. <span class="ctl">Export</span> speichert den Song als Audiodatei (<span class="nw"><span class="key">Strg</span>+<span class="key">Umschalt</span>+<span class="key">E</span></span>, <a href="#export">9.2</a>). Die Taste <span class="key">⚙</span> öffnet die Einstellungen (<a href="#settings">9.3</a>), die Taste <span class="key">?</span> die kurze Anleitung (<span class="key">F1</span>).</p>
+  <div class="clear"></div>
+</section>
+
+<!-- ======================= 3 SPUREN UND MUSTER ======================= -->
+<section class="chapter" id="notes" data-title="3 · Spuren und Patterns" style="page: ch3">
+  <div class="chap-head">
+    <div class="chap-num">3</div>
+    <div class="chap-kicker">Der Inspektor und der Reiter Noten</div>
+    <h1>Spuren und Patterns</h1>
+    <div class="stripes"></div>
+  </div>
+  <h2 id="tracks"><span class="n">3.1</span>Spuren</h2>
+  <p>Jede Spur ist ein Instrument – entweder ein Synthesizer oder die Drum-Maschine. Es gibt fünf Arten, und jede davon kommt mit einem passenden Klang und einem fertigen Pattern, sodass sofort etwas zu hören ist.</p>
+  <table>
+    <thead><tr><th>Art</th><th>Typischer Einsatz</th></tr></thead>
+    <tr><td><b>Bass</b></td><td>Acid-Kurven und tiefe Pulse. Spielt eine Note nach der anderen und kann zwischen Noten gleiten.</td></tr>
+    <tr><td><b>Sequenz</b></td><td>Der sich wiederholende Lauf im Herzen der Berliner Schule.</td></tr>
+    <tr><td><b>Pad</b></td><td>Lange Akkorde im Hintergrund.</td></tr>
+    <tr><td><b>Lead</b></td><td>Eine Melodie obendrauf.</td></tr>
+    <tr><td><b>Drums</b></td><td>Die Drum-Maschine, gespielt vom Auto-Drummer oder von Hand.</td></tr>
+  </table>
+  <ul>
+    <li><b>Hinzufügen</b>: Eine Spur wird mit <span class="ctl">+ Spur hinzufügen</span> über der Zeitleiste oder im Menü <b>Spur</b> hinzugefügt. Ein Song fasst bis zu zwölf Spuren.</li>
+    <li><b>Auswählen</b>: Dazu wird der Name einer Spur in der Zeitleiste, im Loop-Raster oder im Mixer angeklickt. Daraufhin spielen die Buchstabentasten diese Spur, und Inspektor und Reiter zeigen sie: <span class="ctl">Bass · Noten</span>, <span class="ctl">Bass · Sound</span>.</li>
+    <li><b>Umbenennen</b>: per Doppelklick auf den Namen. Ein Rechtsklick darauf bietet Duplizieren, Verschieben, Löschen und die Wahl, ob die Spur den Akkorden folgt.</li>
+    <li id="mute"><span class="key">M</span> schaltet eine Spur stumm, <span class="key">S</span> (Solo) lässt nur diese Spur hören. Läuft der Song, schalten beide erst am nächsten Takt. Der Schieber unter dem Namen ist die Lautstärke der Spur.</li>
+  </ul>
+  <h3 id="inspector">Der Inspektor</h3>
+  <p>Die Spalte links im Fenster zeigt immer die gerade ausgewählte Spur. Ihre Bereiche lassen sich – ganz einfach per Klick auf den jeweiligen Namen – zuklappen, sodass nur das offen bleibt, was gerade tatsächlich gebraucht wird (siehe <a href="#room">Platz schaffen</a>).</p>
+  <ul>
+    <li><b>Spur</b>: die Lautstärke, <span class="ctl">Panorama</span>, wie viel in das gemeinsame <span class="ctl">Echo</span> und den <span class="ctl">Hall</span> geht, <span class="ctl">Pumpen</span> (<a href="#pump">9.1</a>) sowie <span class="ctl">Stumm</span> und <span class="ctl">Solo</span>.</li>
+    <li><b>Sound</b>: das Preset, <span class="ctl">Neu würfeln</span>, <span class="ctl">Mutieren</span> und die fünf Regler, die am häufigsten gedreht werden: <span class="ctl">Cutoff</span>, <span class="ctl">Resonanz</span>, <span class="ctl">Hüllkurve</span>, <span class="ctl">Decay</span> und <span class="ctl">Drive</span>. Bei einer Drum-Spur steht hier stattdessen das Kit (<a href="#sound">Kapitel 5</a>).</li>
+    <li><b>So werden Noten gespielt</b>: Oktave, Akkorde und Arpeggios (<a href="#chordkeys">3.4</a>).</li>
+    <li><b>Auto-Drummer</b>, sobald ein Drum-Clip ausgewählt ist (<a href="#drummer">Kapitel 4</a>).</li>
+  </ul>
+
+  <h2 id="ideas"><span class="n">3.2</span>Ideen holen</h2>
+  <p>Ein <b>Clip</b> ist ein farbiger Block in der Zeitleiste. Er enthält ein <b>Pattern</b>, das sich so lange wiederholt, wie der Clip dauert, und trägt den Namen der Idee, die es geschrieben hat (z.&#x202F;B. <i>Acid-Kurve</i>). Wird ein Clip angeklickt, zeigt der Reiter Noten sein Pattern.</p>
+  <figure><img src="img-de/notes.png" alt="Der Reiter Noten"><figcaption><b>ABB 6</b>Der Reiter Noten einer Bass-Spur. Die getönten Zeilen sind die Töne des aktuellen Akkords.</figcaption></figure>
+  <table>
+    <thead><tr><th>Bedienelement</th><th>Was es tut</th></tr></thead>
+    <tr><td><span class="ctl">Neue Idee ▾</span></td><td>Schreibt ein neues Pattern. Die Auswahl hängt von der Art der Spur ab (siehe unten).</td></tr>
+    <tr><td><span class="ctl">Variieren</span></td><td id="vary">Ändert ein, zwei Noten. Ein weiterer Druck ändert mehr.</td></tr>
+    <tr><td><span class="ctl">Ruhig – Dicht</span></td><td>Wie viele Noten neue Ideen haben.</td></tr>
+    <tr><td><span class="ctl">Länge</span></td><td>Wie lang das Pattern ist, bevor es sich wiederholt: ein halber bis acht Takte.</td></tr>
+    <tr><td><span class="ctl">Raster</span></td><td id="grid">Der Schritt, in dem Noten einrasten, von Vierteln bis zu Zweiunddreißigsteln, Triolen inklusive.</td></tr>
+    <tr><td><span class="ctl">Aufräumen</span></td><td>Räumt Eingespieltes auf (siehe <a href="#cleanup">3.4</a>).</td></tr>
+    <tr><td><span class="ctl">Leeren</span></td><td>Entfernt alle Noten des Patterns.</td></tr>
+  </table>
+  <table class="wide1">
+    <thead><tr><th>Spur</th><th>Ideen im Angebot</th></tr></thead>
+    <tr><td>Bass</td><td>Acid-Kurve · Oktavsprung · Grundton-Puls · Berliner Sequenz</td></tr>
+    <tr><td>Sequenz</td><td>Berliner Sequenz · Arpeggio-Lauf · Acid-Kurve</td></tr>
+    <tr><td>Pad</td><td>Gehaltener Akkord · Akkord-Stabs</td></tr>
+    <tr><td>Lead</td><td>Melodie · Sparsame Melodie · Arpeggio-Lauf</td></tr>
+    <tr><td>Drums</td><td>Auto-Drummer · Four on the Floor · Acid House · Motorik · Broken Beat</td></tr>
+  </table>
+  <div class="note"><p>Läuft der Song, beginnt eine neue Idee oder Variation erst am nächsten Takt. So kommt sie immer im Takt.</p></div>
+
+  <h2 id="editing"><span class="n">3.3</span>Noten bearbeiten</h2>
+  <p>Jede Zeile des Rasters ist ein Ton der Tonleiter des Songs. Die dunklen Zeilen sind der Grundton (z.&#x202F;B. jedes A in a-Moll), und ein Klick auf einen Notennamen links spielt ihn ab. Bei Spuren, die den Akkorden folgen, sind die Zeilen des aktuellen Akkords außerdem <b>getönt</b> – das sind die sichersten Töne, denn sie passen eigentlich immer. Ein leeres Pattern zeigt übrigens im Raster selbst, was zu tun ist.</p>
+  <table class="wide1">
+    <thead><tr><th>Vorhaben</th><th>So geht es</th></tr></thead>
+    <tr><td>Note setzen</td><td>Auf eine freie Stelle klicken. Wird die Taste gehalten und nach rechts gezogen, wird die Note länger.</td></tr>
+    <tr><td>Note verschieben</td><td>Ziehen: auf und ab für die Tonhöhe, links und rechts für den Zeitpunkt.</td></tr>
+    <tr><td>Länge ändern</td><td>Die rechte Kante ziehen.</td></tr>
+    <tr><td>Note löschen</td><td>Rechtsklick darauf. Wird die rechte Taste gehalten und gewischt, werden mehrere gelöscht.</td></tr>
+    <tr id="stamp"><td>Einen Takt Arpeggio oder Akkord setzen</td><td>Rechtsklick auf eine freie Stelle; dann wird ein Arpeggio (aufwärts, abwärts oder auf und ab), eine rollende Sequenz oder ein Akkord gewählt. Ein Takt davon beginnt an dieser Note, aus der Tonleiter gebaut. Auf einer Drum-Zeile gibt es stattdessen einen Takt Schläge.</td></tr>
+    <tr><td>Mehrere auswählen</td><td><span class="key">Umschalt</span> halten und einen Rahmen ziehen. <span class="nw"><span class="key">Strg</span>+Klick</span> nimmt eine hinzu oder heraus.</td></tr>
+    <tr><td>Zoomen</td><td><span class="key">Strg</span> + Mausrad.</td></tr>
+  </table>
+  <div class="note"><p><b>Worauf wirken Löschen und Kopieren?</b> Notenraster und Zeitleiste reagieren beide auf <span class="key">Entf</span>, <span class="nw"><span class="key">Strg</span>+<span class="key">C</span></span>, <span class="nw"><span class="key">Strg</span>+<span class="key">V</span></span> und <span class="nw"><span class="key">Strg</span>+<span class="key">D</span></span>. Der zuletzt angeklickte Bereich trägt eine dünne farbige Linie an der Oberkante.</p></div>
+  <p>Die Knöpfe der Gruppe <span class="ctl">Noten</span> wirken auf die ausgewählten Noten. <span class="ctl">Stufe</span> und <span class="ctl">Oktave</span> verschieben alle Noten, wenn keine ausgewählt ist.</p>
+  <ul>
+    <li id="accent"><span class="ctl">Akzent</span> macht Noten lauter und heller. Betonte Noten sind kräftiger gezeichnet, mit einer Linie an der Oberkante.</li>
+    <li id="slide"><span class="ctl">Slide</span> lässt eine Note in die nächste gleiten: der klassische Acid-Bass-Effekt. Noten mit Slide enden in einem kleinen Pfeil. Am besten klingt das bei einem Klang, der auf <b>Mono</b> steht.</li>
+    <li><span class="ctl">Stufe ▲ ▼</span> verschiebt Noten um einen Ton der Tonleiter, <span class="ctl">Oktave ▲ ▼</span> um eine ganze Oktave.</li>
+  </ul>
+  <p>Vier weitere Knöpfe wirken nur auf ausgewählte Noten. Auf einer Drum-Spur werden Schläge mit <span class="key">Umschalt</span> + Ziehen oder <span class="nw"><span class="key">Strg</span>+Klick</span> ausgewählt (ein einfacher Klick entfernt einen Schlag).</p>
+  <ul>
+    <li id="chance"><span class="ctl">Häufigkeit ▾</span> legt fest, wie oft eine Note spielt: <b>immer</b>, <b>oft</b> (3 von 4 Malen), <b>in der Hälfte der Fälle</b> oder <b>ab und zu</b> (1 von 4 Malen). Bei jedem Durchlauf des Loops wird neu entschieden; so verändert sich selbst ein kurzes Pattern ständig. Es lohnt sich, das bei ein paar Hi-Hats oder den letzten Noten einer Bassline auszuprobieren! Solche Noten sehen blasser aus, mit gestricheltem Rand und der Prozentzahl.</li>
+    <li id="repeat"><span class="ctl">Wiederholen ▾</span> spielt eine Note über ihre Länge zwei-, drei- oder viermal schnell hintereinander: ein Trommelwirbel oder das Stottern einer 303-Note. Die Note zeigt ihre Wiederholungen als kleine Striche. Eine Note mit Häufigkeit spielt entweder alle ihre Wiederholungen oder keine.</li>
+    <li id="lean"><span class="ctl">Leitton ▾</span> macht aus Noten „richtige falsche Noten“ (siehe <a href="#wrongnotes">3.4</a>). Bei <b>Die richtige falsche Note</b> sucht Nachtzug die Seite aus, die richtig klingt; ebenso lässt sich ein Halbton tiefer (♭) oder höher (♯) selbst wählen oder die Note mit <b>In der Tonleiter</b> zurückholen. Solche Noten tragen ein kleines ♭ oder ♯.</li>
+    <li id="keep"><span class="ctl">Behalten</span> sperrt Noten: <span class="ctl">Variieren</span> und <span class="ctl">Neue Idee</span> lassen sie, wie sie sind, und schreiben um sie herum. Behaltene Noten tragen ein kleines Schloss. Ein weiterer Druck gibt sie wieder frei.</li>
+  </ul>
+  <figure><img src="img-de/notes-chance.png" alt="Noten mit Häufigkeit, Wiederholungen und behaltenen Noten"><figcaption><b>ABB 0</b>Hi-Hats, die nur in der Hälfte der Fälle spielen, ein dreifach wiederholter Snare-Wirbel und zwei behaltene Snares (die Schlösser).</figcaption></figure>
+
+  <h2 id="playing"><span class="n">3.4</span>Mitspielen und aufnehmen</h2>
+  <p>Die Computertastatur ist das Instrument! Drei Reihen Buchstabentasten spielen die ausgewählte Spur, und zwar drei Oktaven der Tonleiter des Songs. Da jede Taste ein Ton dieser Tonleiter ist, passt – ganz egal, welche gedrückt wird – jede Taste. In a-Moll spielen die Tasten:</p>
+  <div class="kbd">
+    <div class="row"><div class="lab">Hoch</div><div class="k root"><span>A3</span><i>Q</i></div><div class="k"><span>H3</span><i>W</i></div><div class="k"><span>C4</span><i>E</i></div><div class="k"><span>D4</span><i>R</i></div><div class="k"><span>E4</span><i>T</i></div><div class="k"><span>F4</span><i>Z</i></div><div class="k"><span>G4</span><i>U</i></div><div class="k root"><span>A4</span><i>I</i></div><div class="k"><span>H4</span><i>O</i></div><div class="k"><span>C5</span><i>P</i></div></div>
+    <div class="row r2"><div class="lab">Mitte</div><div class="k root"><span>A2</span><i>A</i></div><div class="k"><span>H2</span><i>S</i></div><div class="k"><span>C3</span><i>D</i></div><div class="k"><span>D3</span><i>F</i></div><div class="k"><span>E3</span><i>G</i></div><div class="k"><span>F3</span><i>H</i></div><div class="k"><span>G3</span><i>J</i></div><div class="k root"><span>A3</span><i>K</i></div><div class="k"><span>H3</span><i>L</i></div><div class="k"><span>C4</span><i>Ö</i></div></div>
+    <div class="row r3"><div class="lab">Tief</div><div class="k root"><span>A1</span><i>Y</i></div><div class="k"><span>H1</span><i>X</i></div><div class="k"><span>C2</span><i>C</i></div><div class="k"><span>D2</span><i>V</i></div><div class="k"><span>E2</span><i>B</i></div><div class="k"><span>F2</span><i>N</i></div><div class="k"><span>G2</span><i>M</i></div><div class="k root"><span>A2</span><i>,</i></div><div class="k"><span>H2</span><i>.</i></div><div class="k"><span>C3</span><i>-</i></div></div>
+  </div>
+  <p class="small">Auf Deutsch heißt der Ton zwischen A und C auch in Nachtzug H. Die Oktavzahlen folgen der Einstellung <span class="ctl">Oktave</span>; dunkle Tasten sind der Grundton. Auf einer Drum-Spur spielen <span class="key">Y</span> bis <span class="key">,</span> die acht Drumsounds. Die Tasten werden nach ihrer Lage erkannt, deshalb funktioniert jede Tastaturbelegung.</p>
+  <figure><img src="img-de/pads.png" alt="Die Bildschirmtasten"><figcaption><b>ABB 7</b>Die Bildschirmtasten unter dem Notenraster zeigen dieselbe Belegung, leuchten beim Spielen auf und lassen sich anklicken. Ist der Reiter Noten niedrig, machen sie dem Raster Platz; der Knopf <span class="ctl">Tasten</span> am rechten Ende der Zeile darüber holt sie zurück oder blendet sie aus (ebenso <b>Ansicht → Bildschirmtasten unter den Noten</b>).</figcaption></figure>
+  <p id="chordkeys">Unter <span class="ctl">So werden Noten gespielt</span> im Inspektor lässt sich ändern, was eine einzelne Taste tut. <span class="ctl">Jede Note spielt</span> eine einzelne Note, Oktaven, Quinten, einen Dreiklang, einen Septakkord, einen offenen Dreiklang oder geschichtete Quarten (alles aus der Tonleiter gebaut, versteht sich). <span class="ctl">Arpeggio</span> spielt gehaltene Noten nacheinander – aufwärts, abwärts, auf und ab, zufällig oder in der gespielten Reihenfolge – in einem wählbaren Tempo und über eine bis drei Oktaven.</p>
+  <p id="intime">Mit <span class="ctl">Im Takt</span> klingt eine etwas zu spät gespielte Note sofort, eine etwas zu früh gespielte wartet auf den Schlag.</p>
+  <h3 id="wrongnotes">Die richtigen falschen Noten</h3>
+  <p>Manchmal ist gerade der Ton der beste, der eigentlich nicht passt – vorausgesetzt, es ist die <i>richtige</i> falsche Note. Wird beim Spielen <span class="key">Umschalt</span> gehalten, spielt jede Taste einen Ton einen Halbton außerhalb der Tonleiter, der zum eigentlichen Ton der Taste strebt (meist der Halbton direkt darunter, der nach oben zieht, andernfalls der darüber). Wird er kurz vor dem eigentlichen Ton gespielt, hört man ihn förmlich an seinen Platz fallen. Solange <span class="key">Umschalt</span> gedrückt ist, zeigen die Bildschirmtasten, welche Töne man bekommt, und aufgenommene Noten behalten ihr ♭ oder ♯.</p>
+  <p>Im Akkordmodus spielt <span class="key">Umschalt</span> den Akkord jeder Taste übrigens einen Halbton tiefer – einen Akkord, der in den eigentlichen hinaufgleitet. Ein solcher lässt sich auch in die Akkordzeile schreiben (<a href="#chords">7.2</a>).</p>
+  <h3 id="chordmode">Akkordmodus: alles auf einmal verschieben</h3>
+  <p>Unter dem Notenraster wird <span class="ctl">Tasten spielen</span> von <span class="ctl">Noten</span> auf <span class="ctl">Akkorde</span> umgestellt (oder <span class="nw"><span class="key">Strg</span>+<span class="key">J</span></span> gedrückt). Nun ist jede Buchstabentaste ein Akkord der Tonleiter, und jede Spur, die den Akkorden folgt, wechselt sofort dorthin und spielt dabei ihr Pattern einfach weiter. Genau so wird übrigens der Sequencer eines alten Synthesizers über seine Tastatur transponiert – und das ist der Kniff hinter erstaunlich viel Musik der Berliner Schule. Der Akkord bleibt, wenn die Taste losgelassen wird; <span class="key">Esc</span> kehrt zu den Akkorden des Songs zurück. Ist die Aufnahme an, werden die gedrückten Akkorde Takt für Takt in die Akkordzeile der Zeitleiste geschrieben.</p>
+  <figure><img src="img-de/chord-pads.png" alt="Die Tasten im Akkordmodus"><figcaption><b>ABB 0</b>Im Akkordmodus nennen die Pads die Akkorde; Pfeile zeigen die Oktave darüber oder darunter. Der klingende Akkord bleibt beleuchtet.</figcaption></figure>
+  <p id="midikeys">Auch ein <b>MIDI-Keyboard</b> spielt mit (<a href="#midi">9.6</a>): Jede Taste spielt den nächstgelegenen Ton der Tonleiter, kräftig angeschlagene Noten bekommen einen Akzent, und im Akkordmodus wechseln seine Tasten den Akkord.</p>
+  <h3 id="rec">Aufnehmen</h3>
+  <ol class="steps">
+    <li>Zuallererst wird <span class="key ico rec"></span> gedrückt, sodass sie leuchtet, danach <span class="key ico play"></span>.</li>
+    <li>Nun wird auf den Tasten gespielt. Die Noten landen im Clip unter der Abspielposition; gibt es dort keinen, wird einer angelegt.</li>
+    <li>Ist <b>Spielen → Aufgenommene Noten am Raster ausrichten</b> eingeschaltet (das ist die Grundeinstellung), werden aufgenommene Noten am Raster ausgerichtet. <span class="nw"><span class="key">Strg</span>+<span class="key">Z</span></span> nimmt eine Note zurück.</li>
+  </ol>
+  <p id="cleanup">Ist das Eingespielte etwas wackelig geraten, hilft <span class="ctl">Aufräumen</span> in der Gruppe <span class="ctl">Pattern</span>. Dabei werden Noten, die neben dem Raster liegen, darauf gerückt, doppelte Noten zu einer zusammengelegt und eine winzige, aus Versehen neben der eigentlichen gedrückte Note entfernt. Läuft das Pattern dreimal oder öfter durch und sind die Durchläufe größtenteils gleich, wird außerdem eine in einem Durchlauf verpasste Note ergänzt und eine falsche Taste korrigiert. Eine Änderung im letzten Durchlauf bleibt – abhängig davon, wie man spielt, ist sie meistens nämlich gewollt – ebenso unangetastet wie behaltene Noten. Was geändert wurde, steht in der Statuszeile, und <span class="nw"><span class="key">Strg</span>+<span class="key">Z</span></span> holt das Gespielte zurück.</p>
+</section>
+
+<!-- ======================= 4 AUTO-DRUMMER ======================= -->
+<section class="chapter" id="drummer" data-title="4 · Der Auto-Drummer" style="page: ch4">
+  <div class="chap-head">
+    <div class="chap-num">4</div>
+    <div class="chap-kicker">Rhythmus</div>
+    <h1>Der Auto-Drummer</h1>
+    <div class="stripes"></div>
+  </div>
+  <figure class="narrow"><img src="img-de/drummer.png" alt="Der Auto-Drummer"><figcaption><b>ABB 8</b>Der Auto-Drummer erscheint im Inspektor, sobald ein Drum-Clip ausgewählt ist.</figcaption></figure>
+  <p>Drum-Clips beginnen mit eingeschaltetem Auto-Drummer. Er schreibt die Schläge aus einer Handvoll Einstellungen und schreibt sie neu, sobald eine davon geändert wird – der Groove lässt sich also lenken, während er spielt. Zu finden ist der Drummer im Inspektor links (allerdings nur, solange ein Drum-Clip ausgewählt ist).</p>
+  <p>Sieben Stile stehen bereit: <b>Four on the Floor</b>, <b>Acid House</b>, <b>Motorik</b>, <b>Broken Beat</b>, <b>Halftime</b>, <b>Electro</b> und <b>Berliner Puls</b>.</p>
+  <div class="clear"></div>
+  <table class="wide1">
+    <thead><tr><th>Einstellung</th><th>Was sie tut</th></tr></thead>
+    <tr><td><span class="ctl">Der Drummer spielt diesen Clip</span></td><td>Ohne Haken werden die Schläge von Hand gesetzt. Was der Drummer geschrieben hat, bleibt als Ausgangspunkt erhalten.</td></tr>
+    <tr><td><span class="ctl">Neuer Take</span></td><td>Gleiche Einstellungen, etwas anders gespielt. Der Knopf sitzt ganz oben, damit er immer erreichbar ist.</td></tr>
+    <tr><td><span class="ctl">Stil</span></td><td>Die Art des Beats.</td></tr>
+    <tr><td><span class="ctl">Energie</span></td><td id="energy">Wie kräftig der Drummer spielt. Dabei zählt jede Stellung: vom kargen Puls ganz unten über Ghost-Notes und zusätzliche Kicks bis zu dichten Hi-Hats, Crashs und langen Fills ganz oben.</td></tr>
+    <tr><td><span class="ctl">Verspieltheit</span></td><td>Wie viele Ghost-Notes und kleine Überraschungen dazukommen.</td></tr>
+    <tr><td><span class="ctl">Shuffle</span></td><td>Spielt jede zweite Sechzehntel etwas später.</td></tr>
+    <tr><td><span class="ctl">Fills</span></td><td id="fills">Nie, oder alle 2, 4 oder 8 Takte. Am Ende des Clips kommt immer ein Fill. Je mehr Energie, desto länger und dichter die Fills.</td></tr>
+    <tr><td><span class="ctl">Backbeat</span></td><td>Welcher Sound auf 2 und 4 spielt: wie der Stil, Clap, Snare, Rimshot oder keiner.</td></tr>
+    <tr><td><span class="ctl">Hi-Hats</span></td><td>Wie der Stil, Achtel, Sechzehntel, nur Offbeats oder keine.</td></tr>
+    <tr><td><span class="ctl">Über den Clip</span></td><td>Gleichmäßig, <b>Aufbauen</b> (von leise zu kräftig) oder <b>Ausklingen</b>. Gut geeignet für Anfang und Ende eines Songs.</td></tr>
+    <tr><td><span class="ctl">Crash nach Fills</span></td><td>Ein Becken-Crash auf dem ersten Schlag nach jedem Fill.</td></tr>
+  </table>
+  <div class="tip"><p>Ein Song lässt sich gut aus drei Drum-Clips bauen: einer auf <b>Aufbauen</b> am Anfang, ein gleichmäßiger in der Mitte mit Fills alle 8 Takte und einer auf <b>Ausklingen</b> am Ende.</p></div>
+  <p>Um Schläge von Hand zu setzen, muss zuerst der Haken beim Drummer entfernt werden. Danach wird ins Raster geklickt, um einen Schlag zu setzen, und auf einen Schlag, um ihn zu entfernen. Die acht Drumsounds sind Kick, Snare, Clap, Hi-Hat zu, Hi-Hat offen, Tom, Rimshot und Becken.</p>
+</section>
+
+<!-- ======================= 5 SYNTHESIZER ======================= -->
+<section class="chapter" id="sound" data-title="5 · Der Synthesizer" style="page: ch5">
+  <div class="chap-head">
+    <div class="chap-num">5</div>
+    <div class="chap-kicker">Der Reiter Sound</div>
+    <h1>Der Synthesizer</h1>
+    <div class="stripes"></div>
+  </div>
+  <p>Jede Synth-Spur hat ihren eigenen Synthesizer. Der Reiter Sound ordnet ihn so an, wie der Klang entsteht: Die <b>Oszillatoren</b> erzeugen einen rohen Ton, der <b>Filter</b> formt seine Farbe, die <b>Amp-Hüllkurve</b> seine Lautstärke, und die <b>Effekte</b> geben Raum und Biss. Kleine Fenster mit Millimeterpapier zeigen, was die Regler gerade tun.</p>
+  <p>Die Bereiche verteilen sich auf so viele Reihen, wie das Fenster eben braucht – auf einem schmalen Bildschirm wird der Reiter also einfach länger, und es wird nach unten gescrollt. Per Klick auf den Namen eines Bereichs wird er zugeklappt (<a href="#room">Platz schaffen</a>), woraufhin er nur noch eine einzeilige Zusammenfassung zeigt, z.&#x202F;B. <i>Tiefpass 24 dB</i>.</p>
+  <div class="signal">
+    <svg viewBox="0 0 420 92" xmlns="http://www.w3.org/2000/svg" font-family="Jost" font-weight="600">
+      <defs><marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#2b2623"/></marker></defs>
+      <g font-size="8.4" letter-spacing=".8" text-anchor="middle">
+        <rect x="4" y="22" width="78" height="34" rx="3" fill="#ebe4d6" stroke="#2b2623"/><text x="43" y="37">1 · OSZ</text><text x="43" y="49" font-size="6" font-weight="500" letter-spacing="0" fill="#6e6054">2 Wellen · Sub · Rauschen</text>
+        <rect x="114" y="22" width="78" height="34" rx="3" fill="#ebe4d6" stroke="#2b2623"/><text x="153" y="37">2 · FILTER</text><text x="153" y="49" font-size="6" font-weight="500" letter-spacing="0" fill="#6e6054">TP24 · TP12 · BP · HP</text>
+        <rect x="224" y="22" width="78" height="34" rx="3" fill="#ebe4d6" stroke="#2b2623"/><text x="263" y="37">3 · AMP</text><text x="263" y="49" font-size="6" font-weight="500" letter-spacing="0" fill="#6e6054">Lautstärke-Hüllkurve</text>
+        <rect x="334" y="22" width="82" height="34" rx="3" fill="#2b2623" stroke="#2b2623"/><text x="375" y="37" fill="#f3ece0">4 · EFFEKTE</text><text x="375" y="49" font-size="6" font-weight="500" letter-spacing="0" fill="#e08a2c">Drive · Phaser · Chorus</text>
+        <rect x="114" y="70" width="78" height="18" rx="3" fill="none" stroke="#b4512a" stroke-dasharray="3 2"/><text x="153" y="82" font-size="6" letter-spacing=".4" fill="#b4512a">FILTERHÜLLKURVE</text>
+        <rect x="4" y="2" width="78" height="14" rx="3" fill="none" stroke="#b4512a" stroke-dasharray="3 2"/><text x="43" y="12" font-size="6.5" letter-spacing=".6" fill="#b4512a">LFO</text>
+        <rect x="334" y="70" width="82" height="18" rx="3" fill="none" stroke="#c9a24a"/><text x="375" y="82" font-size="5.4" letter-spacing=".1" fill="#9c7a22">GEMEINSAMES ECHO · HALL</text>
+      </g>
+      <g stroke="#2b2623" stroke-width="1.2" fill="none">
+        <path d="M82 39 H112" marker-end="url(#ar)"/><path d="M192 39 H222" marker-end="url(#ar)"/><path d="M302 39 H332" marker-end="url(#ar)"/>
+      </g>
+      <g stroke="#b4512a" stroke-width="1" fill="none" stroke-dasharray="2 2">
+        <path d="M153 70 V58" marker-end="url(#ar)"/><path d="M82 9 H153 V20" marker-end="url(#ar)"/>
+      </g>
+      <path d="M375 56 V68" stroke="#c9a24a" stroke-width="1" fill="none" marker-end="url(#ar)"/>
+    </svg>
+  </div>
+  <h3>Regler</h3>
+  <p>Ein Regler wird nach oben oder unten gezogen. Mit gehaltener <span class="key">Umschalt</span>-Taste geht es in kleinen Schritten; ein Doppelklick setzt ihn zurück. Ruht die Maus darauf, werden sein Wert und seine Aufgabe angezeigt. Ein kleiner roter Punkt auf einem Regler bedeutet, dass eine Kurve ihn mit der Zeit bewegt (<a href="#lines">Kapitel 6</a>).</p>
+  <h2 id="simple"><span class="n">5.1</span>Einfach oder Komplett</h2>
+  <p>Der Reiter Sound hat zwei Seiten. Umgeschaltet wird mit <b>Ansicht → Einfache Sound-Seite</b> oder auf der Seite Allgemein der Einstellungen; Nachtzug merkt sich die Wahl. <b>Komplett</b> zeigt jeden Regler, wie ab 5.3 beschrieben. <b>Einfach</b> zeigt stattdessen acht große Regler in klaren Worten. Jeder davon bewegt mehrere Regler der Seite Komplett zugleich – und zwar von dort aus, wo sie gerade stehen –, weshalb ein Preset seinen Charakter behält.</p>
+  <figure><img src="img-de/simple-sound.png" alt="Die Seite Einfach im Reiter Sound"><figcaption><b>ABB 9</b>Die Seite Einfach. Die Bilder links bewegen sich mit, wenn an den Reglern gedreht wird.</figcaption></figure>
+  <table class="wide1">
+    <thead><tr><th>Großer Regler</th><th>Was er bewegt</th></tr></thead>
+    <tr><td><span class="ctl">Helligkeit</span></td><td>Dunkel bis hell: den <span class="ctl">Cutoff</span> des Filters.</td></tr>
+    <tr><td><span class="ctl">Squelch</span></td><td>Der Acid-Sound: <span class="ctl">Resonanz</span>, <span class="ctl">Hüllkurve</span> und <span class="ctl">Akzent</span> zusammen.</td></tr>
+    <tr><td><span class="ctl">Länge</span></td><td>Kurze Plucks bis lange Töne: <span class="ctl">Decay</span> von Amp und Filter, dazu <span class="ctl">Release</span>.</td></tr>
+    <tr><td><span class="ctl">Fülle</span></td><td>Dünn bis fett: Unisono-Kopien, Sub-Oszillator und Detune.</td></tr>
+    <tr><td><span class="ctl">Dreck</span></td><td>Sauber bis dreckig: <span class="ctl">Drive</span>.</td></tr>
+    <tr><td><span class="ctl">Raum</span></td><td>Trocken bis weit weg: wie viel in den Hall und das Echo geht.</td></tr>
+    <tr><td><span class="ctl">Bewegung</span></td><td>Ruhig bis bewegt: ein langsames Filter-Wabern vom LFO, dazu Chorus.</td></tr>
+    <tr><td><span class="ctl">Glide</span></td><td>Springen bis Gleiten zwischen den Noten.</td></tr>
+  </table>
+  <p>Bei einer Drum-Spur hat die Seite Einfach einen Lautstärkeregler für jeden Drumsound, eine Taste <span class="key ico play"></span> zum Anhören, die zugehörige Sample-Taste (<a href="#samples">9.4</a>) sowie <span class="ctl">Dreck</span>, <span class="ctl">Echo</span> und <span class="ctl">Raum</span> für das ganze Kit.</p>
+
+  <h2 id="presets"><span class="n">5.2</span>Schnell zu einem Sound</h2>
+  <ul>
+    <li><span class="ctl">Sound</span>, im Inspektor oder oben im Reiter Sound, wählt ein fertiges Preset, nach Einsatz gruppiert. In der offenen Liste <b>genügt es, die Maus auf einem Preset ruhen zu lassen, um es zu hören</b>: eine kurze Phrase in Tonart und Tempo des Songs, eine Bassline für einen Bass, ein Akkord für ein Pad. Genauso funktioniert die Liste der Drum-Kits.</li>
+    <li id="roll"><span class="ctl">Neu würfeln</span> baut einen ganz neuen Klang, der zur Art der Spur passt. Es lohnt sich, öfter zu drücken: So finden sich Klänge, auf die man selbst nie gekommen wäre!</li>
+    <li id="mutate"><span class="ctl">Mutieren</span> stupst jeden Regler ein wenig an, für einen nahen Verwandten.</li>
+    <li><span class="nw"><span class="key">Strg</span>+<span class="key">Z</span></span> holt den vorigen Klang zurück.</li>
+  </ul>
+  <table class="wide1 small">
+    <thead><tr><th>Gruppe</th><th>Presets</th></tr></thead>
+    <tr><td>Bass</td><td>Acid Squelch · Rubber Square · Deep Bass · Zap Bass</td></tr>
+    <tr><td>Sequenz und Pluck</td><td>Berlin Sequence · Glass Pluck · Pulse Wanderer · Hollow Band</td></tr>
+    <tr><td>Pad</td><td>String Machine · Supersaw Pad · Phase Choir · Night Drone · Thin Air</td></tr>
+    <tr><td>Lead</td><td>Mellow Lead · Saw Lead · Wide Unison Lead</td></tr>
+    <tr><td>Glocken und Effekte</td><td>FM Bell · Sample and Hold</td></tr>
+  </table>
+
+  <h2 id="osc"><span class="n">5.3</span>Oszillatoren, Unisono und Stimmen</h2>
+  <figure><img src="img-de/oscillators.png" alt="Oszillatoren, Unisono und Stimmen"><figcaption><b>ABB 10</b>Abschnitt 1: die beiden Oszillatoren samt Sub-Oszillator und Rauschen.</figcaption></figure>
+  <table>
+    <thead><tr><th>Bedienelement</th><th>Was es tut</th></tr></thead>
+    <tr><td><span class="ctl">Welle 1, 2</span></td><td>Sägezahn, Puls, Dreieck oder Sinus. Das Fenster zeigt die gemischte Welle.</td></tr>
+    <tr><td><span class="ctl">Osz. 2</span></td><td>Stimmt den zweiten Oszillator eine Oktave tiefer, gleich, eine Quinte höher oder eine Oktave höher.</td></tr>
+    <tr><td><span class="ctl">Osz.-Mix</span></td><td>Mischt die beiden.</td></tr>
+    <tr><td><span class="ctl">Detune</span></td><td>Verstimmt sie leicht, so dass sie langsam gegeneinander schweben.</td></tr>
+    <tr><td><span class="ctl">FM</span></td><td id="fm">Lässt den zweiten den ersten verbiegen: Glocken und metallische Töne.</td></tr>
+    <tr><td><span class="ctl">Pulsbreite</span></td><td>Macht die Pulswelle dünner.</td></tr>
+    <tr><td><span class="ctl">Sub</span>, <span class="ctl">Rauschen</span></td><td>Ein tiefer Ton eine Oktave darunter; Rauschen.</td></tr>
+    <tr><td><span class="ctl">Stimmen</span></td><td id="unison">Unisono: stapelt bis zu sieben leicht verstimmte Kopien für einen riesigen Klang. <span class="ctl">Unisono-Detune</span> bestimmt, wie weit sie auseinander liegen, <span class="ctl">Stereobreite</span> verteilt sie nach links und rechts.</td></tr>
+    <tr><td><span class="ctl">Spielweise</span></td><td id="mono"><b>Poly</b> spielt Akkorde (bis zu acht Noten); <b>Mono</b> eine Note nach der anderen, wie bei Acid-Basslines.</td></tr>
+    <tr><td><span class="ctl">Glide</span></td><td id="glide">Lässt die Tonhöhe von einer Note zur nächsten gleiten.</td></tr>
+  </table>
+
+  <h2 id="filter"><span class="n">5.4</span>Filter</h2>
+  <figure><img src="img-de/filter.png" alt="Der Filter"><figcaption><b>ABB 11</b>Die Kurve zeigt, welche Tonhöhen durchkommen, mit dem Cutoff in Hz. Zieh darin, um Cutoff und Resonanz zugleich zu stellen.</figcaption></figure>
+  <p>Der Filter nimmt einen Teil des Klangs weg. Ihn zu fahren ist die Geste im Herzen der Acid-Musik; es empfiehlt sich deshalb, mit diesem Abschnitt anzufangen.</p>
+  <table>
+    <thead><tr><th>Bedienelement</th><th>Was es tut</th></tr></thead>
+    <tr><td><span class="ctl">Typ</span></td><td>Tiefpass 24 oder 12 dB (die klassische Fahrt von dunkel nach hell), Bandpass (dünn und näselnd), Hochpass (entfernt den Bass).</td></tr>
+    <tr><td><span class="ctl">Cutoff</span></td><td id="cutoff">Wo er schneidet.</td></tr>
+    <tr><td><span class="ctl">Resonanz</span></td><td id="resonance">Erzeugt eine quietschende Spitze am Cutoff.</td></tr>
+    <tr><td><span class="ctl">Hüllkurve</span></td><td>Wie weit jede Note den Filter öffnet.</td></tr>
+    <tr><td><span class="ctl">Keytracking</span></td><td>Macht hohe Noten heller.</td></tr>
+    <tr><td><span class="ctl">Akzent</span></td><td>Wie stark betonte Noten herausstechen.</td></tr>
+  </table>
+  <div class="tip"><p>Das Acid-Rezept: <b>Mono</b>, Tiefpass 24 dB, <span class="ctl">Cutoff</span> niedrig, <span class="ctl">Resonanz</span> hoch, <span class="ctl">Hüllkurve</span> etwa halb, kurzes Filter-<span class="ctl">Decay</span> und ein Pattern mit Akzenten und Slides. Danach wird der <span class="ctl">Cutoff</span> langsam gedreht, während es läuft.</p></div>
+
+  <h2 id="env"><span class="n">5.5</span>Hüllkurven</h2>
+  <figure><img src="img-de/envelopes.png" alt="Filter- und Amp-Hüllkurve"><figcaption><b>ABB 12</b>Zieh die runden Punkte in beiden Fenstern, um die Hüllkurve direkt zu formen.</figcaption></figure>
+  <p>Eine Hüllkurve ist eine Form, der jede Note folgt. Die <b>Filterhüllkurve</b> öffnet und schließt den Filter bei jeder Note mit <span class="ctl">Attack</span>, <span class="ctl">Decay</span> und <span class="ctl">Sustain</span>; <span class="ctl">→ Tonhöhe</span> verbiegt dabei auch die Tonhöhe (das ergibt Zaps und Laserklänge). Die <b>Amp-Hüllkurve</b> bestimmt, wie laut jede Note über die Zeit ist – kurzes Attack und Decay für Plucks, lange Werte für Pads. <span class="ctl">Release</span> ist schließlich, wie lange eine Note nach ihrem Ende noch nachklingt.</p>
+
+  <h2 id="lfo"><span class="n">5.6</span>LFO und Effekte</h2>
+  <p>Der <b>LFO</b> ist eine langsame, wiederkehrende Bewegung: Dreieck, Rechteck oder zufällige Stufen. Er kann auf den Filter (<span class="ctl">LFO → Filter</span>), die Tonhöhe (<span class="ctl">Vibrato</span>) oder die Pulsbreite (<span class="ctl">LFO → Pulsbreite</span>) geschickt werden. Der Punkt in seinem Fenster wandert im Tempo des LFO.</p>
+  <p id="effects"><b>Effekte</b>: <span class="ctl">Drive</span> (Verzerrung), <span class="ctl">Phaser</span> mit seiner Rate, <span class="ctl">Chorus</span>, und wie viel von der Spur in das gemeinsame <span class="ctl">Echo</span> und den <span class="ctl">Hall</span> geht.</p>
+  <p id="shared">Der ganze Song teilt sich ein <b>gemeinsames Echo und einen Hall</b>. Die <span class="ctl">Echozeit</span> folgt dem Tempo, während <span class="ctl">Feedback</span>, <span class="ctl">Hallgröße</span> und <span class="ctl">Hall-Dämpfung</span> ihren Charakter bestimmen.</p>
+  <figure><img src="img-de/full-sound.png" alt="Der ganze Reiter Sound"><figcaption><b>ABB 13</b>Der ganze Reiter Sound: Abschnitte von 1 bis 4 nummeriert, in der Reihenfolge, in der der Klang entsteht.</figcaption></figure>
+
+  <h2 id="kit"><span class="n">5.7</span>Das Drum-Kit</h2>
+  <p>Bei einer Drum-Spur zeigt der Reiter Sound stattdessen das Drum-Kit: ein Kit-Preset (<b>Maschinen-Kit</b>, <b>Weiches Boom-Kit</b> oder <b>Straffes Acid-Kit</b>) sowie <span class="ctl">Pegel</span>, <span class="ctl">Stimmung</span> und <span class="ctl">Decay</span> für jeden der acht Drumsounds, jeweils mit einer Taste <span class="key ico play"></span> zum Anhören. Der Inspektor hält das Kit samt <span class="ctl">Drive</span>, <span class="ctl">Echo</span> und <span class="ctl">Hall</span> griffbereit.</p>
+  <figure><img src="img-de/drum-sound.png" alt="Das Drum-Kit auf der Seite Komplett"><figcaption><b>ABB 14</b>Das Drum-Kit. Die Taste unter jedem <span class="key ico play"></span> sagt <b>Eingebaut</b> oder nennt das Sample, das dieser Sound spielt.</figcaption></figure>
+  <p>Jeder Drumsound kann stattdessen <b>einen eigenen Sound</b> spielen: Dazu wird darunter <span class="ctl">Eingebaut</span> angeklickt und ein Sample gewählt, eine Audiodatei importiert oder eine aufgenommen (<a href="#samples">9.4</a>). Mit Sample spielt <span class="ctl">Stimmung</span> es schneller oder langsamer, bis zu einer Oktave in jede Richtung, und <span class="ctl">Decay</span> kürzt es; ganz aufgedreht spielt das ganze Sample. Vier Kits bestehen aus Samples der Nachtzug-Bibliothek (9.4): <b>Nachtzug-Kit</b>, <b>Tape-Kit</b>, <b>Electro-Kit</b> und <b>Handpercussion-Kit</b>. Ein anderes Kit bringt seine eigenen Sounds mit; ein Drumsound, der ein eigenes Sample spielt, behält es.</p>
+</section>
+
+<!-- ======================= 6 LINIEN ======================= -->
+<section class="chapter" id="lines" data-title="6 · Klänge in Bewegung" style="page: ch6">
+  <div class="chap-head">
+    <div class="chap-num">6</div>
+    <div class="chap-kicker">Automation</div>
+    <h1>Klänge in Bewegung</h1>
+    <div class="stripes"></div>
+  </div>
+  <p>Ein Filter, der sich langsam über sechzehn Takte öffnet, macht ein sich wiederholendes Pattern erstaunlich lebendig. Jeder Regler kann einer Kurve folgen, und eine solche Kurve ist – das ist das Schöne daran – schnell gezeichnet.</p>
+  <figure><img src="img-de/lines.png" alt="Eine Kurvenspur unter der Bass-Spur"><figcaption><b>ABB 15</b>Eine Cutoff-Kurve unter der Bass-Spur. Kurven erscheinen auch als dünne rote Linien über den Clips.</figcaption></figure>
+  <h2 id="draw"><span class="n">6.1</span>Eine Kurve zeichnen</h2>
+  <ol class="steps">
+    <li>Auf der Spur in der Zeitleiste wird <span class="ctl">Kurven</span> gedrückt. Darunter öffnet sich eine Bahn.</li>
+    <li>Links in der Bahn wird <span class="ctl">Kurve: …</span> angeklickt und der Regler gewählt, z.&#x202F;B. <b>Cutoff</b>. (Alternativ per Rechtsklick auf einen Regler im Reiter Sound: <b>Kurve für … in der Zeitleiste zeichnen</b>.)</li>
+    <li>Mit Klicks in die Bahn werden Punkte gesetzt. Punkte lassen sich ziehen, um sie zu verschieben, ein Rechtsklick entfernt einen Punkt, und mit <span class="key">Umschalt</span> geht es in feinen Schritten.</li>
+    <li>Über <span class="ctl">Folgt dem Song</span> wird festgelegt, wie sich die Kurve wiederholt: eine lange Kurve über den ganzen Song oder eine kurze Form jeden halben Takt, jeden Takt oder alle 2, 4 oder 8 Takte.</li>
+  </ol>
+  <h2 id="recknob"><span class="n">6.2</span>Reglerbewegungen aufnehmen</h2>
+  <p>Zuallererst wird <span class="key ico rec"></span> gedrückt, sodass sie leuchtet. Danach wird <span class="key ico play"></span> gedrückt und ein Regler gedreht. Die Bewegung wird als Kurve geschrieben.</p>
+  <p>Ein Regler an einem <b>MIDI-Controller</b> nimmt genauso auf, sobald er seinen Regler auf dem Bildschirm gelernt hat (<a href="#midi">9.6</a>).</p>
+  <div class="warn"><p><b>Wird ein Regler von Hand gestellt, pausiert seine Kurve</b>, damit in Ruhe ausprobiert werden kann, ohne die Kurve zu verlieren. <span class="ctl">Kurven fortsetzen</span> im Reiter Sound holt die Kurven zurück. Um eine Kurve zu löschen, wird der Regler mit rechts angeklickt und <b>Kurve von … löschen</b> gewählt.</p></div>
+</section>
+
+<!-- ======================= 7 ZEITLEISTE ======================= -->
+<section class="chapter" id="timeline" data-title="7 · Die Song-Zeitleiste" style="page: ch7">
+  <div class="chap-head">
+    <div class="chap-num">7</div>
+    <div class="chap-kicker">Arrangieren</div>
+    <h1>Die Song-Zeitleiste</h1>
+    <div class="stripes"></div>
+  </div>
+  <p>Im Modus <span class="ctl">Song</span> zeigt die Zeitleiste den ganzen Song. Die Zeit läuft in Takten von links nach rechts, mit einer Zeile pro Spur. Oben liegen drei Zeilen:</p>
+  <ul>
+    <li><b>Takte</b>: Klicken oder Ziehen setzt die Abspielposition.</li>
+    <li id="loop"><b>Loop</b>: Der farbige Balken markiert den Abschnitt, der sich wiederholt, solange <span class="ctl">Loop</span> an ist. Wird in der Zeile gezogen, wird ein anderer Abschnitt markiert; ein Klick schaltet das Loopen an oder aus. <span class="ctl">Diesen Teil loopen</span> legt den Loop um die ausgewählten Clips.</li>
+    <li><b>Akkorde</b>: der Akkord jedes Takts.</li>
+  </ul>
+  <h2 id="clips"><span class="n">7.1</span>Mit Clips arbeiten</h2>
+  <table class="wide1">
+    <thead><tr><th>Vorhaben</th><th>So geht es</th></tr></thead>
+    <tr><td>Clip anlegen</td><td>Doppelklick auf eine freie Stelle in der Zeile einer Spur.</td></tr>
+    <tr><td>Auswählen</td><td>Klicken. <span class="nw"><span class="key">Strg</span>+Klick</span> nimmt weitere dazu.</td></tr>
+    <tr><td>Noten bearbeiten</td><td>Doppelklick darauf.</td></tr>
+    <tr><td>Verschieben</td><td>Ziehen, auch auf eine andere Spur derselben Art.</td></tr>
+    <tr><td>Verlängern</td><td>Die rechte Kante ziehen. Striche oben zeigen, wo sich das Pattern wiederholt.</td></tr>
+    <tr><td id="scissors">Teilen</td><td><span class="ctl">Schere</span> einschalten, dann an die gewünschte Stelle klicken; oder <span class="ctl">An Position teilen</span> (<span class="nw"><span class="key">Strg</span>+<span class="key">E</span></span>).</td></tr>
+    <tr><td>Kopieren</td><td><span class="ctl">Duplizieren</span> (<span class="nw"><span class="key">Strg</span>+<span class="key">D</span></span>) setzt eine Kopie direkt dahinter. <span class="nw"><span class="key">Strg</span>+<span class="key">C</span> / <span class="key">V</span></span> fügt an der Abspielposition ein.</td></tr>
+    <tr><td>Löschen</td><td><span class="ctl">Löschen</span> oder die Taste <span class="key">Entf</span>.</td></tr>
+    <tr><td id="fade">Ein- oder ausblenden</td><td>Rechtsklick → <b>Übergang am Anfang</b> oder <b>am Ende</b>: Blende, Filterfahrt oder beides, einen Schlag bis vier Takte lang. Ein dunkler Keil zeigt den Übergang an.</td></tr>
+  </table>
+  <p id="undo">Beim Verschieben rasten Clips auf ganze Schläge ein; mit gehaltener <span class="key">Umschalt</span>-Taste in Sechzehnteln. <span class="key">Strg</span> + Mausrad oder <span class="key">−</span> <span class="key">+</span> zoomen. Und nicht vergessen: <span class="key">↶</span> oder <span class="nw"><span class="key">Strg</span>+<span class="key">Z</span></span> macht alles rückgängig.</p>
+
+  <h2 id="chords"><span class="n">7.2</span>Akkorde</h2>
+  <p>Jeder Takt hat einen Akkord. Spuren mit <span class="ctl">Akkorden folgen</span> (zu Beginn sind das Bass, Sequenz und Pad) verschieben ihre Noten mit, sodass ein einziges eintaktiges Pattern über eine ganze Akkordfolge spielen kann.</p>
+  <ul>
+    <li>Um einen Akkord zu ändern, wird ein Takt in der Zeile <b>Akkorde</b> angeklickt und ein Akkord gewählt. Angeboten werden nur Akkorde aus der Tonleiter des Songs.</li>
+    <li><b>Die ersten Takte über den ganzen Song wiederholen</b> verteilt eine kurze Folge über alles.</li>
+    <li><b>Überrasch mich mit einer neuen Akkordfolge</b> schreibt eine frische.</li>
+    <li><b>Zum nächsten Akkord streben</b> spielt den Akkord des nächsten Taktes einen Halbton tiefer, außerhalb der Tonleiter, sodass die Musik am Taktstrich in ihn hinaufgleitet. Das ist ein richtiger falscher Akkord (<a href="#wrongnotes">3.4</a>), am besten im letzten Takt vor einem Wechsel.</li>
+  </ul>
+  <p>Ist die Zeitleiste weit herausgezoomt, wird jede Strecke mit demselben Akkord als ein Block in der Akkordzeile gezeigt; die Blöcke wechseln sich farblich ab, sodass die Wechsel immer gut zu sehen sind. Ruht die Maus auf einem Takt, wird dessen Akkord angezeigt.</p>
+  <div class="note"><p>Ob eine Spur den Akkorden folgt, wird mit <span class="ctl">Akkorden folgen</span> unter <span class="ctl">So werden Noten gespielt</span> im Inspektor eingestellt, oder per Rechtsklick auf ihren Namen. Lead und Drums folgen von Haus aus nicht.</p></div>
+
+  <h2 id="arrange"><span class="n">7.3</span>Arrangieren lassen</h2>
+  <p>Aus einem Loop, der gut klingt, einen ganzen Song zu machen, ist oft der schwierigste Teil. <span class="ctl">Arrangieren lassen</span> – über der Zeitleiste oder im Menü <b>Bearbeiten</b> – nimmt genau das ab: Dabei wird von jeder Spur das Pattern am Loop genommen und daraus der Song in Teilen gebaut.</p>
+  <figure style="width:58%; margin-left:auto; margin-right:auto"><img src="img-de/dlg-arrange.png" alt="Arrangieren lassen"><figcaption><b>ABB 16</b>Kurz, mittel oder lang; die Dauer beim aktuellen Tempo steht dabei.</figcaption></figure>
+  <table class="wide1">
+    <thead><tr><th>Teil</th><th>Was spielt</th></tr></thead>
+    <tr><td><b>Intro</b></td><td>Ein leiser Drummer, das Pad blendet sich ein, die Sequenz blendet sich ein, während ihr Filter aufgeht.</td></tr>
+    <tr><td><b>Build-up</b></td><td>Der Bass steigt ein, sein Filter öffnet sich; der Drummer baut auf.</td></tr>
+    <tr><td><b>Hauptteil</b></td><td>Alles.</td></tr>
+    <tr><td><b>Break</b></td><td>Keine Drums und kein Bass: Pad, Sequenz und der Lead.</td></tr>
+    <tr><td><b>Hauptteil 2</b></td><td>Wieder alles, mit dem Lead, einem lebhafteren Drummer und leicht variierten Patterns.</td></tr>
+    <tr><td><b>Outro</b></td><td>Der Drummer klingt aus; die Spuren blenden sich aus, ihre Filter schließen sich.</td></tr>
+  </table>
+  <figure><img src="img-de/arranged.png" alt="Ein arrangierter Song"><figcaption><b>ABB 17</b>Ein Song nach <b>Arrangieren lassen</b>: Die Keile sind Blenden und Filterfahrten.</figcaption></figure>
+  <p>Ist die Lead-Spur noch leer, bekommt sie eine eigene Melodie. Was vorher in der Zeitleiste lag, wird ersetzt (<span class="key">↶</span> holt es aber jederzeit zurück). Danach besteht alles aus ganz gewöhnlichen Clips, die verschoben, verlängert und geändert werden können – und mit dem Loop lässt sich an einem Teil nach dem anderen arbeiten.</p>
+</section>
+
+<!-- ======================= 8 LOOPS ======================= -->
+<section class="chapter" id="loops" data-title="8 · Das Loop-Raster" style="page: ch8">
+  <div class="chap-head">
+    <div class="chap-num">8</div>
+    <div class="chap-kicker">Live spielen</div>
+    <h1>Das Loop-Raster</h1>
+    <div class="stripes"></div>
+  </div>
+  <p>Wird <span class="ctl">Loops</span> neben <span class="ctl">Song</span> gedrückt, wird aus der Zeitleiste ein Raster. Es ist – wie der Name schon vermuten lässt – zum Ausprobieren und zum Live-Spielen gedacht: Jede Spur hat eine Reihe <b>Zellen</b>, und jede Zelle enthält ein Pattern.</p>
+  <figure style="width:78%; margin-left:auto; margin-right:auto"><img src="img-de/loops-grid.png" alt="Das Loop-Raster"><figcaption><b>ABB 18</b>Das Loop-Raster. Jede Zelle ist ein Pattern, das sich wiederholt, solange es an ist.</figcaption></figure>
+  <ul>
+    <li><b>Starten</b>: Eine Zelle wird per Klick gestartet. Sie beginnt am nächsten Takt und ersetzt, was die Spur gerade spielt. Eine wartende Zelle blinkt.</li>
+    <li><b>Stoppen</b>: per erneutem Klick. <span class="ctl">Stopp</span> links stoppt eine Spur, <span class="ctl">Alle stoppen</span> stoppt alles.</li>
+    <li><b>Bearbeiten</b>: Die zuletzt geklickte Zelle hat einen Ring und ist die, die der Reiter Noten zeigt. Mit <span class="nw"><span class="key">Umschalt</span>+Klick</span> auf eine laufende Zelle wird sie bearbeitet, ohne sie zu stoppen.</li>
+    <li>Ein Klick auf eine <b>leere</b> Zelle schreibt dort eine neue Idee.</li>
+  </ul>
+  <ul>
+    <li>Die Knöpfe <span class="ctl">▶ 1</span>, <span class="ctl">▶ 2</span> … unten starten eine ganze <b>Spalte</b>; Spuren ohne Zelle in dieser Spalte stoppen.</li>
+    <li>Die Zeile <b>Akkorde</b> zeigt die Akkordfolge, ein Kästchen pro Takt, der Reihe nach wiederholt; der aktuelle Takt leuchtet. Ein Klick auf ein Kästchen ändert es, <span class="key">+</span> fügt einen Takt an.</li>
+    <li>Per Rechtsklick lässt sich eine Zelle in die nächste Spalte kopieren, an der Abspielposition in die Song-Zeitleiste kopieren oder löschen. <span class="ctl">+ Spalte</span> fügt eine Spalte hinzu.</li>
+  </ul>
+  <h2 id="jam"><span class="n">8.1</span>Aus einer Jam wird ein Song</h2>
+  <p>Wird <span class="key ico rec"></span> gedrückt, sodass sie leuchtet, während Zellen gestartet und gestoppt werden, wird alles Gestartete als Clips in die Song-Zeitleiste geschrieben, vom Takt, an dem es begann, bis zum Takt, an dem es endete. Danach wird zurück auf <span class="ctl">Song</span> geschaltet, um das Ergebnis zu sehen und (wie jeden anderen Teil der Zeitleiste auch) zu bearbeiten. Eine gute Jam ist schon der halbe Song!</p>
+</section>
+
+<!-- ======================= 9 MIXER ======================= -->
+<section class="chapter" id="mixer" data-title="9 · Mixer, Export, Einstellungen" style="page: ch9">
+  <div class="chap-head">
+    <div class="chap-num">9</div>
+    <div class="chap-kicker">Fertigstellen</div>
+    <h1>Mixer, Export, Einstellungen</h1>
+    <div class="stripes"></div>
+  </div>
+  <h2><span class="n">9.1</span>Der Mixer</h2>
+  <figure><img src="img-de/mixer.png" alt="Der Mixer"><figcaption><b>ABB 19</b>Ein Kanalzug pro Spur, der Eingang, rechts der Zug Ganzer Song.</figcaption></figure>
+  <p>Der Reiter <span class="ctl">Mixer</span> zeigt einen Kanalzug pro Spur, jeder in seine eigene Mulde geschraubt: Regler für <span class="ctl">Panorama</span>, <span class="ctl">Echo</span> und <span class="ctl">Hall</span>, einen Lautstärke-<b>Fader</b> mit dem Pegel der Spur daneben, dazu <span class="ctl">Stumm</span> und <span class="ctl">Solo</span>. Doppelklick auf einen Fader setzt ihn zurück. Der Zug <span class="ctl">Ganzer Song</span> trägt Gesamtlautstärke, Feedback und Hallgröße.</p>
+  <p id="pump"><span class="ctl">Pumpen</span>, bei jeder Spur außer den Drums, duckt die Spur bei jeder Kick weg und lässt sie in etwa einem Drittel Schlag wieder anschwellen: der atmende Klang so vieler Tanzmusik. Es lohnt sich, das bei einem Pad oder einer Bassline auszuprobieren; der Unterschied ist sofort zu hören. Die Kick treibt das Pumpen auch dann an, wenn die Drum-Spur stumm ist.</p>
+  <p id="input">Der Kanalzug <span class="ctl">Eingang</span> spielt den Eingang des Audiogeräts live durch Nachtzug: eine Gitarre, eine Stimme, einen anderen Synthesizer. Mit <span class="ctl">Eingang</span> wird er geöffnet (das Gerät wird in den Einstellungen auf der Seite Audio gewählt). <span class="ctl">Gain</span> stellt ein, wie laut er hereinkommt, <span class="ctl">Filter</span> und <span class="ctl">Squelch</span> arbeiten wie das Filter des Synthesizers, <span class="ctl">Wah</span> öffnet das Filter, je lauter gespielt wird, wie ein Wah-Pedal, und <span class="ctl">Drive</span>, <span class="ctl">Pumpen</span>, <span class="ctl">Echo</span> und <span class="ctl">Hall</span> tun, was sie bei den Spuren tun. Der Eingang ist nie Teil eines Exports.</p>
+  <div class="warn"><p>Mit einem Mikrofon müssen <b>Kopfhörer</b> benutzt werden! Über Lautsprecher würde der Klang andernfalls ins Mikrofon zurückkoppeln und pfeifen.</p></div>
+  <div class="warn" id="limiter"><p>Ein Limiter schützt den Ausgang: Wird die Mischung zu laut, knackt nichts, aber der Klang wird zusammengedrückt. Stehen die Anzeigen oft im Roten, sollten Spuren leiser statt lauter gemacht werden.</p></div>
+
+  <h2 id="saving"><span class="n">9.2</span>Speichern und exportieren</h2>
+  <table class="wide1">
+    <thead><tr><th>Menüeintrag</th><th>Was er tut</th></tr></thead>
+    <tr><td>Neuer Song mit frischen Ideen <span class="nw"><span class="key">Strg</span>+<span class="key">N</span></span></td><td>Drums, Bass, Sequenz und Pad, dazu eine zufällige Akkordfolge.</td></tr>
+    <tr><td>Neuer leerer Song</td><td>Ein Song ohne Spuren.</td></tr>
+    <tr><td>Öffnen… <span class="nw"><span class="key">Strg</span>+<span class="key">O</span></span></td><td>Öffnet einen <code>.nachtzug</code>-Song.</td></tr>
+    <tr><td>Speichern <span class="nw"><span class="key">Strg</span>+<span class="key">S</span></span></td><td>Speichert den Song. Speichern unter… mit zusätzlich <span class="key">Umschalt</span>.</td></tr>
+    <tr><td>Export: Audiodatei, Spuren oder MIDI… <span class="nw"><span class="key">Strg</span>+<span class="key">Umschalt</span>+<span class="key">E</span></span></td><td>Dasselbe wie die Taste <span class="ctl">Export</span> (unten).</td></tr>
+    <tr><td>Einstellungen… <span class="nw"><span class="key">Strg</span>+<span class="key">,</span></span></td><td>Sprache, Farben, Größe, Audio, Samples und MIDI (9.3).</td></tr>
+  </table>
+  <p>Gibt es ungespeicherte Änderungen, fragt Nachtzug vor dem Schließen oder Öffnen eines anderen Songs nach; der Fenstertitel zeigt dann ein <code>*</code>.</p>
+  <p id="autosave">Solange es ungespeicherte Änderungen gibt, legt Nachtzug alle halbe Minute still und leise eine <b>Ersatzkopie</b> an. Schließt es sich einmal, ohne zu fragen – etwa nach einem Absturz oder weil der Computer ausging –, bietet der nächste Start an, <b>den Song wiederherzustellen</b>, und zwar samt der Änderungen, die nicht gespeichert waren. Wird Nachtzug ganz normal beendet, wird die Kopie wieder weggeworfen.</p>
+  <h3 id="export">Exportieren</h3>
+  <p>Zuallererst wird oben rechts <span class="ctl">Export</span> gedrückt. Unter <span class="ctl">Erstellen</span> wird dann gewählt, was herauskommen soll:</p>
+  <ul>
+    <li><b>Eine Audiodatei (WAV)</b>: der ganze Song gemischt, überall abspielbar.</li>
+    <li id="stems"><b>Eine Audiodatei pro Spur (Stems)</b>: jede hörbare Spur in einer eigenen Datei (<code>01 Drums.wav</code>, <code>02 Bass.wav</code> …) in einem neuen Ordner. Alle beginnen im selben Moment und ergeben zusammen genau den Song, samt Echo und Hall, zum Mischen in einem anderen Musikprogramm.</li>
+    <li id="midiexport"><b>Eine MIDI-Datei mit den Noten</b>: die Noten jeder Spur, ohne Klang, für andere Musikprogramme und Synthesizer. Akkorde, Arpeggios, schnelle Wiederholungen, Swing und Noten mit Häufigkeit werden so ausgeschrieben, wie sie zu hören sind; die Drums liegen auf den General-MIDI-Drumnoten auf Kanal 10.</li>
+  </ul>
+  <p>Stummgeschaltete Spuren bleiben bei allen dreien draußen.</p>
+  <figure style="width:66%; margin-left:auto; margin-right:auto"><img src="img-de/dlg-export.png" alt="Das Fenster Export"><figcaption><b>ABB 20</b>Das Fenster zeigt, wie lang die Datei wird und etwa wie groß. Ende und Qualität gelten nicht für eine MIDI-Datei.</figcaption></figure>
+  <table class="wide1">
+    <thead><tr><th>Einstellung</th><th>Auswahl</th></tr></thead>
+    <tr><td><span class="ctl">Was</span></td><td><b>Den ganzen Song</b> von Takt 1 bis zum Ende des letzten Clips, egal wo der Loop liegt; oder <b>nur den Loop</b>, 1- bis 32-mal hintereinander, für einen nahtlosen Loop oder einen Übungstrack.</td></tr>
+    <tr><td><span class="ctl">Ende</span></td><td>Echo und Hall <b>ausklingen lassen</b> (die Datei endet, sobald sie verklungen sind), oder über die letzten Takte <b>ausblenden</b>.</td></tr>
+    <tr><td><span class="ctl">Qualität</span></td><td><b>CD-Qualität</b>, 44,1 kHz 16 Bit, läuft überall. 48 kHz 16 Bit passt zu Video; 24 Bit mit 48 oder 96 kHz ist für die Weiterarbeit in einem Studioprogramm.</td></tr>
+    <tr><td><span class="ctl">Speichern als</span></td><td>Der Dateiname, zu Beginn im Musik-Ordner; <span class="ctl">Auswählen…</span> wählt einen anderen Ort. Nachtzug fragt, bevor es eine Datei ersetzt.</td></tr>
+  </table>
+  <p>Ist die Datei geschrieben, zeigt <b>Dein Song ist fertig</b> ihre Länge und Größe, mit <span class="ctl">Abspielen</span> und <span class="ctl">Im Ordner zeigen</span>. Aus dem Terminal: <code>nachtzug --render out.wav song.nachtzug</code>.</p>
+
+  <h2 id="settings"><span class="n">9.3</span>Einstellungen und Audio</h2>
+  <p>Die Taste <span class="key">⚙</span> im Ausgang oder <b>Datei → Einstellungen…</b> (<span class="nw"><span class="key">Strg</span>+<span class="key">,</span></span>) öffnet die Einstellungen. Jede Änderung gilt sofort.</p>
+  <table class="wide1">
+    <thead><tr><th>Seite</th><th>Was sich einstellen lässt</th></tr></thead>
+    <tr><td><b>Allgemein</b></td><td>Sprache (ab dem nächsten Start), Farben, <span class="ctl">Größe</span>, ob der Reiter Sound Einfach oder Komplett öffnet, die Bildschirmtasten, den Rückgängig-Hinweis und die Begrüßung.</td></tr>
+    <tr><td><b>Audio</b></td><td><span class="ctl">Audiosystem</span> (Automatisch nimmt das beste; unter Linux auch PipeWire, PulseAudio, ALSA oder JACK), <span class="ctl">Ausgabe über</span> (welche Lautsprecher oder Kopfhörer), <span class="ctl">Samplerate</span> und <span class="ctl">Puffergröße</span>. Eine Zeile darunter sagt, was gerade läuft. <span class="ctl">Testton abspielen</span> prüft, ob Ton herauskommt. <span class="ctl">Aufnehmen von</span> wählt den Eingang, für Sample-Aufnahmen und für den Eingangs-Kanal des Mixers.</td></tr>
+    <tr><td><b>Samples</b></td><td>Die Sample-Bibliothek (9.4).</td></tr>
+    <tr><td><b>MIDI</b></td><td>Keyboards, Controller und Clock (9.6).</td></tr>
+  </table>
+  <figure style="width:62%; margin-left:auto; margin-right:auto"><img src="img-de/dlg-soundcard.png" alt="Die Audio-Einstellungen"><figcaption><b>ABB 21</b>Die Seite Audio.</figcaption></figure>
+  <div class="tip"><p>Eine kleinere <span class="ctl">Puffergröße</span> lässt die Buchstabentasten schneller reagieren; knackt der Ton, sollte eine größere gewählt werden. 256 Samples sind eine gute Mitte. Fehlt eine gewählte Soundkarte beim nächsten Start (etwa abgezogene Kopfhörer), nimmt Nachtzug die Standardausgabe und sagt es.</p></div>
+  <p id="size"><span class="ctl">Größe</span> zeichnet das ganze Fenster größer oder kleiner, von 80 bis 200 %. Auf <b>Automatisch</b> (die Voreinstellung) wählt Nachtzug eine Größe, die bequem auf den Bildschirm passt – auf einem Laptop sind das meist 90&#x202F;%, damit nichts gedrängt wirkt. Eine neue Größe gilt ab dem nächsten Start; <span class="ctl">Jetzt neu starten</span> startet sofort neu und fragt vorher nach ungespeicherten Änderungen. Größen, die zu groß für den Bildschirm sind, werden gezeigt, lassen sich aber nicht wählen.</p>
+
+  <h2 id="samples"><span class="n">9.4</span>Samples: Bibliothek und eigene</h2>
+  <p>Jeder der acht Drumsounds kann statt seines eigenen Sounds ein Sample spielen. Nachtzug bringt dafür eine Bibliothek mit <b>65 eigens gemachten Sounds</b> mit, die allesamt – ganz ohne Aufnahmen – aus Oszillatoren, Rauschen und Filtern synthetisiert sind: Kicks, Snares, Claps, Hi-Hats, Becken und Percussion, neun Klänge eines Nachtzugs (Schienenstöße, Türgong, Bremsen, ein fernes Horn), Töne, Effekte und vier lange Texturen wie Regen am Fenster. Die ganze Liste steht in <a href="#library">A.4</a>.</p>
+  <figure style="width:56%; margin-left:auto; margin-right:auto"><img src="img-de/sample-menu.png" alt="Das Sample-Menü"><figcaption><b>ABB 22</b>Das Menü unter einem Drumsound. Ruht die Maus auf einem Sound, spielt er.</figcaption></figure>
+  <p>Zuallererst wird die Taste unter einem Drumsound angeklickt (bis etwas gewählt ist, steht dort <b>Eingebaut</b>) und eine Kategorie geöffnet. Ruht die Maus auf einem Sound, ist er zu hören; ein Klick wählt ihn aus. Der Drumsound spielt ihn dann in seiner eigenen Tonhöhe und ganz. Am schnellsten geht es mit einem Sample-Kit (5.7). Besonders zu empfehlen ist das <b>Nachtzug-Kit</b>: Es spielt den tiefen Kick, eine Tape-Snare, den Schienenstoß als Clap, einen Shaker als geschlossene Hi-Hat, einen Dampfstoß als offene Hi-Hat, eine tiefe Tom, die Kupplung als Rimshot und den Türgong als Becken.</p>
+  <div class="tip"><p>Die Texturen dauern mehrere Sekunden. Wird eine davon auf einen Drumsound gelegt, der von Hand gespielt wird (z.&#x202F;B. die Tom), mit einem Schlag alle vier oder acht Takte und zurückgenommenem <span class="ctl">Pegel</span>, liegen Regen oder ferne Schienen unter dem Intro.</p></div>
+  <p>Die Seite <b>Samples</b> der Einstellungen zeigt die Bibliothek und die eigenen Samples.</p>
+  <figure style="width:62%; margin-left:auto; margin-right:auto"><img src="img-de/dlg-samples.png" alt="Die Sample-Bibliothek"><figcaption><b>ABB 23</b>Die Sample-Bibliothek. Doppelklick auf ein Sample spielt es ab.</figcaption></figure>
+  <ul>
+    <li><span class="ctl">Importieren…</span> kopiert WAV- oder AIFF-Dateien (8 bis 32 Bit, mono oder stereo, bis zu einer Minute) in die Bibliothek, damit Songs sie wiederfinden, auch wenn die Originale verschoben werden. MP3-, FLAC- oder OGG-Dateien lassen sich mit einem kostenlosen Programm wie Audacity in WAV umwandeln.</li>
+    <li id="recordsample"><span class="ctl">Aufnehmen…</span> nimmt über den Eingang auf, der auf der Seite Audio gewählt ist: <span class="ctl">● Aufnehmen</span> drücken, den Sound machen, <span class="ctl">■ Stopp</span> drücken, einen Namen geben und speichern. Der Pegelbalken zeigt, ob der Eingang zu leise oder zu laut ist; Stille am Anfang und Ende wird abgeschnitten. Nachtzug hört nur zu, während aufgenommen wird.</li>
+    <li><span class="ctl">Anhören</span>, <span class="ctl">Umbenennen…</span>, <span class="ctl">Entfernen</span> und <span class="ctl">Ordner öffnen</span> tun, was sie sagen.</li>
+  </ul>
+  <p>Um ein Sample zu benutzen, wird der Reiter Sound einer Drum-Spur geöffnet und unter einem Drumsound <span class="ctl">Eingebaut</span> angeklickt (<a href="#kit">5.7</a>). Dasselbe Menü kann auch gleich importieren oder aufnehmen. Ein Song merkt sich die Namen seiner Samples; fehlt eins beim Öffnen, spielt dieser Drumsound den eingebauten Sound, und Nachtzug sagt, welches Sample fehlt.</p>
+
+  <h3 id="chop">Einen Loop auf die Drums verteilen</h3>
+  <p>Ein Drum-Loop von anderswo lässt sich in Stücke schneiden, eines auf jedes Drum-Pad. Dazu wird <b>Spur → Loop auf die Drums verteilen…</b> gewählt (oder <span class="ctl">Zerschneiden…</span> auf der Seite Samples oder der Eintrag im Sample-Menü unter einem Drumsound) und der Loop ausgesucht.</p>
+  <figure><img src="img-de/dlg-chop.png" alt="Einen Loop zerschneiden"><figcaption><b>ABB 0</b>Die Schnitte liegen auf den Schlägen, die Nachtzug findet; jedes Stück kommt auf das Drum-Pad mit seiner Nummer.</figcaption></figure>
+  <ul>
+    <li>Schneiden <b>an den gefundenen Schlägen</b> (<span class="ctl">weniger</span> … <span class="ctl">mehr</span> legt fest, wie leise ein Schlag sein darf) oder <b>in gleiche Stücke</b>, 2, 4 oder 8, für einen Loop, der genau im Takt ist.</li>
+    <li>Ein Klick auf ein Stück spielt es ab. Wird eine Linie gezogen, verschiebt sich der Schnitt; ein Doppelklick setzt einen neuen (bis zu acht Stücke), ein Rechtsklick auf eine Linie nimmt ihn weg.</li>
+    <li><span class="ctl">Länge</span> ist, wie viele Takte der Loop dauert, geschätzt aus seiner Länge beim Tempo des Songs.</li>
+    <li>Mit Haken bei <b>Ein Pattern schreiben …</b> spielt ein Drum-Clip am Loop die Stücke der Reihe nach, jedes auf der nächsten Sechzehntel, sodass der Loop klingt wie vorher, im Tempo des Songs. Danach kann das Pattern geändert werden: Stücke weglassen, vertauschen oder einer Hi-Hat eine Häufigkeit geben.</li>
+  </ul>
+  <p>Die Stücke werden unter dem angegebenen Namen durchnummeriert in der Sample-Bibliothek gespeichert, damit der Song sie wiederfindet. Die ausgewählte Drum-Spur bekommt sie; ist keine ausgewählt, die erste, oder es wird eine neue angelegt. Ein <span class="key">↶</span> nimmt alles zurück.</p>
+
+  <h2 id="colours"><span class="n">9.5</span>Farben</h2>
+  <p><b>Ansicht → Farben</b> oder die Seite Allgemein der Einstellungen bietet sechs Farbschemata und merkt sich die Wahl.</p>
+  <ul>
+    <li><b>Bakelit</b>, die Grundeinstellung: warme cremefarbene Platten, eingeschraubte Bereiche und Elfenbeinglas, wie in diesem Heft.</li>
+    <li><b>Pergament</b>: flacheres helles Creme.</li>
+    <li><b>Glut</b>: dunkelbraun und bernstein.</li>
+    <li><b>Wein</b>: dunkelrot.</li>
+    <li><b>Anthrazit</b>: dunkelgrau.</li>
+    <li><b>Blaues Panel</b>: das Blau alter Studiogeräte.</li>
+  </ul>
+  <figure><img src="img-de/full-dark.png" alt="Das Farbschema Glut"><figcaption><b>ABB 24</b>Dasselbe Fenster im Farbschema Glut.</figcaption></figure>
+  <div class="clear"></div>
+
+  <h2 id="midi"><span class="n">9.6</span>MIDI: Keyboards, Controller und Clock</h2>
+  <p>Nachtzug hört auf jedes eingesteckte MIDI-Gerät, außer es wird auf der Seite <b>MIDI</b> der Einstellungen eines ausgewählt; eine Zeile dort zeigt, was zuletzt ankam.</p>
+  <ul>
+    <li><b>Ein Keyboard</b> spielt die ausgewählte Spur wie die Buchstabentasten und nimmt genauso auf. Jede Taste spielt den nächstgelegenen Ton der Tonleiter, also klingt nichts falsch; kräftig angeschlagene Noten bekommen einen Akzent. Auf einer Drum-Spur spielen die General-MIDI-Drumnoten die Drums (36 Kick, 38 Snare, 42 geschlossene Hi-Hat …). Im Akkordmodus wechseln die Tasten den Akkord (<a href="#chordmode">3.4</a>).</li>
+    <li id="learn"><b>Controller-Regler</b>: Ein Regler des Reiters Sound, ein Regler oder Fader im Mixer oder <span class="ctl">Lautstärke</span> oder <span class="ctl">Swing</span> in der oberen Leiste wird mit rechts angeklickt, <b>MIDI-Steuerung lernen</b> gewählt und dann ein Regler am Controller gedreht. Ab dann steuert er diesen Regler; ein kleiner Ring oben links am Regler zeigt das. Ein Regler des Reiters Sound wirkt auf die gerade ausgewählte Spur, so ist ein Controller-Regler immer das Cutoff dessen, woran gerade gearbeitet wird. Jede Drehung ist ein Schritt zum Rückgängigmachen, und mit Aufnahme an wird sie als Kurve geschrieben. <b>MIDI-Steuerung vergessen</b> löst die Verbindung; <span class="ctl">Alle vergessen</span> auf der Seite der Einstellungen löst alle. Die Regler eines Drum-Kits können noch nicht lernen.</li>
+    <li id="clock"><b>Clock</b>: Soll eine Drum-Machine oder ein anderes Programm Nachtzug folgen, wird es unter <span class="ctl">Senden an</span> gewählt und der Haken bei <span class="ctl">Clock, Start und Stopp dorthin senden</span> gesetzt. Soll Nachtzug einem anderen Gerät folgen, wird der Haken bei <span class="ctl">Seiner Clock folgen</span> gesetzt: Nachtzug übernimmt dessen Tempo und startet und stoppt mit ihm.</li>
+  </ul>
+  <div class="tip"><p>Unter Linux muss der Benutzer für MIDI in der Gruppe <code>audio</code> sein. Ist er es nicht, weist die Seite MIDI darauf hin. In diesem Falle muss in einem Terminal <code>sudo usermod -aG audio $USER</code> eingegeben werden; danach ist eine Ab- und Wiederanmeldung nötig.</p></div>
+</section>
+
+<!-- ======================= 10 KLANGREZEPTE ======================= -->
+<section class="chapter" id="recipes" data-title="10 · Klangrezepte" style="page: ch10">
+  <div class="chap-head">
+    <div class="chap-num">10</div>
+    <div class="chap-kicker">Patch-Buch</div>
+    <h1>Klangrezepte</h1>
+    <div class="stripes"></div>
+  </div>
+  <p>Drei klassische Klänge, Regler für Regler. Das genannte Preset dient als Ausgangspunkt (wer lernen möchte, was jeder Regler tut, stellt sie nach einem <b>Neu würfeln</b> einfach selbst ein). Die Regler sind gezeichnet, wie sie stehen; was nicht gezeigt ist, bleibt, wie es ist.</p>
+
+  <div class="recipe" id="r-acid">
+    <h2><span class="n">10.1</span>Acid Squelch <span class="for">Bass-Spur · Preset „Acid Squelch“</span></h2>
+    <div class="panelrow">
+      <div class="grp"><div class="gt">Oszillatoren</div><i class="sel" data-opts="Säge|Puls|Dreieck|Sinus" data-on="0">Welle 1</i><i class="knob" data-v="0">Osz.-Mix</i><i class="knob" data-v="0">Sub</i></div>
+      <div class="grp"><div class="gt">Filter</div><i class="sel" data-opts="TP24|TP12|BP|HP" data-on="0">Typ</i><i class="knob" data-v="0.3">Cutoff</i><i class="knob" data-v="0.8">Resonanz</i><i class="knob" data-v="0.62">Hüllkurve</i><i class="knob" data-v="0.8">Akzent</i></div>
+    </div>
+    <div class="panelrow">
+      <div class="grp"><div class="gt">Filterhüllkurve</div><i class="knob" data-v="0.58">Decay</i><i class="knob" data-v="0">Sustain</i></div>
+      <div class="grp"><div class="gt">Amp-Hüllkurve</div><i class="knob" data-v="0.7">Decay</i><i class="knob" data-v="0.5">Sustain</i><i class="knob" data-v="0.3">Release</i></div>
+      <div class="grp"><div class="gt">Stimmen</div><i class="sel" data-opts="Poly|Mono" data-on="1">Spielweise</i></div>
+      <div class="grp"><div class="gt">Effekte</div><i class="knob" data-v="0.45">Drive</i><i class="knob" data-v="0.22">Echo</i></div>
+    </div>
+    <ol class="steps">
+      <li>Zuallererst bekommt der Bass mit <span class="ctl">Neue Idee</span> eine <b>Acid-Kurve</b>. Akzente und Slides bringen ihn zum Sprechen.</li>
+      <li>Während er läuft, wird der <span class="ctl">Cutoff</span> langsam hoch- und wieder heruntergedreht. Mehr <span class="ctl">Resonanz</span> ergibt mehr Quietschen.</li>
+      <li>Damit er sich von selbst bewegt, wird eine <b>Cutoff</b>-Kurve über sechzehn Takte gezeichnet (<a href="#lines">Kapitel 6</a>).</li>
+    </ol>
+  </div>
+
+  <div class="recipe" id="r-berlin">
+    <h2><span class="n">10.2</span>Berliner Sequenz <span class="for">Sequenz-Spur · Preset „Berlin Sequence“</span></h2>
+    <div class="panelrow">
+      <div class="grp"><div class="gt">Oszillatoren</div><i class="sel" data-opts="Säge|Puls|Dreieck|Sinus" data-on="0">Welle 1</i><i class="sel" data-opts="Säge|Puls|Dreieck|Sinus" data-on="1">Welle 2</i><i class="sel" data-opts="−1 Okt|Unisono|+Quinte|+1 Okt" data-on="0">Osz. 2</i><i class="knob" data-v="0.4">Osz.-Mix</i><i class="knob" data-v="0.15">Detune</i></div>
+      <div class="grp"><div class="gt">Filter</div><i class="knob" data-v="0.42">Cutoff</i><i class="knob" data-v="0.35">Resonanz</i><i class="knob" data-v="0.45">Hüllkurve</i></div>
+    </div>
+    <div class="panelrow">
+      <div class="grp"><div class="gt">Filterhüllkurve</div><i class="knob" data-v="0.6">Decay</i><i class="knob" data-v="0.1">Sustain</i></div>
+      <div class="grp"><div class="gt">Amp-Hüllkurve</div><i class="knob" data-v="0.62">Decay</i><i class="knob" data-v="0.3">Sustain</i><i class="knob" data-v="0.5">Release</i></div>
+      <div class="grp"><div class="gt">Effekte</div><i class="knob" data-v="0.2">Chorus</i><i class="knob" data-v="0.55">Echo</i><i class="knob" data-v="0.2">Hall</i></div>
+    </div>
+    <ol class="steps">
+      <li>Zuerst wird eine <b>Berliner Sequenz</b> geschrieben; <span class="ctl">Akkorden folgen</span> bleibt an, damit der Lauf mit der Akkordfolge wandert.</li>
+      <li>Die <span class="ctl">Echozeit</span> wird auf <b>Punktierte 1/8</b> gestellt: Die Wiederholungen fallen zwischen die Noten, und die Linie beginnt zu perlen.</li>
+      <li>Ein langsamer <span class="ctl">LFO → Filter</span> mit niedriger <span class="ctl">LFO-Rate</span> lässt die Sequenz minutenlang atmen.</li>
+    </ol>
+  </div>
+
+  <div class="recipe" id="r-pad">
+    <h2><span class="n">10.3</span>Supersaw-Pad <span class="for">Pad-Spur · Preset „Supersaw Pad“</span></h2>
+    <div class="panelrow">
+      <div class="grp"><div class="gt">Unisono</div><i class="sel" data-opts="1|2|3|5|7" data-on="4">Stimmen</i><i class="knob" data-v="0.45">Detune</i><i class="knob" data-v="0.8">Stereobreite</i></div>
+      <div class="grp"><div class="gt">Filter</div><i class="knob" data-v="0.58">Cutoff</i><i class="knob" data-v="0.1">Resonanz</i><i class="knob" data-v="0.1">Hüllkurve</i></div>
+    </div>
+    <div class="panelrow">
+      <div class="grp"><div class="gt">Amp-Hüllkurve</div><i class="knob" data-v="0.65">Attack</i><i class="knob" data-v="0.9">Sustain</i><i class="knob" data-v="0.8">Release</i></div>
+      <div class="grp"><div class="gt">Stimmen</div><i class="sel" data-opts="Poly|Mono" data-on="0">Spielweise</i></div>
+      <div class="grp"><div class="gt">Effekte</div><i class="knob" data-v="0.4">Chorus</i><i class="knob" data-v="0.2">Echo</i><i class="knob" data-v="0.55">Hall</i></div>
+    </div>
+    <ol class="steps">
+      <li>Das Pad bekommt einen <b>Gehaltenen Akkord</b>: einen langen Akkord pro Takt, der der Akkordfolge folgt.</li>
+      <li>Ein langsames <span class="ctl">Attack</span> lässt jeden Akkord anschwellen; ein langes <span class="ctl">Release</span> lässt ihn in den nächsten hineinklingen.</li>
+      <li>Mehr <span class="ctl">Hallgröße</span> im gemeinsamen Echo und Hall ergibt einen weiten Nachthimmel.</li>
+    </ol>
+  </div>
+  <div class="tip"><p>Ein Lieblingsklang gefunden? Er kann auf einem der Patch-Bögen hinten in diesem Heft notiert werden, so wie es Synthesizer-Spieler schon immer gemacht haben!</p></div>
+</section>
+
+<!-- ======================= ANHANG ======================= -->
+<section class="chapter" id="appendix" data-title="Anhang" style="page: chA">
+  <div class="chap-head">
+    <div class="chap-num">A</div>
+    <div class="chap-kicker">Nachschlagen</div>
+    <h1>Anhang</h1>
+    <div class="stripes"></div>
+  </div>
+  <h2 id="shortcuts"><span class="n">A.1</span>Tastenkürzel</h2>
+  <table class="keys">
+    <thead><tr><th>Taste</th><th>Aktion</th></tr></thead>
+    <tr><td><span class="key">Leertaste</span></td><td>Abspielen oder stoppen</td></tr>
+    <tr><td><span class="key">Pos1</span></td><td>Zurück zum Anfang</td></tr>
+    <tr><td>Buchstabentasten</td><td>Die ausgewählte Spur spielen (<a href="#playing">3.4</a>)</td></tr>
+    <tr><td><span class="nw"><span class="key">Strg</span>+<span class="key">R</span></span></td><td>Aufnahme an oder aus</td></tr>
+    <tr><td><span class="nw"><span class="key">Strg</span>+<span class="key">L</span></span></td><td>Loop an oder aus</td></tr>
+    <tr><td><span class="nw"><span class="key">Strg</span>+<span class="key">K</span></span></td><td>Metronom an oder aus</td></tr>
+    <tr><td><span class="nw"><span class="key">Strg</span>+<span class="key">J</span></span></td><td>Akkordmodus an oder aus (<a href="#chordmode">3.4</a>)</td></tr>
+    <tr><td><span class="key">Esc</span></td><td>Zurück zu den Akkorden des Songs; nicht mehr auf einen MIDI-Regler warten</td></tr>
+    <tr><td><span class="nw"><span class="key">Strg</span>+<span class="key">Z</span></span> / <span class="nw"><span class="key">Strg</span>+<span class="key">Umschalt</span>+<span class="key">Z</span></span></td><td>Rückgängig / wiederholen (auch die Tasten <span class="key">↶</span> <span class="key">↷</span>)</td></tr>
+    <tr><td><span class="nw"><span class="key">Strg</span>+<span class="key">C</span></span> <span class="key">X</span> <span class="key">V</span></td><td>Kopieren, ausschneiden, einfügen</td></tr>
+    <tr><td><span class="nw"><span class="key">Strg</span>+<span class="key">D</span></span></td><td>Duplizieren</td></tr>
+    <tr><td><span class="nw"><span class="key">Strg</span>+<span class="key">A</span></span></td><td>Alles auswählen</td></tr>
+    <tr><td><span class="key">Entf</span></td><td>Ausgewähltes löschen</td></tr>
+    <tr><td><span class="nw"><span class="key">Strg</span>+<span class="key">E</span></span></td><td>Ausgewählten Clip an der Abspielposition teilen</td></tr>
+    <tr><td><span class="nw"><span class="key">Strg</span>+<span class="key">N</span></span> <span class="key">O</span> <span class="key">S</span></td><td>Neuer Song, öffnen, speichern</td></tr>
+    <tr><td><span class="nw"><span class="key">Strg</span>+<span class="key">Umschalt</span>+<span class="key">E</span></span></td><td>Song exportieren</td></tr>
+    <tr><td><span class="nw"><span class="key">Strg</span>+<span class="key">,</span></span></td><td>Einstellungen</td></tr>
+    <tr><td><span class="nw"><span class="key">Strg</span>+<span class="key">I</span></span></td><td>Inspektor zeigen oder wegklappen (<a href="#room">Platz schaffen</a>)</td></tr>
+    <tr><td><span class="key">F1</span></td><td>Die Anleitung im Programm</td></tr>
+    <tr><td><span class="key">Strg</span> + Mausrad</td><td>Notenraster oder Zeitleiste zoomen</td></tr>
+    <tr><td><span class="nw"><span class="key">Umschalt</span> + Ziehen</span></td><td>Feine Schritte für Regler, Fader, Noten, Clips und Kurvenpunkte</td></tr>
+  </table>
+
+  <h2 id="trouble"><span class="n">A.2</span>Wenn etwas nicht klappt</h2>
+  <h3>Es ist nichts zu hören.</h3>
+  <p>Ließ sich die Tonausgabe nicht öffnen, weist Nachtzug beim Start darauf hin. Zuallererst sollten die Einstellungen (<span class="key">⚙</span>) geöffnet, die Seite <b>Audio</b> gewählt und <span class="ctl">Testton abspielen</span> gedrückt werden; danach lohnt sich ein Versuch mit einer anderen <span class="ctl">Ausgabe über</span> oder einem anderen <span class="ctl">Audiosystem</span>. Außerdem sollte geprüft werden, dass kein anderes Programm das Audiogerät allein belegt, dass keine Spuren stumm geschaltet sind und dass die <span class="ctl">Lautstärke</span> aufgedreht ist. Bluetooth-Kopfhörer hängen mitunter fest; meist hilft es, sie neu zu verbinden.</p>
+  <h3>Der Ton knackt oder stottert.</h3>
+  <p>Auf der Seite Audio der Einstellungen sollte eine größere <span class="ctl">Puffergröße</span> gewählt werden; außerdem sollten andere Programme, die viel Rechenzeit brauchen, geschlossen werden.</p>
+  <h3>Ein Drumsound spielt den eingebauten Sound statt des eigenen Samples.</h3>
+  <p>Das Sample ist nicht mehr in der Bibliothek (entfernt oder umbenannt). In diesem Falle muss es neu importiert und unter diesem Drumsound gewählt werden.</p>
+  <h3>Die Buchstabentasten spielen nichts.</h3>
+  <p>Vermutlich hat ein Textfeld die Tastatur: Nachdem ein Tempo eingetippt wurde, muss <span class="key">Esc</span> gedrückt oder woanders hingeklickt werden. Außerdem lohnt sich ein Blick auf die Anzeige: Sie zeigt, welche Spur die Tasten spielen.</p>
+  <h3>Die Drum-Schläge lassen sich nicht bearbeiten.</h3>
+  <p>Der Auto-Drummer schreibt diesen Clip. Zuerst muss im Inspektor der Haken bei <span class="ctl">Der Drummer spielt diesen Clip</span> entfernt werden.</p>
+  <h3>Eine Änderung kam nicht sofort.</h3>
+  <p>Läuft der Song, warten neue Ideen, Stummschaltungen, Akkordwechsel und Starts im Loop-Raster auf den nächsten Taktstrich, damit sie – wie es sich gehört – im Takt kommen. Die Anzeige weist darauf hin, solange etwas wartet.</p>
+  <h3>Ein Regler bewegt sich von selbst.</h3>
+  <p>Er folgt einer Kurve. Wird er von Hand gedreht, pausiert die Kurve; <span class="ctl">Kurven fortsetzen</span> holt sie zurück, und per Rechtsklick auf den Regler lässt sie sich löschen.</p>
+  <h3>Das Fenster passt nicht auf den Bildschirm.</h3>
+  <p>Auf der Seite Allgemein der Einstellungen wird <span class="ctl">Größe</span> auf <b>Automatisch</b> oder eine kleinere Größe gestellt und <span class="ctl">Jetzt neu starten</span> gedrückt. Platz schaffen außerdem zugeklappte Bereiche, ein weggeklappter Inspektor oder ein eigenes Fenster für die Reiter (<a href="#room">Platz schaffen</a>).</p>
+  <h3>Das MIDI-Keyboard tut nichts.</h3>
+  <p>Zuallererst sollte die Seite <b>MIDI</b> der Einstellungen geöffnet werden: Sie zeigt, ob Nachtzug MIDI überhaupt benutzen darf (unter Linux siehe den Tipp in <a href="#midi">9.6</a>), und was zuletzt ankam. Nach dem Einstecken eines Geräts muss <span class="ctl">Erneut nach Geräten suchen</span> gedrückt werden.</p>
+  <h3>Nachtzug hat sich von selbst geschlossen.</h3>
+  <p>Kein Grund zur Sorge! Beim nächsten Start bietet Nachtzug an, den Song wiederherzustellen, samt der Änderungen, die nicht gespeichert waren (<a href="#autosave">9.2</a>).</p>
+  <h3>Der Inspektor ist verschwunden.</h3>
+  <p>Der schmale Reiter <span class="key">»</span> am linken Fensterrand holt ihn zurück, ebenso <span class="nw"><span class="key">Strg</span>+<span class="key">I</span></span> oder <b>Ansicht → Inspektor</b>.</p>
+  <h3>Der Klang verzerrt.</h3>
+  <p>Mehrere laute Spuren addieren sich. Abhilfe schafft es, im Mixer Spuren leiser zu machen oder den <span class="ctl">Drive</span> der lautesten zu senken.</p>
+
+  <h2 id="spec" style="break-before: page"><span class="n">A.3</span>Technische Daten</h2>
+  <table class="spec">
+    <tr><td>Spuren</td><td>Bis zu 12; Bass, Sequenz, Pad, Lead oder Drums</td></tr>
+    <tr><td>Synth-Stimmen</td><td>8 pro Spur, mono oder poly, mit Glide</td></tr>
+    <tr><td>Oszillatoren</td><td>2 pro Stimme (Sägezahn, Puls, Dreieck, Sinus), Sub, Rauschen, FM, Unisono bis 7 Kopien</td></tr>
+    <tr><td>Filter</td><td>Resonanter Ladder-Filter; Tiefpass 24 / 12 dB, Bandpass, Hochpass; Keytracking, Akzent</td></tr>
+    <tr><td>Hüllkurven</td><td>Filter-ADS mit Tonhöhen-Anteil; Amp-ADSR</td></tr>
+    <tr><td>LFO</td><td>Dreieck, Rechteck, Zufall; auf Filter, Tonhöhe, Pulsbreite</td></tr>
+    <tr><td>Effekte</td><td>Pro Spur: Drive, Phaser, Chorus. Gemeinsam: Tempo-Echo, Hall. Ausgangs-Limiter</td></tr>
+    <tr><td>Drums</td><td>8 synthetische Drumsounds, jeder kann stattdessen ein Sample spielen; 3 synthetische und 4 Sample-Kits; Auto-Drummer mit 7 Stilen; Loops auf die Pads verteilt</td></tr>
+    <tr><td>Noten</td><td>Akzent, Slide, Häufigkeit (100, 75, 50, 25 %), 1 bis 4 schnelle Wiederholungen, Behalten</td></tr>
+    <tr><td>Mixer</td><td>Pro Spur: Lautstärke, Panorama, Echo, Hall, Pumpen (Ducking von der Kick), Stumm, Solo. Ein Live-Eingang mit Filter, Wah, Drive, Pumpen und Sends</td></tr>
+    <tr><td>Presets</td><td>18 Synth-Klänge, dazu ein Zufallsklang-Generator</td></tr>
+    <tr><td>Tonleitern</td><td>8; jede Tonart</td></tr>
+    <tr><td>Patterns</td><td>½ bis 8 Takte; Raster ¼ bis 1/32 mit Triolen</td></tr>
+    <tr><td>Takt</td><td>4/4, 40 bis 240 BPM, Swing</td></tr>
+    <tr><td>Export</td><td>WAV stereo, 44,1, 48 oder 96 kHz, 16 Bit (mit Dither) oder 24 Bit; ganzer Song oder Loop, ausklingen oder ausblenden; eine Datei pro Spur (Stems); Standard-MIDI-Datei</td></tr>
+    <tr><td>MIDI</td><td>Keyboards (in der Tonleiter, Akzent aus der Anschlagstärke, GM-Drumnoten), gelernte Controller-Regler, Clock rein und raus mit Start, Stopp und Songposition</td></tr>
+    <tr><td>Samples</td><td>Eine Bibliothek mit 65 eigens gemachten Sounds; eigene WAV- und AIFF-Dateien, 8 bis 32 Bit, mono oder stereo, bis 60 s; Aufnahme von jedem Eingang</td></tr>
+    <tr><td>Song-Datei</td><td><code>.nachtzug</code> (einfaches JSON)</td></tr>
+    <tr><td>Sprachen</td><td>Deutsch, Englisch</td></tr>
+    <tr><td>System</td><td>Linux und macOS, Windows in Vorbereitung; Qt 6 und SDL2 (PipeWire, PulseAudio, ALSA, JACK; Core Audio); MIDI über ALSA oder Core MIDI</td></tr>
+    <tr><td>Noch nicht</td><td>Audiospuren, Import von MP3 und FLAC</td></tr>
+  </table>
+  <h2 id="library"><span class="n">A.4</span>Die Sample-Bibliothek</h2>
+  <p class="small">Jeder Sound ist mit <code>tools/samplegen</code> synthetisiert, dem programmeigenen Sample-Macher. Die tonalen sagen, welchen Ton sie spielen; <span class="ctl">Stimmung</span> verschiebt sie um bis zu eine Oktave.</p>
+  <table class="wide1 small lib">
+    <thead><tr><th>Art</th><th>Sounds</th></tr></thead>
+    <tr><td>Kicks</td><td><b>Tiefer Boom</b>: Lang und rund, mit tiefem Ausklang; <b>Punch</b>: Kurz und fest, setzt sich in einer dichten Mischung durch; <b>Analoger Wumms</b>: Trocken und hölzern, wie eine alte Drum-Maschine; <b>Grollen</b>: Hart, mit dunkel grollendem Ausklang, für Techno; <b>Hart</b>: Verzerrt und knapp, für Acid; <b>Weicher Filz</b>: Gedämpft und sanft, für leise Songs; <b>Sub-Boom</b>: Mehr gefühlt als gehört: ein sehr tiefes Anschwellen; <b>Klick</b>: Sehr kurz, mit scharfem Klick</td></tr>
+    <tr><td>Snares</td><td><b>Knapp</b>: Knackig und kurz; <b>Fett</b>: Tief und lang, mit etwas Raum; <b>Tape</b>: Warm und abgenutzt, wie vom Band; <b>Besen</b>: Das weiche Wischen eines Besens; <b>Electro</b>: Rauschen und ein fallender Zap; <b>Rand-Snare</b>: Eine Snare mit klingendem Rand</td></tr>
+    <tr><td>Claps</td><td><b>Klassisch</b>: Mehrere Hände zugleich, wie bei einer Drum-Maschine; <b>Großer Raum</b>: Ein Klatschen in einer großen Halle; <b>Fingerschnipsen</b>: Ein Fingerschnipsen; <b>Menge</b>: Viele Leute klatschen zusammen</td></tr>
+    <tr><td>Hi-Hats</td><td><b>Geschlossen</b>: Die Hi-Hat für jeden Tag; <b>Knapp</b>: Sehr kurz und hell; <b>Offen</b>: Öffnet sich und klingt aus; <b>Zischend</b>: Eine lange, zischende offene Hi-Hat; <b>Pedal</b>: Ein leises Tschick vom Fußpedal; <b>Shaker</b>: Ein Shaker, vor und zurück; <b>Tamburin</b>: Schellen</td></tr>
+    <tr><td>Becken</td><td><b>Crash</b>: Ein großes Crash-Becken; <b>Ride</b>: Ein klingendes Ride-Becken; <b>Ride-Glocke</b>: Die Glocke eines Ride-Beckens; <b>Crash rückwärts</b>: Ein Crash rückwärts: schwillt bis zum nächsten Takt an</td></tr>
+    <tr><td>Percussion</td><td><b>Kuhglocke</b>: Zwei metallische Töne; <b>Clave</b>: Ein heller hölzerner Klick; <b>Holzblock</b>: Ein hohles hölzernes Klopfen; <b>Conga hoch</b>: Eine Handtrommel, hoch; <b>Conga tief</b>: Eine Handtrommel, tief; <b>Bongo</b>: Eine kleine Handtrommel; <b>Tom tief</b>: Eine Synth-Tom, tief; <b>Tom mittel</b>: Eine Synth-Tom, mittel; <b>Tom hoch</b>: Eine Synth-Tom, hoch; <b>Rimshot</b>: Ein Stock auf dem Rand; <b>Triangel</b>: Ein langer, klarer Klang</td></tr>
+    <tr><td>Zug</td><td><b>Schienenstoß</b>: Räder über einen Schienenstoß: ta-dam; <b>Schienenstoß, fern</b>: Dasselbe, weit weg; <b>Türgong</b>: Zwei Töne, bevor die Türen schließen; <b>Bahnhofsglocke</b>: Eine kleine Glocke am Bahnsteig; <b>Bremsenzischen</b>: Luft aus den Bremsen; <b>Nachthorn</b>: Ein weicher Hornakkord in der Ferne; <b>Dampfstoß</b>: Ein Stoß Dampf; <b>Kupplung</b>: Zwei Waggons werden gekuppelt; <b>Quietschende Räder</b>: Räder quietschen in der Kurve</td></tr>
+    <tr><td>Töne</td><td><b>Sub-Drop</b>: Ein tiefer Ton, der wegfällt; <b>Zap</b>: Ein schnell fallender Zap; <b>Laser</b>: Ein Weltraumlaser; <b>Blip</b>: Ein kurzer Piepton; <b>Acid-Stab</b>: Eine quäkende Acid-Note, C; <b>Akkord-Stab</b>: Ein kurzer Akkord, c-Moll; <b>FM-Glocke</b>: Eine gläserne Glocke, A; <b>Zupfer</b>: Eine gezupfte Saite, A</td></tr>
+    <tr><td>Effekte</td><td><b>Riser</b>: Drei Sekunden steigendes Rauschen, vor einem Drop; <b>Downlifter</b>: Wegfallendes Rauschen; <b>Einschlag</b>: Ein gewaltiger Schlag mit langem Ausklang; <b>Abschalten</b>: Wie eine Bandmaschine, die stehen bleibt</td></tr>
+    <tr><td>Texturen</td><td><b>Nachtregen</b>: Regen am Fenster, sieben Sekunden; <b>Vinylknistern</b>: Eine alte Schallplatte, sieben Sekunden; <b>Wind im Waggon</b>: Wind durch einen Spalt, mit leisem Pfeifen; <b>Schienen bei Nacht</b>: Ein Zug in der Ferne: Schienenstöße alle 1,1 Sekunden</td></tr>
+  </table>
+  <p class="small"><i>Die Einstellungen liegen in <code>~/.config/Nachtzug/Nachtzug.conf</code>, die eigenen Samples in <code>~/.local/share/Nachtzug/Nachtzug/samples</code> (auf dem Mac: <code>~/Library/Application Support/Nachtzug/Nachtzug/samples</code>).</i></p>
+</section>
+
+<!-- ======================= STICHWORTVERZEICHNIS ======================= -->
+<section class="chapter cont" id="index" data-title="Stichwortverzeichnis" style="page: chA">
+  <div class="chap-head">
+    <div class="chap-kicker">Wo steht was</div>
+    <h1>Stichwortverzeichnis</h1>
+    <div class="stripes"></div>
+  </div>
+  <div class="index">
+    <div class="letter">A</div>
+    <div class="e"><a href="#chords">Akkorde</a></div>
+    <div class="e"><a href="#chords">Akkorden folgen</a></div>
+    <div class="e"><a href="#chordmode">Akkordmodus</a></div>
+    <div class="e"><a href="#accent">Akzent</a></div>
+    <div class="e"><a href="#env">Amp-Hüllkurve</a></div>
+    <div class="e"><a href="#chordkeys">Arpeggio</a></div>
+    <div class="e"><a href="#arrange">Arrangieren lassen</a></div>
+    <div class="e"><a href="#settings">Audio, Soundkarte</a></div>
+    <div class="e"><a href="#rec">Aufnahme, Noten</a></div>
+    <div class="e"><a href="#recknob">Aufnahme, Regler</a></div>
+    <div class="e"><a href="#cleanup">Aufräumen</a></div>
+    <div class="e"><a href="#output">Ausgang</a></div>
+    <div class="e"><a href="#drummer">Auto-Drummer</a></div>
+    <div class="letter">B</div>
+    <div class="e"><a href="#tracks">Bass-Spur</a></div>
+    <div class="e"><a href="#welcome">Begrüßung</a></div>
+    <div class="e"><a href="#keep">Behalten (Noten sperren)</a></div>
+    <div class="e"><a href="#ideas">Berliner Sequenz</a></div>
+    <div class="e"><a href="#playing">Bildschirmtasten</a></div>
+    <div class="letter">C</div>
+    <div class="e"><a href="#ideas">Clips</a></div>
+    <div class="e"><a href="#clock">Clock (MIDI)</a></div>
+    <div class="e"><a href="#cutoff">Cutoff</a></div>
+    <div class="letter">D</div>
+    <div class="e"><a href="#kit">Drum-Kit</a></div>
+    <div class="e"><a href="#scissors">Duplizieren, teilen</a></div>
+    <div class="letter">E</div>
+    <div class="e"><a href="#shared">Echo</a></div>
+    <div class="e"><a href="#effects">Effekte</a></div>
+    <div class="e"><a href="#fade">Ein- und Ausblenden</a></div>
+    <div class="e"><a href="#simple">Einfach und Komplett</a></div>
+    <div class="e"><a href="#input">Eingang (Mixer)</a></div>
+    <div class="e"><a href="#settings">Einstellungen</a></div>
+    <div class="e"><a href="#energy">Energie</a></div>
+    <div class="e"><a href="#autosave">Ersatzkopie, automatisch</a></div>
+    <div class="e"><a href="#export">Export</a></div>
+    <div class="letter">F</div>
+    <div class="e"><a href="#colours">Farben</a></div>
+    <div class="e"><a href="#fills">Fills</a></div>
+    <div class="e"><a href="#filter">Filter</a></div>
+    <div class="e"><a href="#fm">FM</a></div>
+    <div class="letter">G</div>
+    <div class="e"><a href="#panel">Gerätebeschreibung</a></div>
+    <div class="e"><a href="#glide">Glide</a></div>
+    <div class="e"><a href="#size">Größe des Fensters</a></div>
+    <div class="letter">H</div>
+    <div class="e"><a href="#shared">Hall</a></div>
+    <div class="e"><a href="#chance">Häufigkeit</a></div>
+    <div class="e"><a href="#env">Hüllkurven</a></div>
+    <div class="letter">I</div>
+    <div class="e"><a href="#ideas">Ideen</a></div>
+    <div class="e"><a href="#intime">Im Takt</a></div>
+    <div class="letter">K</div>
+    <div class="e"><a href="#recipes">Klangrezepte</a></div>
+    <div class="e"><a href="#metronome">Klick (Metronom)</a></div>
+    <div class="e"><a href="#lines">Kurven</a></div>
+    <div class="letter">L</div>
+    <div class="e"><a href="#lean">Leitton</a></div>
+    <div class="e"><a href="#lessons">Lektionen</a></div>
+    <div class="e"><a href="#lfo">LFO</a></div>
+    <div class="e"><a href="#limiter">Limiter</a></div>
+    <div class="e"><a href="#loop">Loop</a></div>
+    <div class="e"><a href="#chop">Loop zerschneiden</a></div>
+    <div class="e"><a href="#loops">Loop-Raster</a></div>
+    <div class="letter">M</div>
+    <div class="e"><a href="#midiexport">MIDI-Datei exportieren</a></div>
+    <div class="e"><a href="#midi">MIDI-Keyboard</a></div>
+    <div class="e"><a href="#learn">MIDI-Steuerung lernen</a></div>
+    <div class="e"><a href="#mixer">Mixer</a></div>
+    <div class="e"><a href="#mono">Mono, Poly</a></div>
+    <div class="e"><a href="#mutate">Mutieren</a></div>
+    <div class="letter">N</div>
+    <div class="e"><a href="#roll">Neu würfeln</a></div>
+    <div class="e"><a href="#editing">Noten bearbeiten</a></div>
+    <div class="letter">O</div>
+    <div class="e"><a href="#osc">Oszillatoren</a></div>
+    <div class="letter">P</div>
+    <div class="e"><a href="#recipes">Patch-Bögen</a></div>
+    <div class="e"><a href="#presets">Presets</a></div>
+    <div class="e"><a href="#presets">Presets anhören</a></div>
+    <div class="e"><a href="#pump">Pumpen (Ducking)</a></div>
+    <div class="letter">R</div>
+    <div class="e"><a href="#grid">Raster</a></div>
+    <div class="e"><a href="#resonance">Resonanz</a></div>
+    <div class="e"><a href="#wrongnotes">Richtige falsche Noten</a></div>
+    <div class="e"><a href="#undokeys">Rückgängig, Wiederholen</a></div>
+    <div class="letter">S</div>
+    <div class="e"><a href="#recordsample">Sample aufnehmen</a></div>
+    <div class="e"><a href="#library">Sample-Bibliothek, Liste</a></div>
+    <div class="e"><a href="#kit">Sample-Kits</a></div>
+    <div class="e"><a href="#samples">Samples, Bibliothek und eigene</a></div>
+    <div class="e"><a href="#scissors">Schere</a></div>
+    <div class="e"><a href="#slide">Slide</a></div>
+    <div class="e"><a href="#sound">Sound, Reiter</a></div>
+    <div class="e"><a href="#saving">Speichern</a></div>
+    <div class="e"><a href="#tracks">Spuren</a></div>
+    <div class="e"><a href="#stems">Stems</a></div>
+    <div class="e"><a href="#mute">Stumm, Solo</a></div>
+    <div class="e"><a href="#swing">Swing</a></div>
+    <div class="letter">T</div>
+    <div class="e"><a href="#stamp">Takt setzen (Rechtsklick)</a></div>
+    <div class="e"><a href="#tap">Tap (Tempo)</a></div>
+    <div class="e"><a href="#playing">Tastaturbelegung</a></div>
+    <div class="e"><a href="#shortcuts">Tastenkürzel</a></div>
+    <div class="e"><a href="#spec">Technische Daten</a></div>
+    <div class="e"><a href="#tempo">Tempo</a></div>
+    <div class="e"><a href="#key">Tonart</a></div>
+    <div class="e"><a href="#scales">Tonleitern</a></div>
+    <div class="e"><a href="#transport">Transport</a></div>
+    <div class="letter">U</div>
+    <div class="e"><a href="#unison">Unisono</a></div>
+    <div class="letter">V</div>
+    <div class="e"><a href="#vary">Variieren</a></div>
+    <div class="letter">W</div>
+    <div class="e"><a href="#trouble">Wenn etwas nicht klappt</a></div>
+    <div class="e"><a href="#repeat">Wiederholen (Ratchet)</a></div>
+    <div class="letter">Z</div>
+    <div class="e"><a href="#timeline">Zeitleiste</a></div>
+  </div>
+</section>
+
+<!--SHEET-->
+<section class="sheet-page">
+  <div class="sheet-head"><h1>Patch-Bogen</h1><div class="fields"><span>Name</span><span>Spur</span><span>Song</span></div></div>
+  <div class="panelrow">
+    <div class="grp"><div class="gt">1 · Oszillatoren</div><i class="sel" data-opts="Säge|Puls|Dreieck|Sinus" data-on="-1">Welle 1</i><i class="sel" data-opts="Säge|Puls|Dreieck|Sinus" data-on="-1">Welle 2</i><i class="sel" data-opts="−1 Okt|Unisono|+Quinte|+1 Okt" data-on="-1">Osz. 2</i></div>
+  </div>
+  <div class="panelrow">
+    <div class="grp wide"><div class="gt">&nbsp;</div><i class="knob" data-v="-1">Osz.-Mix</i><i class="knob" data-v="-1">Detune</i><i class="knob" data-v="-1">FM</i><i class="knob" data-v="-1">Pulsbreite</i><i class="knob" data-v="-1">Sub</i><i class="knob" data-v="-1">Rauschen</i></div>
+    <div class="grp"><div class="gt">Unisono</div><i class="sel" data-opts="1|2|3|5|7" data-on="-1">Stimmen</i><i class="knob" data-v="-1">Detune</i><i class="knob" data-v="-1">Breite</i></div>
+  </div>
+  <div class="panelrow">
+    <div class="grp"><div class="gt">2 · Filter</div><i class="sel" data-opts="TP24|TP12|BP|HP" data-on="-1">Typ</i><i class="knob" data-v="-1">Cutoff</i><i class="knob" data-v="-1">Resonanz</i><i class="knob" data-v="-1">Hüllkurve</i><i class="knob" data-v="-1">Key-Track.</i><i class="knob" data-v="-1">Akzent</i></div>
+  </div>
+  <div class="panelrow">
+    <div class="grp"><div class="gt">Filterhüllkurve</div><i class="knob" data-v="-1">Attack</i><i class="knob" data-v="-1">Decay</i><i class="knob" data-v="-1">Sustain</i><i class="knob" data-v="-1">→ Tonhöhe</i></div>
+    <div class="grp"><div class="gt">3 · Amp-Hüllkurve</div><i class="knob" data-v="-1">Attack</i><i class="knob" data-v="-1">Decay</i><i class="knob" data-v="-1">Sustain</i><i class="knob" data-v="-1">Release</i></div>
+  </div>
+  <div class="panelrow">
+    <div class="grp"><div class="gt">LFO</div><i class="sel" data-opts="Drei|Rech|Zuf" data-on="-1">Form</i><i class="knob" data-v="-1">Tempo</i><i class="knob" data-v="-1">→ Filter</i><i class="knob" data-v="-1">Vibrato</i><i class="knob" data-v="-1">→ Breite</i></div>
+    <div class="grp"><div class="gt">Stimmen</div><i class="sel" data-opts="Poly|Mono" data-on="-1">Spielweise</i><i class="knob" data-v="-1">Glide</i></div>
+  </div>
+  <div class="panelrow">
+    <div class="grp"><div class="gt">4 · Effekte</div><i class="knob" data-v="-1">Verzerrung</i><i class="knob" data-v="-1">Phaser</i><i class="knob" data-v="-1">Ph.-Tempo</i><i class="knob" data-v="-1">Chorus</i><i class="knob" data-v="-1">Echo</i><i class="knob" data-v="-1">Hall</i></div>
+  </div>
+  <div class="sheet-notes"><span>Notizen</span></div>
+</section>
+<!--/SHEET-->
+
+<!-- ======================= RÜCKSEITE ======================= -->
+<section class="back">
+  <img class="art" src="img/cover-wrap.jpg" alt="">
+  <div class="band b1"></div><div class="band b2"></div><div class="band b3"></div>
+  <div class="inner">
+    <h1>Nachtzug</h1>
+    <p>Ein Sequencer und Synthesizer für Acid und Berliner Schule, gemacht für Menschen, die Musik lieben, aber nie ein Instrument gelernt haben.</p>
+    <ul>
+      <li>Jede Note in der Tonleiter des Songs: Nichts kann falsch klingen</li>
+      <li>Ideen auf Knopfdruck: Acid-Kurven, Berliner Sequenzen, Akkorde, Melodien</li>
+      <li>Ein Auto-Drummer mit sieben Stilen und eigenen Fills</li>
+      <li>Ein ganzer Synthesizer pro Spur, mit Bildern davon, was jeder Regler tut</li>
+      <li>Song-Zeitleiste und Live-Loop-Raster: Aus einer Jam wird ein Song</li>
+    </ul>
+  </div>
+  <div class="cat2">Für Linux und macOS</div>
+  <div class="cat">NZ · 001</div>
+</section>
+
+</body>
+</html>

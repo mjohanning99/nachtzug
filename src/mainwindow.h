@@ -1,0 +1,98 @@
+// Main window: transport bar on top, note editor and sound knobs in the middle, song timeline at the bottom.
+#pragma once
+#include <QHash>
+#include <QMainWindow>
+#include <vector>
+
+class App;
+class EditorPanel;
+class Knob;
+class Lcd;
+class VuMeter;
+class QAbstractButton;
+class LoopGrid;
+class QStackedWidget;
+class QPushButton;
+class MixerPanel;
+class QAction;
+class QComboBox;
+class QKeyEvent;
+class QLabel;
+class QSlider;
+class QSpinBox;
+class QTabWidget;
+class QToolButton;
+class SoundPanel;
+class Timeline;
+
+class MainWindow : public QMainWindow {
+    Q_OBJECT
+public:
+    explicit MainWindow(App* app);
+    void showHelp();
+    void showSettings(int page = 0);
+    void showDialog(const QString& which);   // by name, for pictures and tests: settings, sound card, samples, export
+    bool maybeSave();   // asks to save unsaved changes; false if the person cancelled
+    void restartProgram();
+    void startLesson(const QString& id);   // one of the lessons in Help > Lessons
+    class LessonOverlay* lessons() const { return lessonOverlay; }
+protected:
+    bool eventFilter(QObject* o, QEvent* e) override;
+    void closeEvent(QCloseEvent* e) override;
+private:
+    void buildMenus();
+    QWidget* buildTopBar();
+    void sync();
+    void frame();
+    bool saveSong(bool askName);
+    void openSong();
+    void newSong(bool starter);
+    void exportWav();
+    void arrange();
+    void setTheme(int index);
+    static bool mapKey(const QKeyEvent* k, int& row, int& col);
+
+    App* app;
+    Lcd* lcd;
+    Timeline* timeline;
+    LoopGrid* loops;
+    QStackedWidget* bottomStack;
+    class QSplitter* split;
+    QWidget* bottomArea = nullptr;
+    bool shownLive = false;
+    QWidget *songTools, *loopTools;
+    QPushButton *songMode, *loopMode;
+    void setLoopsMode(bool on);
+    EditorPanel* editor;
+    SoundPanel* sound;
+    MixerPanel* mixer;
+    QTabWidget* tabs;
+    void applyLook();
+    QToolButton *playBtn, *stopBtn, *recBtn, *undoBtn, *redoBtn, *exportBtn;
+    class Toast* toast;
+    QAbstractButton *loopBtn, *clickBtn, *timeBtn;     // sliding switches
+    VuMeter *vuL, *vuR;
+    std::vector<qint64> taps;                          // times of the last presses on TAP
+    QSpinBox* tempo;
+    QComboBox *keyBox, *scaleBox;
+    Knob *swing, *volume;
+    class LessonOverlay* lessonOverlay = nullptr;
+    class QMenu* lessonMenu = nullptr;
+    QString nextLesson;                    // the toast's button starts this lesson instead of undoing
+    void fillLessonMenu();
+    QAction *undoAct, *redoAct, *recAct, *loopAct, *clickAct, *timeAct, *snapAct, *chordAct, *padsAct = nullptr;
+    // the panels: the inspector on the left; the timeline (or loop grid) and the tabs above or below each other,
+    // or the tabs in a window of their own
+    class Inspector* inspector = nullptr;
+    QToolButton* inspectorTab = nullptr;      // the slim » tab that brings the inspector back
+    class QSplitter* hsplit = nullptr;
+    QMainWindow* editorWindow = nullptr;
+    bool timelineTop = true;
+    QString shownArrangement;                 // which arrangement the divider sizes below belong to
+    QHash<QString, QList<int>> splitSizes;
+    QAction *inspAct = nullptr, *ownWinAct = nullptr, *topAct = nullptr;
+    void arrangePanels();
+    void setInspectorShown(bool on);
+    void setEditorWindow(bool on);
+    void resetLayout();
+};

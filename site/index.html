@@ -1,0 +1,156 @@
+---
+layout: default
+---
+<main id="top">
+
+<!-- ============================================================ the cover, as on the manual -->
+<section class="cover">
+  <div class="art">
+    <img src="{{ '/assets/img/cover-art-2400.jpg' | relative_url }}" srcset="{{ '/assets/img/cover-art-1200.jpg' | relative_url }} 1200w, {{ '/assets/img/cover-art-2400.jpg' | relative_url }} 2400w" sizes="100vw" alt="A night train crossing a brick viaduct under a full moon, with pine trees on the hillside">
+  </div>
+  <div class="bands" aria-hidden="true"><span></span><span></span><span></span></div>
+  <img class="seal" src="{{ '/assets/img/enamel-sign.png' | relative_url }}" alt="" width="200" height="140">
+  <div class="cover-text">
+    <h1>Nachtzug</h1>
+    <p class="sub">Sequencer · Synthesiser</p>
+    <p class="om">A little music machine for acid and Berlin School music. Every note is in the song’s scale, so you can make music without being able to play the keyboard.</p>
+    <p class="cta">
+      <a class="keycap lit big" href="#download">Einsteigen, bitte! <small>Download Nachtzug, it’s free</small></a>
+      <a class="keycap big" href="#manual">The manual <small>English · Deutsch · PDF</small></a>
+    </p>
+    <p class="cat"><span>For Linux and macOS</span><span>NZ · 001</span></p>
+  </div>
+</section>
+
+<!-- ============================================================ welcome -->
+<section class="paper alt welcome">
+  <div class="col">
+    <p class="dropcap"><span class="dc" aria-hidden="true"><span class="r">N</span><span class="b">N</span></span><span class="sr">N</span>achtzug is a small music program for the kind of music that’s built from repeating synthesiser patterns: squelchy acid basslines, rolling Berlin School sequences, slow pads and simple melodies on top, all carried along by a drummer who never gets tired.</p>
+    <p>You don’t need to be able to play an instrument, and you don’t need to know any music theory. Nachtzug only lets you place notes that fit the song, it comes up with ideas when you’re stuck, and every change you make while the music plays waits politely for the next bar, so it always lands in time.</p>
+    <p>And don’t worry about breaking anything! Every change can be undone, and Nachtzug quietly keeps a spare copy of your song in case something goes wrong.</p>
+  </div>
+</section>
+
+<!-- ============================================================ the journey, as the manual's timetable -->
+<section class="paper journey" id="journey">
+  <header class="chap">
+    <p class="kicker">Fahrplan · What’s on board</p>
+    <h2>A night’s journey through Nachtzug</h2>
+    <svg class="flourish" aria-hidden="true" focusable="false"><use href="#nz-flourish"/></svg>
+  </header>
+  <div class="route">
+    <p class="board" aria-hidden="true"><span>Station</span><span>Abfahrt</span></p>
+    <ol>
+      {% for s in site.data.stations %}
+      <li class="stop">
+        <div class="sign">
+          <span class="no" aria-hidden="true">{{ forloop.index }}</span><span class="dot" aria-hidden="true"></span>
+          <span class="name">{{ s.stop }}</span>
+          <time class="dep">{{ s.time }}</time>
+        </div>
+        <div class="what">
+          <h3>{{ s.title }}</h3>
+          <p>{{ s.text }}</p>
+          {% if s.img %}<figure class="shot well"><img src="{{ '/assets/img/shots/' | append: s.img | relative_url }}" alt="{{ s.alt }}" loading="lazy"></figure>{% endif %}
+        </div>
+      </li>
+      {% endfor %}
+    </ol>
+    <p class="terminus"><span lang="de">Umsteigen</span> · Change here for the manual and your ticket</p>
+  </div>
+</section>
+
+<!-- ============================================================ the manual -->
+<section class="paper alt manual" id="manual">
+  <header class="chap">
+    <p class="kicker">Bordbuch · The manual</p>
+    <h2>An operation manual, as it should be</h2>
+    <svg class="flourish" aria-hidden="true" focusable="false"><use href="#nz-flourish"/></svg>
+  </header>
+  <div class="booklets">
+    <a class="booklet en" href="{{ '/downloads/Nachtzug-Manual.pdf' | relative_url }}"><img src="{{ '/assets/img/cover-en.jpg' | relative_url }}" alt="The cover of the English operation manual" width="641" height="910" loading="lazy"><span class="keycap">Operation manual <small>English · PDF</small></span></a>
+    <a class="booklet de" href="{{ '/downloads/Nachtzug-Handbuch.pdf' | relative_url }}" hreflang="de"><img src="{{ '/assets/img/cover-de.jpg' | relative_url }}" alt="Der Umschlag der deutschen Bedienungsanleitung" lang="de" width="641" height="910" loading="lazy"><span class="keycap"><span lang="de">Bedienungsanleitung</span> <small>Deutsch · PDF</small></span></a>
+  </div>
+  <div class="col">
+    <p class="dropcap"><span class="dc" aria-hidden="true"><span class="r">N</span><span class="b">N</span></span><span class="sr">N</span>achtzug comes with a proper printed manual, the way old synthesisers did: an A5 booklet with pictures of every part, sound recipes, patch sheets to fill in, a table of every key and an index. Read it front to back, or just the chapter you need. It’s in English and in German.</p>
+    <p>Inside the program, <span class="key">F1</span> opens a short guide, <b>Help → Lessons</b> has five guided tours, and almost every button and knob explains itself when you rest the mouse on it.</p>
+  </div>
+</section>
+
+<!-- ============================================================ the tickets: Edmondson card tickets, as sold at every booking office -->
+<section class="paper download" id="download">
+  <header class="chap">
+    <p class="kicker">Fahrkarten · Download</p>
+    <h2>Your ticket, please</h2>
+    <svg class="flourish" aria-hidden="true" focusable="false"><use href="#nz-flourish"/></svg>
+  </header>
+  {% assign issued = site.time | date: "%d.%m.%y" %}
+  {% assign colours = "first:green,second:brown,white:plain white,striped:red-striped brown" | split: "," %}
+  <div class="tickets">
+    {% for t in site.data.tickets %}
+    {% capture colour %}{% for c in colours %}{% assign kv = c | split: ":" %}{% if kv[0] == t.colour %}{{ kv[1] }}{% endif %}{% endfor %}{% endcapture %}
+    <article class="ticket {{ t.id }}" data-file="{{ t.file }}">
+      <div class="card {{ t.colour }}" role="img" aria-label="A {{ colour }} {% if t.class == '1' %}first{% else %}second{% endif %}-class card ticket from Your computer to Berlin School, number {{ forloop.index | prepend: '0000' | slice: -5, 5 }}">
+        {% if t.colour == "striped" %}<span class="stripe"></span>{% endif %}<span class="end"></span>
+        <span class="kl">{{ t.class }}. Kl.</span><span class="nr">{{ forloop.index | prepend: '0000' | slice: -5, 5 }}</span>
+        <span class="from">Your computer</span><span class="via">nach</span><span class="to">Berlin School</span>
+        <span class="what">{{ t.card }}</span><span class="fare">Freifahrt</span>
+        <span class="date" data-issued>{{ issued }}</span>
+      </div>
+      <div class="info">
+        <h3>{{ t.system }}</h3>
+        <p class="sub">{{ t.what }}</p>
+        <p class="valid"><b>Valid for</b> {{ t.valid }}</p>
+        <p>{{ t.how }}</p>
+        {% if t.file != "" %}
+        <a class="keycap primary punchme" href="{% if site.release_downloads %}{{ site.release_downloads | append: t.file }}{% else %}{{ '/downloads/' | append: t.file | relative_url }}{% endif %}"{% unless site.release_downloads %} download{% endunless %}>Download <small>{{ t.file }}</small></a>
+        {% else %}
+        <a class="keycap punchme" href="#readme">How to build it</a>
+        {% endif %}
+        <p class="meta" data-meta></p>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+
+  <div class="col readme" id="readme">
+    <h3>Building Nachtzug yourself</h3>
+    <p>Don’t let that put you off: it’s a handful of commands, and you only have to do it once.</p>
+    <div class="note">
+      <p class="label">On Linux</p>
+      <p>Install the tools. On Arch:</p>
+      <pre><code>sudo pacman -S --needed base-devel cmake qt6-base qt6-tools sdl2 alsa-lib git</code></pre>
+      <p>On Debian or Ubuntu:</p>
+      <pre><code>sudo apt install build-essential cmake qt6-base-dev qt6-tools-dev qt6-l10n-tools libsdl2-dev libasound2-dev git</code></pre>
+      <p>Then unpack the source code (the last ticket above) and run these two in its folder:</p>
+      <pre><code>cmake -B build
+cmake --build build -j</code></pre>
+      <p><code>./build/nachtzug</code> starts it.</p>
+    </div>
+    <div class="note">
+      <p class="label">On a Mac</p>
+      <p>Install Apple’s command line tools (<code>xcode-select --install</code>) and <a href="https://brew.sh">Homebrew</a>, then unpack the source code and run this in its folder:</p>
+      <pre><code>tools/build-macos.sh</code></pre>
+      <p>It installs everything else, builds the app and packs it into a disk image.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ questions -->
+<section class="paper alt faq" id="faq">
+  <header class="chap">
+    <p class="kicker">Fahrgastinformation · Questions</p>
+    <h2>Before you board</h2>
+    <svg class="flourish" aria-hidden="true" focusable="false"><use href="#nz-flourish"/></svg>
+  </header>
+  <div class="col qas well">
+    {% for f in site.data.faq %}
+    <details class="qa">
+      <summary>{{ f.q }}</summary>
+      <p>{{ f.a }}</p>
+    </details>
+    {% endfor %}
+  </div>
+</section>
+
+</main>
