@@ -60,12 +60,12 @@ code, .mono { font-family: "Courier"; font-size: 8.4pt; }
 .chap-head { margin: 0 0 6mm; padding-top: 2mm; }
 .chap-num { font: 700 40pt/1 "Antiqua"; font-variant-numeric: lining-nums; color: var(--rust); float: left; margin-right: 4mm; margin-top: -2mm; }
 .chap-kicker { font: 400 9pt "Antiqua"; font-variant-caps: all-small-caps; letter-spacing: .16em; color: var(--soft); }
-h1 { font: 700 21pt/1.1 "Antiqua"; letter-spacing: .005em; margin: .2mm 0 0; }
+h1 { font: 700 21pt/1.1 "Antiqua"; letter-spacing: 0;   /* no spacing: it switches the ligatures off */ margin: .2mm 0 0; }
 .stripes { clear: both; width: 46mm; height: .9mm; margin-top: 3mm; background: var(--amber); border-top: .9mm solid var(--rust); border-bottom: .9mm solid var(--ochre); }
 .flourish { display: block; clear: both; width: 66mm; height: 6.6mm; margin: 2mm 0 0 -1.5mm; }
 h2 { font: 700 11.4pt/1.2 "Antiqua"; font-variant-caps: small-caps; letter-spacing: .05em; margin: 5mm 0 2mm; padding-bottom: 1mm; border-bottom: .5pt solid var(--line); break-after: avoid; }
 h2 .n { color: var(--rust); margin-right: 1.6mm; }
-h3 { font: 700 9.8pt/1.2 "Antiqua"; letter-spacing: .01em; margin: 3.4mm 0 1.2mm; break-after: avoid; color: var(--rust); }
+h3 { font: 700 9.8pt/1.2 "Antiqua"; letter-spacing: 0; margin: 3.4mm 0 1.2mm; break-after: avoid; color: var(--rust); }
 .lede { font-size: 10.6pt; line-height: 1.25; font-style: italic; color: #4a403a; margin-bottom: 3mm; }
 .lede + p { text-indent: 0; }
 

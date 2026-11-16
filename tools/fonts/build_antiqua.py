@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Nachtzug Antiqua: the text face of Nachtzug, derived from EB Garamond (SIL Open Font License 1.1).
 
-What is ours: a g whose ear is a raised semaphore arm with its disc, a tailed z, rail-joined and catenary ligatures
-(tz, ct, st), swash capitals (A E J K L R Z, with EB Garamond's long Q), the narrow no-break space, and a set of
+What is ours: a g whose ear is a raised semaphore arm with its disc, a tailed z, a rail-joined tz ligature (ct and st
+keep EB Garamond's historical arcs), swash capitals (A E J K L R Z, with EB Garamond's long Q), the narrow no-break space, and a set of
 night-train ornaments (moon, stars, locomotive, sleeping car, track, signal, fleurons, window, lantern) in the
 Private Use Area and on their Unicode code points. Everything else is EB Garamond, instanced a touch heavier than its
 Regular (wght 440) for screens, and at 700 for the Bold.
@@ -146,25 +146,6 @@ def make_tz(g):
                     p29[1] - p35[1], z42[1] - z16[1], cap='butt')
     g.put('t_z', union([t, z, bridge]), off + g.width('z'))
 
-def catenary(g, first, term_idx_top, term_idx_right, name):
-    """c_t / s_t: a fine overhead wire hangs from the first letter's terminal to the top of the t, its mast."""
-    fw = g.width(first)
-    off = fw - (34 if first == 'c' else 22)
-    a = g.path(first)
-    t = g.path('t', dx=off)
-    top = g.pt(first, term_idx_top)          # the upper edge of the terminal
-    t21 = g.pt('t', 21)
-    start = (top[0] - 6, top[1] - 10)
-    end = (off + t21[0] - 2, t21[1] - 12)
-    span = end[0] - start[0]
-    sag = 26
-    mid1 = (start[0] + span * 0.33, start[1] + (end[1] - start[1]) * 0.18 - sag)
-    mid2 = (start[0] + span * 0.7, start[1] + (end[1] - start[1]) * 0.55 - sag * 0.6)
-    wire = stroke(bezier(start, mid1, mid2, end), 21, 17)
-    hair = g.pt('t', 18)
-    shape = union([a, t, wire])
-    g.put(name, shape, off + g.width('t'))
-
 def crossings(path, y):
     """x positions where the outline crosses the horizontal line at y, sorted."""
     xs = []
@@ -298,7 +279,8 @@ def rebuild_gsub(font, swash, classic, sz):
         return len(gsub.LookupList.Lookup) - 1
     L_swash = new_lookup(otl.buildSingleSubstSubtable(swash), 1)
     L_classic = new_lookup(otl.buildSingleSubstSubtable(classic), 1)
-    L_tz = new_lookup(otl.buildLigatureSubstSubtable({('t', 'z'): 't_z'}), 4)
+    # tz, ct and st are standard ligatures (liga, on wherever text is set) as well as discretionary ones (dlig)
+    L_tz = new_lookup(otl.buildLigatureSubstSubtable({('t', 'z'): 't_z', ('c', 't'): 'c_t', ('s', 't'): 's_t'}), 4)
     def feat(tag, lookups):
         fr = ot.FeatureRecord(); fr.FeatureTag = tag
         fr.Feature = ot.Feature(); fr.Feature.FeatureParams = None
@@ -307,7 +289,7 @@ def rebuild_gsub(font, swash, classic, sz):
     for r in keep:
         if r.FeatureTag == 'swsh':
             r.Feature.LookupListIndex = [L_swash]; r.Feature.LookupCount = 1
-        if r.FeatureTag == 'dlig':
+        if r.FeatureTag in ('dlig', 'liga'):
             r.Feature.LookupListIndex = list(r.Feature.LookupListIndex) + [L_tz]; r.Feature.LookupCount = len(r.Feature.LookupListIndex)
     added = [feat('ss01', [L_swash]), feat('ss02', [L_classic])]
     # stylistic set names
@@ -363,7 +345,7 @@ def set_names(font, family, style, extra_names=()):
     rec = {0: COPYRIGHT, 1: family, 2: style, 3: f'{VERSION:.3f};NZUG;{ps}', 4: f'{family} {style}',
            5: f'Version {VERSION:.3f}', 6: ps, 8: 'The Nachtzug Project',
            9: 'The Nachtzug Project; EB Garamond by Georg Duffner and Octavio Pardo',
-           10: 'The text face of Nachtzug: EB Garamond with a semaphore g, a tailed z, rail ligatures, swash capitals and night-train ornaments.',
+           10: 'The text face of Nachtzug: EB Garamond with a semaphore g, a tailed z, a rail-joined tz, swash capitals and night-train ornaments.',
            13: OFL_NOTE, 14: 'https://openfontlicense.org'}
     for k, v in rec.items():
         name.setName(v, k, 3, 1, 0x409)
@@ -401,8 +383,7 @@ def build(style, weight):
     make_z(g)
     g.gs = font.getGlyphSet()
     make_tz(g)
-    catenary(g, 'c', 8, 12, 'c_t')
-    catenary(g, 's', 28, 31, 's_t')
+    # c_t and s_t stay EB Garamond's own: the bow from the head of the c or s onto the t's lengthened stem
     leg_tail(g, 'R', 'R.swsh')
     leg_tail(g, 'K', 'K.swsh', y_hi=205, y_lo=140)
     leg_tail(g, 'A', 'A.swsh', y_hi=185, y_lo=110, y_top=222)

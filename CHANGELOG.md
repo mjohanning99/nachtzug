@@ -1,5 +1,9 @@
 # Changes
 
+## 0.3.1 (16 November 2026)
+
+- **The old ligatures.** In Nachtzug Antiqua, ct and st have their historical arc again, a bow from the c or s onto the t, as in old books, and they show in all running text on the website and in the manuals, together with the tz that joins the name.
+
 ## 0.3.0 (16 November 2026)
 
 - **Sounds of your own.** “Save sound…” keeps a sound you have made as a small file, with a name, a group and a star. The preset list shows the starred and recent ones, and “All sounds…” opens the sound library: a card index where every sound can be heard first, then used, renamed, shared or deleted. Sound files can be dragged into it.

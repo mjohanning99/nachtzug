@@ -282,8 +282,12 @@ x-height (495 instead of 460), a z whose foot hooks down under the baseline, a g
 semaphore arm with its disc, an l with a rail-like foot so that I, l and 1 never meet, a t whose crossbar runs on into
 a following z as one rail (the **tz ligature**, `liga` and `dlig`), narrow typographic spaces, and the symbols the
 program writes (triangles, squares, discs, arrows, undo and redo, copy squares, check, eighth note, gear, command key)
-drawn in the weight of the letters. **Nachtzug Antiqua** is derived from EB Garamond with its own g and z and rail
-ligatures tz, ct and st.
+drawn in the weight of the letters. **Nachtzug Antiqua** is derived from EB Garamond with its own g and z, the tz as one
+rail, and ct and st with the historical arc (EB Garamond’s own: a bow from the head of the c or s onto the t’s lengthened
+stem). All three are standard ligatures (`liga`), so they appear in running text everywhere without any CSS; italics
+are EB Garamond’s Italic and keep their own set. Where a German compound joint falls between s and t (aus|tauschen,
+Übungs|track), a zero-width non-joiner (`&zwnj;`) keeps them apart, as the old typesetting rule asks. Headings in the
+Antiqua are not letter-spaced, since spacing switches the ligatures off.
 
 All of these are under the SIL Open Font License. Edit the build scripts, never the font files.
 
