@@ -340,9 +340,13 @@ def make_tz(g, m, kern_tz=0):
     z = transformed(g.poly['z'], (1, 0, 0, 1, off, 0))
     tb = crossings(t, x=tw * 0.92)                   # the crossbar at its right end
     zb = crossings(z, x=off + g.width('z') * 0.5)    # z's top bar
-    y0 = max(tb[0], zb[-2]); y1 = min(tb[1], zb[-1])
+    # one rail at one height: the z's top bar is a little thicker than the t's crossbar in the heavier weights, so the
+    # rail takes the thicker of the two along its whole length, from the crossbar's left end to the z (taking only
+    # where the two overlap left a step underneath where they met)
+    y0 = min(tb[0], zb[-2]); y1 = max(tb[1], zb[-1])
+    tl = crossings(t, y=(tb[0] + tb[1]) / 2)[0]      # where the crossbar starts, left of the stem
     zl = crossings(z, y=(zb[-2] + zb[-1]) / 2)[0]
-    bridge = rect(tw * 0.8, y0, zl + 20, y1)
+    bridge = rect(tl, y0, zl + 20, y1)
     g.put('t_z', union([t, z, bridge]), off + g.width('z'))
 
 def derived(g, base, new_base_name, names, orig):

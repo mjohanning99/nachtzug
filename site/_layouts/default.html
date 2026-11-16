@@ -1,31 +1,41 @@
-<!doctype html>
-<html lang="{{ site.lang }}">
+{% comment %}
+  Every page, in its language: page.lang is en (the default, _config.yml) or de, and every word comes from _data/<lang>.yml.
+  The language switch goes to the same page in the other language: the other front page, or page.other_url.
+{% endcomment %}{% assign t = site.data[page.lang] %}{% if page.lang == 'de' %}{% assign home = '/de/' | relative_url %}{% else %}{% assign home = '/' | relative_url %}{% endif %}{% assign there = page.other_url | default: t.other.url %}<!doctype html>
+<html lang="{% if page.lang == 'de' %}de{% else %}en-GB{% endif %}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
-  <meta name="description" content="{{ page.description | default: site.description }}">
-  <meta property="og:title" content="{{ site.title }}">
-  <meta property="og:description" content="{{ site.description }}">
+  <title>{% if page.title %}{{ page.title }} · {% endif %}{{ t.title }}</title>
+  <meta name="description" content="{{ page.description | default: t.description }}">
+  {% if page.home %}<link rel="alternate" hreflang="{{ page.lang }}" href="{{ site.url }}{{ page.url | relative_url }}">
+  <link rel="alternate" hreflang="{{ t.other.code }}" href="{{ site.url }}{{ there | relative_url }}">
+  <link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ '/' | relative_url }}">
+  {% endif %}<meta property="og:title" content="{{ t.title }}">
+  <meta property="og:description" content="{{ t.description }}">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="{{ site.url }}{{ '/' | relative_url }}">
+  <meta property="og:locale" content="{% if page.lang == 'de' %}de_DE{% else %}en_GB{% endif %}">
+  <meta property="og:url" content="{{ site.url }}{{ page.url | relative_url }}">
   <meta property="og:image" content="{{ site.url }}{{ '/assets/img/social-preview.png' | relative_url }}">
   <meta property="og:image:width" content="1280">
   <meta property="og:image:height" content="640">
-  <meta property="og:image:alt" content="The Nachtzug enamel sign under a painting of a night train along the Rhine">
+  <meta property="og:image:alt" content="{{ t.og_image_alt }}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#ebe5d8" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#2b2623" media="(prefers-color-scheme: dark)">
+  <meta name="nz-base" content="{{ '/' | relative_url }}">
   {% if site.release_api %}<meta name="nz-release-api" content="{{ site.release_api }}">
   {% endif %}<link rel="icon" href="{{ '/assets/img/logo-small.png' | relative_url }}" sizes="64x64">
   <link rel="icon" href="{{ '/assets/img/logo.png' | relative_url }}" sizes="512x512">
   <link rel="preload" href="{{ '/assets/fonts/antiqua-400.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="{{ '/assets/fonts/antiqua-700.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="{{ '/assets/fonts/jost-500.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ '/assets/fonts/grotesk-600.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ '/assets/fonts/din-condensed-700.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
 <body>
   {% include flourish.svg %}
+  {% include icons.svg %}
   {% include topbar.html %}
   {{ content }}
   {% include footer.html %}

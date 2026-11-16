@@ -1,9 +1,9 @@
 /* Nachtzug operation manual: an A5 booklet in the manner of 1980s/90s synth and CD manuals.
    Rendered by build.py with WeasyPrint. */
 
-@font-face { font-family: "Jost"; src: url(fonts/Jost-400.ttf); font-weight: 400; }
-@font-face { font-family: "Jost"; src: url(fonts/Jost-500.ttf); font-weight: 500; }
-@font-face { font-family: "Jost"; src: url(fonts/Jost-600.ttf); font-weight: 600; }
+@font-face { font-family: "Jost"; src: url(fonts/NachtzugGrotesk-Regular.ttf); font-weight: 400; }
+@font-face { font-family: "Jost"; src: url(fonts/NachtzugGrotesk-Medium.ttf); font-weight: 500; }
+@font-face { font-family: "Jost"; src: url(fonts/NachtzugGrotesk-SemiBold.ttf); font-weight: 600; }
 @font-face { font-family: "Antiqua"; src: url(fonts/NachtzugAntiqua-Regular.ttf); font-weight: 400; }
 @font-face { font-family: "Antiqua"; src: url(fonts/NachtzugAntiqua-Bold.ttf); font-weight: 700; }
 @font-face { font-family: "Antiqua"; src: url(fonts/EBGaramond-Italic-440.ttf); font-weight: 400; font-style: italic; }
@@ -179,16 +179,19 @@ table.spec td:first-child { font: 700 8pt "Antiqua"; font-variant-caps: all-smal
 /* one wide print wraps around the booklet: the front shows its right half, the back its left half */
 .cover .art, .back .art { position: absolute; top: 0; width: 321.4mm; height: 125mm; object-fit: cover; }
 .cover .art { left: 0; } .back .art { left: -173.4mm; }
-.cover .band, .back .band { position: absolute; left: 0; right: 0; height: 2.6mm; }
-.b1 { top: 125mm; background: var(--rust); } .b2 { top: 128.4mm; background: var(--amber); } .b3 { top: 131.8mm; background: var(--ochre); }
+/* the band under the painting: a polished brass strip with screws (as on the website), drawn in img/brass-band.svg
+   (WeasyPrint dropped it as a CSS background) */
+.cover .band, .back .band { position: absolute; left: 0; top: 125mm; width: 148mm; height: 4.2mm; }
 .cover .seal { position: absolute; right: 10mm; top: 117.5mm; width: 36mm; filter: drop-shadow(0 .8mm 1.5mm rgba(0, 0, 0, .45)); }
-.cover .word { position: absolute; left: 12.4mm; top: 144mm; font: 700 34pt/1 "Antiqua"; letter-spacing: .02em; }
+/* the name as on the website: Nachtzug Grotesk with its tz ligature */
+.cover .word { position: absolute; left: 12.4mm; top: 144mm; font: 600 34pt/1 "Jost"; font-feature-settings: "liga", "dlig"; }   /* no letter-spacing: it turns ligatures off */
 .cover .sub { position: absolute; left: 13.2mm; top: 160mm; font: 400 12pt "Antiqua"; letter-spacing: .01em; color: #d9c7ad; }
 .cover .om { position: absolute; left: 13mm; top: 170mm; font: 400 italic 13pt "Antiqua"; color: #e8b77a; }
 .cat, .cat2 { position: absolute; bottom: 9mm; font: 400 8.6pt "Antiqua"; letter-spacing: .01em; color: #9c8a78; }
 .cat { right: 13mm; } .cat2 { left: 13mm; }
 .back .inner { position: absolute; left: 13mm; right: 15mm; top: 143mm; }
-.back h1 { font-size: 17pt; letter-spacing: .02em; color: #f3ece0; margin-bottom: 2.4mm; }
+.back h1 { font: 600 17pt/1.1 "Jost"; font-feature-settings: "liga", "dlig"; color: #f3ece0; margin-bottom: 2.4mm; }   /* as on the front: Grotesk, its tz ligature, no letter-spacing */
+.back .credit { position: absolute; left: 13mm; bottom: 14mm; font: 400 italic 7.8pt "Antiqua"; color: #9c8a78; }
 .back p { color: #e6d9c6; font-size: 8.8pt; text-align: left; margin-bottom: 1.6mm; }
 .back ul { color: #e6d9c6; font-size: 8.2pt; padding-left: 0; list-style: none; margin: 0; }
 .back li { margin-bottom: .5mm; padding-left: 4mm; text-indent: -4mm; }

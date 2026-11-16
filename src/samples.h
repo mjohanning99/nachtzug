@@ -10,18 +10,24 @@ namespace samples {
 
 // The Nachtzug library: sounds made for the program (see tools/samplegen), built in. A song names one as
 // "nz:Kicks/Deep boom"; your own samples are plain file names in the folder below.
-struct LibrarySound { QString id; QString category; QString name; QString about; };   // category, name and about are translated
+struct LibrarySound {
+	QString id;
+	QString category;
+	QString name;
+	QString about;
+}; // category, name and about are translated
 const QList<LibrarySound>& library();
-QStringList libraryCategories();                                   // translated, in the order of the library
+QStringList libraryCategories(); // translated, in the order of the library
 bool isLibrary(const QString& name);
-QString displayName(const QString& name);                          // what to show: "Deep boom", or a file's name without .wav
-QString about(const QString& name);                                // one line about a library sound, empty for your own
+QString displayName(const QString& name); // what to show: "Deep boom", or a file's name without .wav
+QString about(const QString& name);       // one line about a library sound, empty for your own
 
-QString folder();                                                  // created if it does not exist yet
-QStringList list();                                                // file names in the library, sorted
-std::shared_ptr<const dsp::SampleData> get(const QString& name);   // loaded once and kept; nullptr if missing or unreadable
+QString folder();   // created if it does not exist yet
+QStringList list(); // file names in the library, sorted
+std::shared_ptr<const dsp::SampleData> get(
+    const QString& name); // loaded once and kept; nullptr if missing or unreadable
 bool exists(const QString& name);
-double seconds(const QString& name);                               // length, 0 if unreadable
+double seconds(const QString& name); // length, 0 if unreadable
 
 // Reads a WAV (8/16/24/32-bit, float) or AIFF/AIFC file. Long files are cut at maxSeconds.
 bool readFile(const QString& path, dsp::SampleData& out, QString& error, double maxSeconds = 60.0);
@@ -30,7 +36,8 @@ QString import(const QString& path, QString& error);
 // Writes mono float samples as a 24-bit WAV file into the library; returns the name or an empty string.
 QString saveRecording(const QString& wantedName, const std::vector<float>& mono, int rate, QString& error);
 // The same for a sound in stereo (right may be empty for mono). The name is made unique if needed.
-QString saveSound(const QString& wantedName, const std::vector<float>& left, const std::vector<float>& right, int rate, QString& error);
+QString saveSound(const QString& wantedName, const std::vector<float>& left, const std::vector<float>& right, int rate,
+                  QString& error);
 bool remove(const QString& name);
 
 // Chopping a loop: where its hits start (sample positions, the first always 0), at most maxSlices of them.
@@ -43,4 +50,4 @@ dsp::SampleData slice(const dsp::SampleData& d, size_t from, size_t to);
 int guessBars(double seconds, double bpm);
 bool rename(const QString& from, const QString& to, QString& error);
 
-}
+} // namespace samples

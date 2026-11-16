@@ -12,6 +12,9 @@ on:
 permissions:
   contents: write
 
+env:
+  NACHTZUG_WERROR: "1"   # a warning stops the build (CMakeLists.txt)
+
 jobs:
   linux:
     runs-on: ubuntu-latest

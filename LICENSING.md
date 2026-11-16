@@ -17,9 +17,9 @@ That goes for the built-in sounds, too. The sample library and the demo songs ar
 | The manuals, the README, the pictures and the screenshots (`docs/`, `site/`’s texts and images) | [CC BY-SA 4.0](LICENSES/CC-BY-SA-4.0.txt) | Share and adapt them freely, as long as you name Nachtzug as the source and keep your version under the same licence. |
 | The fonts (`assets/fonts/`) | SIL Open Font License 1.1 | Free to use, change and share, but not to sell on their own. Each font folder has its licence (`OFL*.txt`). |
 
-## About the pictures
+## About the cover painting
 
-The cover painting and the train pictures were made with AI image tools (Z-Image and FLUX), from our own sketches, scenes and photo references, and then chosen and edited by hand. I say so here because it’s only fair, and because the law in some places asks for it.
+The cover painting is Hans Baluschek’s “Großstadtbahnhof” (1904), which is in the public domain; the only copy to be found was small, so it was enlarged with an AI upscaler (4xRealWebPhoto) and its colours were freshened a little.
 
 ## What Nachtzug is built on
 

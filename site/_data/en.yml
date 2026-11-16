@@ -1,0 +1,156 @@
+# Every word of the English site. The German site's words are in de.yml, with the same keys in the same order:
+# a change here belongs there too.
+lang: en
+other: { code: de, name: "Deutsch", url: "/de/" }
+title: "Nachtzug"
+description: "Nachtzug is a DAW (digital audio workstation) made for beginners. It lets you create electronic music, in the style of the Berlin School for example, without much prior knowledge."
+og_image_alt: "The Nachtzug enamel sign under Hans Baluschek’s painting of a big-city railway station at night"
+ticker: ["ABFAHRT 22:58 · GLEIS 3 · NACHTZUG NACH BERLIN SCHOOL", "EVERY NOTE IS IN THE SCALE · NOTHING CAN SOUND WRONG", "NEXT STOP: ACID JUNCTION · PLEASE MIND THE SQUELCH", "HOLD SHIFT FOR THE RIGHT WRONG NOTES", "THE DRUMMER NEVER GETS TIRED"]
+
+nav:
+  on_board: "What’s on board"
+  on_board_short: "On board"
+  manual: "Manual"
+  download: "Download"
+  questions: "Questions"
+  label: "On this page"
+  language: "Deutsch"
+  language_label: "Diese Seite auf Deutsch"
+  back: "Back to the platform ↑"
+
+hero:
+  lead: "Nachtzug is a DAW (digital audio workstation) made for beginners. It lets you create electronic music, in the style of the Berlin School for example, without much prior knowledge. You don’t need to know any music theory either: Nachtzug is built so that every note automatically lands in the right scale."
+  cta: "Einsteigen, bitte!"
+  cta_sub: "Download Nachtzug, it’s free"
+  cta_for: "For %system%, it’s free"   # when the page knows your computer (site.js)
+  video_label: "Nachtzug playing its demo song: the display counts the bars, the level meters move and the playhead crosses the timeline"
+  caption: "The demo song playing: eight seconds, without the sound."
+
+board: { platform: "Gleis", number: "3", train: "Nachtzug", to: "nach Berliner Schule", departure: "Abfahrt", time: "22 58", label: "Platform 3: the Nachtzug to Berlin School departs at 22:58" }
+timetable: { title: "Abfahrt", sub: "Departures · Nachtzug, platform 3", station: "Nachtzug Hbf", valid: "valid from", time: "Time", train: "Train", stop: "Stop · what’s on board", platform: "Platform", legend: "Hbf = Hauptbahnhof (main station) · Gbf = Güterbahnhof (goods station)" }
+
+stations_title: "Fahrplan · What’s on board"
+stations_heading: "A night’s journey through Nachtzug"
+stations_intro: "Every stop is a part of the program, in the order you’d meet them."
+
+stations:
+  - { time: "22:58", stop: "Keyboard Hbf", icon: keys, title: "Play along on your keyboard", short: "Three rows of letter keys play three octaves, every key a note of the song’s scale." }
+  - { time: "23:06", stop: "Ideenfeld Ost", icon: idea, title: "Ideas at a press", short: "<b>New idea</b> writes an acid line, a Berlin School sequence, chords or a beat; <b>Vary</b> changes a note or two." }
+  - { time: "23:14", stop: "Drummersdorf Süd", icon: drum, title: "A tireless drummer", short: "Pick a style and how hard it plays; it adds fills by itself." }
+  - { time: "23:21", stop: "Knob Street West", icon: knob, title: "A real synthesiser", short: "On every track, with live pictures of what each knob does, or a <b>Simple</b> page of eight big knobs." }
+  - { time: "23:40", stop: "Loop Grid Abstellbahnhof", icon: grid, title: "Jam like a live set", short: "Start and stop patterns while it plays; every change waits for the next bar." }
+  - { time: "23:52", stop: "Arrangement Viaduct Nord", icon: arrange, title: "From a loop to a song", short: "Lay out clips yourself, or let <b>Arrange</b> make an intro, a build-up, a break and an ending." }
+  - { time: "00:15", stop: "Sample Gbf", icon: wave, title: "Your own sounds", short: "65 sounds made for Nachtzug, nine of them from a night train, your samples, or a chopped drum loop." }
+  - { time: "00:51", stop: "Berliner Schule Hbf", icon: export, title: "Take it with you", short: "Export a WAV, a file per track or MIDI. MIDI keyboards, knobs and clock all work." }
+
+gallery:
+  - { img: notes.png, wide: true, title: "The notes", text: "A grid where every row is a note of the scale; the inspector on the left keeps the track’s sound in reach.", alt: "The note grid with a bass line, the inspector on the left and the timeline above" }
+  - { img: sound.png, title: "The sound", text: "Oscillators, filter, envelopes and effects, laid out in the order the sound flows.", alt: "The Sound tab: oscillators, filter, envelopes and effects" }
+  - { img: mixer.png, title: "The mixer", text: "Volume, pan, echo, reverb and Pump for every track, with meters that tell you when it gets too loud.", alt: "The mixer with a strip per track" }
+  - { img: loops.png, wide: true, title: "The loop grid", text: "A row of patterns for every track, to switch on and off like a live set.", alt: "The loop grid: rows of patterns, one row per track" }
+
+more_title: "And on board too"
+more:
+  - { icon: lesson, title: "Five lessons", short: "Walk you through the real program, one step at a time." }
+  - { icon: undo, title: "Nothing breaks", short: "Every change can be undone, and a spare copy is kept in case of a crash." }
+  - { icon: palette, title: "Six colour schemes", short: "From Bakelite, the warm enamel here, to Ember for late nights." }
+  - { icon: book, title: "A printed manual", short: "An A5 booklet with pictures, sound recipes and patch sheets, in English and German." }
+
+manual_title: "Bordbuch · The manual"
+manual_heading: "An operation manual, as it should be"
+manual_text: "Nachtzug comes with a proper printed manual, the way old synthesisers did: an A5 booklet with pictures of every part, sound recipes, patch sheets to fill in, a table of every key and an index. Inside the program, <span class=\"key\">F1</span> opens a short guide, and almost every button and knob explains itself when you rest the mouse on it."
+manual_en: "Operation manual"
+manual_de: "Bedienungsanleitung"
+manual_en_alt: "The cover of the English operation manual"
+manual_de_alt: "Der Umschlag der deutschen Bedienungsanleitung"
+
+download_title: "Fahrkarten · Download"
+download_heading: "Your ticket, please"
+download_intro: "Free, every one of them. The apps are not signed by Apple or Microsoft, so the first time you open them your computer asks whether you trust them; the ticket says what to press."
+your_ticket: "Your ticket"
+ticket_from: "Your computer"
+ticket_via: "nach"
+ticket_to: "Berlin School"
+ticket_fare: "Freifahrt"
+ticket_valid: "Valid for"
+ticket_download: "Download"
+ticket_build: "How to build it"
+ticket_aria: "A %colour% %class%-class card ticket from Your computer to Berlin School, number %nr%"
+ticket_colours: { first: "green", second: "brown", white: "plain white", striped: "red-striped brown" }
+ticket_class: { "1": "first", "2": "second" }
+tickets:
+  - { id: linux, system: Linux, what: "AppImage, one file", file: Nachtzug-x86_64.AppImage, class: "1", colour: first, card: "Linux · AppImage",
+      valid: "64-bit PCs · distributions from 2025 on",
+      how: "Make it runnable (right-click → Properties → Allow executing, or <code>chmod +x Nachtzug-x86_64.AppImage</code>) and double-click it. Nothing gets installed." }
+  - { id: mac, system: macOS, what: "a disk image", file: Nachtzug-macOS.dmg, class: "2", colour: second, card: "macOS · disk image",
+      valid: "Apple Silicon · macOS 15 Sequoia or newer",
+      how: "Drag Nachtzug into Applications. The first time, click <b>Done</b> when macOS warns, then <b>Open Anyway</b> in System Settings → Privacy &amp; Security." }
+  - { id: windows, system: Windows, what: "an installer", file: Nachtzug-Windows-Setup.exe, class: "2", colour: white, card: "Windows · installer",
+      valid: "Windows 10 and 11 · 64-bit",
+      how: "Run the installer; if Windows warns about an unknown publisher, choose <b>More info</b>, then <b>Run anyway</b>. The newest of the three: <a href=\"https://github.com/mjohanning99/nachtzug/issues\">tell me</a> if anything goes wrong." }
+  - { id: source, system: "Source code", what: "for tinkerers", file: Nachtzug-source.tar.gz, class: "2", colour: striped, card: "Source code · C++20",
+      valid: "Linux, macOS, Windows · <span class=\"nw\">C++20</span>, Qt 6, SDL2",
+      how: "A handful of commands and you have the very newest Nachtzug; the README inside says how." }
+
+build_heading: "Building Nachtzug yourself"
+build_intro: "Don’t let that put you off: it’s a handful of commands, and you only have to do it once."
+build:
+  - label: "On Linux"
+    html: "<p>Install the tools. On Arch:</p><pre><code>sudo pacman -S --needed base-devel cmake qt6-base qt6-tools sdl2 alsa-lib git</code></pre><p>On Debian or Ubuntu:</p><pre><code>sudo apt install build-essential cmake qt6-base-dev qt6-tools-dev qt6-l10n-tools libsdl2-dev libasound2-dev git</code></pre><p>Then unpack the source code and run these two in its folder:</p><pre><code>cmake -B build\ncmake --build build -j</code></pre><p><code>./build/nachtzug</code> starts it.</p>"
+  - label: "On a Mac"
+    html: "<p>Install Apple’s command line tools (<code>xcode-select --install</code>) and <a href=\"https://brew.sh\">Homebrew</a>, then unpack the source code and run this in its folder:</p><pre><code>tools/build-macos.sh</code></pre><p>It installs everything else, builds the app and packs it into a disk image.</p>"
+  - label: "On Windows"
+    html: "<p>Install <a href=\"https://www.msys2.org\">MSYS2</a>, open the <b>MSYS2 UCRT64</b> terminal from the Start menu, then unpack the source code and run this in its folder:</p><pre><code>tools/build-windows.sh</code></pre><p>It installs the compiler and everything else, builds Nachtzug and makes an installer (with <a href=\"https://jrsoftware.org/isinfo.php\">Inno Setup</a> installed) or a zip.</p>"
+
+licence_title: "Beförderungsbedingungen · Licence"
+licence_heading: "Free to ride, yours to keep"
+licence_intro: "Nachtzug is free: use it, share it and change it, without asking. The music you make with it is yours, completely."
+licences:
+  - { icon: music, title: "Your music is yours", text: "Your songs, sounds and exports: release them, sell them, put them in a film. No need to mention Nachtzug, though I’d be delighted." }
+  - { icon: code, title: "Free software", text: "The program is under the GNU GPL, version 3 or later: use it, change it, hand it on with its source.", link: "gpl" }
+  - { icon: wave, title: "Sounds for anyone", text: "Every sound and demo song is in the public domain (CC0), made by Nachtzug’s own sound maker.", link: "cc0" }
+  - { icon: book, title: "Manuals and pictures", text: "Under CC BY-SA 4.0: share and adapt them, naming Nachtzug. The cover painting, Hans Baluschek’s “Großstadtbahnhof” (1904), is in the public domain.", link: "cc-by-sa" }
+  - { icon: type, title: "Nachtzug’s own type", text: "Antiqua, Grotesk, Initialen and Ornamente, built on EB Garamond and Jost, under the SIL Open Font License.", link: "ofl" }
+licence_page: "/licences.html"
+licence_read: "Open"
+licence_buttons:
+  - { label: "The licences in plain words", page: "#top" }
+  - { label: "Credits: who made what", page: "#credits" }
+  - { label: "The source code" }
+
+faq_title: "Fahrgastinformation · Questions"
+faq_heading: "Before you board"
+faq:
+  - q: "Do I need to be able to play the keyboard?"
+    a: "Not at all! That’s the whole idea. Every key and every row of the note grid is a note of your song’s scale, so nothing you press can sound wrong. And if you’d like a little tension, hold <span class=\"key\">Shift</span> for the “right wrong notes”."
+  - q: "What does it cost?"
+    a: "Nothing, and it never will. Nachtzug is free software under the GNU GPL: you may use it, share it and change it. The music you make with it is yours, completely, and the built-in sounds are in the public domain."
+  - q: "Do I need to know music theory?"
+    a: "No. You pick a key and a scale from a list (“A natural minor” is a fine start), and Nachtzug does the rest: the chords, which notes fit, and ideas when you’re stuck. You’ll pick up a bit of theory along the way, without noticing."
+  - q: "Which computers does it run on?"
+    a: "Linux, macOS and Windows. On Linux, the AppImage runs on distributions from 2025 on (Debian 13, Ubuntu 25.04, Fedora 42, Arch, CachyOS and friends); on older ones you can build it yourself in about ten minutes. The Mac version needs Apple Silicon and macOS 15 Sequoia or newer, and the Windows version Windows 10 or 11. Windows is the newest, so if anything there behaves oddly, please tell me."
+  - q: "Can I use my MIDI keyboard and knobs?"
+    a: "Yes. A MIDI keyboard plays the nearest note of the scale, hard notes are accented, and any knob in Nachtzug can learn a knob on your controller. Nachtzug can follow MIDI clock, too."
+  - q: "Can I take my music into another program?"
+    a: "Of course. Export the song as a WAV file, as one WAV file per track, or as a MIDI file with every note just as you hear it, arpeggios and all."
+  - q: "Is there a German version?"
+    a: "Ja! The program speaks English and German, the manual comes in both languages, and this site has a <a href=\"%base%/de/\" hreflang=\"de\">German version</a> too."
+  - q: "Will I lose my song if something crashes?"
+    a: "Don’t worry. Every change can be undone, and Nachtzug quietly keeps a spare copy of your song, which it offers you the next time you start it."
+  - q: "Where are my songs kept?"
+    a: "Wherever you save them, as <code>.nachtzug</code> files. They’re plain text inside (JSON), so they’re small and will still open in many years."
+
+footer:
+  word: "Gute Fahrt!"
+  sub: "Have a good journey."
+  about: "Nachtzug is made by Marvin Johanning, for everyone who loves music but can’t play the keyboard."
+  columns:
+    - title: "Nachtzug"
+      links: [ { label: "What’s on board", href: "#journey" }, { label: "Download", href: "#download" }, { label: "Questions", href: "#faq" } ]
+    - title: "Reading"
+      links: [ { label: "Operation manual", file: "Nachtzug-Manual.pdf" }, { label: "Bedienungsanleitung", file: "Nachtzug-Handbuch.pdf", lang: de }, { label: "Build it yourself", href: "#readme" } ]
+    - title: "Open"
+      links: [ { label: "Licences and credits", page: "/licences.html" }, { label: "Source code", repo: "" }, { label: "Changes", repo: "/blob/main/CHANGELOG.md" } ]
+    - title: "About"
+      links: [ { label: "Impressum", page: "/impressum.html", lang: de }, { label: "Datenschutz", page: "/datenschutz.html", lang: de }, { label: "marvinjohanning.de", url: "https://marvinjohanning.de" } ]
+  line: "© 2026 Marvin Johanning · the program under the GNU GPL, the sounds in the public domain, the manuals and pictures under CC BY-SA 4.0"

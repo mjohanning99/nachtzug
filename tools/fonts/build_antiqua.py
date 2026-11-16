@@ -130,7 +130,8 @@ def make_z(g):
     g.put('z', shape, W)
 
 def make_tz(g):
-    """t_z: the t's crossbar runs on into the z's top bar, like a rail."""
+    """t_z: the t's crossbar runs on into the z's top bar, like a rail. The finished fonts were patched afterwards by fix_antiqua_tz.py,
+    which smooths small jogs where the bridge met the crossbar and the bar; run it again after a rebuild."""
     tw = g.width('t')
     off = tw - 26
     t = g.path('t')

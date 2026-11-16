@@ -1,5 +1,20 @@
 # Changes
 
+## 0.2.0 (16 November 2026)
+
+A new look, inside and out, and many small things made nicer to use.
+
+- **A new top bar.** Transport, song and output in three plates of the same height, with a real VU meter. At the top left, the square sign with “Nachtzug” under it.
+- **Keys with symbols.** Every key shows a symbol and a word, or only the symbol: chosen in the welcome window or in Settings. Tick boxes are now sliding switches, and drop-down lists and menus have rounded corners.
+- **Tidier windows.** Scroll bars stay hidden unless wanted (Settings → Window; Shift and the mouse wheel scroll sideways). The note grid opens on the clip’s notes. The timeline’s clips have the loop grid’s colours, and the labels are shorter.
+- **Help in two tabs.** F1 opens a guide in five steps and a second tab with every key and mouse move. Both point to the operation manual, which Help → Operation manual opens.
+- **German without “du”.** The German program speaks impersonally now, like the manual.
+- **Small fixes.** Clean up puts every note on the grid chosen. Tap tempo shows the tempo it set. Folding a part of the inspector no longer makes it wider, and the closed inspector’s tab is an even key down the edge. The icon has the right size in the Mac Dock, and the fader handles and drop-down arrows show in every download.
+- **A new logo and cover.** The tz on a lighter enamel sign, and Hans Baluschek’s painting “Großstadtbahnhof” (1904) on the cover. The tz ligatures in Nachtzug’s own fonts run as one even rail.
+- **A website**, in English and German, laid out like a railway station: the downloads as tickets, the licences and credits in full, an Impressum and a privacy notice.
+- **The manuals** have new pictures, a page of credits and licences, and Windows on the cover.
+- **Under the bonnet.** The code is split into smaller files and laid out evenly, with a check that it still behaves exactly the same. For anyone who would like to help, AGENTS.md explains the layout.
+
 ## 0.1.1 (15 November 2026)
 
 - **Ready-made downloads for Mac and Windows.** A disk image for Macs with Apple Silicon (macOS 15 or newer) and an installer for Windows 10 and 11, built and self-tested on GitHub for every release. This is the first Windows version: please tell me if anything goes wrong.

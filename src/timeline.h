@@ -7,60 +7,76 @@
 class App;
 
 class Timeline : public QAbstractScrollArea {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    explicit Timeline(App* app, QWidget* parent = nullptr);
-    void setScissors(bool on);
-    void followPlayhead();
-    void refresh();
-    void zoom(double factor);
-    void showWholeSong();   // zoom out so every clip fits, from bar 1
-    void addMenu(const QPoint& global);
+	explicit Timeline(App* app, QWidget* parent = nullptr);
+	void setScissors(bool on);
+	void followPlayhead();
+	void refresh();
+	void zoom(double factor);
+	void showWholeSong(); // zoom out so every clip fits, from bar 1
+	void addMenu(const QPoint& global);
 signals:
-    void clipActivated();     // a clip was opened: show the note editor
+	void clipActivated(); // a clip was opened: show the note editor
 protected:
-    void paintEvent(QPaintEvent*) override;
-    void mousePressEvent(QMouseEvent*) override;
-    void mouseMoveEvent(QMouseEvent*) override;
-    void mouseReleaseEvent(QMouseEvent*) override;
-    void mouseDoubleClickEvent(QMouseEvent*) override;
-    void contextMenuEvent(QContextMenuEvent*) override;
-    void wheelEvent(QWheelEvent*) override;
-    void resizeEvent(QResizeEvent*) override;
-    bool viewportEvent(QEvent*) override;
-private:
-    static constexpr int HDR = 214, RULER = 20, LOOPROW = 16, CHORDS = 22, TOP = RULER + LOOPROW + CHORDS, ROW = 58, LANE = 72;
-    double ppt() const { return pxPerBar / BAR; }
-    int tx(double tick) const;
-    double xt(int x) const;
-    int rowH(int row) const;
-    int rowY(int row) const;
-    int rowAt(int y, bool* inLane = nullptr) const;   // track index under y, or -1; tracks.size() for the "add track" row
-    QRect clipRect(const Clip& c, int row) const;
-    QRect laneRect(int row) const;
-    static double laneY(const QRect& r, float v) { return r.top() + 6 + double(1.f - v) * (r.height() - 12); }
-    static float laneV(const QRect& r, int y) { return std::clamp(1.f - float(y - r.top() - 6) / float(r.height() - 12), 0.f, 1.f); }
-    int lanePointAt(int row, const QPoint& p, int* base) const;
-    Clip* clipAt(const QPoint& p, Track** owner, bool* edge);
-    QString helpAt(const QPoint& p);
-    void updateScroll();
-    void chordMenu(int bar, const QPoint& global);
-    void trackMenu(int trackId, const QPoint& global);
-    void clipMenu(int clipId, int tick, const QPoint& global);
-    void laneParamMenu(int trackId, const QPoint& global);
-    void laneRepeatMenu(int trackId, const QPoint& global);
-    void renameTrack(int trackId);
-    void setVolumeFromX(int x);
-    void dragPoint(QMouseEvent* e);
+	void paintEvent(QPaintEvent*) override;
+	void mousePressEvent(QMouseEvent*) override;
+	void mouseMoveEvent(QMouseEvent*) override;
+	void mouseReleaseEvent(QMouseEvent*) override;
+	void mouseDoubleClickEvent(QMouseEvent*) override;
+	void contextMenuEvent(QContextMenuEvent*) override;
+	void wheelEvent(QWheelEvent*) override;
+	void resizeEvent(QResizeEvent*) override;
+	bool viewportEvent(QEvent*) override;
 
-    App* app;
-    double pxPerBar = 64;
-    bool scissors = false;
-    enum Drag { None, Seek, Loop, Move, Resize, Volume, Point } drag = None;
-    struct Orig { int id, start, len; };
-    std::vector<Orig> orig;
-    double pressTick = 0;
-    QPoint pressPos;
-    int dragTrack = -1, lastDt = 0, pointIdx = -1, pointBase = 0, pointRow = -1;
-    bool began = false, moved = false;
+private:
+	struct Frame;
+	void paintGrid(const Frame& fr); // the track rows, the looped stretch a little lighter, and the bar lines
+	void paintClips(
+	    const Frame& fr); // each track's clips: their colour, notes, name, repeats and transitions, and its knob line
+	void paintPlayhead(const Frame& fr);  // the playhead across the tracks
+	void paintRuler(const Frame& fr);     // the bar numbers along the top, and the playhead's mark in them
+	void paintLoopRow(const Frame& fr);   // the loop row: the stretch that repeats
+	void paintChords(const Frame& fr);    // the chord lane: a block for each stretch of the same chord
+	void paintEmptyNote(const Frame& fr); // what an empty song says: how to begin
+	void paintHeaders(const Frame& fr);   // the header column: each track's name, keys and volume, and the focus line
+	static constexpr int HDR = 214, RULER = 20, LOOPROW = 16, CHORDS = 22, TOP = RULER + LOOPROW + CHORDS, ROW = 58,
+	                     LANE = 72;
+	double ppt() const { return pxPerBar / BAR; }
+	int tx(double tick) const;
+	double xt(int x) const;
+	int rowH(int row) const;
+	int rowY(int row) const;
+	int rowAt(int y, bool* inLane = nullptr) const; // track index under y, or -1; tracks.size() for the "add track" row
+	QRect clipRect(const Clip& c, int row) const;
+	QRect laneRect(int row) const;
+	static double laneY(const QRect& r, float v) { return r.top() + 6 + double(1.f - v) * (r.height() - 12); }
+	static float laneV(const QRect& r, int y) {
+		return std::clamp(1.f - float(y - r.top() - 6) / float(r.height() - 12), 0.f, 1.f);
+	}
+	int lanePointAt(int row, const QPoint& p, int* base) const;
+	Clip* clipAt(const QPoint& p, Track** owner, bool* edge);
+	QString helpAt(const QPoint& p);
+	void updateScroll();
+	void chordMenu(int bar, const QPoint& global);
+	void trackMenu(int trackId, const QPoint& global);
+	void clipMenu(int clipId, int tick, const QPoint& global);
+	void laneParamMenu(int trackId, const QPoint& global);
+	void laneRepeatMenu(int trackId, const QPoint& global);
+	void renameTrack(int trackId);
+	void setVolumeFromX(int x);
+	void dragPoint(QMouseEvent* e);
+
+	App* app;
+	double pxPerBar = 64;
+	bool scissors = false;
+	enum Drag { None, Seek, Loop, Move, Resize, Volume, Point } drag = None;
+	struct Orig {
+		int id, start, len;
+	};
+	std::vector<Orig> orig;
+	double pressTick = 0;
+	QPoint pressPos;
+	int dragTrack = -1, lastDt = 0, pointIdx = -1, pointBase = 0, pointRow = -1;
+	bool began = false, moved = false;
 };

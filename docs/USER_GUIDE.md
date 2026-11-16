@@ -30,10 +30,10 @@ This guide starts with making a first song in a few minutes, then explains each 
 The very first time, Nachtzug asks which language you want and how you would like to start. **I am new to this** gives the Sound tab a few big knobs in plain words and opens a short guide; **I know synthesisers** shows every knob. Both can be changed later.
 
 1. **Listen.** Start Nachtzug and press **Space** (or the **▶** key at the top left). A demo song plays: drums, a bass line, a repeating sequence, a pad and an empty lead track.
-2. **Get a new bass line.** In the timeline at the bottom, click the orange **Bass** clip. The **Notes** tab above now shows its pattern. Press **New idea** and pick **Acid line**. The new pattern starts on the next bar. Press **Vary** a few times to change a note or two each time.
-3. **Change its sound.** Click the **Sound** tab and press **Roll new sound** until you hear one you like. On the Simple page, turn **Brightness** and **Squelch**; on the Full page, **Cutoff** and **Resonance** do the same.
+2. **Get a new bass line.** In the timeline, click the orange **Bass** clip. The **Notes** tab now shows its pattern. Press **New idea** and pick **Acid line**. The new pattern starts on the next bar. Press **Vary** a few times to change a note or two each time.
+3. **Change its sound.** Click the **Sound** tab and press **New sound** (the die) until you hear one you like. On the Simple page, turn **Brightness** and **Squelch**; on the Full page, **Cutoff** and **Resonance** do the same.
 4. **Add a melody.** Click the **Lead** track’s name in the timeline, go back to the **Notes** tab, press **New idea** and pick **Melody**.
-5. **Make it a song.** Press **Arrange for me** above the timeline and pick **Medium**: your patterns become an intro, a build-up, a main part, a break and an ending. (Or drag the right edge of each clip yourself; a pattern repeats for as long as its clip lasts.)
+5. **Make it a song.** Press **Arrange** above the timeline and pick **Medium**: your patterns become an intro, a build-up, a main part, a break and an ending. (Or drag the right edge of each clip yourself; a pattern repeats for as long as its clip lasts.)
 6. **Keep it.** Press **Ctrl+S** to save. For a sound file, press **Export** at the top right; when it is done, **Play it** opens it in your music player.
 
 Don’t like a change? The **↶** key beside the display takes it back, as often as you like.
@@ -179,7 +179,7 @@ Drum clips start with the auto drummer switched on: the program writes the drum 
 
 | Setting | What it does |
 |---|---|
-| **The drummer plays this clip** | Untick it to place hits yourself. The hits the drummer wrote stay, so you can start from them. |
+| **The drummer plays this clip** | Switch it off to place hits yourself. The hits the drummer wrote stay, so you can start from them. |
 | **Style** | Four on the floor, Acid house, Motorik, Broken beat, Half time, Electro or Berlin pulse. |
 | **Energy** | How hard the drummer plays: from a bare pulse up to full hi-hats, open hats and crashes. |
 | **Playfulness** | How many ghost notes and small surprises are added. |
@@ -191,7 +191,7 @@ Drum clips start with the auto drummer switched on: the program writes the drum 
 | **Crash after fills** | A cymbal crash on the first beat after each fill. |
 | **New take** | Same settings, different playing. |
 
-To place drum hits by hand, untick the drummer, then click in the grid to add a hit and click a hit to remove it. The letter keys **Z** to **,** play the eight drums.
+To place drum hits by hand, switch the drummer off, then click in the grid to add a hit and click a hit to remove it. The letter keys **Z** to **,** play the eight drums.
 
 ---
 
@@ -239,7 +239,7 @@ The Sound tab has two pages: **View → Simple sound page** switches between the
 ### Finding a sound quickly
 
 - **Sound** picks a ready-made preset, grouped by use. In the open list, rest the mouse on a preset to hear a short phrase with it in the song’s key and tempo; the list of drum kits does the same. The presets (bass, sequence, pad, lead, effects): Acid Squelch, Rubber Square, Deep Bass, Zap Bass, Berlin Sequence, Glass Pluck, Pulse Wanderer, Hollow Band, String Machine, Supersaw Pad, Phase Choir, Night Drone, Thin Air, Mellow Lead, Saw Lead, Wide Unison Lead, FM Bell and Sample and Hold.
-- **Roll new sound** builds a brand new sound that suits the kind of track.
+- **New sound** (the die) builds a brand new sound that suits the kind of track.
 - **Mutate** nudges every knob a little, for a close relative of the current sound.
 - **Ctrl+Z** brings the previous sound back.
 
@@ -291,7 +291,7 @@ The timeline is the bottom area in **Song** mode. Time runs from left to right, 
 ### The three rows at the top
 
 - **Bars:** click or drag here to move the playhead.
-- **Loop:** the coloured bar marks the stretch that repeats while **Loop** is on. Drag in this row to mark another stretch; click it to switch looping on or off. **Loop this part** above the timeline puts the loop around the selected clips.
+- **Loop:** the coloured bar marks the stretch that repeats while **Loop** is on. Drag in this row to mark another stretch; click it to switch looping on or off. **Loop** above the timeline puts the loop around the selected clips.
 - **Chords:** the chord of each bar ([section 11](#11-chords)).
 
 ### Working with clips
@@ -303,8 +303,8 @@ The timeline is the bottom area in **Song** mode. Time runs from left to right, 
 | Edit its notes | Double-click it. |
 | Move it | Drag it. A single clip can also be dragged onto another track of the same kind (a synth clip onto a synth track, a drum clip onto a drum track). |
 | Make it longer | Drag its right edge. The pattern repeats; small ticks along the top show where. |
-| Cut it in two | Turn on **Scissors** and click where to cut, or put the playhead there and press **Cut at playhead** (Ctrl+E). |
-| Copy it | **Duplicate** (Ctrl+D) puts a copy right after it. Ctrl+C and Ctrl+V copy and paste at the playhead. |
+| Cut it in two | Turn on the scissors (✂) and click where to cut, or put the playhead there and press **Cut** (Ctrl+E). |
+| Copy it | **Copy** (Ctrl+D) puts a copy right after it. Ctrl+C and Ctrl+V copy and paste at the playhead. |
 | Delete it | **Delete**, or the Delete key. |
 | Fade it in or out | Right-click it and choose **Transition at the start** or **at the end**: a fade, a filter sweep, or both, from one beat to four bars long. A dark wedge on the clip shows the transition. |
 
@@ -314,7 +314,7 @@ Moves snap to whole beats; hold **Shift** while dragging for sixteenth steps. **
 
 ![An arranged song](screenshots/arranged.png)
 
-**Arrange for me**, above the timeline (also in the Edit menu), turns your patterns into a whole song. It takes each track’s pattern at the loop and lays out:
+**Arrange for me** (the **Arrange** key above the timeline, also in the Edit menu) turns your patterns into a whole song. It takes each track’s pattern at the loop and lays out:
 
 | Part | What plays |
 |---|---|
@@ -416,7 +416,7 @@ When it is written, **Your song is ready** shows its length and size, with **Pla
 
 The **⚙** key in the Output unit, or **File → Settings…** (Ctrl+,), opens the settings. Every change counts at once.
 
-**General:** the language (from the next start), the colours, the **Size** of everything (Automatic picks the largest size that fits your screen; a new size counts from the next start, and **Start again now** restarts at once), whether the Sound tab opens on Simple or Full, the on-screen keys, the Undo note, and whether to show the welcome window again.
+**General:** the language (from the next start), the colours, the **Size** of everything (Automatic picks the largest size that fits your screen; a new size counts from the next start, and **Start again now** restarts at once), whether the Sound tab opens on Simple or Full, **Keys** (a symbol and a word on each key, or the symbols alone with the word in the tooltip), **Window** (the timeline above the notes or beside them), the on-screen keys, the Undo note, **Show scroll bars** (without them, the wheel and the trackpad scroll as usual; Shift + wheel scrolls sideways), and whether to show the welcome window again.
 
 **Sound card:** the **Sound system** (Automatic picks the best one; on Linux you can also choose PipeWire, PulseAudio, ALSA or JACK), **Play through** (which speakers or headphones), **Sample rate** and **Buffer**. A smaller buffer makes the letter keys answer faster; if the sound crackles, choose a larger one. **Play a test tone** checks that sound comes out. **Record from** picks the microphone or line input, for recording samples and for the mixer’s Input strip. If the chosen output is missing at the next start, Nachtzug falls back to the default and says so.
 
@@ -424,7 +424,7 @@ The **⚙** key in the Output unit, or **File → Settings…** (Ctrl+,), opens 
 
 To use a sample, open a drum track’s **Sound** tab and click **Built-in** under a drum. The menu has the library in submenus, one per kind; resting the mouse on a sound plays it. Below come your own samples, and entries to import or record one straight away. The quickest start is one of the four kits made from the library: **Night train kit**, **Tape kit**, **Electro kit** and **Hand percussion kit**. Choosing a kit brings its sounds, but a drum playing one of your own samples keeps it. The textures last several seconds: put one on a drum you play by hand (the tom, say), once every few bars, and turn its level down. A song remembers its samples by name; if one is missing when you open the song, that drum plays its built-in sound and Nachtzug says which sample it could not find.
 
-**Chopping a loop.** **Track → Chop a loop across the drums…** (or **Chop…** on the Samples page, or the entry in the sample menu) cuts a drum loop into up to eight pieces, one per drum pad: at the hits Nachtzug finds (**fewer … more** sets how faint a hit may be), or into equal pieces. Click a piece to hear it, drag a line to move a cut, double-click to add one, right-click a line to remove it. **Length** is how many bars the loop lasts (guessed from its length and the song’s tempo). With **Write a pattern …** ticked, a drum clip plays the pieces back in their order, so the loop sounds as it was at the song’s tempo. The pieces are saved in your sample library, numbered.
+**Chopping a loop.** **Track → Chop a loop across the drums…** (or **Chop…** on the Samples page, or the entry in the sample menu) cuts a drum loop into up to eight pieces, one per drum pad: at the hits Nachtzug finds (**fewer … more** sets how faint a hit may be), or into equal pieces. Click a piece to hear it, drag a line to move a cut, double-click to add one, right-click a line to remove it. **Length** is how many bars the loop lasts (guessed from its length and the song’s tempo). With **Write a pattern …** switched on, a drum clip plays the pieces back in their order, so the loop sounds as it was at the song’s tempo. The pieces are saved in your sample library, numbered.
 
 **Colours:** **View → Colours** or the settings switch between six themes: **Bakelite** (the default, warm cream panels with raised keys), **Parchment**, **Ember**, **Wine**, **Charcoal** and **Blue panel**.
 
@@ -438,7 +438,7 @@ Nachtzug listens to every MIDI device that is plugged in, unless you choose one 
 
 - **A keyboard** plays the selected track and records like the letter keys. Every key plays the nearest note of the song’s scale; notes struck hard are accented. On a drum track the General MIDI drum notes play the drums (36 kick, 38 snare, 42 closed hat …). In Chords mode the keys change the chord.
 - **Controller knobs:** right-click a knob of the Sound tab, a knob or fader in the mixer, or **Volume** or **Swing** in the top bar, choose **Learn MIDI control**, then turn a knob on your controller. From then on it turns that knob (a small ring at the knob’s top left shows it). A Sound-tab knob works on whichever track is selected. Each turn is one undo step and, with record on, is written as a line. **Forget MIDI control** unties it; **Forget them all** on the settings page unties every one.
-- **Clock:** to make a drum machine or another program follow Nachtzug, choose it under **Send to** and tick **Send the clock, start and stop to it**. To follow another device, tick **Follow its clock**: Nachtzug takes its tempo and starts and stops with it.
+- **Clock:** to make a drum machine or another program follow Nachtzug, choose it under **Send to** and switch on **Send the clock, start and stop to it**. To follow another device, switch on **Follow its clock**: Nachtzug takes its tempo and starts and stops with it.
 
 On Linux, MIDI needs your user in the `audio` group; the MIDI page says if it is not (`sudo usermod -aG audio $USER`, then log in again).
 
@@ -482,7 +482,7 @@ On Linux, MIDI needs your user in the `audio` group; the MIDI page says if it is
 
 **The letter keys don’t play anything.** A text field may have the keyboard: if you just typed a tempo, press **Esc** or click somewhere else. Also check which track the display says the keys play.
 
-**I can’t edit the drum hits.** The auto drummer is writing that clip. Untick **The drummer plays this clip** first.
+**I can’t edit the drum hits.** The auto drummer is writing that clip. Switch off **The drummer plays this clip** first.
 
 **A change didn’t happen straight away.** While the song plays, new ideas, mutes, chord changes and loop-grid launches wait for the next bar line, so they land in time. The display says so while one is waiting.
 

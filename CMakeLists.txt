@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(nachtzug VERSION 0.1.1 LANGUAGES CXX)
+project(nachtzug VERSION 0.2.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,6 +20,11 @@ if(MSVC)
   target_compile_options(nachtzug PRIVATE /W3 /utf-8)
 else()
   target_compile_options(nachtzug PRIVATE -Wall -Wextra)
+endif()
+# the release builds stop on any warning (NACHTZUG_WERROR=1 in .github/workflows/release.yml), so a new one is
+# noticed; building it yourself with a newer compiler that warns about something new still works
+if(DEFINED ENV{NACHTZUG_WERROR} AND NOT MSVC)
+  target_compile_options(nachtzug PRIVATE -Werror)
 endif()
 target_link_libraries(nachtzug PRIVATE Qt6::Widgets SDL2::SDL2)
 target_compile_definitions(nachtzug PRIVATE NACHTZUG_VERSION="${PROJECT_VERSION}")

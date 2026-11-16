@@ -1,0 +1,178 @@
+{% comment %} The front page, in the language of the page (page.lang: en or de); every word comes from _data/<lang>.yml. {% endcomment %}
+{% assign t = site.data[page.lang] %}
+{% assign repo = site.repo %}
+<main id="top">
+
+<!-- ============================================================ the opening: the painting, the name, a row of the destination board -->
+<section class="hero">
+  <div class="art" aria-hidden="true">
+    <img src="{{ '/assets/img/cover-art-2400.jpg' | relative_url }}" srcset="{{ '/assets/img/cover-art-1200.jpg' | relative_url }} 1200w, {{ '/assets/img/cover-art-2400.jpg' | relative_url }} 2400w" sizes="100vw" alt="">
+  </div>
+  <div class="hero-inner">
+    <h1>Nachtzug</h1>
+    <!-- one row of a station's destination board, flaps and all -->
+    <div class="board" role="img" aria-label="{{ t.board.label }}">
+      <div class="glass">
+        <span class="platform">{{ t.board.platform }} {{ t.board.number }}</span>
+        <span class="flap train"><span class="nz">NZ</span><span class="name">{{ t.board.train }}</span><span class="to">{{ t.board.to }}</span></span>
+        <span class="flap dep">{{ t.board.departure }}</span>
+        <span class="flap time">{{ t.board.time }}</span>
+      </div>
+    </div>
+    <div class="hero-panel well">
+      <p class="lead">{{ t.hero.lead }}</p>
+      <p class="cta">
+        <a class="keycap lit big" href="#download" data-for="{{ t.hero.cta_for }}">{{ t.hero.cta }} <small>{{ t.hero.cta_sub }}</small></a>
+        <a class="keycap big manual-key" href="#manual"><span class="line"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>{{ t.nav.manual }}</span><small>English · Deutsch</small></a>
+      </p>
+    </div>
+  </div>
+  <div class="bands" aria-hidden="true"></div>
+</section>
+
+<!-- ============================================================ what's on board: the yellow departure timetable, then the program itself -->
+<section class="paper journey" id="journey">
+  <header class="chap">
+    <div class="sign"><p class="kicker">{{ t.stations_title }}</p><h2>{{ t.stations_heading }}</h2></div>
+    <p class="intro">{{ t.stations_intro }}</p>
+  </header>
+  <div class="timetable">
+    <div class="tt-head">
+      <div><p class="tt-title" lang="de">{{ t.timetable.title }}</p><p class="tt-sub">{{ t.timetable.sub }}</p></div>
+      <p class="tt-station">{{ t.timetable.station }}<br><span>{{ t.timetable.valid }} {{ site.time | date: "%d.%m.%Y" }}</span></p>
+    </div>
+    <table>
+      <thead><tr><th>{{ t.timetable.time }}</th><th class="z">{{ t.timetable.train }}</th><th>{{ t.timetable.stop }}</th><th class="g">{{ t.timetable.platform }}</th></tr></thead>
+      <tbody>
+        {% for s in t.stations %}
+        <tr id="station-{{ forloop.index }}">
+          <td class="t">{{ s.time }}</td>
+          <td class="z"><span class="nz">NZ</span> 1</td>
+          <td><p class="stop">{{ s.stop }}</p><p class="what"><b>{{ s.title }}.</b> {{ s.short }}</p></td>
+          <td class="g">{{ forloop.index }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p class="tt-legend">{{ t.timetable.legend }}</p>
+  </div>
+  <figure class="playing well">
+    <video autoplay muted loop playsinline preload="metadata" poster="{{ '/assets/img/playing.jpg' | relative_url }}" aria-label="{{ t.hero.video_label }}">
+      <source src="{{ '/assets/img/playing.mp4' | relative_url }}" type="video/mp4">
+    </video>
+    <figcaption>{{ t.hero.caption }}</figcaption>
+  </figure>
+  <div class="gallery">
+    {% for g in t.gallery %}
+    <figure class="well{% if g.wide %} wide{% endif %}">
+      <img src="{{ '/assets/img/shots/' | append: g.img | relative_url }}" alt="{{ g.alt }}" loading="lazy">
+      <figcaption><b>{{ g.title }}.</b> {{ g.text }}</figcaption>
+    </figure>
+    {% endfor %}
+  </div>
+  <h3 class="more-title">{{ t.more_title }}</h3>
+  <div class="cards small">
+    {% for m in t.more %}
+    <article class="card-plate">
+      <svg class="icon" aria-hidden="true"><use href="#i-{{ m.icon }}"/></svg>
+      <h3>{{ m.title }}</h3>
+      <p>{{ m.short }}</p>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ============================================================ the manual -->
+<section class="paper alt manual" id="manual">
+  <header class="chap">
+    <div class="sign"><p class="kicker">{{ t.manual_title }}</p><h2>{{ t.manual_heading }}</h2></div>
+  </header>
+  <div class="manual-grid">
+    <div class="booklets">
+      <a class="booklet en" href="{{ '/downloads/Nachtzug-Manual.pdf' | relative_url }}"><img src="{{ '/assets/img/cover-en.jpg' | relative_url }}" alt="{{ t.manual_en_alt }}" lang="en" width="641" height="910" loading="lazy"><span class="keycap" lang="en">{{ t.manual_en }} <small>English · PDF</small></span></a>
+      <a class="booklet de" href="{{ '/downloads/Nachtzug-Handbuch.pdf' | relative_url }}" hreflang="de"><img src="{{ '/assets/img/cover-de.jpg' | relative_url }}" alt="{{ t.manual_de_alt }}" lang="de" width="641" height="910" loading="lazy"><span class="keycap"><span lang="de">{{ t.manual_de }}</span> <small>Deutsch · PDF</small></span></a>
+    </div>
+    <p class="manual-text">{{ t.manual_text }}</p>
+  </div>
+</section>
+
+<!-- ============================================================ the tickets: Edmondson card tickets, as sold at every booking office -->
+<section class="paper download" id="download">
+  <header class="chap">
+    <div class="sign"><p class="kicker">{{ t.download_title }}</p><h2>{{ t.download_heading }}</h2></div>
+    <p class="intro">{{ t.download_intro }}</p>
+  </header>
+  {% assign issued = site.time | date: "%d.%m.%y" %}
+  <div class="tickets">
+    {% for k in t.tickets %}
+    {% assign nr = forloop.index | prepend: '0000' | slice: -5, 5 %}
+    {% assign aria = t.ticket_aria | replace: '%colour%', t.ticket_colours[k.colour] | replace: '%class%', t.ticket_class[k.class] | replace: '%nr%', nr %}
+    <article class="ticket {{ k.id }}" id="ticket-{{ k.id }}" data-file="{{ k.file }}" data-system="{{ k.system }}">
+      {% capture dl %}{% if site.release_downloads %}{{ site.release_downloads | append: k.file }}{% else %}{{ '/downloads/' | append: k.file | relative_url }}{% endif %}{% endcapture %}
+      <!-- the card itself downloads too, as its key below does -->
+      <a class="card {{ k.colour }} punchme" href="{{ dl }}"{% unless site.release_downloads %} download{% endunless %} aria-label="{{ t.ticket_download }} {{ k.file }}: {{ aria }}">
+        {% if k.colour == "striped" %}<span class="stripe"></span>{% endif %}<span class="end"></span>
+        <span class="kl">{{ k.class }}. Kl.</span><span class="nr">{{ nr }}</span>
+        <span class="from">{{ t.ticket_from }}</span><span class="via">{{ t.ticket_via }}</span><span class="to">{{ t.ticket_to }}</span>
+        <span class="what">{{ k.card }}</span><span class="fare">{{ t.ticket_fare }}</span>
+        <span class="date" data-issued>{{ issued }}</span>
+      </a>
+      <div class="info">
+        <p class="yours">{{ t.your_ticket }}</p>
+        <h3>{{ k.system }}</h3>
+        <p class="sub">{{ k.what }}</p>
+        <p class="valid"><b>{{ t.ticket_valid }}</b> {{ k.valid }}</p>
+        <p class="how">{{ k.how }}</p>
+        <a class="keycap primary punchme" href="{{ dl }}"{% unless site.release_downloads %} download{% endunless %}>{{ t.ticket_download }} <small>{{ k.file }}</small></a>
+        <p class="meta" data-meta></p>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+
+  <div class="col readme" id="readme">
+    <h3>{{ t.build_heading }}</h3>
+    <p>{{ t.build_intro }}</p>
+    {% for b in t.build %}
+    <details class="note"><summary class="label">{{ b.label }}</summary>{{ b.html }}</details>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ============================================================ the licences: conditions of carriage -->
+<section class="paper alt licence" id="licence">
+  <header class="chap">
+    <div class="sign"><p class="kicker">{{ t.licence_title }}</p><h2>{{ t.licence_heading }}</h2></div>
+    <p class="intro">{{ t.licence_intro }}</p>
+  </header>
+  <div class="cards five">
+    {% for l in t.licences %}
+    <article class="card-plate">
+      <svg class="icon" aria-hidden="true"><use href="#i-{{ l.icon }}"/></svg>
+      <h3>{{ l.title }}</h3>
+      <p>{{ l.text }}</p>
+      {% if l.link %}<p class="open"><a href="{{ t.licence_page | relative_url }}#{{ l.link }}">{{ t.licence_read }} →</a></p>{% endif %}
+    </article>
+    {% endfor %}
+  </div>
+  <p class="buttons">
+    {% for b in t.licence_buttons %}<a class="keycap" href="{% if b.page %}{{ t.licence_page | relative_url }}{{ b.page }}{% else %}{{ repo }}{% endif %}">{{ b.label }}</a>{% endfor %}
+  </p>
+</section>
+
+<!-- ============================================================ questions -->
+<section class="paper faq" id="faq">
+  <header class="chap">
+    <div class="sign"><p class="kicker">{{ t.faq_title }}</p><h2>{{ t.faq_heading }}</h2></div>
+  </header>
+  <div class="qas well">
+    {% for f in t.faq %}
+    <details class="qa">
+      <summary>{{ f.q }}</summary>
+      <p>{{ f.a | replace: '%base%', site.baseurl }}</p>
+    </details>
+    {% endfor %}
+  </div>
+</section>
+
+</main>

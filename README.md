@@ -5,8 +5,8 @@
 <h1 align="center">Nachtzug</h1>
 
 <p align="center">
-  A little music machine for acid and Berlin School music.<br>
-  Every note is in the song’s scale, so you can make music without being able to play the keyboard.
+  A DAW (digital audio workstation) made for beginners.<br>
+  Nachtzug is built so that every note automatically lands in the right scale.
 </p>
 
 <p align="center">
@@ -16,7 +16,7 @@
   <a href="docs/Nachtzug-Handbuch.pdf" hreflang="de">Handbuch</a>
 </p>
 
-![Nachtzug: the inspector on the left, the song timeline at the top and a bass pattern below](docs/screenshots/notes.png)
+![Nachtzug playing its demo song: the display counts the bars, the meters move and the playhead crosses the timeline](docs/screenshots/playing.gif)
 
 Nachtzug was built for a simple reason: making music more accessible. I fondly remember my parents getting me a music making program back in the late 2000s that I spent a lot of time with. It was very simple to use, didn’t require you to know any sort of music theory and I was able to make dozens of songs.
 
@@ -36,11 +36,12 @@ Nachtzug is made for the kind of music that’s built from repeating synthesiser
 - **An auto drummer** with seven styles. Pick one and how hard it plays; it adds the fills by itself.
 - **A real synthesiser on every track**, with live pictures of what each knob does, and a **Simple** page with eight big knobs in plain words if you’d rather not see them all.
 - **Sounds that move.** Draw a line for any knob, or record your knob turns while the song plays.
-- **From a loop to a song.** Arrange clips on a timeline, jam with the loop grid, or press **Arrange for me** and get an intro, a build-up, a break and an ending.
+- **From a loop to a song.** Arrange clips on a timeline, jam with the loop grid, or press **Arrange** and get an intro, a build-up, a break and an ending.
 - **Your own sounds.** A library of 65 sounds made for Nachtzug (nine of them from a night train!), your own samples, or a drum loop chopped across the pads.
 - **Learn as you go.** Five short lessons walk you through the real program, one step at a time, and almost everything explains itself when you rest the mouse on it.
 - **Share it.** Export your song as a WAV file, as one file per track, or as MIDI for other music programs.
-- **In English and German**, with six colour themes and a printed operation manual in both languages.
+- **Set up the way you like it.** Keys with a symbol and a word, or the symbols alone; the timeline above the notes or beside them; scroll bars or none; six colour themes.
+- **In English and German**, with a printed operation manual in both languages.
 
 | | |
 |---|---|
@@ -49,7 +50,7 @@ Nachtzug is made for the kind of music that’s built from repeating synthesiser
 | ![The loop grid](docs/screenshots/loops.png) | ![The mixer](docs/screenshots/mixer.png) |
 | **The loop grid**, for jamming like a live set. | **The mixer**, for balancing the tracks. |
 | ![The Simple sound page](docs/screenshots/simple-sound.png) | ![An arranged song](docs/screenshots/arranged.png) |
-| **Simple**: eight big knobs in plain words. | **Arrange for me** turns your patterns into a song. |
+| **Simple**: eight big knobs in plain words. | **Arrange** turns your patterns into a song. |
 | ![A lesson](docs/screenshots/lesson.png) | ![Chopping a loop](docs/screenshots/chop.png) |
 | **Lessons** show you one thing at a time. | **Chop a loop** across the drum pads. |
 | ![The Ember colours](docs/screenshots/dark-theme.png) | ![The built-in guide](docs/screenshots/guide.png) |
@@ -124,9 +125,9 @@ Install [MSYS2](https://www.msys2.org), open the **MSYS2 UCRT64** terminal from 
 
 1. Press **Space**. A demo song starts to play.
 2. Click the orange **Bass** clip in the timeline, press **New idea** and pick **Acid line**.
-3. In the inspector on the left, press **Roll new sound** a few times, then turn **Cutoff** while it plays.
+3. In the inspector on the left, press **New sound** (the die) a few times, then turn **Cutoff** while it plays.
 4. Play along on the letter keys: the row **A** to **;** is the middle octave.
-5. Press **Arrange for me** above the timeline, then **Export** at the top right.
+5. Press **Arrange** above the timeline, then **Export** at the top right.
 
 That’s your first song! If you’d like a guided tour instead, choose **Help → Lessons**.
 
@@ -150,6 +151,8 @@ Nachtzug is free: use it, share it and change it. **The music you make with it i
 [`LICENSING.md`](LICENSING.md) explains it all in plain words, and [`docs/THIRD-PARTY.md`](docs/THIRD-PARTY.md) lists the free software Nachtzug is built on.
 
 ## For developers
+
+If you’d like to work on Nachtzug, yourself or with an AI agent, [AGENTS.md](AGENTS.md) has the rules: the promises Nachtzug makes to the person using it, how the code fits together, the tests, and how the words and pictures are kept.
 
 <details>
 <summary>What you need, command-line options, project layout and limits</summary>
@@ -175,14 +178,18 @@ A C++20 compiler (GCC 12 or newer, or a recent Clang), CMake 3.20 or newer, Qt 6
 | Where | What’s in it |
 |---|---|
 | `src/dsp.h` | Sound generation: oscillators, ladder filter, envelopes, synth voices, drum machine, echo, reverb, limiter. |
-| `src/model.*` | The song: tracks, clips, notes, scales, chords, presets, the pattern generators and the auto drummer, saving and loading. |
+| `src/model.*` | The song: tracks, clips, notes, scales, chords, the synth settings’ names and explanations. |
+| `src/songfile.cpp`, `src/sounds.cpp` | Saving and opening songs; the presets, kits and rolled sounds. |
+| `src/ideas.cpp`, `src/drummer.cpp`, `src/cleanup.cpp`, `src/patterns.h` | The pattern generators, Vary, new tracks, the demo song and Arrange; the auto drummer; Clean up; the helpers they share. |
 | `src/engine.*` | The audio engine: plays the song in time, runs the synths and effects, renders WAV files. |
 | `src/app.*` | Editing commands, named undo steps, clipboard, recording, the loop grid’s launching, the sound card. |
+| `src/main.cpp`, `src/cli.*` | Starting the program; the command line, `--render` and the pictures. |
+| `src/selftest.*`, `src/guitest.*`, `src/parity.*` | The self-test, the window tests, and the parity record for tidy-ups. |
 | `src/mainwindow.*` | The window, menus, top bar, the panels and the How to guide. |
 | `src/inspector.*` | The inspector on the left. |
 | `src/editor.*`, `src/soundpanel.*`, `src/mixer.*` | The Notes, Sound and Mixer tabs. |
 | `src/timeline.*`, `src/loops.*` | The song timeline and the loop grid. |
-| `src/widgets.*` | Colour themes, the screwed wells, folding sections, knobs, switches, meters, the display. |
+| `src/widgets.h`, `src/theme.cpp`, `src/drawing.cpp`, `src/panels.cpp`, `src/controls.cpp` | The look and the program’s own controls: the colour themes and style sheet; drawing the wells, displays, keys and icons; the wells, folding sections and rounded lists; knobs, switches, meters, the display. |
 | `src/samples.*`, `src/chopdialog.*` | Samples: the library, WAV and AIFF reading, importing, recording, chopping a loop. |
 | `src/midiio.*`, `src/midi.*`, `src/midifile.*` | MIDI on each system’s own service, learned knobs, clock, and the MIDI file export. |
 | `src/lessons.*`, `src/autosave.*` | The guided lessons; the spare copy of unsaved work. |
@@ -191,7 +198,8 @@ A C++20 compiler (GCC 12 or newer, or a recent Clang), CMake 3.20 or newer, Qt 6
 | `tools/fonts/`, `assets/fonts/nachtzug/` | The scripts that build the Nachtzug type family (Antiqua, Initialen, Ornamente, Grotesk), and the fonts. |
 | `tools/logo/`, `assets/logo/` | The enamel-sign logo and the scripts that draw it, make the icons and the picture for shared links. |
 | `tools/build-appimage.sh`, `tools/build-macos.sh`, `tools/build-windows.sh` | Packing the program for Linux, macOS and Windows. |
-| `tools/readme_shots.py`, `tools/site_shots.py` | The screenshots for this README and for the website. |
+| `tools/readme_shots.py`, `tools/site_shots.py`, `tools/animation.sh` | The screenshots for this README and for the website, and the animation of the program playing. |
+| `tools/kolibri/` | Scripts that rework the German texts with a German language model running locally. |
 | `site/` | The website, built with Jekyll (see `site/README.md`). |
 | `i18n/` | Translations. After changing texts in the code, run `cmake --build build --target update_translations` and translate the new entries in `nachtzug_de.ts`. |
 | `docs/manual/` | The PDF manuals: `build.py` (English) and `build.py de` (German) turn the HTML into PDFs with WeasyPrint; `shots.py [en\|de]` takes their pictures. |

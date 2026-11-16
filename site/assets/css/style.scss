@@ -3,9 +3,15 @@
 // The Nachtzug website: the program's Bakelite colours, its screwed wells and keys, the manual's type.
 // Dark systems get Ember, the program's late-night colours.
 
-@font-face { font-family: "Jost"; src: url(../fonts/jost-400.woff2) format("woff2"); font-weight: 400; font-display: swap; }
-@font-face { font-family: "Jost"; src: url(../fonts/jost-500.woff2) format("woff2"); font-weight: 500; font-display: swap; }
-@font-face { font-family: "Jost"; src: url(../fonts/jost-600.woff2) format("woff2"); font-weight: 600; font-display: swap; }
+// Nachtzug Grotesk: the name, the keys, every label (with its own z and the tz ligature); DIN 1451 (D-DIN) for the
+// station's parts: the destination board, the timetable, the platform signs
+@font-face { font-family: "Grotesk"; src: url(../fonts/grotesk-400.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Grotesk"; src: url(../fonts/grotesk-500.woff2) format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Grotesk"; src: url(../fonts/grotesk-600.woff2) format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "DIN"; src: url(../fonts/din-400.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "DIN"; src: url(../fonts/din-700.woff2) format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "DIN Condensed"; src: url(../fonts/din-condensed-400.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "DIN Condensed"; src: url(../fonts/din-condensed-700.woff2) format("woff2"); font-weight: 700; font-display: swap; }
 @font-face { font-family: "Antiqua"; src: url(../fonts/antiqua-400.woff2) format("woff2"); font-weight: 400; font-display: swap; }
 @font-face { font-family: "Antiqua"; src: url(../fonts/antiqua-700.woff2) format("woff2"); font-weight: 700; font-display: swap; }
 @font-face { font-family: "Antiqua"; src: url(../fonts/antiqua-italic.woff2) format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
@@ -14,6 +20,11 @@
 @font-face { font-family: "NZ Ornamente"; src: url(../fonts/ornamente.woff2) format("woff2"); font-display: block; }
 @font-face { font-family: "NZ Rahmen"; src: url(../fonts/initialen-rahmen.woff2) format("woff2"); font-display: block; }
 @font-face { font-family: "NZ Buchstabe"; src: url(../fonts/initialen-buchstabe.woff2) format("woff2"); font-display: block; }
+
+// ---------------------------------------------------------------- the program's corners
+// The same radii as the program (src/theme.cpp, src/drawing.cpp): a key 4px, a screwed well or plate 8px with its
+// 7px screws centred 9.5px in from the corner, a display 4px (a small one 3px), the glass over a picture 3px.
+// Anything else rounded on this page is paper or card: a ticket, a booklet.
 
 // ---------------------------------------------------------------- colours
 // --rust, --amber and --ochre are the manual's three bands; --accent is the program's own rust, for things you press
@@ -35,6 +46,8 @@
     --brown: #120f0d; --board-ink: #f1c27a; --board-edge: #4a3f37;
     --lcd-bg: #190807; --lcd-ink: #ff5a36;
     --well-shadow: inset 0 2px 4px rgba(0, 0, 0, .6), 0 1px 0 rgba(255, 255, 255, .05);
+    // the screws in Ember: dark steel with a faint highlight, as in the program, not bright dots
+    --screw: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><defs><radialGradient id='g' cx='.35' cy='.3' r='.8'><stop offset='0' stop-color='%23847263'/><stop offset='1' stop-color='%232e2622'/></radialGradient></defs><circle cx='6' cy='6' r='5.2' fill='url(%23g)' stroke='%23120f0d' stroke-width='.6'/><path d='M2.6 7.6 L9.4 4.4' stroke='%23120f0d' stroke-width='1.1' stroke-linecap='round'/></svg>");
     color-scheme: dark;
   }
 }
@@ -52,7 +65,7 @@ a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: .
 a:focus-visible, summary:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; border-radius: 2px; }
 img { max-width: 100%; height: auto; display: block; }
 b, strong { font-weight: 700; }
-code, pre { font-family: "Courier", monospace; font-variant-numeric: normal; }
+code, pre { font-family: "Courier", monospace; font-variant-numeric: normal; hyphens: none; }
 code { font-size: .86em; background: var(--well); padding: .05em .2em; border-radius: 3px; overflow-wrap: anywhere; }
 .nw { white-space: nowrap; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -65,10 +78,10 @@ code { font-size: .86em; background: var(--well); padding: .05em .2em; border-ra
   --k-hi: #ffffff; --k-top: #f3eee4; --k-bot: #e2dacb; --k-deep: #8e8274; --k-edge: #b1a391; --k-ink: #2b2623; --k-sub: #6e6054;
   --lip: 2px; --py: .42em; --px: 1em;
   display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
-  font: 500 .95rem/1.2 "Jost", system-ui, sans-serif; letter-spacing: .03em; font-variant-numeric: normal;
+  font: 500 .95rem/1.2 "Grotesk", system-ui, sans-serif; letter-spacing: .03em; font-variant-numeric: normal;
   color: var(--k-ink); text-decoration: none; white-space: nowrap; cursor: pointer; user-select: none;
   padding: var(--py) var(--px) calc(var(--py) + var(--lip) + 1px);
-  border: 1px solid var(--k-edge); border-bottom-color: var(--k-deep); border-radius: 5px;
+  border: 1px solid var(--k-edge); border-bottom-color: var(--k-deep); border-radius: 4px;
   background: linear-gradient(var(--k-top), var(--k-bot) calc(100% - var(--lip) - .5px), var(--k-deep) calc(100% - var(--lip)));
   small { display: block; font-weight: 400; font-size: .74em; letter-spacing: .02em; color: var(--k-sub); margin-top: .1em; }
   &:hover { background: linear-gradient(var(--k-hi), var(--k-top) calc(100% - var(--lip) - .5px), var(--k-deep) calc(100% - var(--lip))); }
@@ -79,6 +92,10 @@ code { font-size: .86em; background: var(--well); padding: .05em .2em; border-ra
   &:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
   &.primary { --k-hi: #57504a; --k-top: #47403b; --k-bot: #2f2a27; --k-deep: #120f0d; --k-edge: #000; --k-ink: #f3ece0; --k-sub: #c9b9a4; }
   &.lit { --k-hi: #ff8a4f; --k-top: #fd7532; --k-bot: #d8642a; --k-deep: #90431c; --k-edge: #90431c; --k-ink: #fff8ee; --k-sub: #ffe3cc; }
+  &.on, &.on:hover {   // lit and down: the program's checked key, only a hairline of its lip showing
+    padding-top: calc(var(--py) + 2px); padding-bottom: calc(var(--py) + var(--lip) - 1px); cursor: default;
+    background: linear-gradient(var(--k-top), var(--k-bot) calc(100% - 1.5px), var(--k-deep) calc(100% - 1px));
+  }
   &.big { font-size: 1.1rem; --py: .6em; --px: 1.45em; --lip: 3px; small { font-size: .7em; } }
 }
 @media (prefers-color-scheme: dark) {
@@ -87,17 +104,19 @@ code { font-size: .86em; background: var(--well); padding: .05em .2em; border-ra
   .keycap.lit { --k-hi: #ffc35a; --k-top: #ffb53f; --k-bot: #ed9d24; --k-deep: #9e6918; --k-edge: #9e6918; --k-ink: #2b2623; --k-sub: #4a3a26; }
 }
 .key {   // a key named in the text, as in the manual
-  display: inline-block; font: 500 .74em/1 "Jost", sans-serif; letter-spacing: .02em; text-indent: 0; white-space: nowrap; vertical-align: .1em;
+  display: inline-block; font: 500 .74em/1 "Grotesk", sans-serif; letter-spacing: .02em; text-indent: 0; white-space: nowrap; vertical-align: .1em;
   padding: .24em .5em calc(.24em + 2.5px); margin: 0 .05em; color: #2b2623;
   border: 1px solid #a8998a; border-bottom-color: #8e8274; border-radius: 3px;
   background: linear-gradient(#f8f4ec, #e4dccd calc(100% - 2px), #8e8274 calc(100% - 1.5px));
 }
 
 // ---------------------------------------------------------------- the screwed wells and the display
+// a well's screws reach 13px in from each corner: what sits inside keeps --clear from the edges
 .well {
-  position: relative; background-color: var(--well); border-radius: 10px; box-shadow: var(--well-shadow);
+  --clear: 18px;
+  position: relative; background-color: var(--well); border-radius: 8px; box-shadow: var(--well-shadow);
   background-image: var(--screw), var(--screw), var(--screw), var(--screw);
-  background-size: 11px 11px; background-repeat: no-repeat;
+  background-size: 7px 7px; background-repeat: no-repeat;
   background-position: 6px 6px, calc(100% - 6px) 6px, 6px calc(100% - 6px), calc(100% - 6px) calc(100% - 6px);
 }
 .lcd-face {
@@ -114,37 +133,113 @@ code { font-size: .86em; background: var(--well); padding: .05em .2em; border-ra
   nav .keycap { font-size: .86rem; --py: .34em; --px: .85em; }
 }
 .narrow { display: none; }
+// the language switch: two keys joined, as the program's Song | Loops, the page's language lit and pressed in
+.lang { display: inline-flex; flex: none; text-decoration: none; }
+.lang .keycap { font-size: .78rem; font-weight: 600; letter-spacing: .08em; --py: .38em; --px: .62em; }
+.lang .keycap:first-child { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.lang .keycap:last-child { border-top-left-radius: 0; border-bottom-left-radius: 0; border-left: none; }
 .brand {
   display: flex; align-items: center; gap: .55rem; margin-right: auto; color: var(--ink); text-decoration: none;
-  font: 700 1.35rem/1 "Antiqua", serif; letter-spacing: .01em;
+  font: 600 1.4rem/1 "Grotesk", sans-serif; letter-spacing: .01em; font-feature-settings: "liga", "dlig";
   img { width: 34px; height: 34px; }
 }
 .ticker { width: min(26vw, 320px); height: 30px; overflow: hidden; position: relative; white-space: nowrap; flex: none; }
+.ticker.lcd-face { font: 700 1.05rem/1 "DIN Condensed", sans-serif; letter-spacing: .07em; }   // the station's lettering, as on the board
 .ticker-text { position: absolute; left: 100%; top: 0; line-height: 30px; animation: ticker 22s linear -7s infinite; }
 @keyframes ticker { to { left: 0; transform: translateX(-100%); } }
 @media (prefers-reduced-motion: reduce) { .ticker-text { animation: none; left: .7em; } }
 
-// ---------------------------------------------------------------- the cover: the manual's painting, its three bands and the seal
-.cover { position: relative; background: #2b2623; color: #f3ece0; }
-.cover .art { position: relative; height: clamp(260px, 50vh, 540px); overflow: hidden; }
-.cover .art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 28%; }
-.bands span { display: block; height: 9px; margin-top: 4px; }
-.bands span:first-child { margin-top: 0; background: #b4512a; }
-.bands span:nth-child(2) { background: #e08a2c; }
-.bands span:nth-child(3) { background: #c9a24a; }
-.seal { position: absolute; right: max(1.5rem, 7vw); top: calc(clamp(260px, 50vh, 540px) + 17px); transform: translateY(-50%); width: clamp(120px, 14vw, 200px); height: auto; filter: drop-shadow(0 6px 14px rgba(0, 0, 0, .45)); }   // the enamel sign, centred on the three bands
-.cover-text { max-width: 1120px; margin: 0 auto; padding: 2.75rem max(1.25rem, 7vw) 2.25rem; }
-.cover h1 { font: 700 clamp(3.4rem, 9vw, 6.4rem)/.95 "Antiqua", serif; letter-spacing: .02em; margin: 0 0 .55rem; }
-.cover .sub { font-size: clamp(1.1rem, 2vw, 1.4rem); color: #d9c7ad; margin: 0 0 .9rem; letter-spacing: .01em; }
-.cover .om { font-style: italic; color: #e8b77a; font-size: clamp(1.15rem, 2.1vw, 1.45rem); line-height: 1.45; max-width: 34em; margin: 0 0 2rem; }
-.cover .cta { display: flex; flex-wrap: wrap; gap: .9rem; margin: 0 0 3rem; }
-.cover .keycap:not(.lit) { --k-hi: #ffffff; --k-top: #f3eee4; --k-bot: #e2dacb; --k-deep: #8e8274; --k-edge: #b1a391; --k-ink: #2b2623; --k-sub: #6e6054; }
-.cover .cat { display: flex; justify-content: space-between; font-size: .9rem; color: #9c8a78; margin: 0; }
+// ---------------------------------------------------------------- the opening: the painting, the name, a row of the destination board
+.hero { position: relative; background: #2a1513; color: #f6efe2; isolation: isolate; }
+.hero .art { position: absolute; inset: 0; overflow: hidden; z-index: -1; }
+.hero .art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 78%; }   // Baluschek’s lamps, low in the painting
+.hero .art::after {   // a little darker on the left, behind the name (the painting is a night scene already)
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(20, 14, 12, .5), rgba(20, 14, 12, .12) 55%, rgba(20, 14, 12, 0));
+}
+.hero-inner { max-width: 76rem; margin: 0 auto; padding: clamp(3rem, 7vw, 5.5rem) clamp(1rem, 4vw, 3rem) clamp(3rem, 6vw, 5rem); }
+.hero h1 { font: 600 clamp(4rem, 10vw, 7.75rem)/1 "Grotesk", sans-serif; letter-spacing: .01em; margin: 0 0 clamp(1.5rem, 3vw, 2.4rem); font-feature-settings: "liga", "dlig"; }
+.hero-panel { max-width: 51.25rem; padding: 1.5rem 1.9rem 1.6rem; color: var(--ink); }
+.hero .lead { font: 400 1.15rem/1.55 "Antiqua", serif; color: #2b2623; margin: 0 0 1.25rem; }
+.hero .cta { display: flex; flex-wrap: wrap; gap: .9rem; align-items: center; justify-content: space-between; margin: 0; }
+.hero .cta .keycap { min-width: 15rem; }   // the two keys the same size, the manual at the right end of the panel
+.manual-key .line { display: inline-flex; align-items: center; gap: .45em; }
+.manual-key .icon { width: 1.15em; height: 1.15em; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.hero .keycap:not(.lit) { --k-hi: #ffffff; --k-top: #f3eee4; --k-bot: #e2dacb; --k-deep: #8e8274; --k-edge: #b1a391; --k-ink: #2b2623; --k-sub: #6e6054; }
+.hero-panel.well { background-color: #e1d9c9; }   // the program's Bakelite, in the dark look too
+// the band under the painting: a polished brass strip with screws, like the logo's screws and the program's fittings
+.bands { height: 18px; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='18' viewBox='0 0 180 18'><defs><radialGradient id='s' cx='.35' cy='.3' r='.8'><stop offset='0' stop-color='%23f3d488'/><stop offset='1' stop-color='%238a6a2c'/></radialGradient></defs><circle cx='14' cy='9.6' r='5.9' fill='%23000' opacity='.25'/><circle cx='14' cy='9.0' r='5.5' fill='url(%23s)' stroke='%235c4524' stroke-width='.9'/><path d='M10.59 7.41 L17.41 10.60' stroke='%234a3618' stroke-width='1.65' stroke-linecap='round'/></svg>") 0 0 / 180px 18px repeat-x, linear-gradient(#3a2c14 0 1px, #f6dc95 1px, #c9a24a 45%, #7d5f25 calc(100% - 1px), #3a2c14 calc(100% - 1px)); }
+
+// a row of a station's destination board: cream flaps behind glass in a dark frame, split across the middle
+.board {
+  max-width: 51.25rem; padding: .75rem .9rem .9rem; margin: 0 0 1.25rem; border-radius: 14px;
+  background: linear-gradient(#3b2421, #2a1715); box-shadow: 0 20px 40px -20px rgba(0, 0, 0, .8), inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+.glass {
+  position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; gap: 6px; align-items: center; padding: 8px; border-radius: 8px;
+  background: #efe8d8; box-shadow: inset 0 0 0 3px #1c0f0e, inset 0 6px 14px rgba(0, 0, 0, .35); color: #1b1a19;
+}
+.glass::after {   // the light on the glass
+  content: ""; position: absolute; inset: 0; border-radius: 8px; pointer-events: none;
+  background: linear-gradient(115deg, transparent 55%, rgba(255, 255, 255, .35) 56%, transparent 62%, transparent 70%, rgba(255, 255, 255, .18) 71%, transparent 74%);
+}
+.glass .platform { font: 700 clamp(1.3rem, 2.4vw, 1.9rem)/1 "DIN", sans-serif; padding: 0 .9rem; white-space: nowrap; }
+.flap {
+  position: relative; display: flex; align-items: center; height: 3.5rem; padding: 0 1rem; overflow: hidden; white-space: nowrap; border-radius: 3px;
+  background: linear-gradient(#fbf8f1, #efe9dc 49%, #d9d1c1 50%, #f3eee3 51%, #e9e2d4);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .25), inset 0 0 0 1px rgba(0, 0, 0, .08);
+  font: 700 clamp(1.3rem, 2.3vw, 1.85rem)/1 "DIN Condensed", sans-serif;
+}
+.flap::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(0, 0, 0, .28); }
+.flap .nz { font: italic 700 2.5rem/1 "DIN", sans-serif; color: #b4161c; letter-spacing: -.02em; }
+.flap .name { font: italic 400 1.35rem/1 "DIN", sans-serif; color: #b4161c; margin: 0 0 .9rem .5rem; }
+.flap .to { margin-left: auto; padding-left: 1rem; }
+.flap.time { font-size: clamp(1.5rem, 2.8vw, 2.25rem); }
+
+// ---------------------------------------------------------------- enamel platform signs: the heading of each part
+.chap .sign {
+  display: inline-flex; flex-direction: column; align-items: center; gap: .15rem; max-width: 100%;
+  background: #fbfaf6; color: #151515; border: 3px solid #151515; padding: .6rem 1.6rem .5rem; border-radius: 2px;
+  box-shadow: 0 0 0 6px #fbfaf6, 0 0 0 7px rgba(43, 38, 35, .25), 0 12px 22px -14px rgba(0, 0, 0, .55);
+}
+.chap .sign .kicker { font: 400 1.15rem/1.2 "DIN", sans-serif; letter-spacing: .02em; font-variant-caps: normal; color: #151515; margin: 0; }
+.chap .sign h2 { font: 700 clamp(1.7rem, 3.6vw, 2.75rem)/1.1 "DIN Condensed", sans-serif; letter-spacing: .01em; }
+.chap .intro { margin-top: 1.4rem; }
+
+// ---------------------------------------------------------------- what's on board: the yellow departure timetable
+.timetable {
+  max-width: 66rem; margin: 0 auto; padding: 1.6rem 1.9rem 1.1rem; background: #f6d24a; color: #151515;
+  box-shadow: 0 18px 30px -18px rgba(0, 0, 0, .45), inset 0 0 0 1px rgba(0, 0, 0, .06);
+  font-family: "DIN", sans-serif;
+}
+.tt-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; border-bottom: 6px solid #151515; padding-bottom: .6rem; }
+.tt-title { font: 700 clamp(2.75rem, 6vw, 4rem)/1 "DIN Condensed", sans-serif; margin: 0; }
+.tt-sub { font-size: 1.1rem; margin: .35rem 0 0; }
+.tt-station { font-weight: 700; font-size: 1.35rem; text-align: right; margin: 0; line-height: 1.3; }
+.tt-station span { font-weight: 400; font-size: 1rem; }
+.timetable table { width: 100%; border-collapse: collapse; margin-top: .3rem; }
+.timetable th { text-align: left; font: 700 .85rem/1 "DIN", sans-serif; letter-spacing: .06em; text-transform: uppercase; padding: .6rem 1.1rem; }
+.timetable td { vertical-align: top; padding: .75rem 1.1rem; border-top: 1px solid #151515; }
+.timetable .t { font: 700 1.9rem/1 "DIN Condensed", sans-serif; white-space: nowrap; }
+.timetable .z { white-space: nowrap; font-weight: 700; }
+.timetable td.z { padding-top: .9rem; }
+.timetable .nz { font-style: italic; color: #b4161c; }
+.timetable .g { text-align: center; font: 700 1.6rem/1 "DIN Condensed", sans-serif; }
+.timetable th.g { font: 700 .85rem/1 "DIN", sans-serif; }
+.timetable .stop { font: 700 1.5rem/1.1 "DIN Condensed", sans-serif; margin: 0; }
+.timetable .what { font-size: 1.05rem; line-height: 1.45; margin: .2rem 0 0; }
+.timetable .what b { font-weight: 700; }
+.timetable tr:target td { background: rgba(255, 255, 255, .35); }
+.tt-legend { margin: .4rem 0 0; padding-top: .55rem; border-top: 3px solid #151515; font-size: .9rem; }
+
+// the program playing, under the timetable
+.playing { max-width: 66rem; margin: 3.5rem auto 0; padding: var(--clear) var(--clear) .9rem; }
+.playing video { display: block; width: 100%; height: auto; border-radius: 3px; box-shadow: 0 1px 6px -2px rgba(0, 0, 0, .45); }
+.playing figcaption { margin-top: .6rem; text-align: center; font-size: .92rem; color: var(--soft); font-style: italic; }
 
 // ---------------------------------------------------------------- sections and chapter heads, as in the manual
 .paper { --bg: var(--paper); background: var(--bg); padding: 5.5rem 1.25rem; }
 .paper.alt { --bg: var(--panel); }
-.welcome { padding-block: 4.5rem; }
 .col { max-width: 39rem; margin: 0 auto; }
 .col > p { margin: 0; text-align: justify; hyphens: auto; }
 .col > p + p { text-indent: 1.4em; }   // the manual's book paragraphs: no gap, an indent
@@ -152,7 +247,7 @@ code { font-size: .86em; background: var(--well); padding: .05em .2em; border-ra
 .kicker { font: 400 1rem/1.3 "Antiqua", serif; font-variant-caps: all-small-caps; letter-spacing: .2em; color: var(--soft); margin: 0 0 .45rem; }
 h2 { font: 700 clamp(2.05rem, 4.4vw, 2.9rem)/1.1 "Antiqua", serif; letter-spacing: .005em; margin: 0; text-wrap: balance; }
 h3 { font: 700 1.35rem/1.25 "Antiqua", serif; margin: 0 0 .35em; }
-.flourish { display: block; width: 16.5rem; max-width: 80%; aspect-ratio: 10; height: auto; margin: 1rem auto 0; color: var(--ink); }
+.chap .intro { margin: .8rem auto 0; max-width: 36rem; color: var(--soft); font-size: 1.1rem; text-wrap: pretty; }
 
 // the drop cap, as in the manual: frame and letter in two colours, 3.47 times the text. The float is just under two
 // lines deep, so the third line runs the full width; the initial stands on the second line's baseline and rises above
@@ -163,48 +258,50 @@ p.dropcap { margin-top: 1.1em; }
 .dc .r { font-family: "NZ Rahmen"; color: var(--ink); }
 .dc .b { font-family: "NZ Buchstabe"; color: var(--star); }
 
-// ---------------------------------------------------------------- the journey, drawn as the manual's timetable
-.route {
-  --x: 3.5rem;      // the middle of the line
-  --in: 5.25rem;    // where the names and texts start
-  --row: 2.4rem;    // the height of a station's name row
-  max-width: 54rem; margin: 0 auto;
-  ol { list-style: none; margin: 0; padding: 0; }
+// ---------------------------------------------------------------- the cards: small screwed plates, as on the program's panel
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr)); gap: 1.25rem; max-width: 74rem; margin: 0 auto; }
+.cards.small { grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); }
+.cards.five { grid-template-columns: repeat(auto-fit, minmax(12.75rem, 1fr)); }
+.card-plate {
+  position: relative; display: flex; flex-direction: column; padding: 1.5rem 1.4rem 1.35rem; border-radius: 8px; border: 1px solid var(--line);
+  background-color: var(--panel);
+  background-image: var(--screw), var(--screw), var(--screw), var(--screw), linear-gradient(var(--well-hi), var(--panel));
+  background-size: 7px 7px, 7px 7px, 7px 7px, 7px 7px, auto; background-repeat: no-repeat;
+  background-position: 6px 6px, calc(100% - 6px) 6px, 6px calc(100% - 6px), calc(100% - 6px) calc(100% - 6px), 0 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), 0 10px 20px -16px rgba(43, 38, 35, .6);
+  h3 { font-size: 1.25rem; margin: 0 0 .35rem; }
+  p { margin: 0; font-size: 1rem; line-height: 1.5; hyphens: auto; }
+  .icon {
+    display: block; flex: none; width: 2.75rem; height: 2.75rem; padding: .55rem; margin: 0 0 .95rem; border-radius: 50%;
+    background: var(--well); box-shadow: var(--well-shadow); color: var(--rust);
+    fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .where { margin: 0 0 .15rem; font-variant-caps: all-small-caps; letter-spacing: .12em; color: var(--soft); }
+  .where .time {   // the departure, top right, level with the icon
+    position: absolute; top: calc(1.5rem + 1.375rem); right: 1.4rem; transform: translateY(-50%);
+    font: 700 .82rem/1 "Courier", monospace; letter-spacing: .04em; font-variant-caps: normal;
+    color: var(--board-ink); background: var(--brown); padding: .32em .5em .28em; border-radius: 3px; box-shadow: 0 0 0 1px var(--board-edge);
+  }
+  .open { margin-top: auto; padding-top: .8rem; font: 500 .9rem/1.2 "Grotesk", system-ui, sans-serif; letter-spacing: .02em; }
+  .open a { text-decoration: none; }
+  .open a:hover { text-decoration: underline; }
 }
-.route .board {
-  display: flex; justify-content: space-between; margin: 0 0 .9rem; padding: 0 0 .4rem var(--in); border-bottom: 1.5px solid var(--ink);
-  font: 400 .95rem/1.2 "Antiqua", serif; font-variant-caps: all-small-caps; letter-spacing: .22em; color: var(--soft);
-}
-.route .stop { position: relative; padding-bottom: 3.25rem; }
-.route .stop::before { content: ""; position: absolute; left: calc(var(--x) - 4px); width: 8px; top: 0; bottom: 0; background: var(--rust); }
-.route .stop:first-child::before { top: calc(var(--row) / 2); }
-.route .stop:last-child { padding-bottom: .25rem; }
-.route .stop:last-child::before { bottom: auto; height: calc(var(--row) / 2); }
-.route .sign { position: relative; display: flex; align-items: center; gap: 1rem; min-height: var(--row); padding-left: var(--in); }
-.route .no {
-  position: absolute; left: 0; top: 0; width: calc(var(--x) - 1.35rem); text-align: right; line-height: var(--row);
-  font: 700 1.3rem/var(--row) "Antiqua", serif; font-variant-numeric: lining-nums; color: var(--rust);
-}
-.route .dot {
-  position: absolute; left: calc(var(--x) - 13px); top: calc(var(--row) / 2 - 13px); width: 26px; height: 26px; border-radius: 50%;
-  background: var(--bg); border: 6px solid var(--ink); transition: background-color .3s;
-}
-.route .stop.here .dot { background: var(--amber); }
-.route .name { flex: 1; font: 700 1.3rem/1.2 "Antiqua", serif; font-variant-caps: small-caps; letter-spacing: .035em; }
-.route .dep {
-  flex: none; font: 700 1.05rem/1 "Courier", monospace; letter-spacing: .04em; color: var(--board-ink); background: var(--brown);
-  padding: .3em .55em .26em; border-radius: 3px; box-shadow: 0 0 0 1px var(--board-edge);
-}
-.route .what { padding: .35rem 0 0 var(--in); }
-.route .what h3 { font-size: 1.5rem; margin: 0 0 .35rem; }
-.route .what p { max-width: 36rem; margin: 0; }
-.route .terminus { margin: 1.1rem 0 0 var(--in); font-style: italic; color: var(--soft); }
-.shot { padding: 16px; margin: 1.5rem 0 0; }
-.shot img { border-radius: 3px; box-shadow: 0 1px 6px -2px rgba(0, 0, 0, .45); }
+.card-plate:target { border-color: var(--amber); }
+@media (prefers-color-scheme: dark) { .card-plate { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04), 0 10px 20px -14px rgba(0, 0, 0, .8); } }
+
+// the program itself, between the stops and the rest: the wide pictures span the row
+.gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem; max-width: 74rem; margin: 3.75rem auto; }
+.gallery figure { margin: 0; padding: var(--clear) var(--clear) .95rem; }
+.gallery .wide { grid-column: 1 / -1; }
+.gallery img { width: 100%; border-radius: 3px; box-shadow: 0 1px 6px -2px rgba(0, 0, 0, .45); }
+.gallery figcaption { margin: .8rem 0 0; font-size: .98rem; line-height: 1.45; }
+.more-title { text-align: center; font-size: 1.5rem; margin: 0 0 1.4rem; }
 
 // ---------------------------------------------------------------- the manual
-.booklets { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; margin: 0 auto 3.5rem; }
-.booklet { display: flex; flex-direction: column; align-items: center; gap: 1.4rem; text-decoration: none; width: min(40vw, 250px); }
+.manual-grid { display: grid; grid-template-columns: auto minmax(0, 30rem); gap: 1.5rem 4rem; align-items: center; justify-content: center; max-width: 68rem; margin: 0 auto; }
+.manual-text { margin: 0; font-size: 1.12rem; hyphens: auto; }
+.booklets { display: flex; justify-content: center; gap: 2.4rem; flex-wrap: wrap; margin: 0; }
+.booklet { display: flex; flex-direction: column; align-items: center; gap: 1.4rem; text-decoration: none; width: min(38vw, 215px); }
 .booklet img {
   width: 100%; border-radius: 2px 5px 5px 2px; transition: transform .3s;
   box-shadow: inset 2px 0 0 rgba(0, 0, 0, .25), 0 18px 28px -16px rgba(0, 0, 0, .65), 5px 5px 0 -1px var(--well), 5px 5px 0 0 var(--rule);
@@ -218,37 +315,41 @@ p.dropcap { margin-top: 1.1em; }
 // 57 × 30.5 mm of thin card in the class colour (after 1956: brown for second class, green for first), printed and
 // numbered by the machine, dated by the dating press at the counter, and punched by the conductor: here, when you
 // download. The card is the picture; what it means is written beside it in plain text.
-.tickets { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3.5rem 4rem; max-width: 60rem; margin: 0 auto 4.5rem; }
-.ticket { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.6rem; align-content: start; }
+.tickets { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3rem 2.25rem; max-width: 76rem; margin: 0 auto 4.5rem; }
+.ticket { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; gap: 1.6rem; }
 .card {
   --card: #c8a77c; --print: #1f1a17;
-  position: relative; width: 21rem; max-width: 100%; aspect-ratio: 57 / 30.5; border-radius: 3px; color: var(--print);
+  position: relative; width: 100%; max-width: 21rem; aspect-ratio: 57 / 30.5; border-radius: 3px; color: var(--print);
   background:
     url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .09 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>"),
     var(--card);
   box-shadow: 0 1px 1px rgba(43, 38, 35, .25), 0 10px 18px -12px rgba(43, 38, 35, .55), inset 0 0 0 1px rgba(0, 0, 0, .08);
-  font-family: "Jost", sans-serif; font-variant-numeric: lining-nums tabular-nums; container-type: inline-size;
-  transform: rotate(var(--tilt, 0deg));
+  font-family: "Grotesk", sans-serif; font-variant-numeric: lining-nums tabular-nums; container-type: inline-size;
+  transform: rotate(var(--tilt, 0deg)); transition: transform .3s;
   span { position: absolute; white-space: nowrap; line-height: 1; }
 }
 .ticket:nth-child(1) .card { --tilt: -1.5deg; }
 .ticket:nth-child(2) .card { --tilt: .8deg; }
 .ticket:nth-child(3) .card { --tilt: -.6deg; }
 .ticket:nth-child(4) .card { --tilt: 1.1deg; }
+a.card { display: block; text-decoration: none; cursor: pointer; }
+a.card:focus-visible { outline: 2px solid var(--amber); outline-offset: 4px; }
+.ticket:hover .card { transform: rotate(0) translateY(-4px); }
+@media (prefers-reduced-motion: reduce) { .card { transition: none; } }
 .card.first { --card: #a9bf93; }      // first class: green
 .card.white { --card: #f1ece0; }      // the plain white card, used when the coloured ones ran out
 .card .stripe { left: 0; right: 0; top: 46%; height: 9%; background: #b3442f; opacity: .85; }
 .card.striped .via { color: #fff3e4; }
 // sizes in cqw, so the print scales with the card on a narrow phone
-.card .kl { left: 6%; top: 8%; font: 600 5cqw/1 "Jost", sans-serif; }
+.card .kl { left: 6%; top: 8%; font: 600 5cqw/1 "Grotesk", sans-serif; }
 .card .nr { right: 13%; top: 8%; font: 700 4.75cqw/1 "Courier", monospace; letter-spacing: .06em; }
 .card .from, .card .to, .card .via { left: 6%; right: 13%; text-align: center; }
-.card .from, .card .to { font: 600 6.3cqw/1 "Jost", sans-serif; letter-spacing: -.005em; }
+.card .from, .card .to { font: 600 6.3cqw/1 "Grotesk", sans-serif; letter-spacing: -.005em; }
 .card .from { top: 25%; }
-.card .via { top: 47.5%; font: 400 3.9cqw/1 "Jost", sans-serif; letter-spacing: .04em; }
+.card .via { top: 47.5%; font: 400 3.9cqw/1 "Grotesk", sans-serif; letter-spacing: .04em; }
 .card .to { top: 60%; }
-.card .what { left: 6%; bottom: 8%; font: 500 3.7cqw/1 "Jost", sans-serif; letter-spacing: .02em; }
-.card .fare { right: 13%; bottom: 8%; font: 600 3.7cqw/1 "Jost", sans-serif; letter-spacing: .06em; text-transform: uppercase; }
+.card .what { left: 6%; bottom: 8%; font: 500 3.7cqw/1 "Grotesk", sans-serif; letter-spacing: .02em; }
+.card .fare { right: 13%; bottom: 8%; font: 600 3.7cqw/1 "Grotesk", sans-serif; letter-spacing: .06em; text-transform: uppercase; }
 .card .end { right: 9.5%; top: 6%; bottom: 6%; border-left: 1px dashed rgba(31, 26, 23, .35); }
 // the dating press: the day of issue, in violet ink across the end of the card
 .card .date { right: 4.75%; top: 50%; transform: translate(50%, -50%) rotate(-90deg); font: 700 4.1cqw/1 "Courier", monospace; letter-spacing: .12em; color: #4b3a7a; opacity: .82; }
@@ -256,13 +357,33 @@ p.dropcap { margin-top: 1.1em; }
 .ticket.punched .card { -webkit-mask: radial-gradient(circle at 63% 12%, transparent 5px, #000 5.5px); mask: radial-gradient(circle at 63% 12%, transparent 5px, #000 5.5px); }
 @media (prefers-color-scheme: dark) { .card { box-shadow: 0 1px 1px rgba(0, 0, 0, .5), 0 12px 22px -12px rgba(0, 0, 0, .9); } }
 
-.ticket .info {
-  h3 { font-size: 1.6rem; margin: 0; }
-  p { margin: 0 0 .7rem; max-width: 32rem; }
+// the ticket for the computer you are reading this on (site.js): a tag above its name, and its key lit
+.ticket .info .yours {
+  display: inline-block; visibility: hidden; margin: 0 0 .45rem; padding: .3em .6em .26em; border-radius: 3px;   // its line kept on every ticket, so the names stay level
+  font: 600 .72rem/1 "Grotesk", system-ui, sans-serif; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--board-ink); background: var(--brown); box-shadow: 0 0 0 1px var(--board-edge);
+}
+.ticket.mine .info .yours { visibility: visible; }
+@media (max-width: 760px) {
+  .glass { grid-template-columns: auto 1fr auto; }
+  .glass .flap.train { grid-column: 1 / -1; grid-row: 2; }
+  .flap .name { display: none; }
+  .timetable { padding: 1.1rem 1rem .8rem; }
+  .timetable .z, .timetable .g { display: none; }
+  .timetable td, .timetable th { padding-left: .5rem; padding-right: .5rem; }
+  .tt-head { flex-direction: column; align-items: flex-start; }
+  .tt-station { text-align: left; }
+}
+@media (max-width: 640px) { .ticket .yours { display: none; } .ticket.mine .yours { display: inline-block; } }
+.ticket .info {   // the download keys line up along the bottom of the row
+  display: flex; flex-direction: column; align-items: flex-start;
+  h3 { font-size: 1.45rem; margin: 0; }
+  p { margin: 0 0 .7rem; max-width: 32rem; font-size: 1rem; line-height: 1.5; hyphens: auto; }
   .sub { font-style: italic; color: var(--soft); margin-bottom: .55rem; }
   .valid { font-size: .95rem; margin-bottom: .5rem; }
   .valid b { font-weight: 400; font-variant-caps: all-small-caps; letter-spacing: .14em; color: var(--soft); margin-right: .35rem; }
-  .keycap { margin-top: .3rem; }
+  .keycap { margin-top: auto; }
+  .how { margin-bottom: 1rem; }
   .meta { font: 400 .8rem/1.3 "Courier", monospace; font-variant-numeric: normal; color: var(--soft); margin: .6rem 0 0; }
   .meta:empty { display: none; }
 }
@@ -272,11 +393,22 @@ p.dropcap { margin-top: 1.1em; }
 .readme > h3 { font-size: 1.5rem; margin: 0 0 .3rem; }
 .readme > p { text-align: left; }
 .note {
-  margin: 1.3rem 0 0; padding: 1rem 1.3rem 1.1rem; background: var(--panel); border-left: 3px solid var(--ink); border-radius: 3px;
+  margin: .8rem 0 0; padding: 0 1.3rem; background: var(--panel); border-left: 3px solid var(--ink); border-radius: 3px;
   p { margin: 0 0 .45rem; text-align: left; }
-  p:last-child { margin-bottom: 0; }
-  .label { font: 700 1rem/1.2 "Antiqua", serif; font-variant-caps: all-small-caps; letter-spacing: .16em; margin-bottom: .5rem; }
+  > :last-child { margin-bottom: 1.1rem; }
+  .label {
+    position: relative; display: block; cursor: pointer; list-style: none; padding: .8rem 0 .8rem 1.2rem;
+    font: 700 1.05rem/1.2 "Antiqua", serif; font-variant-caps: all-small-caps; letter-spacing: .16em;
+  }
+  .label::-webkit-details-marker { display: none; }
+  .label::before {
+    content: ""; position: absolute; left: 0; top: calc(.8rem + .6em - 5px); border: 5px solid transparent; border-left: 8px solid var(--rust); border-right: 0;
+    transition: transform .15s; transform-origin: 3px 50%;
+  }
+  .label:hover { color: var(--link); }
+  &[open] .label::before { transform: rotate(90deg); }
 }
+.readme > h3 + p { margin-bottom: 1.1rem; }
 pre {
   margin: 0 0 .7rem; padding: .55rem .8rem; background: var(--well); border-radius: 4px; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .15);
   font-size: .86rem; line-height: 1.45; white-space: pre-wrap; overflow-wrap: break-word;
@@ -284,7 +416,7 @@ pre {
 }
 
 // ---------------------------------------------------------------- questions: one screwed panel, the answers behind each line
-.qas { padding: .6rem 2.1rem; }
+.qas { max-width: 46rem; margin: 0 auto; padding: .6rem 2.1rem; }
 .qa + .qa { border-top: 1px solid var(--line); }
 .qa summary {
   position: relative; cursor: pointer; list-style: none; padding: .95rem 0 .95rem 1.5rem;
@@ -302,23 +434,33 @@ pre {
 // ---------------------------------------------------------------- the footer, as the manual's back cover: the painting, the bands, the brown
 .foot { background: #2b2623; color: #f3ece0; font-size: 1rem; }
 .foot .strip { height: clamp(150px, 19vw, 260px); overflow: hidden; }
-.foot .strip img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 64%; }
-.foot .bands span { height: 7px; margin-top: 3px; }
-.foot .bands span:first-child { margin-top: 0; }
-.foot .inner { max-width: 1120px; margin: 0 auto; padding: 2.6rem max(1.25rem, 7vw) 2rem; display: grid; grid-template-columns: 1fr 1.35fr; gap: 1.2rem 4rem; align-items: start; }
-.foot .word { font: 700 clamp(2.4rem, 5vw, 3.4rem)/1 "Antiqua", serif; letter-spacing: .02em; margin: 0 0 .4rem; }
-.foot .sub { color: #e8b77a; font-style: italic; font-size: 1.15rem; margin: 0 0 1.4rem; }
-.foot .links { display: flex; flex-direction: column; align-items: flex-start; gap: .45rem; margin: 0; padding: 0; list-style: none;
-  font: 400 1.02rem/1.3 "Antiqua", serif; font-variant-caps: all-small-caps; letter-spacing: .14em; }
-.foot .links a { color: #f3ece0; text-decoration: none; border-bottom: 1px solid rgba(240, 184, 96, .5); }
-.foot .links a:hover { color: #f0b860; border-bottom-color: #f0b860; }
-.foot .licence { color: #d9cbb7; line-height: 1.55; margin: 0; hyphens: auto; }
-.foot .licence a { color: #f0b860; }
-.foot .cat { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 1rem; font-size: .9rem; color: #9c8a78; margin: 1rem 0 0; padding-top: 1rem; border-top: 1px solid #4a3f37; }
+.foot .strip img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 80%; }
+.foot .bands { height: 14px; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='14' viewBox='0 0 160 14'><defs><radialGradient id='s' cx='.35' cy='.3' r='.8'><stop offset='0' stop-color='%23f3d488'/><stop offset='1' stop-color='%238a6a2c'/></radialGradient></defs><circle cx='14' cy='7.6' r='4.800000000000001' fill='%23000' opacity='.25'/><circle cx='14' cy='7.0' r='4.4' fill='url(%23s)' stroke='%235c4524' stroke-width='.9'/><path d='M11.27 5.72 L16.73 8.28' stroke='%234a3618' stroke-width='1.32' stroke-linecap='round'/></svg>") 0 0 / 160px 14px repeat-x, linear-gradient(#3a2c14 0 1px, #f6dc95 1px, #c9a24a 45%, #7d5f25 calc(100% - 1px), #3a2c14 calc(100% - 1px)); }
+.foot .inner {
+  max-width: 76rem; margin: 0 auto; padding: 2.8rem clamp(1rem, 3vw, 2rem) 1.6rem;
+  display: grid; grid-template-columns: minmax(0, 1.7fr) repeat(4, minmax(0, 1fr)); gap: 2rem 2.5rem; align-items: start;
+}
+.foot .word { font: 700 clamp(2.2rem, 4vw, 3rem)/1 "Antiqua", serif; letter-spacing: .02em; margin: 0 0 .35rem; }
+.foot .sub { color: #e8b77a; font-style: italic; font-size: 1.1rem; margin: 0 0 1rem; }
+.foot .made { color: #d9cbb7; font-size: .98rem; line-height: 1.5; margin: 0 0 1rem; max-width: 22rem; hyphens: auto; }
+.foot .back { margin: 0; font-size: .95rem; }
+.foot .title { font: 400 1rem/1.2 "Antiqua", serif; font-variant-caps: all-small-caps; letter-spacing: .18em; color: #e8b77a; margin: .45rem 0 .85rem; }
+.foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .55rem; font-size: .98rem; line-height: 1.3; }
+.foot .inner a { color: #f3ece0; text-decoration: none; border-bottom: 1px solid rgba(240, 184, 96, .4); }
+.foot .inner a:hover { color: #f0b860; border-bottom-color: #f0b860; }
+.foot .cat { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 1rem; font-size: .88rem; color: #9c8a78; margin: .6rem 0 0; padding-top: 1rem; border-top: 1px solid #4a3f37; }
+.foot .cat span:last-child { flex: none; }
 
 // ---------------------------------------------------------------- narrow screens
+@media (max-width: 1100px) {
+  .tickets { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3rem 2.5rem; max-width: 50rem; }
+  .foot .inner { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .foot .about { grid-column: 1 / -1; }
+}
+@media (max-width: 960px) {
+  .manual-grid { grid-template-columns: minmax(0, 1fr); max-width: 36rem; }
+}
 @media (max-width: 860px) {
-  .tickets { gap: 3rem 2.5rem; }
   .topbar { flex-wrap: wrap; gap: .5rem .75rem; padding: .45rem .75rem .55rem; }
   .topbar nav { order: 3; width: 100%; }
   .topbar nav .keycap { flex: 1 1 0; min-width: 0; --px: .3em; }
@@ -328,24 +470,42 @@ pre {
   body { font-size: 1.0625rem; }
   .col > p { text-align: left; }
   .paper { padding: 3.75rem 1rem; }
-  .welcome { padding-block: 3.25rem; }
   .chap { margin-bottom: 2.5rem; }
   .wide { display: none; }
   .narrow { display: inline; }
   .topbar nav .keycap { font-size: .82rem; }
-  .cover .cta { flex-direction: column; align-items: stretch; }
-  .route { --x: 13px; --in: 2.6rem; }
-  .route .no { display: none; }
-  .route .stop { padding-bottom: 2.6rem; }
-  .route .name { font-size: 1.15rem; }
-  .route .what h3 { font-size: 1.3rem; }
-  .shot { padding: 10px; margin-top: 1.1rem; }
+  .hide-narrow { display: none; }
+  .hero .cta .keycap { display: flex; }
+  .gallery { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; margin: 2.5rem auto; }
+  .well { --clear: 16px; }
   .booklets { gap: 1.5rem; }
   .booklet { width: 42vw; }
   .booklet .keycap { font-size: .82rem; --px: .6em; }
   .tickets { grid-template-columns: minmax(0, 1fr); gap: 3rem; }
   .ticket { gap: 1.2rem; }
-  .foot .inner { grid-template-columns: 1fr; padding-top: 2.2rem; }
+  .foot .inner { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 2.2rem; }
+  .foot .cat { flex-direction: column; }
   .qas { padding: .3rem 1.1rem; }
-  .note { padding: .9rem 1rem 1rem; }
+  .note { padding: 0 1rem; }
 }
+
+// ---------------------------------------------------------------- licence, Impressum, Datenschutz
+.licence .buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem; margin: 2.5rem 0 0; }
+.legal .small { font-size: .9rem; color: var(--soft); text-indent: 0; text-align: left; }
+.legal { padding-top: 7rem; }
+.legal h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: 0 0 .3rem; }
+.legal h2 { font-size: 1.25rem; margin: 2rem 0 .4rem; }
+.legal .col > p { text-indent: 0; text-align: left; hyphens: auto; margin: 0 0 .7rem; }
+.legal .en { color: var(--soft); font-style: italic; }
+// the licences page: tables of who made what, and the licence texts folded away
+.credits .col { max-width: 52rem; }
+.credits h3 { font-size: 1.05rem; margin: 1.5rem 0 .35rem; }
+.credits code { font-size: .88em; overflow-wrap: anywhere; }
+.ltable { width: 100%; border-collapse: collapse; margin: .4rem 0 1.1rem; font-size: .95rem; }
+.ltable th { text-align: left; font: 600 .78rem/1.3 "Grotesk", sans-serif; letter-spacing: .06em; text-transform: uppercase; color: var(--soft); padding: .45rem .7rem .45rem 0; border-bottom: 2px solid var(--rule); }
+.ltable td { vertical-align: top; padding: .5rem .7rem .5rem 0; border-bottom: 1px solid var(--line); }
+.ltext { border: 1px solid var(--line); border-radius: 6px; background: var(--well-hi); margin: .5rem 0; }
+.ltext summary { cursor: pointer; padding: .7rem 1rem; font: 600 1rem "Grotesk", sans-serif; }
+.ltext[open] summary { border-bottom: 1px solid var(--line); }
+.ltext pre { margin: 0; padding: 1rem; max-height: 32rem; overflow: auto; white-space: pre-wrap; font: .82rem/1.5 ui-monospace, "Courier New", monospace; }
+@media (max-width: 640px) { .ltable, .ltable tbody, .ltable tr, .ltable td { display: block; } .ltable th { display: none; } .ltable td { border: 0; padding: .1rem 0; } .ltable tr { border-bottom: 1px solid var(--line); padding: .5rem 0; } }

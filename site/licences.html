@@ -1,0 +1,69 @@
+---
+layout: default
+lang: en
+other_url: "/de/lizenzen.html"
+title: Licences and credits
+---
+<main id="top">
+<section class="paper legal credits">
+  <div class="col">
+    <h1>Licences and credits</h1>
+    <p>Nachtzug is free. You may use it, share it and change it, and you never have to ask. This page says in plain words what the licences allow and names the work Nachtzug is made with; the licence texts themselves are at the end, and they are what count.</p>
+
+    <h2 id="music">The music you make is yours</h2>
+    <p>Everything you make with Nachtzug belongs to you, completely: your songs, your patterns, your sounds and every WAV or MIDI file you export. You can release it, sell it, put it in a game or a film, and you don’t have to mention Nachtzug (though I’d be delighted if you did!).</p>
+    <p>That goes for the built-in sounds, too. The sample library and the demo songs are given away with no strings attached, so use them in your music however you like.</p>
+
+    <h2 id="which">Which licence covers what</h2>
+    <table class="ltable">
+      <tr><th>Part</th><th>Licence</th><th>What that means</th></tr>
+      <tr><td>The program, its tools, its build files and the website’s code</td><td><a href="#gpl">GNU GPL, version 3 or later</a></td><td>Use it for anything, share it, change it. If you hand on a changed version, hand on its source code too, under the same licence. Nobody may turn Nachtzug into a closed program.</td></tr>
+      <tr><td>The sample library and the demo songs</td><td><a href="#cc0">CC0 1.0</a></td><td>In the public domain: do whatever you like with them, no credit needed. Every sound is made by Nachtzug’s own sound maker; nothing is recorded or copied from anywhere.</td></tr>
+      <tr><td>The manuals, the texts and pictures of this website, the screenshots</td><td><a href="#cc-by-sa">CC BY-SA 4.0</a></td><td>Share and adapt them freely, as long as you name Nachtzug as the source and keep your version under the same licence. The cover painting is the exception: it is in the public domain (below).</td></tr>
+      <tr><td>The fonts</td><td><a href="#ofl">SIL Open Font License 1.1</a></td><td>Free to use, change and share, but not to sell on their own.</td></tr>
+    </table>
+
+    <h2 id="credits">Credits</h2>
+
+    <h3 id="painting">The cover painting</h3>
+    <p><b>Hans Baluschek</b> (1870–1935), <i lang="de">“Großstadtbahnhof”</i>, 1904. Baluschek painted Berlin and its railways like no one else, and this station at nightfall, its locomotives steaming under the lamps, is on the cover of Nachtzug, its manuals and this website. The painting is in the public domain.</p>
+    <p class="small">The only copy to be found is a small scan of a printed reproduction, on <a href="https://commons.wikimedia.org/wiki/File:Hans_Baluschek_Gro%C3%9Fstadtbahnhof.jpg">Wikimedia Commons</a>. For Nachtzug the printer’s halftone screen was taken out, the picture was enlarged with the AI upscaler <a href="https://github.com/Phhofm/models">4xRealWebPhoto_v4_dat2</a> (Phhofm, CC BY 4.0), and its colours were freshened a little. The scripts for each step are in <code>tools/cover/</code>.</p>
+
+    <h3 id="fonts">The fonts</h3>
+    <table class="ltable">
+      <tr><th>Font</th><th>Licence</th></tr>
+      <tr><td>Nachtzug Antiqua, Grotesk, Initialen and Ornamente, our own, built on EB Garamond and Jost</td><td><a href="#ofl">SIL Open Font License 1.1</a></td></tr>
+      <tr><td><a href="https://github.com/indestructible-type/Jost">Jost</a> (indestructible type*)</td><td>SIL Open Font License 1.1</td></tr>
+      <tr><td><a href="https://github.com/octaviopardo/EBGaramond12">EB Garamond</a> (Georg Duffner, Octavio Pardo)</td><td>SIL Open Font License 1.1</td></tr>
+      <tr><td><a href="https://github.com/quoteunquoteapps/CourierPrime">Courier Prime</a> (Alan Dague-Greene)</td><td>SIL Open Font License 1.1</td></tr>
+      <tr><td>On this website: <a href="https://www.datto.com/fonts/d-din">D-DIN</a> (Datto), the lettering of German railway signs (DIN 1451)</td><td>SIL Open Font License 1.1</td></tr>
+      <tr><td>In the manuals also <a href="https://github.com/Fonthausen/CrimsonPro">Crimson Pro</a>, <a href="https://github.com/jpt/barlow">Barlow</a> and <a href="https://github.com/googlefonts/Michroma-font">Michroma</a></td><td>SIL Open Font License 1.1</td></tr>
+    </table>
+
+    <h3 id="software">The software it is built on</h3>
+    <table class="ltable">
+      <tr><th>Part</th><th>What it does</th><th>Licence</th></tr>
+      <tr><td><a href="https://www.qt.io">Qt 6</a></td><td>the window, the controls, text and pictures</td><td><a href="#lgpl3">LGPL 3.0</a></td></tr>
+      <tr><td><a href="https://www.libsdl.org">SDL 2</a></td><td>the sound card</td><td><a href="#zlib">zlib</a></td></tr>
+      <tr><td>ALSA (Linux), Core MIDI (macOS), WinMM (Windows)</td><td>MIDI</td><td>the system’s own; not bundled</td></tr>
+    </table>
+    <p><b>In the Linux AppImage.</b> The AppImage is one file that carries the libraries Nachtzug needs, taken from Debian 13: besides Qt and SDL, the X11, XCB and Wayland libraries, xkbcommon, libdecor, PulseAudio, libsystemd, GLib, D-Bus, libcap, libffi, ICU, PCRE2, double-conversion, md4c, libb2, graphite2, libpng, libjpeg, zstd, Brotli, bzip2, libsndfile with FLAC, Ogg, Vorbis, Opus, mpg123 and LAME, libsamplerate, and the GCC runtime. Most are under the MIT, BSD or zlib licences; Qt, GLib, PulseAudio, libsystemd, libsndfile, mpg123, LAME, graphite2 and libasyncns are under the LGPL (<a href="#lgpl21">2.1</a>, <a href="#lgpl3">3.0</a>). The full licence of each is inside the AppImage, in <code>usr/share/doc/nachtzug/third-party/</code>; their source code is Debian’s, at <a href="https://sources.debian.org">sources.debian.org</a>.</p>
+    <p><b>In the macOS and Windows downloads.</b> The Mac disk image and the Windows installer carry Qt and SDL too, with the libraries Qt needs, taken from <a href="https://brew.sh">Homebrew</a> and <a href="https://www.msys2.org">MSYS2</a>: among them ICU, PCRE2, HarfBuzz, FreeType, libpng, libjpeg, zlib, zstd, Brotli, double-conversion, md4c, on Windows GLib and the GCC and MinGW runtime. Their licences are inside each download (on a Mac in <code>Nachtzug.app/Contents/Resources/licences/</code>, on Windows in the <code>licences</code> folder).</p>
+    <p class="small"><b>Replacing a library</b>, as the LGPL allows: on Linux, unpack the AppImage with <code>--appimage-extract</code>, swap the library in <code>squashfs-root/usr/lib/</code> and start <code>squashfs-root/AppRun</code>; on Windows, swap the DLL in Nachtzug’s folder; on a Mac, swap it in <code>Nachtzug.app/Contents/Frameworks/</code> and sign the app again (<code>codesign --force --deep --sign - Nachtzug.app</code>).</p>
+    <p>Thank you to everyone who made these!</p>
+
+    <h2 id="copyright">Copyright</h2>
+    <p>Copyright © 2026 Marvin Johanning. The program is free software: you can redistribute it and modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. It is distributed in the hope that it will be useful, but <b>without any warranty</b>; without even the implied warranty of merchantability or fitness for a particular purpose.</p>
+
+    <h2 id="texts">The licence texts</h2>
+    <p class="small">In full, as they are; click one to open it.</p>
+    {% include licence-text.html id="gpl" file="GPL-3.0.txt" title="GNU General Public License, version 3" %}
+    {% include licence-text.html id="lgpl3" file="LGPL-3.0-only.txt" title="GNU Lesser General Public License, version 3" %}
+    {% include licence-text.html id="lgpl21" file="LGPL-2.1-or-later.txt" title="GNU Lesser General Public License, version 2.1" %}
+    {% include licence-text.html id="zlib" file="Zlib.txt" title="zlib License" %}
+    {% include licence-text.html id="cc0" file="CC0-1.0.txt" title="Creative Commons Zero 1.0 (public domain)" %}
+    {% include licence-text.html id="cc-by-sa" file="CC-BY-SA-4.0.txt" title="Creative Commons Attribution-ShareAlike 4.0" %}
+    {% include licence-text.html id="ofl" file="OFL-1.1.txt" title="SIL Open Font License 1.1" %}
+  </div>
+</section>
+</main>

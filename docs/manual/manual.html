@@ -13,12 +13,12 @@
 <!-- ======================= COVER ======================= -->
 <section class="cover">
   <img class="art" src="img/cover-wrap.jpg" alt="">
-  <div class="band b1"></div><div class="band b2"></div><div class="band b3"></div>
+  <img class="band" src="img/brass-band.svg" alt="">
   <img class="seal" src="../../assets/logo/enamel.svg" alt="">
   <div class="word">Nachtzug</div>
   <div class="sub">Sequencer · Synthesiser</div>
   <div class="om">Operation manual</div>
-  <div class="cat2">For Linux and macOS</div>
+  <div class="cat2">For Linux, macOS and Windows</div>
   <div class="cat">NZ · 001</div>
 </section>
 
@@ -36,7 +36,7 @@
   <div class="note"><p>Almost every button, knob and corner of the window explains itself. Rest the mouse on it and a short description appears, both next to the pointer and in the status line at the bottom of the window.</p></div>
   <h2>About this manual</h2>
   <ul>
-    <li>Names of controls, as they’re printed on the panel, look like this: <span class="ctl">Roll new sound</span>.</li>
+    <li>Names of controls, as they’re printed on the panel, look like this: <span class="ctl">New sound</span>.</li>
     <li>Keys on your computer keyboard look like this: <span class="key">Space</span> <span class="nw"><span class="key">Ctrl</span>+<span class="key">Z</span></span>. On a Mac, <span class="key">Ctrl</span> is <span class="key">⌘</span>.</li>
     <li>What the display shows is written like this: <span class="lcdtxt">BAR 1 · BEAT 1</span>.</li>
     <li>Menu entries are joined with arrows: <b>File → Export: sound file, tracks or MIDI…</b></li>
@@ -116,7 +116,7 @@
     <li><span class="dot">2</span><b>Song</b>: tempo, tap, key, scale and swing.&nbsp;<a href="#songunit">→&nbsp;2</a></li>
     <li><span class="dot">3</span><b>Output</b>: the meters, volume, the <span class="ctl">Export</span> key, the settings <span class="key">⚙</span> and the <span class="key">?</span> guide.&nbsp;<a href="#output">→&nbsp;2</a></li>
     <li><span class="dot">4</span><b>Inspector</b>: the selected track’s level and sends, its sound, how its notes are played and, for drum clips, the auto drummer.&nbsp;<a href="#inspector">→&nbsp;3</a></li>
-    <li><span class="dot">5</span><b>Song / Loops</b> and the <b>clip tools</b>: add a track, duplicate, loop, cut, delete and <b>Arrange for me</b>.&nbsp;<a href="#timeline">→&nbsp;7</a></li>
+    <li><span class="dot">5</span><b>Song / Loops</b> and the <b>clip tools</b>: add a track, <b>Copy</b>, <b>Loop</b>, <b>Cut</b>, the scissors, <b>Delete</b> and <b>Arrange</b>.&nbsp;<a href="#timeline">→&nbsp;7</a></li>
     <li><span class="dot">6</span><b>Bars, Loop and Chords</b> rows of the timeline.&nbsp;<a href="#timeline">→&nbsp;7</a></li>
     <li><span class="dot">7</span><b>Tracks and clips</b>: one row per instrument.&nbsp;<a href="#timeline">→&nbsp;7</a></li>
     <li><span class="dot">8</span><b>Tabs</b>: Notes and Sound of the selected track, and the Mixer. <span class="key">⧉</span> puts them in a window of their own.&nbsp;<a href="#room">→&nbsp;below</a></li>
@@ -132,7 +132,7 @@
     <li id="inspectoraway"><b>Put the inspector away.</b> The <span class="key">«</span> key at its top right folds it away; the slim <span class="key">»</span> tab on the left edge of the window brings it back. <span class="nw"><span class="key">Ctrl</span>+<span class="key">I</span></span> does both. While it’s away, its sections go back onto the Notes and Sound tabs, so nothing is ever out of reach.</li>
     <li id="ownwindow"><b>Give the tabs a window of their own.</b> The <span class="key">⧉</span> key at the end of the tabs puts Notes, Sound and Mixer in a separate window, which is handy with a second screen. Close that window and they come back.</li>
     <li><b>Drag the dividers</b> between the inspector, the timeline and the tabs to give each part the room you’d like.</li>
-    <li>The <b>View</b> menu has all of this too: <b>Inspector</b>, <b>Timeline on top</b> (untick it to have the tabs above the timeline instead), <b>Notes, Sound and Mixer in their own window</b> and <b>Reset the layout</b>, which puts everything back the way it was at the start.</li>
+    <li>The <b>View</b> menu has all of this too: <b>Inspector</b>, <b>Timeline on top</b> (untick it to have the timeline, or the loop grid, beside the tabs on the left instead), <b>Notes, Sound and Mixer in their own window</b> and <b>Reset the layout</b>, which puts everything back the way it was at the start.</li>
   </ul>
   <p>If the whole window is still too large or too small, have a look at <span class="ctl">Size</span> in the settings (<a href="#size">9.3</a>).</p>
 </section>
@@ -146,15 +146,15 @@
     <div class="stripes"></div>
   </div>
   <p class="lede">Six steps, about ten minutes. A demo song is already waiting for you the moment Nachtzug starts, so you begin by listening and then change it one part at a time.</p>
-  <p id="welcome">The very first time you start Nachtzug, it asks you two things: which <b>language</b> you’d like to use and how you’d like to begin. <b>I am new to this</b> gives the Sound tab a few big knobs in plain words and opens a short guide; <b>I know synthesisers</b> shows every knob. You can change both later in the settings.</p>
+  <p id="welcome">The very first time you start Nachtzug, it asks which <b>language</b> you’d like to use and how you’d like to begin. <b>I am new to this</b> gives the Sound tab a few big knobs in plain words and opens a short guide; <b>I know synthesisers</b> shows every knob. Below, you choose how the window looks: keys with a symbol and a word, or the symbols alone; the timeline above the notes or beside them; and scroll bars hidden or shown. You can change all of it later in the settings.</p>
   <figure style="width:62%; margin-left:auto; margin-right:auto"><img src="img/dlg-welcome.png" alt="The welcome window"><figcaption><b>FIG 1</b>The welcome window. You’ll only see it on the very first start.</figcaption></figure>
   <div class="task"><p><b>What you’ll do:</b> listen to the demo, give it a new bass line and a new sound, add a melody, turn it into a whole song and save it.</p><p><b>Time:</b> about ten minutes.</p></div>
   <ol class="steps">
     <li><b class="t">Listen</b>Press <span class="key">Space</span> or the <span class="key ico play"></span> key. Drums, a bass line, a rolling sequence and a pad start to play. <b>You should see:</b> the display counting <span class="lcdtxt">BAR 2 · BEAT 3</span> and the needles in the Output unit swinging along.</li>
     <li><b class="t">Get a new bass line</b>In the timeline, click the orange <b>Bass</b> clip. The <span class="ctl">Notes</span> tab now shows its pattern. Press <span class="ctl">New idea</span> and choose <b>Acid line</b>; the new pattern starts on the next bar. Then press <span class="ctl">Vary</span> a few times. Each press changes a note or two, so you can keep going until it sounds just right.</li>
-    <li><b class="t">Change its sound</b>In the inspector on the left, press <span class="ctl">Roll new sound</span> until you hear one you like. Then turn <span class="ctl">Cutoff</span> and <span class="ctl">Resonance</span> while it plays: that’s the classic acid squelch! (On the Simple sound page, the same two knobs are called <span class="ctl">Brightness</span> and <span class="ctl">Squelch</span>.)</li>
+    <li><b class="t">Change its sound</b>In the inspector on the left, press <span class="ctl">New sound</span> (the die) until you hear one you like. Then turn <span class="ctl">Cutoff</span> and <span class="ctl">Resonance</span> while it plays: that’s the classic acid squelch! (On the Simple sound page, the same two knobs are called <span class="ctl">Brightness</span> and <span class="ctl">Squelch</span>.)</li>
     <li><b class="t">Add a melody</b>Click the name <b>Lead</b> in the timeline, press <span class="ctl">New idea</span> and pick <b>Melody</b>. Or play one yourself on the letter keys: the row <span class="key">A</span> … <span class="key">;</span> is the middle octave, and every key fits.</li>
-    <li><b class="t">Make it a song</b>Press <span class="ctl">Arrange for me</span> above the timeline and choose <b>Medium</b>. Your patterns become an intro, a build-up, a main part, a break and an ending. Press <span class="key ico start"></span> and listen from the start. (You can also do this by hand: drag the right edge of a clip, and its pattern repeats for as long as the clip lasts.)</li>
+    <li><b class="t">Make it a song</b>Press <span class="ctl">Arrange</span> above the timeline and choose <b>Medium</b>. Your patterns become an intro, a build-up, a main part, a break and an ending. Press <span class="key ico start"></span> and listen from the start. (You can also do this by hand: drag the right edge of a clip, and its pattern repeats for as long as the clip lasts.)</li>
     <li><b class="t">Keep it</b>Press <span class="nw"><span class="key">Ctrl</span>+<span class="key">S</span></span> to save the song. For a sound file you can play anywhere, press <span class="ctl">Export</span> at the top right. <b>You should see:</b> <i>Your song is ready</i>, with a <b>Play it</b> button that opens the file in your music player.</li>
   </ol>
   <div class="tip"><p>Not happy with a change? The <span class="key">↶</span> key next to the display takes it back, as often as you like. Fancy a fresh start instead? <b>File → New song with fresh ideas</b> (<span class="nw"><span class="key">Ctrl</span>+<span class="key">N</span></span>) writes a brand-new song with drums, bass, sequence and pad and a random chord progression. Press it a few times: every song is different!</p></div>
@@ -238,7 +238,7 @@
   <p>The column on the left of the window always shows the selected track. Its sections fold shut when you click their names (<a href="#room">Making room</a>), so you can keep open only what you need.</p>
   <ul>
     <li><b>Track</b>: the volume, <span class="ctl">Pan</span>, how much goes to the shared <span class="ctl">Echo</span> and <span class="ctl">Reverb</span>, <span class="ctl">Pump</span> (<a href="#pump">9.1</a>), and <span class="ctl">Mute</span> and <span class="ctl">Solo</span>.</li>
-    <li><b>Sound</b>: the preset, <span class="ctl">Roll new sound</span>, <span class="ctl">Mutate</span> and the five knobs you’ll probably turn the most: <span class="ctl">Cutoff</span>, <span class="ctl">Resonance</span>, <span class="ctl">Env amount</span>, <span class="ctl">Decay</span> and <span class="ctl">Drive</span>. A drum track shows its kit here instead (<a href="#sound">chapter 5</a>).</li>
+    <li><b>Sound</b>: the preset, <span class="ctl">New sound</span>, <span class="ctl">Mutate</span> and the five knobs you’ll probably turn the most: <span class="ctl">Cutoff</span>, <span class="ctl">Resonance</span>, <span class="ctl">Env amount</span>, <span class="ctl">Decay</span> and <span class="ctl">Drive</span>. A drum track shows its kit here instead (<a href="#sound">chapter 5</a>).</li>
     <li><b>How notes are played</b>: the octave, chords and arpeggios (<a href="#chordkeys">3.4</a>).</li>
     <li><b>Auto drummer</b>, when a drum clip is selected (<a href="#drummer">chapter 4</a>).</li>
   </ul>
@@ -318,7 +318,7 @@
     <li>Play the keys. The notes go into the clip under the playhead; if there isn’t one, one is made for you.</li>
     <li>With <b>Play → Snap recorded notes to the grid</b> switched on (it is to begin with), recorded notes are lined up with the grid. <span class="nw"><span class="key">Ctrl</span>+<span class="key">Z</span></span> takes a note back.</li>
   </ol>
-  <p id="cleanup">Played it a little wobbly? Press <span class="ctl">Clean up</span> in the <span class="ctl">Pattern</span> group. It puts notes that are off the grid onto it, turns doubled notes into one and removes a tiny note you pressed by accident next to the real one. When your pattern goes round three times or more and the rounds are mostly the same, it also fills in a note you missed in one round and puts a wrong key right. A change in the last round is left alone, because that’s usually on purpose, and so are kept notes. The status line says what it changed, and <span class="nw"><span class="key">Ctrl</span>+<span class="key">Z</span></span> brings back what you played.</p>
+  <p id="cleanup">Played it a little wobbly? Press <span class="ctl">Clean up</span> in the <span class="ctl">Pattern</span> group. It puts every note onto the grid chosen beside it (<span class="ctl">Grid</span>), turns doubled notes into one and removes a tiny note you pressed by accident next to the real one. When your pattern goes round three times or more and the rounds are mostly the same, it also fills in a note you missed in one round and puts a wrong key right. A change in the last round is left alone, because that’s usually on purpose, and so are kept notes. The status line says what it changed, and <span class="nw"><span class="key">Ctrl</span>+<span class="key">Z</span></span> brings back what you played.</p>
 </section>
 
 <!-- ======================= 4 DRUMMER ======================= -->
@@ -335,7 +335,7 @@
   <div class="clear"></div>
   <table class="wide1">
     <thead><tr><th>Setting</th><th>What it does</th></tr></thead>
-    <tr><td><span class="ctl">The drummer plays this clip</span></td><td>Untick it to place the hits yourself. The hits the drummer wrote stay, as a starting point.</td></tr>
+    <tr><td><span class="ctl">The drummer plays this clip</span></td><td>Switch it off to place the hits yourself. The hits the drummer wrote stay, as a starting point.</td></tr>
     <tr><td><span class="ctl">New take</span></td><td>The same settings, played a little differently. It sits at the top, so it’s always in reach.</td></tr>
     <tr><td><span class="ctl">Style</span></td><td>The kind of beat.</td></tr>
     <tr><td><span class="ctl">Energy</span></td><td id="energy">How hard the drummer plays. Every bit of it counts: from a bare pulse at the bottom, through ghost notes and extra kicks, up to busy hats, crashes and long fills at the top.</td></tr>
@@ -348,7 +348,7 @@
     <tr><td><span class="ctl">Crash after fills</span></td><td>A cymbal crash on the first beat after each fill.</td></tr>
   </table>
   <div class="tip"><p>Try building a song from three drum clips: one set to <b>Build up</b> at the start, a steady one in the middle with fills every 8 bars, and one set to <b>Wind down</b> at the end.</p></div>
-  <p>To place hits by hand, untick the drummer, then click in the grid to add a hit and click a hit to remove it. The eight drums are Kick, Snare, Clap, Closed hat, Open hat, Tom, Rim and Cymbal.</p>
+  <p>To place hits by hand, switch the drummer off, then click in the grid to add a hit and click a hit to remove it. The eight drums are Kick, Snare, Clap, Closed hat, Open hat, Tom, Rim and Cymbal.</p>
 </section>
 
 <!-- ======================= 5 SOUND ======================= -->
@@ -403,7 +403,7 @@
   <h2 id="presets"><span class="n">5.2</span>Finding a sound quickly</h2>
   <ul>
     <li><span class="ctl">Sound</span>, in the inspector or at the top of the Sound tab, picks a ready-made preset, grouped by use. In the open list, <b>rest the mouse on a preset to hear it</b>: a short phrase in the song’s key and tempo, a bass line for a bass and a chord for a pad. The same works in the list of drum kits.</li>
-    <li id="roll"><span class="ctl">Roll new sound</span> builds a brand-new sound that suits the kind of track. Keep pressing it: it’s a great way to find something you’d never have thought of!</li>
+    <li id="roll"><span class="ctl">New sound</span> (the die) builds a brand-new sound that suits the kind of track. Keep pressing it: it’s a great way to find something you’d never have thought of!</li>
     <li id="mutate"><span class="ctl">Mutate</span> nudges every knob a little, for a close relative.</li>
     <li><span class="nw"><span class="key">Ctrl</span>+<span class="key">Z</span></span> brings the previous sound back.</li>
   </ul>
@@ -496,7 +496,7 @@
   <p>In <span class="ctl">Song</span> mode, the timeline shows your whole song. Time runs from left to right in bars, with one row per track. Three rows sit at the top:</p>
   <ul>
     <li><b>Bars</b>: click or drag to move the playhead.</li>
-    <li id="loop"><b>Loop</b>: the coloured bar marks the stretch that repeats while <span class="ctl">Loop</span> is on. Drag in the row to mark another; click it to switch looping on or off. <span class="ctl">Loop this part</span> puts the loop around the selected clips.</li>
+    <li id="loop"><b>Loop</b>: the coloured bar marks the stretch that repeats while <span class="ctl">Loop</span> is on. Drag in the row to mark another; click it to switch looping on or off. <span class="ctl">Loop</span> puts the loop around the selected clips.</li>
     <li><b>Chords</b>: the chord of each bar.</li>
   </ul>
   <h2 id="clips"><span class="n">7.1</span>Working with clips</h2>
@@ -507,8 +507,8 @@
     <tr><td>Edit its notes</td><td>Double-click it.</td></tr>
     <tr><td>Move</td><td>Drag it, also onto another track of the same kind.</td></tr>
     <tr><td>Make it longer</td><td>Drag its right edge. Ticks along the top show where the pattern repeats.</td></tr>
-    <tr><td id="scissors">Cut in two</td><td><span class="ctl">Scissors</span> on, then click where to cut; or <span class="ctl">Cut at playhead</span> (<span class="nw"><span class="key">Ctrl</span>+<span class="key">E</span></span>).</td></tr>
-    <tr><td>Copy</td><td><span class="ctl">Duplicate</span> (<span class="nw"><span class="key">Ctrl</span>+<span class="key">D</span></span>) puts a copy right after it. <span class="nw"><span class="key">Ctrl</span>+<span class="key">C</span> / <span class="key">V</span></span> paste at the playhead.</td></tr>
+    <tr><td id="scissors">Cut in two</td><td>The scissors (<span class="ctl">✂</span>) on, then click where to cut; or <span class="ctl">Cut</span> (<span class="nw"><span class="key">Ctrl</span>+<span class="key">E</span></span>).</td></tr>
+    <tr><td>Copy</td><td><span class="ctl">Copy</span> (<span class="nw"><span class="key">Ctrl</span>+<span class="key">D</span></span>) puts a copy right after it. <span class="nw"><span class="key">Ctrl</span>+<span class="key">C</span> / <span class="key">V</span></span> paste at the playhead.</td></tr>
     <tr><td>Delete</td><td><span class="ctl">Delete</span>, or the <span class="key">Delete</span> key.</td></tr>
     <tr><td id="fade">Fade in or out</td><td>Right-click → <b>Transition at the start</b> or <b>at the end</b>: a fade, a filter sweep, or both, one beat to four bars long. A dark wedge shows it.</td></tr>
   </table>
@@ -526,7 +526,7 @@
   <div class="note"><p>Whether a track follows the chords is set with <span class="ctl">Follow chords</span> under <span class="ctl">How notes are played</span> in the inspector, or by right-clicking its name. Leads and drums don’t follow to begin with.</p></div>
 
   <h2 id="arrange"><span class="n">7.3</span>Arrange for me</h2>
-  <p>Turning a loop that sounds good into a whole song is often the hardest part. <span class="ctl">Arrange for me</span>, above the timeline (and in the <b>Edit</b> menu), does it for you. It takes each track’s pattern at the loop and lays the song out in parts:</p>
+  <p>Turning a loop that sounds good into a whole song is often the hardest part. <span class="ctl">Arrange for me</span> does it for you: the <span class="ctl">Arrange</span> key above the timeline, or the <b>Edit</b> menu. It takes each track’s pattern at the loop and lays the song out in parts:</p>
   <figure style="width:58%; margin-left:auto; margin-right:auto"><img src="img/dlg-arrange.png" alt="Arrange for me"><figcaption><b>FIG 16</b>Short, medium or long; the length at the current tempo is shown.</figcaption></figure>
   <table class="wide1">
     <thead><tr><th>Part</th><th>What plays</th></tr></thead>
@@ -617,7 +617,7 @@
   <p>The <span class="key">⚙</span> key in the Output unit, or <b>File → Settings…</b> (<span class="nw"><span class="key">Ctrl</span>+<span class="key">,</span></span>), opens the settings. Every change counts straight away.</p>
   <table class="wide1">
     <thead><tr><th>Page</th><th>What you can set</th></tr></thead>
-    <tr><td><b>General</b></td><td>Language (from the next start), colours, <span class="ctl">Size</span>, whether the Sound tab opens Simple or Full, the on-screen keys, the Undo note, and the welcome window.</td></tr>
+    <tr><td><b>General</b></td><td>Language (from the next start), colours, <span class="ctl">Size</span>, whether the Sound tab opens Simple or Full, <span class="ctl">Keys</span> (symbol and word, or symbols only), <span class="ctl">Window</span> (the timeline above or beside the notes), the on-screen keys, the Undo note, the scroll bars and the welcome window.</td></tr>
     <tr><td><b>Sound card</b></td><td><span class="ctl">Sound system</span> (Automatic picks the best one; on Linux also PipeWire, PulseAudio, ALSA or JACK), <span class="ctl">Play through</span> (which speakers or headphones), <span class="ctl">Sample rate</span> and <span class="ctl">Buffer</span>. A line under them says what is running. <span class="ctl">Play a test tone</span> checks that sound comes out. <span class="ctl">Record from</span> picks the input, for recording samples and for the mixer’s Input strip.</td></tr>
     <tr><td><b>Samples</b></td><td>Your sample library (9.4).</td></tr>
     <tr><td><b>MIDI</b></td><td>Keyboards, controllers and clock (9.6).</td></tr>
@@ -647,7 +647,7 @@
     <li>Cut at <b>the hits it finds</b> (<span class="ctl">fewer</span> … <span class="ctl">more</span> sets how faint a hit may be), or into <b>equal pieces</b>, 2, 4 or 8, for a loop that is exactly in time.</li>
     <li>Click a piece to hear it. Drag a line to move a cut, double-click to add one (up to eight pieces), right-click a line to take it away.</li>
     <li><span class="ctl">Length</span> is how many bars the loop lasts, guessed from its length at the song’s tempo.</li>
-    <li>With <b>Write a pattern …</b> ticked, a drum clip at the loop plays the pieces in their order, each on the nearest sixteenth, so the loop sounds as it was, at the song’s tempo. Then change the pattern: leave pieces out, swap them, or give a hat a chance.</li>
+    <li>With <b>Write a pattern …</b> switched on, a drum clip at the loop plays the pieces in their order, each on the nearest sixteenth, so the loop sounds as it was, at the song’s tempo. Then change the pattern: leave pieces out, swap them, or give a hat a chance.</li>
   </ul>
   <p>The pieces are saved in your sample library under the name you give them, numbered, so the song finds them again. The selected drum track gets them; if no drum track is selected, the first one does, or a new one is made. A single <span class="key">↶</span> takes it all back.</p>
 
@@ -669,7 +669,7 @@
   <ul>
     <li><b>A keyboard</b> plays the selected track like the letter keys, and records the same way. Every key plays the nearest note of the song’s scale, so nothing sounds wrong; notes struck hard are accented. On a drum track the General MIDI drum notes play the drums (36 kick, 38 snare, 42 closed hat …). In Chords mode the keys change the chord (<a href="#chordmode">3.4</a>).</li>
     <li id="learn"><b>Controller knobs</b>: right-click a knob of the Sound tab, a knob or fader in the mixer, or <span class="ctl">Volume</span> or <span class="ctl">Swing</span> in the top bar, and choose <b>Learn MIDI control</b>, then turn a knob on your controller. From then on it turns that knob; a small ring at the knob’s top left shows it has one. A knob of the Sound tab works on whichever track is selected, so one controller knob is always the cutoff of what you are working on. Each turn is one undo step, and with record on it is written as a line. <b>Forget MIDI control</b> unties it; <span class="ctl">Forget them all</span> on the settings page unties every one. The knobs of a drum kit cannot learn yet.</li>
-    <li id="clock"><b>Clock</b>: to make a drum machine or another program follow Nachtzug, choose it under <span class="ctl">Send to</span> and tick <span class="ctl">Send the clock, start and stop to it</span>. To follow another device instead, tick <span class="ctl">Follow its clock</span>: Nachtzug takes its tempo, and starts and stops with it.</li>
+    <li id="clock"><b>Clock</b>: to make a drum machine or another program follow Nachtzug, choose it under <span class="ctl">Send to</span> and switch on <span class="ctl">Send the clock, start and stop to it</span>. To follow another device instead, switch on <span class="ctl">Follow its clock</span>: Nachtzug takes its tempo, and starts and stops with it.</li>
   </ul>
   <div class="tip"><p>On Linux, MIDI needs your user to be in the <code>audio</code> group. If it isn’t, the MIDI page tells you so: type <code>sudo usermod -aG audio $USER</code> in a terminal, then log out and back in.</p></div>
 </section>
@@ -683,7 +683,7 @@
     <h1>Sound recipes</h1>
     <div class="stripes"></div>
   </div>
-  <p>Three classic sounds, knob by knob. Pick the named preset to start from it, or set the knobs yourself after a <b>Roll new sound</b> to learn what each one does. The knobs are drawn where they sit, and anything not shown stays as it is.</p>
+  <p>Three classic sounds, knob by knob. Pick the named preset to start from it, or set the knobs yourself after a press of <b>New sound</b> to learn what each one does. The knobs are drawn where they sit, and anything not shown stays as it is.</p>
 
   <div class="recipe" id="r-acid">
     <h2><span class="n">10.1</span>Acid squelch <span class="for">Bass track · preset “Acid Squelch”</span></h2>
@@ -786,7 +786,7 @@
   <h3>The letter keys don’t play anything.</h3>
   <p>A text field may have the keyboard: after typing a tempo, press <span class="key">Esc</span> or click somewhere else. Also check which track the display says the keys play.</p>
   <h3>I can’t edit the drum hits.</h3>
-  <p>The auto drummer is writing that clip. Untick <span class="ctl">The drummer plays this clip</span> in the inspector first.</p>
+  <p>The auto drummer is writing that clip. Switch off <span class="ctl">The drummer plays this clip</span> in the inspector first.</p>
   <h3>A change didn’t happen at once.</h3>
   <p>While the song plays, new ideas, mutes, chord changes and loop-grid launches wait for the next bar line, so they land in time. The display tells you while one is waiting.</p>
   <h3>A knob keeps moving by itself.</h3>
@@ -822,7 +822,7 @@
     <tr><td>MIDI</td><td>Keyboards (scale-locked, accent from velocity, GM drum notes), learned controller knobs, clock in and out with start, stop and song position</td></tr>
     <tr><td>Samples</td><td>A library of 65 sounds made for Nachtzug; your own WAV and AIFF, 8 to 32-bit, mono or stereo, up to 60 s; recording from any input</td></tr>
     <tr><td>Song file</td><td><code>.nachtzug</code> (plain JSON)</td></tr>
-    <tr><td>System</td><td>Linux and macOS, Windows in preparation; Qt 6 and SDL2 (PipeWire, PulseAudio, ALSA, JACK; Core Audio); MIDI through ALSA or Core MIDI</td></tr>
+    <tr><td>System</td><td>Linux, macOS and Windows; Qt 6 and SDL2 (PipeWire, PulseAudio, ALSA, JACK; Core Audio; WASAPI); MIDI through ALSA, Core MIDI or Windows MIDI</td></tr>
     <tr><td>Languages</td><td>English, German</td></tr>
     <tr><td>Not yet</td><td>Audio tracks, MP3 and FLAC import</td></tr>
   </table>
@@ -842,6 +842,27 @@
     <tr><td>Textures</td><td><b>Night rain</b>: Rain on the window, seven seconds; <b>Vinyl crackle</b>: An old record, seven seconds; <b>Wind in the carriage</b>: Wind through a gap, with a faint whistle; <b>Rails at night</b>: A train far away: rail joints every 1.1 seconds</td></tr>
   </table>
   <p class="small"><i>Settings live in <code>~/.config/Nachtzug/Nachtzug.conf</code>, your own samples in <code>~/.local/share/Nachtzug/Nachtzug/samples</code> (on a Mac: <code>~/Library/Application Support/Nachtzug/Nachtzug/samples</code>).</i></p>
+
+  <h2 id="credits" style="break-before: page"><span class="n">A.5</span>Credits and licences</h2>
+  <h3>The cover painting</h3>
+  <p><b>Hans Baluschek</b> (1870–1935), <i lang="de">“Großstadtbahnhof”</i>, 1904. Baluschek painted Berlin and its railways like no one else; this station at nightfall, its locomotives steaming under the lamps, is in the public domain. The only copy to be found is a small scan of a printed reproduction (Wikimedia Commons); for Nachtzug the printer’s screen was taken out, the picture was enlarged with the AI upscaler 4xRealWebPhoto_v4_dat2 (Phhofm, CC BY 4.0) and its colours were freshened a little.</p>
+  <h3>Fonts and software</h3>
+  <table class="small credits"><colgroup><col style="width: 68%"><col></colgroup>
+    <thead><tr><th>What</th><th>Licence</th></tr></thead>
+    <tr><td>Nachtzug Antiqua, Grotesk, Initialen and Ornamente (our own, built on EB Garamond and Jost); Jost, EB Garamond, Courier Prime, Crimson Pro, Barlow, Michroma</td><td>SIL Open Font License 1.1</td></tr>
+    <tr><td>Qt 6: the window, the controls, text and pictures</td><td>LGPL 3.0</td></tr>
+    <tr><td>SDL 2: the sound card</td><td>zlib</td></tr>
+    <tr><td>The libraries in the Linux AppImage and the Mac and Windows downloads</td><td>MIT, BSD, zlib, LGPL; each licence is inside the download</td></tr>
+  </table>
+  <h3>Nachtzug’s own licences</h3>
+  <table class="small credits"><colgroup><col style="width: 68%"><col></colgroup>
+    <thead><tr><th>Part</th><th>Licence</th></tr></thead>
+    <tr><td>The program</td><td>GNU GPL, version 3 or later</td></tr>
+    <tr><td>The sample library and the demo songs</td><td>CC0 1.0: public domain</td></tr>
+    <tr><td>This manual and the pictures (the cover painting excepted)</td><td>CC BY-SA 4.0</td></tr>
+  </table>
+  <p style="text-align: left; text-indent: 0; hyphens: manual">Everything you make with Nachtzug is yours, completely. Every licence in full, and every part Nachtzug is built on: <b>mjohanning99.github.io/nachtzug/licences.html</b>.</p>
+  <p class="small" style="text-align: left; text-indent: 0">Copyright © 2026 Marvin Johanning. Nachtzug is free software, distributed in the hope that it will be useful, but without any warranty. Thank you to everyone whose work it is built on!</p>
 </section>
 
 <!-- ======================= INDEX ======================= -->
@@ -868,6 +889,7 @@
     <div class="e"><a href="#chop">Chopping a loop</a></div>
     <div class="e"><a href="#chords">Chords</a></div>
     <div class="e"><a href="#chordmode">Chords mode</a></div>
+    <div class="e"><a href="#credits">Credits</a></div>
     <div class="e"><a href="#cleanup">Clean up</a></div>
     <div class="e"><a href="#metronome">Click (metronome)</a></div>
     <div class="e"><a href="#ideas">Clips</a></div>
@@ -905,6 +927,7 @@
     <div class="e"><a href="#lean">Lean</a></div>
     <div class="e"><a href="#learn">Learn MIDI control</a></div>
     <div class="e"><a href="#lessons">Lessons</a></div>
+    <div class="e"><a href="#credits">Licences</a></div>
     <div class="e"><a href="#lfo">LFO</a></div>
     <div class="e"><a href="#limiter">Limiter</a></div>
     <div class="e"><a href="#lines">Lines</a></div>
@@ -918,6 +941,7 @@
     <div class="e"><a href="#mutate">Mutate</a></div>
     <div class="e"><a href="#mute">Mute, solo</a></div>
     <div class="letter">N</div>
+    <div class="e"><a href="#roll">New sound</a></div>
     <div class="e"><a href="#editing">Notes, editing</a></div>
     <div class="letter">O</div>
     <div class="e"><a href="#playing">On-screen keys</a></div>
@@ -938,7 +962,6 @@
     <div class="e"><a href="#resonance">Resonance</a></div>
     <div class="e"><a href="#shared">Reverb</a></div>
     <div class="e"><a href="#wrongnotes">Right wrong notes</a></div>
-    <div class="e"><a href="#roll">Roll new sound</a></div>
     <div class="letter">S</div>
     <div class="e"><a href="#library">Sample library, the list</a></div>
     <div class="e"><a href="#kit">Sampled kits</a></div>
@@ -1004,7 +1027,7 @@
 <!-- ======================= BACK COVER ======================= -->
 <section class="back">
   <img class="art" src="img/cover-wrap.jpg" alt="">
-  <div class="band b1"></div><div class="band b2"></div><div class="band b3"></div>
+  <img class="band" src="img/brass-band.svg" alt="">
   <div class="inner">
     <h1>Nachtzug</h1>
     <p>A sequencer and synthesiser for acid and Berlin School music, made for people who love music but never learned an instrument.</p>
@@ -1016,7 +1039,8 @@
       <li>Song timeline and live loop grid; a jam becomes a song</li>
     </ul>
   </div>
-  <div class="cat2">For Linux and macOS</div>
+  <div class="credit">Cover: Hans Baluschek, “Großstadtbahnhof”, 1904</div>
+  <div class="cat2">For Linux, macOS and Windows</div>
   <div class="cat">NZ · 001</div>
 </section>
 

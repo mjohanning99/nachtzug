@@ -1,10 +1,11 @@
 <header class="topbar">
-  <a class="brand" href="#top"><img src="{{ '/assets/img/logo.png' | relative_url }}" alt="" width="34" height="34"><span>Nachtzug</span></a>
-  <nav aria-label="On this page">
-    <a class="keycap" href="#journey"><span class="wide">What’s on board</span><span class="narrow" aria-hidden="true">On board</span></a>
-    <a class="keycap" href="#manual">Manual</a>
-    <a class="keycap" href="#faq">Questions</a>
-    <a class="keycap primary" href="#download">Download</a>
+  <a class="brand" href="{{ home }}#top"><img src="{{ '/assets/img/logo.png' | relative_url }}" alt="" width="34" height="34"><span>Nachtzug</span></a>
+  <nav aria-label="{{ t.nav.label }}">
+    <a class="keycap" href="{{ home }}#journey"><span class="wide">{{ t.nav.on_board }}</span><span class="narrow" aria-hidden="true">{{ t.nav.on_board_short }}</span></a>
+    <a class="keycap" href="{{ home }}#manual">{{ t.nav.manual }}</a>
+    <a class="keycap hide-narrow" href="{{ home }}#faq">{{ t.nav.questions }}</a>
+    <a class="keycap primary" href="{{ home }}#download">{{ t.nav.download }}</a>
   </nav>
-  <div class="ticker lcd-face" aria-hidden="true"><span class="ticker-text">ABFAHRT 22:58 · GLEIS 3 · NACHTZUG NACH BERLIN SCHOOL</span></div>
+  <div class="ticker lcd-face" aria-hidden="true" data-lines="{{ t.ticker | join: '|' | escape }}"><span class="ticker-text">{{ t.ticker[0] }}</span></div>
+  <a class="lang" href="{{ there | relative_url }}" hreflang="{{ t.other.code }}" title="{{ t.nav.language_label }}">{% if page.lang == 'en' %}<span class="keycap lit on" aria-hidden="true">EN</span><span class="keycap" lang="de">DE<span class="sr"> – {{ t.nav.language }}</span></span>{% else %}<span class="keycap" lang="en">EN<span class="sr"> – {{ t.nav.language }}</span></span><span class="keycap lit on" aria-hidden="true">DE</span>{% endif %}</a>
 </header>

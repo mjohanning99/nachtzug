@@ -1,0 +1,69 @@
+---
+layout: default
+lang: de
+other_url: "/licences.html"
+title: Lizenzen und Mitwirkende
+---
+<main id="top">
+<section class="paper legal credits">
+  <div class="col">
+    <h1>Lizenzen und Mitwirkende</h1>
+    <p>Nachtzug ist frei. Man darf es benutzen, weitergeben und verändern, ohne je fragen zu müssen. Diese Seite erklärt in einfachen Worten, was die Lizenzen erlauben, und nennt die Werke, mit denen Nachtzug gemacht ist; die Lizenztexte selbst stehen am Ende, und sie sind es, die gelten.</p>
+
+    <h2 id="music">Die Musik gehört dem, der sie macht</h2>
+    <p>Alles, was mit Nachtzug entsteht, gehört ganz und gar dem, der es macht: Songs, Patterns, Klänge und jede exportierte WAV- oder MIDI-Datei. Man darf es veröffentlichen, verkaufen, in einem Spiel oder Film verwenden, und Nachtzug muss dabei nicht genannt werden (aber ich würde mich freuen!).</p>
+    <p>Das gilt auch für die mitgelieferten Klänge. Die Klangbibliothek und die Demosongs sind ohne jede Bedingung verschenkt; man darf sie in der eigenen Musik verwenden, wie man möchte.</p>
+
+    <h2 id="which">Welche Lizenz wofür gilt</h2>
+    <table class="ltable">
+      <tr><th>Teil</th><th>Lizenz</th><th>Was das bedeutet</th></tr>
+      <tr><td>Das Programm, seine Werkzeuge, die Build-Dateien und der Code dieser Website</td><td><a href="#gpl">GNU GPL, Version 3 oder neuer</a></td><td>Man darf es für alles benutzen, weitergeben und verändern. Wer eine veränderte Fassung weitergibt, gibt auch ihren Quellcode weiter, unter derselben Lizenz. Niemand darf Nachtzug zu einem geschlossenen Programm machen.</td></tr>
+      <tr><td>Die Klangbibliothek und die Demosongs</td><td><a href="#cc0">CC0 1.0</a></td><td>Gemeinfrei: Man darf damit tun, was man möchte, ohne Nennung. Jeder Klang stammt von Nachtzugs eigenem Klangerzeuger; nichts ist aufgenommen oder irgendwoher kopiert.</td></tr>
+      <tr><td>Die Anleitungen, die Texte und Bilder dieser Website, die Bildschirmfotos</td><td><a href="#cc-by-sa">CC BY-SA 4.0</a></td><td>Teilen und Bearbeiten ist erlaubt, solange Nachtzug als Quelle genannt wird und die eigene Fassung unter derselben Lizenz bleibt. Ausgenommen ist das Titelbild: Es ist gemeinfrei (siehe unten).</td></tr>
+      <tr><td>Die Schriften</td><td><a href="#ofl">SIL Open Font License 1.1</a></td><td>Frei zu benutzen, zu verändern und weiterzugeben, aber nicht für sich allein zu verkaufen.</td></tr>
+    </table>
+
+    <h2 id="credits">Mitwirkende</h2>
+
+    <h3 id="painting">Das Titelbild</h3>
+    <p><b>Hans Baluschek</b> (1870–1935), „Großstadtbahnhof“, 1904. Baluschek hat Berlin und seine Eisenbahnen gemalt wie kein anderer, und dieser Bahnhof bei Einbruch der Nacht, die Lokomotiven dampfend unter den Lampen, ziert Nachtzug, seine Anleitungen und diese Website. Das Gemälde ist gemeinfrei.</p>
+    <p class="small">Die einzige auffindbare Kopie ist ein kleiner Scan einer gedruckten Reproduktion, auf <a href="https://commons.wikimedia.org/wiki/File:Hans_Baluschek_Gro%C3%9Fstadtbahnhof.jpg">Wikimedia Commons</a>. Für Nachtzug wurde das Druckraster entfernt, das Bild mit dem KI-Hochskalierer <a href="https://github.com/Phhofm/models">4xRealWebPhoto_v4_dat2</a> (Phhofm, CC BY 4.0) vergrößert und seine Farben ein wenig aufgefrischt. Die Skripte für jeden Schritt liegen in <code>tools/cover/</code>.</p>
+
+    <h3 id="fonts">Die Schriften</h3>
+    <table class="ltable">
+      <tr><th>Schrift</th><th>Lizenz</th></tr>
+      <tr><td>Nachtzug Antiqua, Grotesk, Initialen und Ornamente, unsere eigenen, basierend auf EB Garamond und Jost</td><td><a href="#ofl">SIL Open Font License 1.1</a></td></tr>
+      <tr><td><a href="https://github.com/indestructible-type/Jost">Jost</a> (indestructible type*)</td><td>SIL Open Font License 1.1</td></tr>
+      <tr><td><a href="https://github.com/octaviopardo/EBGaramond12">EB Garamond</a> (Georg Duffner, Octavio Pardo)</td><td>SIL Open Font License 1.1</td></tr>
+      <tr><td><a href="https://github.com/quoteunquoteapps/CourierPrime">Courier Prime</a> (Alan Dague-Greene)</td><td>SIL Open Font License 1.1</td></tr>
+      <tr><td>Auf dieser Website: <a href="https://www.datto.com/fonts/d-din">D-DIN</a> (Datto), die Schrift deutscher Bahnschilder (DIN 1451)</td><td>SIL Open Font License 1.1</td></tr>
+      <tr><td>In den Anleitungen außerdem <a href="https://github.com/Fonthausen/CrimsonPro">Crimson Pro</a>, <a href="https://github.com/jpt/barlow">Barlow</a> und <a href="https://github.com/googlefonts/Michroma-font">Michroma</a></td><td>SIL Open Font License 1.1</td></tr>
+    </table>
+
+    <h3 id="software">Die Software, auf der es aufbaut</h3>
+    <table class="ltable">
+      <tr><th>Teil</th><th>Wofür</th><th>Lizenz</th></tr>
+      <tr><td><a href="https://www.qt.io">Qt 6</a></td><td>Fenster, Bedienelemente, Text und Bilder</td><td><a href="#lgpl3">LGPL 3.0</a></td></tr>
+      <tr><td><a href="https://www.libsdl.org">SDL 2</a></td><td>die Soundkarte</td><td><a href="#zlib">zlib</a></td></tr>
+      <tr><td>ALSA (Linux), Core MIDI (macOS), WinMM (Windows)</td><td>MIDI</td><td>Teil des Systems; nicht mitgeliefert</td></tr>
+    </table>
+    <p><b>Im Linux-AppImage.</b> Das AppImage ist eine einzige Datei, die die Bibliotheken mitbringt, die Nachtzug braucht, entnommen aus Debian 13: neben Qt und SDL die X11-, XCB- und Wayland-Bibliotheken, xkbcommon, libdecor, PulseAudio, libsystemd, GLib, D-Bus, libcap, libffi, ICU, PCRE2, double-conversion, md4c, libb2, graphite2, libpng, libjpeg, zstd, Brotli, bzip2, libsndfile mit FLAC, Ogg, Vorbis, Opus, mpg123 und LAME, libsamplerate und die GCC-Laufzeit. Die meisten stehen unter der MIT-, BSD- oder zlib-Lizenz; Qt, GLib, PulseAudio, libsystemd, libsndfile, mpg123, LAME, graphite2 und libasyncns unter der LGPL (<a href="#lgpl21">2.1</a>, <a href="#lgpl3">3.0</a>). Die vollständige Lizenz jeder Bibliothek liegt im AppImage unter <code>usr/share/doc/nachtzug/third-party/</code>; ihr Quellcode ist der von Debian, auf <a href="https://sources.debian.org">sources.debian.org</a>.</p>
+    <p><b>In den Downloads für macOS und Windows.</b> Das Mac-Disk-Image und der Windows-Installer bringen ebenfalls Qt und SDL mit, dazu die Bibliotheken, die Qt braucht, entnommen aus <a href="https://brew.sh">Homebrew</a> und <a href="https://www.msys2.org">MSYS2</a>: darunter ICU, PCRE2, HarfBuzz, FreeType, libpng, libjpeg, zlib, zstd, Brotli, double-conversion, md4c, unter Windows GLib und die GCC- und MinGW-Laufzeit. Ihre Lizenzen liegen in jedem Download (auf dem Mac in <code>Nachtzug.app/Contents/Resources/licences/</code>, unter Windows im Ordner <code>licences</code>).</p>
+    <p class="small"><b>Eine Bibliothek ersetzen</b>, wie es die LGPL erlaubt: unter Linux das AppImage mit <code>--appimage-extract</code> entpacken, die Bibliothek in <code>squashfs-root/usr/lib/</code> austauschen und <code>squashfs-root/AppRun</code> starten; unter Windows die DLL in Nachtzugs Ordner austauschen; auf dem Mac in <code>Nachtzug.app/Contents/Frameworks/</code> austauschen und die App neu signieren (<code>codesign --force --deep --sign - Nachtzug.app</code>).</p>
+    <p>Vielen Dank an alle, die das geschaffen haben!</p>
+
+    <h2 id="copyright">Urheberrecht</h2>
+    <p>Copyright © 2026 Marvin Johanning. Das Programm ist freie Software: Es darf unter den Bedingungen der GNU General Public License, wie von der Free Software Foundation veröffentlicht, weitergegeben und verändert werden, entweder gemäß Version 3 der Lizenz oder (nach Wahl) jeder späteren Version. Es wird in der Hoffnung verbreitet, dass es nützlich ist, aber <b>ohne jede Gewährleistung</b>; sogar ohne die implizite Gewährleistung der Marktreife oder der Eignung für einen bestimmten Zweck.</p>
+
+    <h2 id="texts">Die Lizenztexte</h2>
+    <p class="small">Vollständig und im Original (englisch); ein Klick öffnet sie.</p>
+    {% include licence-text.html id="gpl" file="GPL-3.0.txt" title="GNU General Public License, Version 3" %}
+    {% include licence-text.html id="lgpl3" file="LGPL-3.0-only.txt" title="GNU Lesser General Public License, Version 3" %}
+    {% include licence-text.html id="lgpl21" file="LGPL-2.1-or-later.txt" title="GNU Lesser General Public License, Version 2.1" %}
+    {% include licence-text.html id="zlib" file="Zlib.txt" title="zlib-Lizenz" %}
+    {% include licence-text.html id="cc0" file="CC0-1.0.txt" title="Creative Commons Zero 1.0 (gemeinfrei)" %}
+    {% include licence-text.html id="cc-by-sa" file="CC-BY-SA-4.0.txt" title="Creative Commons Namensnennung – Weitergabe unter gleichen Bedingungen 4.0" %}
+    {% include licence-text.html id="ofl" file="OFL-1.1.txt" title="SIL Open Font License 1.1" %}
+  </div>
+</section>
+</main>

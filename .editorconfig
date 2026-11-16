@@ -1,0 +1,23 @@
+# Keeps editors in step with the project's style (AGENTS.md, "Code style"): tabs for indentation, spaces only to
+# line up a continued line, UTF-8, a newline at the end.
+root = true
+
+[*]
+indent_style = tab
+tab_width = 4
+charset = utf-8
+insert_final_newline = true
+max_line_length = 120
+
+# Markdown, YAML and the website's files keep spaces
+[*.{md,yml,yaml,html,scss,css,js,json}]
+indent_style = space
+indent_size = 2
+
+# the translation files are written by Qt's tools
+[*.ts]
+indent_style = unset
+
+# pictures are left as they are drawn
+[*.svg]
+indent_style = unset

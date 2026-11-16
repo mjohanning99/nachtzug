@@ -1,0 +1,6 @@
+{% comment %} One licence text in full, folded away: include.id (the anchor), include.file (in _includes/licences/,
+copied there by prepare.sh), include.title. {% endcomment %}{% capture text %}{% include licences/{{ include.file }} %}{% endcapture %}
+<details class="ltext" id="{{ include.id }}">
+  <summary>{{ include.title }}</summary>
+  <pre>{{ text | xml_escape }}</pre>
+</details>

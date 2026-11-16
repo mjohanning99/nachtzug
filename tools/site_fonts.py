@@ -15,7 +15,12 @@ F = os.path.join(ROOT, 'assets', 'fonts')
 M = os.path.join(ROOT, 'docs', 'manual', 'fonts')
 TEXT = ''.join(chr(c) for c in range(0x20, 0x7f)) + 'ÄÖÜäöüßéèàçñ' + '‘’‚“”„‹›«»–—…×−·•′″°§©®™€ ' + '♯♭♮←→↑↓↗↘▲▼▸▾■●▶' + '  '
 FONTS = [
-    (f'{F}/Jost-400.ttf', 'jost-400'), (f'{F}/Jost-500.ttf', 'jost-500'), (f'{F}/Jost-600.ttf', 'jost-600'),
+    # Nachtzug Grotesk (built on Jost, with its own z and the tz ligature): the name, the keys, every label
+    (f'{F}/nachtzug/NachtzugGrotesk-Regular.ttf', 'grotesk-400'), (f'{F}/nachtzug/NachtzugGrotesk-Medium.ttf', 'grotesk-500'),
+    (f'{F}/nachtzug/NachtzugGrotesk-SemiBold.ttf', 'grotesk-600'),
+    # D-DIN, the lettering of German railway signs (DIN 1451): the destination board, the timetable, the platform signs
+    (f'{F}/d-din/D-DIN.otf', 'din-400'), (f'{F}/d-din/D-DIN-Bold.otf', 'din-700'),
+    (f'{F}/d-din/D-DINCondensed.otf', 'din-condensed-400'), (f'{F}/d-din/D-DINCondensed-Bold.otf', 'din-condensed-700'),
     (f'{F}/CourierPrime-Regular.ttf', 'courier-400'), (f'{F}/CourierPrime-Bold.ttf', 'courier-700'),
     (f'{F}/nachtzug/NachtzugAntiqua-Regular.ttf', 'antiqua-400'), (f'{F}/nachtzug/NachtzugAntiqua-Bold.ttf', 'antiqua-700'),
     (f'{M}/EBGaramond-Italic-440.ttf', 'antiqua-italic'),

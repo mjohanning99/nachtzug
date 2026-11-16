@@ -1,18 +1,25 @@
+{% comment %} The footer, as the manual's back cover: the painting, the bands, the brown; then the link columns. {% endcomment %}
 <footer class="foot">
   <div class="strip" aria-hidden="true"><img src="{{ '/assets/img/cover-art-1200.jpg' | relative_url }}" srcset="{{ '/assets/img/cover-art-1200.jpg' | relative_url }} 1200w, {{ '/assets/img/cover-art-2400.jpg' | relative_url }} 2400w" sizes="100vw" alt="" loading="lazy"></div>
-  <div class="bands" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div class="bands" aria-hidden="true"></div>
   <div class="inner">
-    <div>
-      <p class="word">Gute Fahrt!</p>
-      <p class="sub">Have a good journey.</p>
-      <ul class="links">
-        <li><a href="{{ '/downloads/Nachtzug-Manual.pdf' | relative_url }}">Operation manual</a></li>
-        <li><a href="{{ '/downloads/Nachtzug-Handbuch.pdf' | relative_url }}" hreflang="de" lang="de">Bedienungsanleitung</a></li>
-        <li><a href="#download">Download</a></li>
-        <li><a href="#top">Back to the platform ↑</a></li>
-      </ul>
+    <div class="about">
+      <p class="word" lang="de">{{ t.footer.word }}</p>
+      <p class="sub" lang="en">{{ t.footer.sub }}</p>
+      <p class="made">{{ t.footer.about }}</p>
+      <p class="back"><a href="#top">{{ t.nav.back }}</a></p>
     </div>
-    <p class="licence">Nachtzug is made by Marvin Johanning, for everyone who loves music but can’t play the keyboard. It’s free software under the GNU GPL; the music you make with it is yours. The sounds are in the public domain, the manuals and pictures under CC&nbsp;BY-SA&nbsp;4.0, and the fonts are Nachtzug’s own, under the SIL Open Font License. The cover painting and train pictures were made with AI image tools from our own sketches and photo references.</p>
-    <p class="cat"><span>Nachtzug · Sequencer · Synthesiser</span><span>NZ · 001</span></p>
+    {% for c in t.footer.columns %}
+    <nav class="column" aria-label="{{ c.title }}">
+      <p class="title">{{ c.title }}</p>
+      <ul>
+        {% for l in c.links %}
+        {% if l.file %}{% assign href = '/downloads/' | append: l.file | relative_url %}{% elsif l.page %}{% assign href = l.page | relative_url %}{% elsif l.repo %}{% assign href = site.repo | append: l.repo %}{% elsif l.url %}{% assign href = l.url %}{% else %}{% assign href = home | append: l.href %}{% endif %}
+        <li><a href="{{ href }}"{% if l.lang %} hreflang="{{ l.lang }}" lang="{{ l.lang }}"{% endif %}>{{ l.label }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+    {% endfor %}
+    <p class="cat"><span>{{ t.footer.line }}</span><span>NZ · 001</span></p>
   </div>
 </footer>

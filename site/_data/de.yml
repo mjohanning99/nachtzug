@@ -1,0 +1,157 @@
+# Jedes Wort der deutschen Seite. Die gleichen Schlüssel in der gleichen Reihenfolge wie en.yml:
+# was dort geändert wird, gehört auch hierher. Die Seite spricht unpersönlich (Passiv, „man“, Infinitiv), wie das
+# Programm und die Bedienungsanleitung: nie „du“ oder „Sie“.
+lang: de
+other: { code: en, name: "English", url: "/" }
+title: "Nachtzug"
+description: "Nachtzug ist eine für Anfänger gedachte DAW, die es ermöglicht, elektronische Musik, z. B. im Stil der Berliner Schule, ohne große Vorkenntnisse zu erstellen."
+og_image_alt: "Das Emailleschild von Nachtzug unter Hans Baluscheks Gemälde eines Großstadtbahnhofs bei Nacht"
+ticker: ["ABFAHRT 22:58 · GLEIS 3 · NACHTZUG NACH BERLINER SCHULE", "JEDE NOTE LIEGT IN DER TONLEITER · NICHTS KLINGT FALSCH", "NÄCHSTER HALT: ACID-KREUZ · VORSICHT, ES QUIETSCHT", "UMSCHALT HALTEN FÜR DIE RICHTIGEN FALSCHEN TÖNE", "DER DRUMMER WIRD NIE MÜDE"]
+
+nav:
+  on_board: "An Bord"
+  on_board_short: "An Bord"
+  manual: "Anleitung"
+  download: "Download"
+  questions: "Fragen"
+  label: "Auf dieser Seite"
+  language: "English"
+  language_label: "This page in English"
+  back: "Zurück zum Bahnsteig ↑"
+
+hero:
+  lead: "Nachtzug ist eine für Anfänger gedachte DAW – Digital Audio Workstation –, die es ermöglicht, elektronische Musik, z. B. im Stil der Berliner Schule, ohne große Vorkenntnisse zu erstellen. Auch ist es nicht nötig, sich mit Musiktheorie auszukennen. Denn: Nachtzug ist so aufgebaut, dass alle Noten automatisch in der korrekten Tonleiter landen."
+  cta: "Einsteigen, bitte!"
+  cta_sub: "Nachtzug herunterladen, kostenlos"
+  cta_for: "Für %system%, kostenlos"   # when the page knows your computer (site.js)
+  video_label: "Nachtzug spielt seinen Demosong: das Display zählt die Takte, die Pegelanzeigen bewegen sich und der Abspielkopf läuft über die Zeitleiste"
+  caption: "Der Demosong läuft: acht Sekunden, ohne Ton."
+
+board: { platform: "Gleis", number: "3", train: "Nachtzug", to: "nach Berliner Schule", departure: "Abfahrt", time: "22 58", label: "Gleis 3: Nachtzug nach Berliner Schule, Abfahrt 22:58" }
+timetable: { title: "Abfahrt", sub: "Nachtzug, Gleis 3", station: "Nachtzug Hbf", valid: "gültig ab", time: "Zeit", train: "Zug", stop: "Halt · was an Bord ist", platform: "Gleis", legend: "Hbf = Hauptbahnhof · Gbf = Güterbahnhof" }
+
+stations_title: "Fahrplan · An Bord"
+stations_heading: "Eine Nachtfahrt mit Nachtzug"
+stations_intro: "Jeder Halt ist ein Teil des Programms, in der Reihenfolge, in der man ihnen begegnet."
+
+stations:
+  - { time: "22:58", stop: "Tastenkreuz Hbf", icon: keys, title: "Auf der Tastatur mitspielen", short: "Drei Reihen Buchstabentasten spielen drei Oktaven, jede Taste eine Note der Tonleiter des Songs." }
+  - { time: "23:06", stop: "Ideenfeld Ost", icon: idea, title: "Ideen auf Knopfdruck", short: "<b>Neue Idee</b> schreibt eine Acid-Linie, eine Sequenz der Berliner Schule, Akkorde oder einen Beat; <b>Variieren</b> ändert ein, zwei Noten." }
+  - { time: "23:14", stop: "Trommlers Ruh Süd", icon: drum, title: "Ein unermüdlicher Drummer", short: "Stil und Spielstärke wählen – Fills spielt er von selbst." }
+  - { time: "23:21", stop: "Reglerstraße West", icon: knob, title: "Ein echter Synthesizer", short: "Auf jeder Spur, mit Live-Bildern von jedem Regler – oder eine Seite <b>Einfach</b> mit acht großen Reglern." }
+  - { time: "23:40", stop: "Loops Abstellbahnhof", icon: grid, title: "Jammen wie in einem Live-Set", short: "Patterns starten und stoppen, während es spielt; jede Änderung wartet auf den nächsten Takt." }
+  - { time: "23:52", stop: "Arrangement-Viadukt Nord", icon: arrange, title: "Vom Loop zum Song", short: "Die Clips lassen sich von Hand anlegen, oder <b>Arrangieren</b> macht ein Intro, einen Aufbau, einen Break und ein Ende." }
+  - { time: "00:15", stop: "Sample Gbf", icon: wave, title: "Eigene Klänge", short: "65 Klänge, eigens für Nachtzug gemacht, neun davon aus einem Nachtzug, eigene Samples oder ein zerlegter Drumloop." }
+  - { time: "00:51", stop: "Berliner Schule Hbf", icon: export, title: "Zum Mitnehmen", short: "Export als WAV, eine Datei pro Spur oder MIDI. MIDI-Keyboards, Regler und Clock funktionieren alle." }
+
+gallery:
+  - { img: notes.png, wide: true, title: "Die Noten", text: "Ein Raster, in dem jede Zeile eine Note der Tonleiter ist; der Inspektor links hält den Klang der Spur griffbereit.", alt: "Das Notenraster mit einer Basslinie, links der Inspektor, darüber die Zeitleiste" }
+  - { img: sound.png, title: "Der Sound", text: "Oszillatoren, Filter, Hüllkurven und Effekte, in der Reihenfolge, in der der Klang fließt.", alt: "Der Reiter Sound: Oszillatoren, Filter, Hüllkurven und Effekte" }
+  - { img: mixer.png, title: "Der Mixer", text: "Lautstärke, Panorama, Echo, Hall und Pumpen für jede Spur, mit Anzeigen, die zeigen, wann es zu laut wird.", alt: "Der Mixer mit einem Kanal pro Spur" }
+  - { img: loops.png, wide: true, title: "Das Loopraster", text: "Eine Reihe Patterns für jede Spur, zum Ein- und Ausschalten wie bei einem Live-Set.", alt: "Das Loopraster: Reihen von Patterns, eine Reihe pro Spur" }
+
+more_title: "Außerdem an Bord"
+more:
+  - { icon: lesson, title: "Fünf Lektionen", short: "Führen Schritt für Schritt durch das echte Programm." }
+  - { icon: undo, title: "Nichts geht kaputt", short: "Jede Änderung lässt sich rückgängig machen, und für den Fall eines Absturzes liegt eine Ersatzkopie bereit." }
+  - { icon: palette, title: "Sechs Farbschemata", short: "Von Bakelit, dem warmen Emaille hier, bis Glut für späte Nächte." }
+  - { icon: book, title: "Ein gedrucktes Handbuch", short: "Ein A5-Heft mit Bildern, Klangrezepten und Patchbögen, auf Deutsch und Englisch." }
+
+manual_title: "Bordbuch · Die Anleitung"
+manual_heading: "Eine Bedienungsanleitung, wie sie sein soll"
+manual_text: "Zu Nachtzug gehört eine richtige gedruckte Anleitung, wie bei alten Synthesizern: ein A5-Heft mit Bildern von jedem Teil, Klangrezepten, Patchbögen zum Ausfüllen, einer Tabelle aller Tasten und einem Register. Im Programm öffnet <span class=\"key\">F1</span> eine kurze Hilfe, und fast jeder Knopf und Regler erklärt sich selbst, wenn die Maus kurz darauf ruht."
+manual_en: "Operation manual"
+manual_de: "Bedienungsanleitung"
+manual_en_alt: "The cover of the English operation manual"
+manual_de_alt: "Der Umschlag der deutschen Bedienungsanleitung"
+
+download_title: "Fahrkarten · Download"
+download_heading: "Die Fahrkarten, bitte"
+download_intro: "Alle kostenlos. Die Programme sind nicht von Apple oder Microsoft signiert, deshalb fragt der Computer beim ersten Öffnen nach, ob man ihnen vertraut; auf der Fahrkarte steht, was dann zu drücken ist."
+your_ticket: "Für diesen Computer"
+ticket_from: "Dieser Computer"
+ticket_via: "nach"
+ticket_to: "Berliner Schule"
+ticket_fare: "Freifahrt"
+ticket_valid: "Gültig für"
+ticket_download: "Herunterladen"
+ticket_build: "Selbst bauen"
+ticket_aria: "Eine %colour% Edmondson-Fahrkarte %class% Klasse von diesem Computer nach Berliner Schule, Nummer %nr%"
+ticket_colours: { first: "grüne", second: "braune", white: "weiße", striped: "braune, rot gestreifte" }
+ticket_class: { "1": "erster", "2": "zweiter" }
+tickets:
+  - { id: linux, system: Linux, what: "AppImage, eine Datei", file: Nachtzug-x86_64.AppImage, class: "1", colour: first, card: "Linux · AppImage",
+      valid: "64-Bit-PCs · Distributionen ab 2025",
+      how: "Die Datei ausführbar machen (Rechtsklick → Eigenschaften → Ausführen erlauben, oder <code>chmod +x Nachtzug-x86_64.AppImage</code>) und doppelt darauf klicken. Installiert wird nichts." }
+  - { id: mac, system: macOS, what: "ein Disk-Image", file: Nachtzug-macOS.dmg, class: "2", colour: second, card: "macOS · Disk-Image",
+      valid: "Apple Silicon · macOS 15 Sequoia oder neuer",
+      how: "Nachtzug in den Ordner Programme ziehen. Beim ersten Mal bei der Warnung auf <b>Fertig</b> klicken, dann in den Systemeinstellungen unter Datenschutz &amp; Sicherheit auf <b>Trotzdem öffnen</b>." }
+  - { id: windows, system: Windows, what: "ein Installationsprogramm", file: Nachtzug-Windows-Setup.exe, class: "2", colour: white, card: "Windows · Installer",
+      valid: "Windows 10 und 11 · 64 Bit",
+      how: "Das Installationsprogramm starten; warnt Windows vor einem unbekannten Herausgeber, <b>Weitere Informationen</b> und dann <b>Trotzdem ausführen</b> wählen. Die jüngste der drei Fassungen: Wenn etwas nicht klappt, freue ich mich über <a href=\"https://github.com/mjohanning99/nachtzug/issues\">eine Nachricht</a>." }
+  - { id: source, system: "Quellcode", what: "für Bastler", file: Nachtzug-source.tar.gz, class: "2", colour: striped, card: "Quellcode · C++20",
+      valid: "Linux, macOS, Windows · <span class=\"nw\">C++20</span>, Qt 6, SDL2",
+      how: "Eine Handvoll Befehle, und der allerneueste Nachtzug läuft; wie, steht in der README darin." }
+
+build_heading: "Nachtzug selbst bauen"
+build_intro: "Kein Grund zur Sorge: Es ist eine Handvoll Befehle, und das Ganze ist nur einmal nötig."
+build:
+  - label: "Unter Linux"
+    html: "<p>Zuerst die Werkzeuge installieren. Unter Arch:</p><pre><code>sudo pacman -S --needed base-devel cmake qt6-base qt6-tools sdl2 alsa-lib git</code></pre><p>Unter Debian oder Ubuntu:</p><pre><code>sudo apt install build-essential cmake qt6-base-dev qt6-tools-dev qt6-l10n-tools libsdl2-dev libasound2-dev git</code></pre><p>Dann den Quellcode auspacken und in seinem Ordner diese beiden Befehle ausführen:</p><pre><code>cmake -B build\ncmake --build build -j</code></pre><p><code>./build/nachtzug</code> startet das Programm.</p>"
+  - label: "Auf dem Mac"
+    html: "<p>Apples Befehlszeilenwerkzeuge (<code>xcode-select --install</code>) und <a href=\"https://brew.sh\">Homebrew</a> installieren, dann den Quellcode auspacken und in seinem Ordner dies ausführen:</p><pre><code>tools/build-macos.sh</code></pre><p>Es installiert alles Weitere, baut das Programm und packt es in ein Disk-Image.</p>"
+  - label: "Unter Windows"
+    html: "<p><a href=\"https://www.msys2.org\">MSYS2</a> installieren, aus dem Startmenü das Terminal <b>MSYS2 UCRT64</b> öffnen, dann den Quellcode auspacken und in seinem Ordner dies ausführen:</p><pre><code>tools/build-windows.sh</code></pre><p>Es installiert den Compiler und alles Weitere, baut Nachtzug und macht daraus ein Installationsprogramm (wenn <a href=\"https://jrsoftware.org/isinfo.php\">Inno Setup</a> installiert ist) oder ein Zip.</p>"
+
+licence_title: "Beförderungsbedingungen · Lizenz"
+licence_heading: "Freifahrt ohne Kleingedrucktes"
+licence_intro: "Nachtzug ist frei: Man darf es benutzen, weitergeben und verändern, ohne zu fragen. Die Musik, die damit entsteht, gehört ganz und gar dem, der sie macht."
+licences:
+  - { icon: music, title: "Die Musik gehört dem, der sie macht", text: "Songs, Klänge und Exporte dürfen veröffentlicht, verkauft oder in einem Film verwendet werden. Nachtzug muss dabei nicht genannt werden, aber ich würde mich freuen." }
+  - { icon: code, title: "Freie Software", text: "Das Programm steht unter der GNU GPL, Version 3 oder neuer: Man darf es benutzen, verändern und mit seinem Quellcode weitergeben.", link: "gpl" }
+  - { icon: wave, title: "Klänge für alle", text: "Jeder Klang und jeder Demosong ist gemeinfrei (CC0), gemacht von Nachtzugs eigenem Klangerzeuger.", link: "cc0" }
+  - { icon: book, title: "Anleitungen und Bilder", text: "Unter CC BY-SA 4.0: Teilen und Bearbeiten erlaubt, mit Nennung von Nachtzug. Das Titelbild, Hans Baluscheks „Großstadtbahnhof“ (1904), ist gemeinfrei.", link: "cc-by-sa" }
+  - { icon: type, title: "Nachtzugs eigene Schrift", text: "Antiqua, Grotesk, Initialen und Ornamente, basierend auf EB Garamond und Jost, unter der SIL Open Font License.", link: "ofl" }
+licence_page: "/de/lizenzen.html"
+licence_read: "Öffnen"
+licence_buttons:
+  - { label: "Die Lizenzen in einfachen Worten", page: "#top" }
+  - { label: "Mitwirkende: wer was gemacht hat", page: "#credits" }
+  - { label: "Der Quellcode" }
+
+faq_title: "Fahrgastinformation · Fragen"
+faq_heading: "Vor dem Einsteigen"
+faq:
+  - q: "Muss man Keyboard spielen können?"
+    a: "Überhaupt nicht. Genau darum geht es. Jede Taste und jede Zeile des Notenrasters ist eine Note aus der Tonleiter des Songs, deshalb kann nichts falsch klingen. Und wer ein wenig Spannung möchte, hält <span class=\"key\">Umschalt</span> gedrückt: für die „richtigen falschen Töne“."
+  - q: "Was kostet es?"
+    a: "Nichts, und das bleibt so. Nachtzug ist freie Software unter der GNU GPL: Es darf benutzt, weitergegeben und verändert werden. Die Musik, die damit entsteht, gehört ganz dem, der sie macht, und die eingebauten Klänge sind gemeinfrei."
+  - q: "Braucht man Musiktheorie?"
+    a: "Nein. Tonart und Tonleiter werden aus einer Liste gewählt („a-Moll“ ist ein guter Anfang), und Nachtzug macht den Rest: die Akkorde, welche Noten passen, und Ideen, wenn man nicht weiterweiß. Ein bisschen Theorie lernt man nebenbei, ohne es zu merken."
+  - q: "Auf welchen Computern läuft es?"
+    a: "Linux, macOS und Windows. Unter Linux läuft das AppImage auf Distributionen ab 2025 (Debian 13, Ubuntu 25.04, Fedora 42, Arch, CachyOS und Verwandte); auf älteren lässt es sich in etwa zehn Minuten selbst bauen. Die Mac-Fassung braucht Apple Silicon und macOS 15 Sequoia oder neuer, die Windows-Fassung Windows 10 oder 11. Windows ist die jüngste; wenn sich dort etwas seltsam verhält, freue ich mich über eine Nachricht."
+  - q: "Funktionieren MIDI-Keyboards und Controller?"
+    a: "Ja. Ein MIDI-Keyboard spielt die nächstgelegene Note der Tonleiter, kräftige Anschläge werden betont, und jeder Regler in Nachtzug kann einen Regler am Controller lernen. Nachtzug kann auch einer MIDI-Clock folgen."
+  - q: "Lässt sich die Musik in ein anderes Programm mitnehmen?"
+    a: "Natürlich. Der Song lässt sich als WAV-Datei exportieren, als eine WAV-Datei pro Spur oder als MIDI-Datei mit jeder Note genau so, wie sie klingt, Arpeggios eingeschlossen."
+  - q: "Gibt es Nachtzug auch auf Englisch?"
+    a: "Yes! Das Programm spricht Deutsch und Englisch, die Anleitung gibt es in beiden Sprachen, und diese Seite gibt es auch <a href=\"%base%/\" hreflang=\"en\">auf Englisch</a>."
+  - q: "Ist der Song weg, wenn etwas abstürzt?"
+    a: "Keine Sorge. Jede Änderung lässt sich rückgängig machen, und Nachtzug bewahrt still eine Ersatzkopie des Songs auf, die beim nächsten Start angeboten wird."
+  - q: "Wo werden die Songs gespeichert?"
+    a: "Wo immer man sie speichert, als <code>.nachtzug</code>-Dateien. Darin steht einfacher Text (JSON), deshalb sind sie klein und lassen sich auch in vielen Jahren noch öffnen."
+
+footer:
+  word: "Gute Fahrt!"
+  sub: "Have a good journey."
+  about: "Nachtzug ist von Marvin Johanning, für alle, die Musik lieben, aber nicht Keyboard spielen können."
+  columns:
+    - title: "Nachtzug"
+      links: [ { label: "An Bord", href: "#journey" }, { label: "Download", href: "#download" }, { label: "Fragen", href: "#faq" } ]
+    - title: "Zum Lesen"
+      links: [ { label: "Bedienungsanleitung", file: "Nachtzug-Handbuch.pdf" }, { label: "Operation manual", file: "Nachtzug-Manual.pdf", lang: en }, { label: "Selbst bauen", href: "#readme" } ]
+    - title: "Offen"
+      links: [ { label: "Lizenzen und Mitwirkende", page: "/de/lizenzen.html" }, { label: "Quellcode", repo: "" }, { label: "Änderungen", repo: "/blob/main/CHANGELOG.md" } ]
+    - title: "Über"
+      links: [ { label: "Impressum", page: "/impressum.html" }, { label: "Datenschutz", page: "/datenschutz.html" }, { label: "marvinjohanning.de", url: "https://marvinjohanning.de" } ]
+  line: "© 2026 Marvin Johanning · das Programm unter der GNU GPL, die Klänge gemeinfrei, die Anleitungen und Bilder unter CC BY-SA 4.0"

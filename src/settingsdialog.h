@@ -10,58 +10,63 @@ class QTreeWidget;
 class QTreeWidgetItem;
 class QPushButton;
 class QTabWidget;
-class QCheckBox;
+class Switch;
 
 class SettingsDialog : public QDialog {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    // what the main window does when a setting changes
-    struct Hooks {
-        std::function<void(int)> theme;          // colour scheme index
-        std::function<void(bool)> simpleSound;   // the Sound tab shows the simple page
-        std::function<void(bool)> pads;          // on-screen keys under the notes
-        std::function<void()> restart;           // start the program again (asks to save first)
-    };
-    SettingsDialog(App* app, const Hooks& hooks, QWidget* parent, int page = 0);
-    enum Page { General, Audio, Samples, MidiPage };
+	// what the main window does when a setting changes
+	struct Hooks {
+		std::function<void(int)> theme;        // colour scheme index
+		std::function<void(bool)> simpleSound; // the Sound tab shows the simple page
+		std::function<void(bool)> pads;        // on-screen keys under the notes
+		std::function<void()> restart;         // start the program again (asks to save first)
+		std::function<void(bool)> scrollBars;  // the window's scroll bars shown
+		std::function<void(bool)> keys;        // keys show their symbols alone
+		std::function<void(bool)> timelineTop; // the timeline above the tabs, not beside them
+	};
+	SettingsDialog(App* app, const Hooks& hooks, QWidget* parent, int page = 0);
+	enum Page { General, Audio, Samples, MidiPage };
+
 private:
-    QWidget* generalPage();
-    QWidget* audioPage();
-    QWidget* samplesPage();
-    QWidget* midiPage();
-    void fillAudio();
-    void applyAudio();
-    void fillSamples(const QString& select = QString());
-    QString currentSample() const;
-    App* app;
-    Hooks hooks;
-    QTabWidget* tabs;
-    QComboBox *driver, *output, *rate, *buffer, *input;
-    QLabel* audioState;
-    QTreeWidget* sampleList;
-    QPushButton *playBtn, *renameBtn, *removeBtn, *chopBtn;
-    bool filling = false;
+	QWidget* generalPage();
+	QWidget* audioPage();
+	QWidget* samplesPage();
+	QWidget* midiPage();
+	void fillAudio();
+	void applyAudio();
+	void fillSamples(const QString& select = QString());
+	QString currentSample() const;
+	App* app;
+	Hooks hooks;
+	QTabWidget* tabs;
+	QComboBox *driver, *output, *rate, *buffer, *input;
+	QLabel* audioState;
+	QTreeWidget* sampleList;
+	QPushButton *playBtn, *renameBtn, *removeBtn, *chopBtn;
+	bool filling = false;
 };
 
 // Records a sample from the sound card's input into the library.
 class RecordDialog : public QDialog {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    RecordDialog(App* app, QWidget* parent);
-    QString savedName() const { return saved; }
+	RecordDialog(App* app, QWidget* parent);
+	QString savedName() const { return saved; }
+
 private:
-    void start();
-    void stop();
-    void save();
-    App* app;
-    QComboBox* input;
-    QPushButton *recBtn, *saveBtn;
-    QCheckBox* trim;
-    class QLineEdit* name;
-    QLabel *timeLabel, *hint;
-    class LevelBar* level;
-    std::vector<float> take;
-    int takeRate = 48000;
-    bool recording = false;
-    QString saved;
+	void start();
+	void stop();
+	void save();
+	App* app;
+	QComboBox* input;
+	QPushButton *recBtn, *saveBtn;
+	Switch* trim;
+	class QLineEdit* name;
+	QLabel *timeLabel, *hint;
+	class LevelBar* level;
+	std::vector<float> take;
+	int takeRate = 48000;
+	bool recording = false;
+	QString saved;
 };

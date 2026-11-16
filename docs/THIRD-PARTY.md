@@ -17,6 +17,7 @@ Nachtzug is built with other people’s free software. This page lists it, with 
 | Nachtzug Antiqua, Initialen, Ornamente and Grotesk (our own, built on EB Garamond and Jost) | SIL Open Font License 1.1 (`assets/fonts/nachtzug/OFL.txt`) |
 | [Jost](https://github.com/indestructible-type/Jost) | SIL Open Font License 1.1 (`assets/fonts/OFL-Jost.txt`) |
 | [Courier Prime](https://github.com/quoteunquoteapps/CourierPrime) | SIL Open Font License 1.1 (`assets/fonts/OFL-CourierPrime.txt`) |
+| [D-DIN](https://www.datto.com/fonts/d-din) (Datto), on the website: the lettering of German railway signs (DIN 1451) | SIL Open Font License 1.1 (`assets/fonts/d-din/OFL.txt`) |
 | In the manuals also [EB Garamond](https://github.com/octaviopardo/EBGaramond12) italic, [Crimson Pro](https://github.com/Fonthausen/CrimsonPro), [Barlow](https://github.com/jpt/barlow) and [Michroma](https://github.com/googlefonts/Michroma-font) | SIL Open Font License 1.1 (`docs/manual/fonts/OFL-*.txt`) |
 
 ## In the Linux AppImage
@@ -37,4 +38,4 @@ The Mac disk image and the Windows installer carry Qt and SDL too (SDL 2 as a sm
 
 ## The pictures
 
-The cover painting and the train pictures were made with [Z-Image Turbo](https://huggingface.co/Tongyi-MAI/Z-Image-Turbo) (Apache 2.0) and [FLUX 3 Image Klein](https://huggingface.co/black-forest-labs/flux-3-image-klein) (FLUX Kommunity License) from our own sketches, scenes and photo references, and chosen and edited by hand. Neither model claims any rights to the pictures.
+The cover painting is Hans Baluschek’s “Großstadtbahnhof” (1904), in the public domain, from [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Hans_Baluschek_Gro%C3%9Fstadtbahnhof.jpg); the printer’s halftone screen was taken out, it was enlarged with [4xRealWebPhoto_v4_dat2](https://github.com/Phhofm/models) (Phhofm, CC BY 4.0) and its colours were freshened a little, see `tools/cover/`.

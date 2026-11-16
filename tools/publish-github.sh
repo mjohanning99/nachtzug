@@ -8,13 +8,14 @@
 # clone of the public repository (in ~/.cache/nachtzug-github unless NACHTZUG_PUBLIC says otherwise), commits them
 # as "Version 0.1.0", tags v0.1.0 and pushes. The tag starts the AppImage build and the release on GitHub
 # (.github/workflows/release.yml); the push to main rebuilds the website (pages.yml). Needs git and the GitHub CLI,
-# logged in as mjohanning99. Everything private (the Forgejo workflows, the history) stays here.
+# logged in as mjohanning99. Everything private (RELEASING.md, CLAUDE.md, the Forgejo workflows, the history) stays
+# here.
 set -eu
 VERSION=${1:?which version? e.g. tools/publish-github.sh 0.1.0}
 REPO=mjohanning99/nachtzug
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 PUB=${NACHTZUG_PUBLIC:-$HOME/.cache/nachtzug-github}
-FILES=".github .gitignore CHANGELOG.md CMakeLists.txt LICENSE LICENSES LICENSING.md README.md assets docs i18n site src tools"
+FILES=".clang-format .editorconfig .github .gitignore AGENTS.md CHANGELOG.md CMakeLists.txt LICENSE LICENSES LICENSING.md README.md assets docs i18n site src tools"
 
 [ -z "$(git -C "$ROOT" status --porcelain)" ] || { echo "Commit everything first: the last commit is what gets published."; exit 1; }
 grep -q "^## $VERSION " "$ROOT/CHANGELOG.md" || { echo "CHANGELOG.md has no section \"## $VERSION\" yet."; exit 1; }

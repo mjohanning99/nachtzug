@@ -13,25 +13,25 @@ class QSpinBox;
 struct RenderOptions;
 
 class ExportDialog : public QDialog {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    explicit ExportDialog(App* app, QWidget* parent);
-    static void run(App* app, QWidget* parent);   // the whole export, from asking to the finished window
+	explicit ExportDialog(App* app, QWidget* parent);
+	static void run(App* app, QWidget* parent); // the whole export, from asking to the finished window
 private:
-    enum Kind { Wav, Stems, Midi };
-    RenderOptions options() const;
-    Kind kind() const;
-    void updateInfo();
-    void choosePath();
-    void kindChanged();
-    QString baseName() const;
-    App* app;
-    QButtonGroup *format, *what, *ending;
-    QWidget *endingBox, *qualityBox;
-    QLabel *endingCap, *qualityCap, *head;
-    QString lastDir;
-    QSpinBox* repeats;
-    QComboBox* quality;
-    QLineEdit* path;
-    QLabel *info, *wholeText, *loopText;
+	enum Kind { Wav, Stems, Midi };
+	RenderOptions options() const;
+	Kind kind() const;
+	void updateInfo();
+	void choosePath();
+	void kindChanged();
+	QString baseName() const;
+	App* app;
+	QButtonGroup *format, *what, *ending;
+	QWidget *endingBox, *qualityBox;
+	QLabel *endingCap, *qualityCap, *head;
+	QString lastDir;
+	QSpinBox* repeats;
+	QComboBox* quality;
+	QLineEdit* path;
+	QLabel *info, *wholeText, *loopText;
 };

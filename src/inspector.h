@@ -14,23 +14,27 @@ class QVBoxLayout;
 class SoundPanel;
 
 class Inspector : public QScrollArea {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    Inspector(App* app, SoundPanel* sound, EditorPanel* editor, QWidget* parent = nullptr);
-    void adopt(bool on);   // take the How notes and drummer sections in (on), or give them back to their tabs
-    QSize sizeHint() const override { return {300, 600}; }
-signals:
-    void hideRequested();
-public slots:
-    void sync();
+	Inspector(App* app, SoundPanel* sound, EditorPanel* editor, QWidget* parent = nullptr);
+	void adopt(bool on); // take the How notes and drummer sections in (on), or give them back to their tabs
+
 private:
-    App* app;
-    SoundPanel* sound;
-    EditorPanel* editor;
-    QVBoxLayout* col;
-    QLabel* head;
-    QSlider* volume;
-    Knob *pan, *echo, *reverb, *pump;
-    QPushButton *mute, *solo;
-    bool adopted = false;
+	void alignForms(); // the label columns of the sections above each other, one width, so their boxes line up
+	QSize sizeHint() const override { return {300, 600}; }
+signals:
+	void hideRequested();
+public slots:
+	void sync();
+
+private:
+	App* app;
+	SoundPanel* sound;
+	EditorPanel* editor;
+	QVBoxLayout* col;
+	QLabel* head;
+	QSlider* volume;
+	Knob *pan, *echo, *reverb, *pump;
+	QPushButton *mute, *solo;
+	bool adopted = false;
 };
