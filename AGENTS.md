@@ -100,16 +100,24 @@ The words are as much a part of Nachtzug as the code.
   (‘ ’ “ ”, and „ “ in German), apostrophes (’), en dashes for ranges and breaks (–), … for an ellipsis, × for
   dimensions and multiplication, ♯ and ♭ in note names, and a narrow no-break space (U+202F) in “z. B.” and between
   a number and its unit.
-- **German**: the program speaks to the person as “du”. The German manual is impersonal (passive voice or “man”),
-  like a classic operation manual.
+- **German**: impersonal everywhere, in the program, the manual and the website: passive voice, “man” or an
+  infinitive, never “du” or “Sie”, like a classic operation manual.
 - **Every text in the code is translatable**: `tr("…")`, or `QCoreApplication::translate()` outside a QObject. After
   changing texts, run `cmake --build build --target update_translations` and translate the new entries in
   `i18n/nachtzug_de.ts`; leave no entry unfinished.
 
 ## Looks
 
-- **Type**: the program’s own interface is set in **Nachtzug Grotesk** throughout. The manual, the website and the
-  logo use **Nachtzug Antiqua**, with the Initialen for drop caps. The fonts are built by the scripts in
+**Read [docs/design-language.md](docs/design-language.md) before you change or add anything that shows on screen.**
+It sets out the philosophy, the colours of every theme, the typefaces, radii, spacing and every component with its
+object name and states, with a checklist for new work; [docs/design-language.png](docs/design-language.png) shows it
+on one page. Build new screens from the parts it lists, and any change to the look starts as mockups for the owner
+to choose from.
+
+- **Type**: the program’s own interface is set in **Nachtzug Grotesk** (in the Bakelite look; see the design
+  language’s open questions for the other themes). The manual, the website and the logo use **Nachtzug Antiqua**,
+  with the Initialen for drop caps. The name “Nachtzug” is set in the Grotesk with its tz ligature and never
+  letter-spaced, as spacing switches ligatures off. The fonts are built by the scripts in
   `tools/fonts/` and are under the SIL Open Font License; edit the scripts, not the font files.
 - **Look and feel**: a 1970s and ’80s instrument: Bakelite, screwed panels, enamel, warm light. Six colour themes;
   check a change in a light and a dark one (`--screenshot out.png --theme NAME`).

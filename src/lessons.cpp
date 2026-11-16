@@ -95,8 +95,8 @@ void LessonOverlay::start(const Lesson& lesson) {
 	card_->raise();
 	// the card in the theme's colours
 	card_->setStyleSheet(QStringLiteral("#lessonCard { background: %1; border: 2px solid %2; border-radius: 10px; }"
-	                                    "#lessonTitle { font-weight: 700; color: %2; letter-spacing: 1px; }"
-	                                    "#lessonTick { font-weight: 700; color: %2; }")
+	                                    "#lessonTitle { font-weight: 600; color: %2; letter-spacing: 1px; }"
+	                                    "#lessonTick { font-weight: 600; color: %2; }")
 	                         .arg(theme::panel.name(), theme::amber.name()));
 	timer_->start();
 	show(0);

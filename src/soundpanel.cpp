@@ -1,4 +1,6 @@
 #include "soundpanel.h"
+#include "savesounddialog.h"
+#include "soundlibrary.h"
 #include <QFormLayout>
 #include "chopdialog.h"
 #include "midi.h"
@@ -595,6 +597,10 @@ QWidget* SoundPanel::buildSynthPage() {
 	connect(mutate, &QPushButton::clicked, this, [this] { mutateSound(); });
 	l->addWidget(roll);
 	l->addWidget(mutate);
+	auto* keep = button(tr("Save sound…"), tr("Keep this sound under a name as one of your own, for every song"));
+	theme::symbolKey(keep, QStringLiteral("savesound"), tr("Save sound…"));
+	connect(keep, &QPushButton::clicked, this, [this] { saveSound(); });
+	l->addWidget(keep);
 	resume = button(tr("Resume lines"),
 	                tr("Some knobs were set by hand, which paused their lines. This brings the lines back."));
 	resume->setCheckable(true);
@@ -852,9 +858,15 @@ QGroupBox* SoundPanel::buildQuick() {
 		                    tr("Roll new sound: build a brand new sound that suits this kind of track"));
 		roll->setObjectName("primary");
 		theme::symbolKey(roll, QStringLiteral("dice"), roll->text());
-		theme::symbolKey(roll, QStringLiteral("dice"), roll->text());
 		connect(roll, &QPushButton::clicked, this, [this] { rollSound(); });
-		sv->addWidget(roll);
+		auto* keep = button(tr("Save sound…"), tr("Keep this sound under a name as one of your own, for every song"));
+		theme::symbolKey(keep, QStringLiteral("savesound"), tr("Save sound…"));
+		connect(keep, &QPushButton::clicked, this, [this] { saveSound(); });
+		auto* rk = new QHBoxLayout;
+		rk->setSpacing(6);
+		rk->addWidget(roll, 1);
+		rk->addWidget(keep);
+		sv->addLayout(rk);
 		auto* ks = new QHBoxLayout;
 		ks->setSpacing(0);
 		for (int p : {P_CUTOFF, P_RES, P_ENVAMT, P_AD, P_DRIVE}) {
@@ -949,8 +961,11 @@ void SoundPanel::sync() {
 	if (t) {
 		int pi = 0;
 		for (int i = 0; i < presetBox->count(); i++) { // separators carry no number and are skipped
-			const QVariant d = presetBox->itemData(i);
-			if (d.isValid() && d.toInt() >= 0 && presets()[size_t(d.toInt())].name == t->patch.name) pi = i;
+			const int d = presetBox->itemData(i).isValid() ? presetBox->itemData(i).toInt() : -1;
+			if (d >= MINE && d - MINE < int(mine.size()) && mine[size_t(d - MINE)].name == t->patch.name)
+				pi = i;
+			else if (d >= 0 && d < int(presets().size()) && presets()[size_t(d)].name == t->patch.name)
+				pi = i;
 		}
 		for (QComboBox* b : presetBoxes) {
 			b->blockSignals(true);
@@ -1039,35 +1054,35 @@ private:
 QComboBox* SoundPanel::makePresetBox() {
 	auto* box = new HearCombo(
 	    [this](QComboBox* b, int row) {
-		    const QVariant d = b->itemData(row);
-		    if (d.isValid() && d.toInt() >= 0) app->previewSound(&presets()[size_t(d.toInt())], nullptr);
+		    const int d = b->itemData(row).isValid() ? b->itemData(row).toInt() : -1;
+		    if (d >= MINE && d - MINE < int(mine.size()))
+			    app->previewSound(&mine[size_t(d - MINE)].patch, nullptr);
+		    else if (d >= 0 && d < int(presets().size()))
+			    app->previewSound(&presets()[size_t(d)], nullptr);
 	    },
 	    [this] { app->previewSound(nullptr, nullptr); });
 	box->setFocusPolicy(Qt::NoFocus);
 	box->setMinimumWidth(170);
-	box->setToolTip(tr("Ready-made sounds. Pick one as a starting point, then change it with the knobs. In the open "
-	                   "list, rest the mouse on a sound to hear it."));
-	// presets in groups, each under a heading that cannot be picked
-	box->addItem(tr("Custom sound"), -1);
-	for (const char* group : {"Bass", "Sequence and pluck", "Pad", "Lead"}) {
-		box->insertSeparator(box->count());
-		box->addItem(ui(group).toUpper(), -2);
-		if (auto* model = qobject_cast<QStandardItemModel*>(box->model())) {
-			QStandardItem* head = model->item(box->count() - 1);
-			head->setFlags(head->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
-			QFont hf = head->font();
-			hf.setPixelSize(10);
-			hf.setBold(true);
-			head->setFont(hf);
-		}
-		for (size_t i = 0; i < presets().size(); i++)
-			if (presetGroup(presets()[i].name) == QLatin1String(group))
-				box->addItem(QStringLiteral("   ") + ui(presets()[i].name), int(i));
-	}
+	box->setToolTip(tr("Ready-made sounds, and your own on top. Pick one as a starting point, then change it with the "
+	                   "knobs. In the open list, rest the mouse on a sound to hear it."));
+	if (mine.empty()) mine = mysounds::all();
+	fillPresetBox(box);
 	connect(box, &QComboBox::activated, this, [this, box](int i) {
 		const QVariant d = box->itemData(i);
 		const int idx = d.isValid() ? d.toInt() : -1;
-		if (idx >= 0)
+		if (idx == -3) {
+			openLibrary();
+			return;
+		}
+		if (idx >= MINE && idx - MINE < int(mine.size())) {
+			const mysounds::Sound s = mine[size_t(idx - MINE)];
+			app->edit(
+			    [&](Song& song) {
+				    if (Track* t = song.track(app->selTrack)) t->patch = s.patch;
+			    },
+			    tr("Preset"));
+			mysounds::noteUsed(s);
+		} else if (idx >= 0 && idx < int(presets().size()))
 			app->edit(
 			    [&](Song& s) {
 				    if (Track* t = s.track(app->selTrack)) t->patch = presets()[size_t(idx)];
@@ -1076,6 +1091,88 @@ QComboBox* SoundPanel::makePresetBox() {
 	});
 	presetBoxes.push_back(box);
 	return box;
+}
+
+void SoundPanel::fillPresetBox(QComboBox* box) {
+	box->blockSignals(true);
+	box->clear();
+	// a heading for each group (no separator above it: in the list a separator took a whole line's height)
+	auto heading = [&](const QString& text) {
+		box->addItem(text.toUpper(), -2);
+		if (auto* model = qobject_cast<QStandardItemModel*>(box->model())) {
+			QStandardItem* head = model->item(box->count() - 1);
+			head->setFlags(head->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+			QFont hf = head->font();
+			hf.setPixelSize(10);
+			hf.setWeight(QFont::DemiBold); // the Grotesk’s heaviest, 600
+			head->setFont(hf);
+		}
+	};
+	box->addItem(tr("Custom sound"), -1);
+	// your own, kept short: the starred ones, then the ones used lately; the rest are in the sound library
+	std::vector<size_t> order;
+	for (size_t i = 0; i < mine.size(); i++)
+		if (mine[i].starred) order.push_back(i);
+	for (const QString& f : mysounds::recent())
+		for (size_t i = 0; i < mine.size(); i++)
+			if (!mine[i].starred && mine[i].file == f) order.push_back(i);
+	if (!order.empty()) {
+		heading(tr("My sounds"));
+		for (size_t i : order)
+			box->addItem(QStringLiteral("   ") + mine[i].name + (mine[i].starred ? QStringLiteral("  ★") : QString()),
+			             MINE + int(i));
+	}
+	// the ready-made ones in groups, each under a heading that cannot be picked
+	for (const char* group : {"Bass", "Sequence and pluck", "Pad", "Lead"}) {
+		heading(ui(group));
+		for (size_t i = 0; i < presets().size(); i++)
+			if (presetGroup(presets()[i].name) == QLatin1String(group))
+				box->addItem(QStringLiteral("   ") + ui(presets()[i].name), int(i));
+	}
+	box->addItem(tr("All sounds…"), -3); // the sound library
+	box->blockSignals(false);
+}
+
+void SoundPanel::openLibrary() {
+	SoundLibrary lib(
+	    app,
+	    [this](const mysounds::Sound& s) {
+		    app->edit(
+		        [&](Song& song) {
+			        if (Track* t = song.track(app->selTrack)) t->patch = s.patch;
+		        },
+		        tr("Preset"));
+	    },
+	    window());
+	lib.exec();
+	refreshMine();
+}
+
+void SoundPanel::refreshMine() {
+	mine = mysounds::all();
+	for (QComboBox* b : presetBoxes)
+		fillPresetBox(b);
+	sync();
+}
+
+void SoundPanel::saveSound() {
+	const Track* t = app->curTrack();
+	if (!t || t->isDrums()) return;
+	const int group = t->role == R_BASS   ? mysounds::Bass
+	                  : t->role == R_PAD  ? mysounds::Pad
+	                  : t->role == R_LEAD ? mysounds::Lead
+	                                      : mysounds::Sequence;
+	SaveSoundDialog d(t->patch, group, window());
+	if (d.exec() != QDialog::Accepted) return;
+	const mysounds::Sound saved = d.saved();
+	app->edit(
+	    [&](Song& s) {
+		    if (Track* tr = s.track(app->selTrack)) tr->patch.name = saved.name;
+	    },
+	    tr("Save sound"));
+	mysounds::noteUsed(saved);
+	refreshMine();
+	emit app->status(tr("Saved “%1” as one of your sounds. Every song can use it now.").arg(saved.name));
 }
 
 QComboBox* SoundPanel::makeKitBox() {
@@ -1159,7 +1256,7 @@ void SoundPanel::sampleMenu(int drum, QPushButton* under) {
 		QAction* h = in->addAction(text.toUpper());
 		QFont f = h->font();
 		f.setPointSizeF(f.pointSizeF() * 0.85);
-		f.setBold(true);
+		f.setWeight(QFont::DemiBold); // the Grotesk’s heaviest, 600
 		f.setLetterSpacing(QFont::AbsoluteSpacing, 1.0);
 		h->setFont(f);
 		h->setEnabled(false);

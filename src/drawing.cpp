@@ -562,6 +562,9 @@ void drawSymbol(QPainter& p, const QString& kind, const QRectF& box, const QColo
 	} else if (kind == "stop") {
 		fill(ink);
 		p.drawRoundedRect(QRectF(4.5, 4.5, 9, 9), 1.5, 1.5);
+	} else if (kind == "play") { // listen: the transport's triangle
+		fill(ink);
+		p.drawPolygon(QPolygonF({QPointF(5.5, 3.8), QPointF(14.2, 9), QPointF(5.5, 14.2)}));
 	} else if (kind == "idea") { // a light bulb
 		QPainterPath bulb;
 		bulb.moveTo(6.9, 13.3);
@@ -639,6 +642,14 @@ void drawSymbol(QPainter& p, const QString& kind, const QRectF& box, const QColo
 		p.drawLine(QPointF(3, 12.5), QPointF(15, 12.5));
 		poly({{5, 10.5}, {3, 12.5}, {5, 14.5}});
 		poly({{13, 10.5}, {15, 12.5}, {13, 14.5}});
+	} else if (kind == "savesound") { // an index card with a plus: a sound kept in the card index
+		p.drawRoundedRect(QRectF(2.5, 4.5, 11, 9), 1.4, 1.4);
+		p.drawLine(QPointF(4.8, 7.6), QPointF(9.5, 7.6));
+		p.drawLine(QPointF(4.8, 10.4), QPointF(8, 10.4));
+		p.setPen(accentLine);
+		p.drawLine(QPointF(14, 9.5), QPointF(14, 15.5));
+		p.drawLine(QPointF(11, 12.5), QPointF(17, 12.5));
+		p.setPen(line);
 	} else if (kind == "keep") { // a pin
 		poly({{6.5, 2.5}, {11.5, 2.5}});
 		poly({{7.5, 2.5}, {7.5, 7}, {5, 10}, {13, 10}, {10.5, 7}, {10.5, 2.5}});

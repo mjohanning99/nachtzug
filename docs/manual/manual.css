@@ -10,18 +10,12 @@
 @font-face { font-family: "NZ Rahmen"; src: url(fonts/NachtzugInitialenRahmen-Regular.ttf); }
 @font-face { font-family: "NZ Buchstabe"; src: url(fonts/NachtzugInitialenBuchstabe-Regular.ttf); }
 @font-face { font-family: "NZ Ornamente"; src: url(fonts/NachtzugOrnamente-Regular.otf); }
-@font-face { font-family: "Crimson"; src: url(fonts/CrimsonPro-400.ttf); font-weight: 400; }
-@font-face { font-family: "Crimson"; src: url(fonts/CrimsonPro-Italic-400.ttf); font-weight: 400; font-style: italic; }
-@font-face { font-family: "Crimson"; src: url(fonts/CrimsonPro-600.ttf); font-weight: 600; }
-@font-face { font-family: "Crimson"; src: url(fonts/CrimsonPro-700.ttf); font-weight: 700; }
-@font-face { font-family: "Barlow"; src: url(fonts/BarlowSemiCondensed-Medium.ttf); font-weight: 500; }
-@font-face { font-family: "Barlow"; src: url(fonts/BarlowSemiCondensed-SemiBold.ttf); font-weight: 600; }
 @font-face { font-family: "Courier"; src: url(fonts/CourierPrime-Regular.ttf); font-weight: 400; }
 @font-face { font-family: "Courier"; src: url(fonts/CourierPrime-Bold.ttf); font-weight: 700; }
 
 :root {
   --ink: #2b2623; --soft: #6e6054; --paper: #f7f2e8; --panel: #ebe4d6; --line: #cbbfac;
-  --rust: #b4512a; --amber: #e08a2c; --ochre: #c9a24a; --brown: #2b2623; --lcd: #c9cc9a;
+  --rust: #a9441f; --amber: #e08a2c; --ochre: #c9a24a; --brown: #2b2623; --lcd: #c9cc9a;
 }
 
 @page {

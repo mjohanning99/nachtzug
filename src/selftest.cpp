@@ -13,6 +13,8 @@
 #include "widgets.h"
 #include <QCoreApplication>
 #include "app.h"
+#include "mysounds.h"
+#include <QFileInfo>
 #include "samples.h"
 #include "autosave.h"
 #include "midifile.h"
@@ -151,6 +153,29 @@ void Test::session() {
 	app.releaseAllKeys();
 	pump(20);
 	check(!app.song.track(app.selTrack)->clips.empty(), "recording made a clip");
+
+	{ // your own sounds: saved, read back, renamed, moved to another group, deleted (in the test run's own folder)
+		mysounds::Sound s;
+		s.name = QStringLiteral("Test Bass / one");
+		s.group = mysounds::Bass;
+		s.words = {QStringLiteral("dark")};
+		s.patch = presets()[0];
+		s.patch.p[dsp::P_CUTOFF] = 0.123f;
+		bool ok = mysounds::save(s) && QFileInfo::exists(s.file);
+		mysounds::Sound back;
+		ok = ok && mysounds::read(s.file, back) && back.name == s.name && back.words == s.words &&
+		     std::abs(back.patch.p[dsp::P_CUTOFF] - 0.123f) < 1e-6f;
+		bool listed = false;
+		for (const mysounds::Sound& x : mysounds::all())
+			listed = listed || x.file == s.file;
+		const QString before = s.file;
+		ok = ok && listed && mysounds::rename(s, QStringLiteral("Test Bass two")) && !QFileInfo::exists(before) &&
+		     QFileInfo::exists(s.file);
+		s.group = mysounds::Pad;
+		ok = ok && mysounds::save(s) && s.file.contains(QStringLiteral("/pad/"));
+		ok = ok && mysounds::remove(s) && !QFileInfo::exists(s.file);
+		check(ok, "a sound of your own is saved, read back, renamed, moved and deleted");
+	}
 
 	// knob lines: record one, draw one that repeats, pause and resume
 	app.paramPress(synthId, dsp::P_CUTOFF);

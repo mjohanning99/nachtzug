@@ -18,7 +18,7 @@ Nachtzug is built with other people’s free software. This page lists it, with 
 | [Jost](https://github.com/indestructible-type/Jost) | SIL Open Font License 1.1 (`assets/fonts/OFL-Jost.txt`) |
 | [Courier Prime](https://github.com/quoteunquoteapps/CourierPrime) | SIL Open Font License 1.1 (`assets/fonts/OFL-CourierPrime.txt`) |
 | [D-DIN](https://www.datto.com/fonts/d-din) (Datto), on the website: the lettering of German railway signs (DIN 1451) | SIL Open Font License 1.1 (`assets/fonts/d-din/OFL.txt`) |
-| In the manuals also [EB Garamond](https://github.com/octaviopardo/EBGaramond12) italic, [Crimson Pro](https://github.com/Fonthausen/CrimsonPro), [Barlow](https://github.com/jpt/barlow) and [Michroma](https://github.com/googlefonts/Michroma-font) | SIL Open Font License 1.1 (`docs/manual/fonts/OFL-*.txt`) |
+| In the manuals also [EB Garamond](https://github.com/octaviopardo/EBGaramond12) italic | SIL Open Font License 1.1 (`docs/manual/fonts/OFL-*.txt`) |
 
 ## In the Linux AppImage
 

@@ -16,7 +16,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPushButton>
-#include <QRadioButton>
+#include <QPushButton>
 #include <QSettings>
 #include <QSlider>
 #include <QStandardPaths>
@@ -194,14 +194,22 @@ ChopDialog::ChopDialog(App* a, std::shared_ptr<const dsp::SampleData> s, const Q
 	int row = 0;
 	grid->addWidget(caption(tr("Cut at")), row, 0, Qt::AlignRight);
 	how = new QButtonGroup(this);
-	auto* atHits = new QRadioButton(tr("the hits it finds"));
-	auto* atEqual = new QRadioButton(tr("equal pieces:"));
+	auto* atHits = new QPushButton(tr("The hits it finds"));
+	auto* atEqual = new QPushButton(tr("Equal pieces"));
+	atHits->setObjectName("segL");
+	atEqual->setObjectName("segR");
+	for (QPushButton* k : {atHits, atEqual})
+		k->setCheckable(true);
 	how->addButton(atHits, 0);
 	how->addButton(atEqual, 1);
 	atHits->setChecked(true);
 	auto* hitsRow = new QHBoxLayout;
 	hitsRow->setSpacing(8);
-	hitsRow->addWidget(atHits);
+	auto* pair = new QHBoxLayout; // joined keys, as in the welcome window
+	pair->setSpacing(0);
+	pair->addWidget(atHits);
+	pair->addWidget(atEqual);
+	hitsRow->addLayout(pair);
 	auto* fewer = new QLabel(tr("fewer"));
 	fewer->setObjectName("dim");
 	sensitivity = new QSlider(Qt::Horizontal);
@@ -216,7 +224,6 @@ ChopDialog::ChopDialog(App* a, std::shared_ptr<const dsp::SampleData> s, const Q
 	hitsRow->addWidget(sensitivity);
 	hitsRow->addWidget(more);
 	hitsRow->addSpacing(18);
-	hitsRow->addWidget(atEqual);
 	parts = new QComboBox;
 	for (int n : {2, 4, 8})
 		parts->addItem(QString::number(n), n);

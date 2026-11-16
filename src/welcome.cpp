@@ -3,6 +3,7 @@
 #include <QComboBox>
 #include <QEvent>
 #include <QGridLayout>
+#include <QButtonGroup>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
@@ -101,9 +102,12 @@ WelcomeDialog::WelcomeDialog(std::function<void(const QString&)> set, QWidget* p
 		b->setObjectName("segR");
 		auto* both = new QHBoxLayout;
 		both->setSpacing(0);
+		// a group of its own for each pair: keys left to group themselves join every such key in the window, so
+		// choosing in one row took the choice away from the others
+		auto* only = new QButtonGroup(this);
 		for (QPushButton* k : {a, b}) {
 			k->setCheckable(true);
-			k->setAutoExclusive(true);
+			only->addButton(k);
 			k->setFocusPolicy(Qt::StrongFocus);
 			k->setMinimumWidth(190);
 			both->addWidget(k);
@@ -170,8 +174,8 @@ void WelcomeDialog::changeEvent(QEvent* e) {
 void WelcomeDialog::retranslate() {
 	setWindowTitle(tr("Welcome to Nachtzug"));
 	// the name without letter-spacing, which would switch its tz ligature off
-	title->setText(tr("<span style=\"font-size:22px; font-weight:700; letter-spacing:2px\">Welcome aboard </span>"
-	                  "<span style=\"font-size:22px; font-weight:700\">Nachtzug</span>"));
+	title->setText(tr("<span style=\"font-size:22px; font-weight:600; letter-spacing:2px\">Welcome aboard </span>"
+	                  "<span style=\"font-size:22px; font-weight:600\">Nachtzug</span>"));
 	intro->setText(
 	    tr("Nachtzug is a DAW (digital audio workstation) made for beginners. It lets you create electronic "
 		   "music, in the style of the Berlin School for example, without much prior knowledge. You don’t need "

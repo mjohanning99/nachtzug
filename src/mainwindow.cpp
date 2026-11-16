@@ -1,4 +1,6 @@
 #include "mainwindow.h"
+#include "savesounddialog.h"
+#include "soundlibrary.h"
 #include "inspector.h"
 #include "app.h"
 #include "editor.h"
@@ -43,7 +45,6 @@
 #include <QProcess>
 #include <QActionGroup>
 #include <QButtonGroup>
-#include <QRadioButton>
 #include <QScrollArea>
 #include <QTextEdit>
 #include <QAbstractItemView>
@@ -1323,7 +1324,7 @@ void MainWindow::arrange() {
 		   "and it fades out at the end. What is in the timeline now is replaced; Undo brings it back."));
 	head->setTextFormat(Qt::RichText);
 	head->setWordWrap(true);
-	head->setMinimumWidth(480);
+	head->setFixedWidth(520);
 	v->addWidget(head);
 	auto* group = new QButtonGroup(&dlg);
 	auto minutes = [this](int bars) {
@@ -1334,23 +1335,33 @@ void MainWindow::arrange() {
 	auto* parts = new QLabel;
 	parts->setObjectName("dim");
 	parts->setWordWrap(true);
-	auto describe = [parts](int len) {
+	auto* length = new QLabel;
+	length->setObjectName("dim");
+	auto describe = [parts, length, minutes](int len) {
 		QStringList l;
-		for (const ArrangePart& p : arrangePlan(len))
+		int bars = 0;
+		for (const ArrangePart& p : arrangePlan(len)) {
 			l << QStringLiteral("%1 (%2)").arg(ui(p.name)).arg(p.bars);
+			bars += p.bars;
+		}
+		length->setText(tr("%1 bars, about %2 at this tempo").arg(bars).arg(minutes(bars)));
 		parts->setText(tr("Parts, with their length in bars: %1").arg(l.join(QStringLiteral("  ·  "))));
 	};
 	const int was = std::clamp(QSettings().value(QStringLiteral("arrangeLength"), 1).toInt(), 0, 2);
+	auto* keys = new QHBoxLayout; // joined keys, as in the welcome window
+	keys->setSpacing(0);
 	for (int i = 0; i < 3; i++) {
-		int bars = 0;
-		for (const ArrangePart& p : arrangePlan(i))
-			bars += p.bars;
-		auto* r =
-		    new QRadioButton(tr("%1: %2 bars, about %3 at this tempo").arg(tr(names[i])).arg(bars).arg(minutes(bars)));
-		group->addButton(r, i);
-		if (i == was) r->setChecked(true);
-		v->addWidget(r);
+		auto* k = new QPushButton(tr(names[i]));
+		k->setObjectName(i == 0 ? "segL" : i == 2 ? "segR" : "segM");
+		k->setCheckable(true);
+		k->setMinimumWidth(110);
+		group->addButton(k, i);
+		if (i == was) k->setChecked(true);
+		keys->addWidget(k);
 	}
+	keys->addStretch(1);
+	v->addLayout(keys);
+	v->addWidget(length);
 	v->addWidget(parts);
 	describe(was);
 	connect(group, &QButtonGroup::idClicked, &dlg, describe);
@@ -1369,6 +1380,9 @@ void MainWindow::arrange() {
 	connect(buttons, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
 	connect(buttons, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
 	v->addWidget(buttons);
+	// Qt sizes a dialog without heeding wrapped text, which then overlaps the keys: as tall as the text needs
+	dlg.adjustSize();
+	dlg.setMinimumHeight(v->totalHeightForWidth(dlg.width()));
 	if (dlg.exec() != QDialog::Accepted) return;
 	const int len = group->checkedId();
 	QSettings().setValue(QStringLiteral("arrangeLength"), len);
@@ -1396,7 +1410,16 @@ void MainWindow::showDialog(const QString& which) {
 		exportWav();
 	else if (which == QLatin1String("arrange"))
 		arrange();
-	else if (which == QLatin1String("chop")) { // for pictures: two bars of the song's drums as the loop
+	else if (which == QLatin1String("library")) { // for pictures: the sound library
+		SoundLibrary lib(app, [](const mysounds::Sound&) {}, this);
+		lib.exec();
+	} else if (which == QLatin1String("savesound")) { // for pictures: the sound of the selected track
+		const Track* t = app->curTrack();
+		if (t && !t->isDrums()) {
+			SaveSoundDialog d(t->patch, mysounds::Sequence, this);
+			d.exec();
+		}
+	} else if (which == QLatin1String("chop")) { // for pictures: two bars of the song's drums as the loop
 		Song s = app->song;
 		int did = -1;
 		for (const Track& t : s.tracks)
@@ -1570,6 +1593,7 @@ QWidget* MainWindow::keysPage(const QString& style) {
 	row(tr("Click in the note grid"), tr("A note; drag to make it longer, drag a note to move it"));
 	row(tr("Right-click a note"), tr("Delete it (keep the button down to wipe several)"));
 	row(key(Qt::Key_Shift) + plus + tr("drag"), tr("Select several notes, hits or clips"));
+	row(key(Qt::Key_Shift) + plus + tr("drag a note’s end"), tr("Any length, between the grid lines too"));
 	row(tr("Double-click in the timeline"), tr("A new clip on an empty spot"));
 	row(tr("Right-click"),
 	    tr("More choices: on a clip (fades, filter sweeps), a track (rename), a knob (Learn MIDI control)"));
@@ -1599,7 +1623,7 @@ void MainWindow::showHelp() {
 	mark->setFixedSize(56, 56);
 	head->addWidget(mark);
 	auto* title = new QLabel(
-	    tr("<span style=\"font-size:22px; font-weight:700; letter-spacing:3px\">NACHTZUG</span><br>Make a "
+	    tr("<span style=\"font-size:22px; font-weight:600; letter-spacing:3px\">NACHTZUG</span><br>Make a "
 		   "song in five steps. Nachtzug is built so that every note automatically lands in the right scale."));
 	title->setTextFormat(Qt::RichText);
 	title->setWordWrap(true);
@@ -1642,7 +1666,8 @@ void MainWindow::showHelp() {
 		   "what "
 		   "the knobs do; drag on the filter picture to sweep it. "
 		   "<b>View → Simple sound page</b> switches between a few big knobs in plain words and every knob of the "
-		   "synthesiser.</p>"
+		   "synthesiser. Like a sound? <b>Save sound…</b> keeps it for every song, and <b>All sounds…</b> at the "
+		   "bottom of the preset list opens your sound library.</p>"
 		   "<p>To make a sound change over time, press the <b>Lines</b> button on a track in the timeline, pick a knob "
 		   "such as Cutoff, and click to draw a line. "
 		   "Or switch on record (the ● key) and turn a knob while the song plays.</p>"

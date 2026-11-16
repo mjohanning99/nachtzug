@@ -53,7 +53,7 @@ stations:
   - { time: "23:21", stop: "Reglerstraße West", icon: knob, title: "Ein echter Synthesizer", short: "Auf jeder Spur, mit Live-Bildern von jedem Regler – oder eine Seite <b>Einfach</b> mit acht großen Reglern." }
   - { time: "23:40", stop: "Loops Abstellbahnhof", icon: grid, title: "Jammen wie in einem Live-Set", short: "Patterns starten und stoppen, während es spielt; jede Änderung wartet auf den nächsten Takt." }
   - { time: "23:52", stop: "Arrangement-Viadukt Nord", icon: arrange, title: "Vom Loop zum Song", short: "Die Clips lassen sich von Hand anlegen, oder <b>Arrangieren</b> macht ein Intro, einen Aufbau, einen Break und ein Ende." }
-  - { time: "00:15", stop: "Sample Gbf", icon: wave, title: "Eigene Klänge", short: "65 Klänge, eigens für Nachtzug gemacht, neun davon aus einem Nachtzug, eigene Samples oder ein zerlegter Drumloop." }
+  - { time: "00:15", stop: "Sample Gbf", icon: wave, title: "Eigene Klänge", short: "65 Klänge, eigens für Nachtzug gemacht, neun davon aus einem Nachtzug, eigene Samples oder ein zerlegter Drumloop. Dazu die selbst gebauten Klänge, unter eigenem Namen aufbewahrt." }
   - { time: "00:51", stop: "Berliner Schule Hbf", icon: export, title: "Zum Mitnehmen", short: "Export als WAV, eine Datei pro Spur oder MIDI. MIDI-Keyboards, Regler und Clock funktionieren alle." }
 
 gallery:

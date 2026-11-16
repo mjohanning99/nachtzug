@@ -94,7 +94,7 @@ void Knob::paintEvent(QPaintEvent*) {
 		           QPointF(c.x() + 9.5 * std::cos(a), c.y() - 9.5 * std::sin(a)));
 		if (marked) {
 			p.setPen(Qt::NoPen);
-			p.setBrush(QColor(0xc0, 0x36, 0x1c));
+			p.setBrush(QColor(0xc4, 0x36, 0x1c)); // the one red (mute, record, the VU’s red zone)
 			p.drawEllipse(QPointF(dial.right() + 1, dial.top() + 3), 3, 3);
 		}
 		drawMidiMark(p, dial);

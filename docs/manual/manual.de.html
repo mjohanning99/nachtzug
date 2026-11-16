@@ -425,6 +425,13 @@
     <tr><td>Glocken und Effekte</td><td>FM Bell · Sample and Hold</td></tr>
   </table>
 
+  <h3 id="mysounds">Einen eigenen Klang behalten</h3>
+  <p>Ein Klang gefällt? <span class="ctl">Klang speichern …</span>, neben <span class="ctl">Neu würfeln</span>, behält ihn unter einem Namen als eigenen Klang, außerhalb des Songs, sodass jeder Song ihn verwenden kann. Dazu gehören ein Name, eine Gruppe und auf Wunsch ein paar Suchwörter; mit Stern steht er oben in der Presetliste.</p>
+  <p>Die Presetliste zeigt unter <b>Eigene Klänge</b> die Klänge mit Stern und die zuletzt verwendeten. Alle übrigen liegen in der <b>Klangbibliothek</b>: <span class="ctl">Alle Klänge …</span> unten in der Liste. Die Fächer links enthalten die eigenen Klänge, die mit Stern, jede Gruppe und die fertigen Klänge; die Suche findet einen Klang über seinen Namen oder seine Suchwörter. Das <span class="key ico play"></span> auf einer Karte spielt eine kurze Phrase mit diesem Klang, ohne etwas zu verändern, und <span class="ctl">Für diese Spur verwenden</span> legt ihn auf die Spur. Die Pfeiltasten wählen eine Karte, <span class="key">Leertaste</span> spielt sie an und <span class="key">Return</span> verwendet sie.</p>
+  <figure><img src="img-de/library.png" alt="Die Klangbibliothek"><figcaption><b>ABB 0</b>Die Klangbibliothek: Fächer, die Karten mit einer Taste zum Anhören und der gewählte Klang mit allem, was sich damit tun lässt.</figcaption></figure>
+  <p>Jeder eigene Klang ist eine kleine Datei (<code>.nzsound</code>). <span class="ctl">Als Datei weitergeben …</span> speichert eine Kopie an einem beliebigen Ort; ein Klang von jemand anderem kommt mit <span class="ctl">Datei hereinholen …</span> herein oder indem man die Datei auf die Bibliothek zieht.</p>
+
+
   <h2 id="osc"><span class="n">5.3</span>Oszillatoren, Unisono und Stimmen</h2>
   <figure><img src="img-de/oscillators.png" alt="Oszillatoren, Unisono und Stimmen"><figcaption><b>ABB 10</b>Abschnitt 1: die beiden Oszillatoren samt Sub-Oszillator und Rauschen.</figcaption></figure>
   <table>
@@ -606,16 +613,16 @@
   <h3 id="export">Exportieren</h3>
   <p>Zuallererst wird oben rechts <span class="ctl">Export</span> gedrückt. Unter <span class="ctl">Erstellen</span> wird dann gewählt, was herauskommen soll:</p>
   <ul>
-    <li><b>Eine Audiodatei (WAV)</b>: der ganze Song gemischt, überall abspielbar.</li>
-    <li id="stems"><b>Eine Audiodatei pro Spur (Stems)</b>: jede hörbare Spur in einer eigenen Datei (<code>01 Drums.wav</code>, <code>02 Bass.wav</code> …) in einem neuen Ordner. Alle beginnen im selben Moment und ergeben zusammen genau den Song, samt Echo und Hall, zum Mischen in einem anderen Musikprogramm.</li>
-    <li id="midiexport"><b>Eine MIDI-Datei mit den Noten</b>: die Noten jeder Spur, ohne Klang, für andere Musikprogramme und Synthesizer. Akkorde, Arpeggios, schnelle Wiederholungen, Swing und Noten mit Häufigkeit werden so ausgeschrieben, wie sie zu hören sind; die Drums liegen auf den General-MIDI-Drumnoten auf Kanal 10.</li>
+    <li><span class="ctl">Eine Audiodatei</span>: eine WAV-Datei mit dem ganzen Song gemischt, überall abspielbar.</li>
+    <li id="stems"><span class="ctl">Eine Datei pro Spur</span> (Stems): jede hörbare Spur in einer eigenen Datei (<code>01 Drums.wav</code>, <code>02 Bass.wav</code> …) in einem neuen Ordner. Alle beginnen im selben Moment und ergeben zusammen genau den Song, samt Echo und Hall, zum Mischen in einem anderen Musikprogramm.</li>
+    <li id="midiexport"><span class="ctl">MIDI-Noten</span>: eine MIDI-Datei mit den Noten jeder Spur, ohne Klang, für andere Musikprogramme und Synthesizer. Akkorde, Arpeggios, schnelle Wiederholungen, Swing und Noten mit Häufigkeit werden so ausgeschrieben, wie sie zu hören sind; die Drums liegen auf den General-MIDI-Drumnoten auf Kanal 10.</li>
   </ul>
   <p>Stummgeschaltete Spuren bleiben bei allen dreien draußen.</p>
   <figure style="width:66%; margin-left:auto; margin-right:auto"><img src="img-de/dlg-export.png" alt="Das Fenster Export"><figcaption><b>ABB 20</b>Das Fenster zeigt, wie lang die Datei wird und etwa wie groß. Ende und Qualität gelten nicht für eine MIDI-Datei.</figcaption></figure>
   <table class="wide1">
     <thead><tr><th>Einstellung</th><th>Auswahl</th></tr></thead>
-    <tr><td><span class="ctl">Was</span></td><td><b>Den ganzen Song</b> von Takt 1 bis zum Ende des letzten Clips, egal wo der Loop liegt; oder <b>nur den Loop</b>, 1- bis 32-mal hintereinander, für einen nahtlosen Loop oder einen Übungstrack.</td></tr>
-    <tr><td><span class="ctl">Ende</span></td><td>Echo und Hall <b>ausklingen lassen</b> (die Datei endet, sobald sie verklungen sind), oder über die letzten Takte <b>ausblenden</b>.</td></tr>
+    <tr><td><span class="ctl">Was</span></td><td><span class="ctl">Der ganze Song</span> von Takt 1 bis zum Ende des letzten Clips, egal wo der Loop liegt; oder <span class="ctl">Der Loop</span> allein, 1- bis 32-mal hintereinander, für einen nahtlosen Loop oder einen Übungstrack.</td></tr>
+    <tr><td><span class="ctl">Ende</span></td><td><span class="ctl">Ausklingen lassen</span>: Echo und Hall klingen aus, und die Datei endet, sobald sie verklungen sind; oder <span class="ctl">Ausblenden</span> über die letzten Takte.</td></tr>
     <tr><td><span class="ctl">Qualität</span></td><td><b>CD-Qualität</b>, 44,1 kHz 16 Bit, läuft überall. 48 kHz 16 Bit passt zu Video; 24 Bit mit 48 oder 96 kHz ist für die Weiterarbeit in einem Studioprogramm.</td></tr>
     <tr><td><span class="ctl">Speichern als</span></td><td>Der Dateiname, zu Beginn im Musik-Ordner; <span class="ctl">Auswählen…</span> wählt einen anderen Ort. Nachtzug fragt, bevor es eine Datei ersetzt.</td></tr>
   </table>
@@ -652,7 +659,7 @@
   <p>Ein Drum-Loop von anderswo lässt sich in Stücke schneiden, eines auf jedes Drum-Pad. Dazu wird <b>Spur → Loop auf die Drums verteilen…</b> gewählt (oder <span class="ctl">Zerschneiden…</span> auf der Seite Samples oder der Eintrag im Sample-Menü unter einem Drumsound) und der Loop ausgesucht.</p>
   <figure><img src="img-de/dlg-chop.png" alt="Einen Loop zerschneiden"><figcaption><b>ABB 0</b>Die Schnitte liegen auf den Schlägen, die Nachtzug findet; jedes Stück kommt auf das Drum-Pad mit seiner Nummer.</figcaption></figure>
   <ul>
-    <li>Schneiden <b>an den gefundenen Schlägen</b> (<span class="ctl">weniger</span> … <span class="ctl">mehr</span> legt fest, wie leise ein Schlag sein darf) oder <b>in gleiche Stücke</b>, 2, 4 oder 8, für einen Loop, der genau im Takt ist.</li>
+    <li>Bei <span class="ctl">Schneiden</span> wird gewählt: <span class="ctl">Die gefundenen Schläge</span> (<span class="ctl">weniger</span> … <span class="ctl">mehr</span> legt fest, wie leise ein Schlag sein darf) oder <span class="ctl">Gleich lange Stücke</span>, 2, 4 oder 8, für einen Loop, der genau im Takt ist.</li>
     <li>Ein Klick auf ein Stück spielt es ab. Wird eine Linie gezogen, verschiebt sich der Schnitt; ein Doppelklick setzt einen neuen (bis zu acht Stücke), ein Rechtsklick auf eine Linie nimmt ihn weg.</li>
     <li><span class="ctl">Länge</span> ist, wie viele Takte der Loop dauert, geschätzt aus seiner Länge beim Tempo des Songs.</li>
     <li>Ist <b>Ein Pattern schreiben …</b> eingeschaltet, spielt ein Drum-Clip am Loop die Stücke der Reihe nach, jedes auf der nächsten Sechzehntel, sodass der Loop klingt wie vorher, im Tempo des Songs. Danach kann das Pattern geändert werden: Stücke weglassen, vertauschen oder einer Hi-Hat eine Häufigkeit geben.</li>
@@ -856,7 +863,7 @@
   <h3>Schriften und Software</h3>
   <table class="small credits"><colgroup><col style="width: 68%"><col></colgroup>
     <thead><tr><th>Was</th><th>Lizenz</th></tr></thead>
-    <tr><td>Nachtzug Antiqua, Grotesk, Initialen und Ornamente (unsere eigenen, basierend auf EB Garamond und Jost); Jost, EB Garamond, Courier Prime, Crimson Pro, Barlow, Michroma</td><td>SIL Open Font License 1.1</td></tr>
+    <tr><td>Nachtzug Antiqua, Grotesk, Initialen und Ornamente (unsere eigenen, basierend auf EB Garamond und Jost); Jost, EB Garamond, Courier Prime</td><td>SIL Open Font License 1.1</td></tr>
     <tr><td>Qt 6: Fenster, Bedienelemente, Text und Bilder</td><td>LGPL 3.0</td></tr>
     <tr><td>SDL 2: die Soundkarte</td><td>zlib</td></tr>
     <tr><td>Die Bibliotheken im Linux-AppImage und in den Downloads für Mac und Windows</td><td>MIT, BSD, zlib, LGPL; jede Lizenz liegt im Download</td></tr>
@@ -910,6 +917,7 @@
     <div class="letter">E</div>
     <div class="e"><a href="#shared">Echo</a></div>
     <div class="e"><a href="#effects">Effekte</a></div>
+    <div class="e"><a href="#mysounds">Eigene Klänge</a></div>
     <div class="e"><a href="#fade">Ein- und Ausblenden</a></div>
     <div class="e"><a href="#simple">Einfach und Komplett</a></div>
     <div class="e"><a href="#input">Eingang (Mixer)</a></div>
@@ -934,6 +942,7 @@
     <div class="e"><a href="#ideas">Ideen</a></div>
     <div class="e"><a href="#intime">Im Takt</a></div>
     <div class="letter">K</div>
+    <div class="e"><a href="#mysounds">Klangbibliothek</a></div>
     <div class="e"><a href="#recipes">Klangrezepte</a></div>
     <div class="e"><a href="#metronome">Klick (Metronom)</a></div>
     <div class="e"><a href="#lines">Kurven</a></div>

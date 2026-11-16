@@ -416,6 +416,13 @@
     <tr><td>Bells and effects</td><td>FM Bell · Sample and Hold</td></tr>
   </table>
 
+  <h3 id="mysounds">Keeping a sound of your own</h3>
+  <p>Found a sound you like? <span class="ctl">Save sound…</span>, beside <span class="ctl">New sound</span>, keeps it under a name as one of your own, outside the song, so every song can use it. Give it a name, a group and, if you like, a few words to find it by, and star it to have it listed on top of the preset list.</p>
+  <p>The preset list shows your starred sounds and the ones you used lately under <b>My sounds</b>. All the others are in the <b>sound library</b>: <span class="ctl">All sounds…</span> at the bottom of the list. The shelves on the left hold your own sounds, the starred ones, each group and the ready-made sounds; the search finds a sound by its name or its words. The <span class="key ico play"></span> on a card plays a short phrase with that sound without changing anything, and <span class="ctl">Use on this track</span> puts it on the track. The arrow keys choose a card, <span class="key">Space</span> listens and <span class="key">Return</span> uses it.</p>
+  <figure><img src="img/library.png" alt="The sound library"><figcaption><b>FIG 0</b>The sound library: shelves, the cards with a key to listen first, and the chosen sound with what you can do with it.</figcaption></figure>
+  <p>Every sound of your own is a small file (<code>.nzsound</code>). <span class="ctl">Share as a file…</span> saves a copy wherever you like; a sound someone gave you comes in with <span class="ctl">Bring in a file…</span>, or by dropping the file on the library.</p>
+
+
   <h2 id="osc"><span class="n">5.3</span>Oscillators, unison and voices</h2>
   <figure><img src="img/oscillators.png" alt="Oscillators, unison and voices"><figcaption><b>FIG 10</b>Section 1: the two oscillators, with the sub oscillator and noise.</figcaption></figure>
   <table>
@@ -598,16 +605,16 @@
   <h3 id="export">Exporting</h3>
   <p>Press <span class="ctl">Export</span> at the top right. Under <span class="ctl">Make</span>, choose what you’d like to come out:</p>
   <ul>
-    <li><b>One sound file (WAV)</b>: the whole song mixed, to play anywhere.</li>
-    <li id="stems"><b>A sound file for each track (stems)</b>: every track that is heard in a file of its own (<code>01 Drums.wav</code>, <code>02 Bass.wav</code> …) in a new folder. They all start at the same moment and add up exactly to the song, echoes and reverb included, for mixing it in another music program.</li>
-    <li id="midiexport"><b>A MIDI file with the notes</b>: the notes of every track, without the sound, for other music programs and synthesisers. Chords, arpeggios, quick repeats, swing and notes with a chance are written out as you hear them; the drums use the General MIDI drum notes on channel 10.</li>
+    <li><span class="ctl">One sound file</span>: a WAV file with the whole song mixed, to play anywhere.</li>
+    <li id="stems"><span class="ctl">A file per track</span> (stems): every track that is heard in a file of its own (<code>01 Drums.wav</code>, <code>02 Bass.wav</code> …) in a new folder. They all start at the same moment and add up exactly to the song, echoes and reverb included, for mixing it in another music program.</li>
+    <li id="midiexport"><span class="ctl">MIDI notes</span>: a MIDI file with the notes of every track, without the sound, for other music programs and synthesisers. Chords, arpeggios, quick repeats, swing and notes with a chance are written out as you hear them; the drums use the General MIDI drum notes on channel 10.</li>
   </ul>
   <p>Muted tracks are left out of all three.</p>
   <figure style="width:66%; margin-left:auto; margin-right:auto"><img src="img/dlg-export.png" alt="The export window"><figcaption><b>FIG 20</b>The export window shows how long the file will be and roughly how large. Ending and quality do not apply to a MIDI file.</figcaption></figure>
   <table class="wide1">
     <thead><tr><th>Setting</th><th>Choices</th></tr></thead>
-    <tr><td><span class="ctl">What</span></td><td><b>The whole song</b> from bar 1 to the end of the last clip, whatever the loop; or <b>only the loop</b>, played 1 to 32 times, for a seamless loop or a practice track.</td></tr>
-    <tr><td><span class="ctl">Ending</span></td><td>Let the echo and reverb <b>ring out</b> (the file ends once they have died away), or <b>fade out</b> over the last bars.</td></tr>
+    <tr><td><span class="ctl">What</span></td><td><span class="ctl">The whole song</span> from bar 1 to the end of the last clip, whatever the loop; or <span class="ctl">The loop</span> alone, played 1 to 32 times, for a seamless loop or a practice track.</td></tr>
+    <tr><td><span class="ctl">Ending</span></td><td><span class="ctl">Let it ring out</span>: the echo and reverb ring out, and the file ends once they have died away; or <span class="ctl">Fade out</span> over the last bars.</td></tr>
     <tr><td><span class="ctl">Quality</span></td><td><b>CD quality</b>, 44.1 kHz 16-bit, plays on everything. 48 kHz 16-bit suits video; 24-bit at 48 or 96 kHz is for further work in a studio program.</td></tr>
     <tr><td><span class="ctl">Save as</span></td><td>The file name, in your Music folder to begin with; <span class="ctl">Choose…</span> picks another place. Nachtzug asks before replacing a file.</td></tr>
   </table>
@@ -644,7 +651,7 @@
   <p>A drum loop from somewhere else can be cut into pieces, one on each drum pad. Choose <b>Track → Chop a loop across the drums…</b> (or <span class="ctl">Chop…</span> on the Samples page, or the entry in the sample menu under a drum) and pick the loop.</p>
   <figure><img src="img/dlg-chop.png" alt="Chopping a loop"><figcaption><b>FIG 0</b>The cuts sit on the hits Nachtzug finds; each piece goes to the drum pad with its number.</figcaption></figure>
   <ul>
-    <li>Cut at <b>the hits it finds</b> (<span class="ctl">fewer</span> … <span class="ctl">more</span> sets how faint a hit may be), or into <b>equal pieces</b>, 2, 4 or 8, for a loop that is exactly in time.</li>
+    <li>Under <span class="ctl">Cut at</span>, choose <span class="ctl">The hits it finds</span> (<span class="ctl">fewer</span> … <span class="ctl">more</span> sets how faint a hit may be) or <span class="ctl">Equal pieces</span>, 2, 4 or 8, for a loop that is exactly in time.</li>
     <li>Click a piece to hear it. Drag a line to move a cut, double-click to add one (up to eight pieces), right-click a line to take it away.</li>
     <li><span class="ctl">Length</span> is how many bars the loop lasts, guessed from its length at the song’s tempo.</li>
     <li>With <b>Write a pattern …</b> switched on, a drum clip at the loop plays the pieces in their order, each on the nearest sixteenth, so the loop sounds as it was, at the song’s tempo. Then change the pattern: leave pieces out, swap them, or give a hat a chance.</li>
@@ -849,7 +856,7 @@
   <h3>Fonts and software</h3>
   <table class="small credits"><colgroup><col style="width: 68%"><col></colgroup>
     <thead><tr><th>What</th><th>Licence</th></tr></thead>
-    <tr><td>Nachtzug Antiqua, Grotesk, Initialen and Ornamente (our own, built on EB Garamond and Jost); Jost, EB Garamond, Courier Prime, Crimson Pro, Barlow, Michroma</td><td>SIL Open Font License 1.1</td></tr>
+    <tr><td>Nachtzug Antiqua, Grotesk, Initialen and Ornamente (our own, built on EB Garamond and Jost); Jost, EB Garamond, Courier Prime</td><td>SIL Open Font License 1.1</td></tr>
     <tr><td>Qt 6: the window, the controls, text and pictures</td><td>LGPL 3.0</td></tr>
     <tr><td>SDL 2: the sound card</td><td>zlib</td></tr>
     <tr><td>The libraries in the Linux AppImage and the Mac and Windows downloads</td><td>MIT, BSD, zlib, LGPL; each licence is inside the download</td></tr>
@@ -966,6 +973,7 @@
     <div class="e"><a href="#library">Sample library, the list</a></div>
     <div class="e"><a href="#kit">Sampled kits</a></div>
     <div class="e"><a href="#samples">Samples, library and own</a></div>
+    <div class="e"><a href="#mysounds">Save sound</a></div>
     <div class="e"><a href="#saving">Saving</a></div>
     <div class="e"><a href="#scales">Scales</a></div>
     <div class="e"><a href="#scissors">Scissors</a></div>
@@ -974,6 +982,7 @@
     <div class="e"><a href="#size">Size of the window</a></div>
     <div class="e"><a href="#slide">Slide</a></div>
     <div class="e"><a href="#settings">Sound card</a></div>
+    <div class="e"><a href="#mysounds">Sound library</a></div>
     <div class="e"><a href="#sound">Sound tab</a></div>
     <div class="e"><a href="#spec">Specifications</a></div>
     <div class="e"><a href="#stamp">Stamp a bar (right-click)</a></div>

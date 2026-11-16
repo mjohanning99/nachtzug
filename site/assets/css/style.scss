@@ -30,8 +30,8 @@
 // --rust, --amber and --ochre are the manual's three bands; --accent is the program's own rust, for things you press
 :root {
   --paper: #f4efe5; --panel: #ebe5d8; --well: #e1d9c9; --well-hi: #e9e2d4; --rule: #b1a391; --line: #cbbfac;
-  --ink: #2b2623; --soft: #6e6054; --link: #a9431a;
-  --rust: #b4512a; --amber: #e08a2c; --ochre: #c9a24a; --accent: #d8642a; --star: #b8501f;
+  --ink: #2b2623; --soft: #6e6054; --link: #a9441f;   // the brand rust, as in the logo
+  --rust: #a9441f; --amber: #e08a2c; --ochre: #c9a24a; --accent: #d8642a; --star: #b8501f;
   --brown: #2b2623; --board-ink: #f1c27a; --board-edge: transparent;
   --lcd-bg: #f0e1ba; --lcd-ink: #3b2a1b;
   --screw: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><defs><radialGradient id='g' cx='.35' cy='.3' r='.8'><stop offset='0' stop-color='%23f7f2e8'/><stop offset='1' stop-color='%23968874'/></radialGradient></defs><circle cx='6' cy='6' r='5.2' fill='url(%23g)' stroke='%237d705f' stroke-width='.6'/><path d='M2.6 7.6 L9.4 4.4' stroke='%235c5144' stroke-width='1.1' stroke-linecap='round'/></svg>");
@@ -140,7 +140,7 @@ code { font-size: .86em; background: var(--well); padding: .05em .2em; border-ra
 .lang .keycap:last-child { border-top-left-radius: 0; border-bottom-left-radius: 0; border-left: none; }
 .brand {
   display: flex; align-items: center; gap: .55rem; margin-right: auto; color: var(--ink); text-decoration: none;
-  font: 600 1.4rem/1 "Grotesk", sans-serif; letter-spacing: .01em; font-feature-settings: "liga", "dlig";
+  font: 600 1.4rem/1 "Grotesk", sans-serif; letter-spacing: 0; font-feature-settings: "liga", "dlig";
   img { width: 34px; height: 34px; }
 }
 .ticker { width: min(26vw, 320px); height: 30px; overflow: hidden; position: relative; white-space: nowrap; flex: none; }
@@ -158,7 +158,8 @@ code { font-size: .86em; background: var(--well); padding: .05em .2em; border-ra
   background: linear-gradient(90deg, rgba(20, 14, 12, .5), rgba(20, 14, 12, .12) 55%, rgba(20, 14, 12, 0));
 }
 .hero-inner { max-width: 76rem; margin: 0 auto; padding: clamp(3rem, 7vw, 5.5rem) clamp(1rem, 4vw, 3rem) clamp(3rem, 6vw, 5rem); }
-.hero h1 { font: 600 clamp(4rem, 10vw, 7.75rem)/1 "Grotesk", sans-serif; letter-spacing: .01em; margin: 0 0 clamp(1.5rem, 3vw, 2.4rem); font-feature-settings: "liga", "dlig"; }
+.hero h1 { font: 600 clamp(4rem, 10vw, 7.75rem)/1 "Grotesk", sans-serif; letter-spacing: 0;   // never spaced: it switches the tz ligature off
+ margin: 0 0 clamp(1.5rem, 3vw, 2.4rem); font-feature-settings: "liga", "dlig"; }
 .hero-panel { max-width: 51.25rem; padding: 1.5rem 1.9rem 1.6rem; color: var(--ink); }
 .hero .lead { font: 400 1.15rem/1.55 "Antiqua", serif; color: #2b2623; margin: 0 0 1.25rem; }
 .hero .cta { display: flex; flex-wrap: wrap; gap: .9rem; align-items: center; justify-content: space-between; margin: 0; }
@@ -279,7 +280,7 @@ p.dropcap { margin-top: 1.1em; }
   h3 { font-size: 1.25rem; margin: 0 0 .35rem; }
   p { margin: 0; font-size: 1rem; line-height: 1.5; hyphens: auto; }
   .icon {
-    display: block; flex: none; width: 2.75rem; height: 2.75rem; padding: .55rem; margin: 0 0 .95rem; border-radius: 50%;
+    display: block; flex: none; width: 2.75rem; height: 2.75rem; padding: .55rem; margin: 0 0 .95rem; border-radius: 6px;   // a rounded square, not a disc
     background: var(--well); box-shadow: var(--well-shadow); color: var(--rust);
     fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
   }
@@ -447,7 +448,7 @@ pre {
   max-width: 76rem; margin: 0 auto; padding: 2.8rem clamp(1rem, 3vw, 2rem) 1.6rem;
   display: grid; grid-template-columns: minmax(0, 1.7fr) repeat(4, minmax(0, 1fr)); gap: 2rem 2.5rem; align-items: start;
 }
-.foot .word { font: 700 clamp(2.2rem, 4vw, 3rem)/1 "Antiqua", serif; letter-spacing: .02em; margin: 0 0 .35rem; }
+.foot .word { font: 700 clamp(2.2rem, 4vw, 3rem)/1 "Antiqua", serif; letter-spacing: 0; font-feature-settings: "liga", "dlig"; margin: 0 0 .35rem; }
 .foot .sub { color: #e8b77a; font-style: italic; font-size: 1.1rem; margin: 0 0 1rem; }
 .foot .made { color: #d9cbb7; font-size: .98rem; line-height: 1.5; margin: 0 0 1rem; max-width: 22rem; hyphens: auto; }
 .foot .back { margin: 0; font-size: .95rem; }

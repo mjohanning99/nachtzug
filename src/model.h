@@ -233,6 +233,8 @@ double unswing(double p, float swing);
 double swingPos(double m, float swing); // the reverse: where a musical position falls on the playhead
 
 const std::vector<Patch>& presets();
+QJsonObject patchToJson(const Patch& patch);             // a sound's knobs by name (songfile.cpp)
+void patchFromJson(const QJsonObject& pj, Patch& patch); // and back, defaults for missing ones
 QString presetGroup(const QString& name); // "Bass", "Sequence and pluck", "Pad" or "Lead", for grouping the list
 const std::vector<DrumKit>& drumKits();
 // A kit preset chosen over the current kit: the preset brings its own sounds, but a drum playing one of your own

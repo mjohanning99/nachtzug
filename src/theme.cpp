@@ -173,7 +173,7 @@ QLabel#cap { color: @dim@; font-size: 13px; }
 QToolButton[transport="true"] { min-height: 30px; max-height: 30px; padding: 0 6px; }
 QToolButton#exportKey { min-height: 62px; max-height: 62px; padding: 4px 4px 2px 4px; }
 QPushButton#tap { min-height: 26px; max-height: 26px; padding: 0 10px; font-weight: 600; }
-QToolButton#help { min-height: 16px; max-height: 16px; min-width: 20px; max-width: 20px; padding: 0; border-radius: 10px; font-weight: 700; font-size: 11px; }
+QToolButton#help { min-height: 16px; max-height: 16px; min-width: 20px; max-width: 20px; padding: 0; font-weight: 600; font-size: 11px; }
 QToolButton#inspectorTab { min-height: 0; max-height: 16777215; padding: 0; border-radius: 0 6px 6px 0; border-left: none; font-size: 15px; } /* the tab on the left edge, as tall as the window */
 /* the mixer strips' keys sit between the screws, so they are narrower: less room beside the word */
 QFrame#strip QPushButton#mute, QFrame#strip QPushButton[strip="true"] { padding: 0 2px; }
@@ -181,6 +181,12 @@ QFrame#strip QPushButton#mute:pressed, QFrame#strip QPushButton#mute:checked, QF
   QFrame#strip QPushButton[strip="true"]:checked { padding: 2px 2px 1px 2px; }
 QPushButton#segL { border-top-right-radius: 0; border-bottom-right-radius: 0; margin-right: 0; }
 QPushButton#segR { border-top-left-radius: 0; border-bottom-left-radius: 0; border-left: none; margin-left: 0; }
+QPushButton#segM { border-radius: 0; border-left: none; margin-left: 0; margin-right: 0; }
+QFrame#soundCard { background: @field@; border: 1px solid @rule@; border-radius: 6px; }
+QFrame#soundCard[on="true"] { border: 2px solid @amber@; }
+QLabel#cardName { font-weight: 600; }
+QFrame#soundChosen { background: @wellHi@; border: 1px solid @rule@; border-radius: 6px; }
+QLabel#chosenName { font-size: 19px; font-weight: 600; }
 QPushButton#mute:checked { background: #c4361c; color: #fff8ee; border-color: #7a2010; }
 QLabel#title { font-weight: 600; letter-spacing: 1px; }
 QGroupBox { border: 1px solid @rule@; border-radius: 6px; margin-top: 9px; padding: 8px 6px 4px 6px; }
@@ -192,6 +198,7 @@ QPushButton:checked, QToolButton:checked { background: @amber@; color: @accentIn
 QPushButton:disabled, QToolButton:disabled { background: transparent; color: @rule@; border-color: @gridBar@; }
 QPushButton#primary, QToolButton#primary { background: @key@; color: @keyInk@; border-color: @key@; }
 QPushButton#primary:hover, QToolButton#primary:hover { background: @keyHover@; }
+QPushButton#primary:disabled, QToolButton#primary:disabled { background: transparent; color: @rule@; border-color: @gridBar@; }
 QPushButton#primary:pressed, QToolButton#primary:pressed { background: @keyPress@; }
 QToolButton#primary:checked { background: @amber@; color: @accentInk@; border-color: @amber@; }
 QToolButton#rec:checked { background: @lcd@; color: @accentInk@; border-color: @lcd@; }
@@ -201,9 +208,8 @@ QToolButton[big="true"] { min-height: 32px; max-height: 32px; font-size: 14px; p
 QLabel#plate { color: @ink@; }
 QFrame#strip { background: @well@; border: 1px solid @gridBar@; border-radius: 6px; padding: 1px; }
 QFrame#strip[sel="true"] { border: 2px solid @amber@; padding: 0; } /* the thicker border takes the padding's place: nothing inside moves */
-QPushButton#stripName { background: transparent; border: none; border-radius: 0; font-weight: 700; }
+QPushButton#stripName { background: transparent; border: none; border-radius: 0; font-weight: 600; }
 QPushButton#stripName:hover { background: @hover@; }
-QLabel#chip { font-weight: 700; letter-spacing: 1px; padding: 0 14px 0 10px; }
 QTextBrowser { background: @canvas@; border: 1px solid @rule@; border-radius: 6px; padding: 8px; }
 QToolButton::menu-indicator { image: none; }
 QComboBox, QSpinBox { background: @well@; border: 1px solid @rule@; border-radius: 4px; padding: 0 8px; min-height: 28px; max-height: 28px; }
@@ -252,7 +258,7 @@ QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; lef
    exactly (a thicker bottom border would join the corners badly). Pressed or lit keys show a thinner lip. */
 QPushButton, QToolButton { background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 @keyTop@, stop:0.895 @keyBot@, stop:0.900 @keyDeep@, stop:1 @keyDeep@);
   color: @ink@; border: 1px solid @keyEdge@; border-radius: 4px;
-  padding: 0 12px 3px 12px; min-height: 25px; max-height: 25px; font-weight: 500; letter-spacing: 0.5px; }
+  padding: 0 12px 3px 12px; min-height: 25px; max-height: 25px; font-weight: 500; letter-spacing: 0.5px; } /* 30 in all: 25, the 3 px lip, the borders (measured) */
 QPushButton:hover, QToolButton:hover { background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ffffff, stop:0.895 @keyTop@, stop:0.900 @keyDeep@, stop:1 @keyDeep@); }
 QPushButton:pressed, QToolButton:pressed { background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 @keyBot@, stop:0.962 @keyBot@, stop:0.967 @keyDeep@, stop:1 @keyDeep@); padding: 2px 12px 1px 12px; }
 QPushButton:checked, QToolButton:checked { background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 @amberHi@, stop:0.962 @amber@, stop:0.967 @amberDeep@, stop:1 @amberDeep@);
@@ -263,7 +269,7 @@ QPushButton#primary:hover, QToolButton#primary:hover { background: qlineargradie
 QPushButton#primary:pressed, QToolButton#primary:pressed { background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 @key@, stop:0.962 @key@, stop:0.967 #120f0d, stop:1 #120f0d); padding: 2px 12px 1px 12px; }
 QToolButton#primary:checked { background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 @amberHi@, stop:0.962 @amber@, stop:0.967 @amberDeep@, stop:1 @amberDeep@); color: @accentInk@; border-color: @amberDeep@; }
 QToolButton#rec:checked { background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #e0563c, stop:0.962 #b8361f, stop:0.967 #7a2010, stop:1 #7a2010); color: #fff8ee; border-color: #7a2010; }
-QToolButton[transport="true"] { min-height: 23px; max-height: 23px; padding: 0 6px 3px 6px; } /* as tall as a key: 28 */
+QToolButton[transport="true"] { min-height: 23px; max-height: 23px; padding: 0 6px 3px 6px; } /* 28 in all (23, the 3 px lip, the borders), 2 less than a key */
 QToolButton[transport="true"]:pressed, QToolButton[transport="true"]:checked { padding: 2px 6px 1px 6px; }
 QToolButton[big="true"] { min-height: 31px; max-height: 31px; padding: 0 14px 3px 14px; }
 QToolButton[big="true"]:pressed, QToolButton[big="true"]:checked { padding: 2px 14px 1px 14px; }

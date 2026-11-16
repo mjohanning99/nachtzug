@@ -89,7 +89,8 @@ QIcon ledIcon(const QColor& lit);         // a small indicator light: dark when 
 QIcon transportIcon(const QString& kind); // "start", "play", "stop", "rec": symbols for the transport keys
 // The keys' symbols, drawn on an 18-unit grid with round ends: "copy", "loop", "cut", "scissors", "delete",
 // "arrange" (above the timeline), "mute", "solo", "lines", "stop", "idea", "vary", "clean", "clear", "accent",
-// "slide", "chance", "repeat", "lean", "keep", "dice", "mutate", "stopall", "column". accent: the red or amber parts.
+// "slide", "chance", "repeat", "lean", "keep", "dice", "mutate", "stopall", "column", "play", "savesound". accent: the
+// red or amber parts.
 void drawSymbol(QPainter& p, const QString& kind, const QRectF& box, const QColor& ink, const QColor& accent);
 // a symbol as an icon: in the ink (or, dark: the dark keys' ink), in the accent's ink on a lit key, faint when disabled
 QIcon symbolIcon(const QString& kind, bool dark = false);
@@ -271,7 +272,8 @@ private:
 	QString text_;
 };
 
-// Red LED display: oscilloscope, song position, key and tempo, plus short messages.
+// The display: oscilloscope, song position, key and tempo, plus short messages. Warm ivory with brown type in
+// Bakelite, a red LED look in the dark themes.
 class Lcd : public QWidget {
 	Q_OBJECT
 public:

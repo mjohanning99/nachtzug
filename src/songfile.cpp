@@ -114,6 +114,21 @@ static Clip clipFromJson(const QJsonObject& cj) {
 	return c;
 }
 
+// a sound's knobs, by name, as in a song file and in a saved sound (see mysounds.cpp)
+QJsonObject patchToJson(const Patch& patch) {
+	QJsonObject pj;
+	for (int i = 0; i < P_COUNT; i++)
+		pj[PARAMS[i].id] = double(patch.p[i]);
+	return pj;
+}
+// missing knobs get their default; every value is kept within its range
+void patchFromJson(const QJsonObject& pj, Patch& patch) {
+	for (int i = 0; i < P_COUNT; i++) {
+		const double top = PARAMS[i].kind == K_CHOICE ? double(QString::fromLatin1(PARAMS[i].choices).count('|')) : 1.0;
+		patch.p[i] = float(std::clamp(pj[PARAMS[i].id].toDouble(double(PARAMS[i].def)), 0.0, top));
+	}
+}
+
 QJsonObject Song::toJson() const {
 	QJsonObject o;
 	o["format"] = "nachtzug-1";
@@ -173,11 +188,8 @@ QJsonObject Song::toJson() const {
 		j["arp"] = t.arp;
 		j["arpRate"] = t.arpRate;
 		j["arpOct"] = t.arpOct;
-		QJsonObject pj;
-		for (int i = 0; i < P_COUNT; i++)
-			pj[PARAMS[i].id] = double(t.patch.p[i]);
 		j["patchName"] = t.patch.name;
-		j["patch"] = pj;
+		j["patch"] = patchToJson(t.patch);
 		QJsonArray kj;
 		for (int i = 0; i < DP_COUNT; i++)
 			kj.append(double(t.kit.p[i]));
@@ -280,12 +292,7 @@ bool Song::fromJson(const QJsonObject& o, Song& s) {
 		if (t.laneParam != AP_VOLUME &&
 		    (t.laneParam < 0 || t.laneParam >= P_COUNT || PARAMS[t.laneParam].kind == K_CHOICE))
 			t.laneParam = P_CUTOFF;
-		const QJsonObject pj = j["patch"].toObject();
-		for (int i = 0; i < P_COUNT; i++) {
-			const double top =
-			    PARAMS[i].kind == K_CHOICE ? double(QString::fromLatin1(PARAMS[i].choices).count('|')) : 1.0;
-			t.patch.p[i] = float(std::clamp(pj[PARAMS[i].id].toDouble(double(PARAMS[i].def)), 0.0, top));
-		}
+		patchFromJson(j["patch"].toObject(), t.patch);
 		t.kit = drumKits()[0];
 		t.kit.name = j["kitName"].toString(t.kit.name);
 		const QJsonArray kj = j["kit"].toArray();

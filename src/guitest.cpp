@@ -9,6 +9,7 @@
 #include "mainwindow.h"
 #include "inspector.h"
 #include "editor.h"
+#include "welcome.h"
 #include "widgets.h"
 #include "soundpanel.h"
 #include "samples.h"
@@ -33,7 +34,6 @@
 #include <QKeyEvent>
 #include <QDialog>
 #include <QLineEdit>
-#include <QRadioButton>
 #include <QThread>
 #include <cmath>
 #include <functional>
@@ -54,6 +54,16 @@ void scheduleGuiTest(App& app, MainWindow& w) {
 				std::fprintf(stderr, "FAILED: %s\n", what);
 			}
 		};
+		{ // the welcome window's pairs of keys: a choice in one row leaves the other rows' choices alone
+			WelcomeDialog d([](const QString&) {});
+			const QList<QPushButton*> right = d.findChildren<QPushButton*>(QStringLiteral("segR"));
+			for (QPushButton* k : right)
+				k->click();
+			bool all = right.size() == 3;
+			for (QPushButton* k : right)
+				all = all && k->isChecked();
+			check(all, "each row of the welcome window keeps its own choice");
+		}
 		auto* sp = w.findChild<SoundPanel*>();
 		auto* tabs = w.findChild<QTabWidget*>();
 		tabs->setCurrentIndex(1);
@@ -467,16 +477,16 @@ void scheduleGuiTest(App& app, MainWindow& w) {
 		{
 			bool stemsPath = false, midiOff = false;
 			onModal([&](QWidget* d) {
-				QList<QRadioButton*> radios = d->findChildren<QRadioButton*>();
-				for (QRadioButton* r : radios)
-					if (r->text().contains(QStringLiteral("each track"))) r->click();
+				QList<QPushButton*> keys = d->findChildren<QPushButton*>(); // the kinds are joined keys
+				for (QPushButton* r : keys)
+					if (r->text().contains(QStringLiteral("per track"))) r->click();
 				for (QLineEdit* e : d->findChildren<QLineEdit*>())
 					stemsPath = e->text().endsWith(QStringLiteral(" (tracks)"));
-				for (QRadioButton* r : radios)
+				for (QPushButton* r : keys)
 					if (r->text().contains(QStringLiteral("MIDI"))) r->click();
 				for (QComboBox* c : d->findChildren<QComboBox*>())
 					midiOff = !c->isEnabled();
-				for (QRadioButton* r : radios)
+				for (QPushButton* r : keys)
 					if (r->text().contains(QStringLiteral("One sound file"))) r->click();
 				static_cast<QDialog*>(d)->reject();
 			});

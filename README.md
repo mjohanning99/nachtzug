@@ -43,7 +43,7 @@ For more advanced users, or once Nachtzug starts to feel limiting, we recommend 
 - **A real synthesiser on every track**, with live pictures of what each knob does, and a **Simple** page with eight big knobs in plain words if you’d rather not see them all.
 - **Sounds that move.** Draw a line for any knob, or record your knob turns while the song plays.
 - **From a loop to a song.** Arrange clips on a timeline, jam with the loop grid, or press **Arrange** and get an intro, a build-up, a break and an ending.
-- **Your own sounds.** A library of 65 sounds made for Nachtzug (nine of them from a night train!), your own samples, or a drum loop chopped across the pads.
+- **Your own sounds.** A library of 65 sounds made for Nachtzug (nine of them from a night train!), your own samples, or a drum loop chopped across the pads. Any sound you make can be kept under a name of your own and found again in the sound library.
 - **Learn as you go.** Five short lessons walk you through the real program, one step at a time, and almost everything explains itself when you rest the mouse on it.
 - **Share it.** Export your song as a WAV file, as one file per track, or as MIDI for other music programs.
 - **Set up the way you like it.** Keys with a symbol and a word, or the symbols alone; the timeline above the notes or beside them; scroll bars or none; six colour themes.

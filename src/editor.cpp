@@ -532,7 +532,9 @@ void NoteEditor::mouseMoveEvent(QMouseEvent* e) {
 	if (drag == Draw) {
 		if (drawIdx < 0 || drawIdx >= int(c->notes.size())) return;
 		Note& n = c->notes[size_t(drawIdx)];
-		const int len = std::clamp(int(std::ceil((xt(p.x()) - n.start) / g)) * g, g, L - n.start);
+		const bool free = e->modifiers() & Qt::ShiftModifier; // Shift: any length, not only whole grid steps
+		const int len = free ? std::clamp(int(std::lround(xt(p.x()) - n.start)), 3, L - n.start)
+		                     : std::clamp(int(std::ceil((xt(p.x()) - n.start) / g)) * g, g, L - n.start);
 		if (len != n.len) {
 			n.len = len;
 			lastLen = len;
@@ -545,6 +547,15 @@ void NoteEditor::mouseMoveEvent(QMouseEvent* e) {
 		return;
 	}
 	int dt = int(std::lround((xt(p.x()) - pressTick) / g)) * g, dd = drag == Move ? degAt(p.y()) - pressDeg : 0;
+	const bool freeLen = drag == Resize && (e->modifiers() & Qt::ShiftModifier); // Shift: any length
+	if (freeLen)
+		dt = int(std::lround(xt(p.x()) - pressTick));
+	else if (drag == Resize && drawIdx >= 0 && drawIdx < int(orig.size())) {
+		// the end goes to the grid line nearest the mouse (a note made shorter than its step, as ideas make them,
+		// would otherwise keep falling short of every line)
+		const Note& o = orig[size_t(drawIdx)];
+		dt = int(std::lround(xt(p.x()) / g)) * g - (o.start + o.len);
+	}
 	if (drag == Move) { // keep the whole selection inside the clip and the pitch range
 		int minS = INT_MAX, maxS = 0, minD = INT_MAX, maxD = INT_MIN;
 		for (const Note& o : orig)
@@ -569,7 +580,10 @@ void NoteEditor::mouseMoveEvent(QMouseEvent* e) {
 			n.start = orig[i].start + dt;
 			n.deg = orig[i].deg + dd;
 		} else {
-			n.len = std::clamp(orig[i].len + dt, std::min(g, 12), std::max(std::min(g, 12), L - n.start));
+			const int to = orig[i].start + orig[i].len + dt;
+			const int end = freeLen ? to : int(std::lround(double(to) / g)) * g; // on a grid line, unless Shift
+			const int shortest = freeLen ? 3 : std::min(g, 12);
+			n.len = std::clamp(end - n.start, shortest, std::max(shortest, L - n.start));
 			if (int(i) == drawIdx) lastLen = n.len;
 		}
 	}

@@ -1,6 +1,7 @@
 // Sound panel: every knob of the selected track's synth or drum kit, laid out in the order the sound flows
 // (oscillators -> filter -> amp, then movement and effects), with a live picture in each section.
 #pragma once
+#include "mysounds.h"
 #include "model.h"
 #include <QWidget>
 #include <functional>
@@ -55,6 +56,12 @@ private:
 	void rollSound();
 	void mutateSound();
 	QComboBox* makePresetBox();
+	void fillPresetBox(QComboBox* box); // the ready-made sounds in groups, your own on top
+	void refreshMine();                 // your own sounds read again (after saving one), every preset list refilled
+	void saveSound();                   // "Save sound…"
+	void openLibrary();                 // "All sounds…": the sound library
+	static constexpr int MINE = 10000;  // a preset list entry at MINE + i is mine[i]
+	std::vector<mysounds::Sound> mine;  // your own sounds, as listed
 	QComboBox* makeKitBox();
 	QPushButton* sampleButton(int drum);
 	void sampleMenu(int drum, QPushButton* under);

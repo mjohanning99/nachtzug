@@ -107,7 +107,7 @@ void LoopGrid::paintEvent(QPaintEvent*) {
 	QFont fs = f;
 	fs.setPixelSize(10);
 	QFont fb = f;
-	fb.setBold(true);
+	fb.setWeight(QFont::DemiBold); // the Grotesk’s heaviest, 600
 	fb.setPixelSize(12);
 	const double m = app->musicalPos();
 	const bool playing = app->isPlaying();
@@ -330,7 +330,7 @@ void LoopGrid::paintHeaders(const Frame& fr) {
 	p.drawText(QRect(12, COLH, HDR - 16, CHORDH), Qt::AlignVCenter | Qt::AlignLeft, tr("CHORDS"));
 	p.drawText(QRect(12, rowsBottom, HDR - 16, FOOT), Qt::AlignVCenter | Qt::AlignLeft, tr("COLUMNS"));
 	p.setClipRect(QRect(0, TOP, HDR, rowsBottom - TOP));
-	auto pill = [&](const QRect& r, const QString& text, bool on, const QColor& onCol, const QString& symbol = {}) {
+	auto keyFace = [&](const QRect& r, const QString& text, bool on, const QColor& onCol, const QString& symbol = {}) {
 		theme::drawKey(p, r, text, on, onCol, symbol);
 	};
 
@@ -347,9 +347,9 @@ void LoopGrid::paintHeaders(const Frame& fr) {
 		p.drawText(QRect(33, y + 5, HDR - 153, 20), Qt::AlignVCenter | Qt::AlignLeft,
 		           p.fontMetrics().elidedText(ui(t.name), Qt::ElideRight, HDR - 153));
 		p.setFont(f);
-		pill(QRect(HDR - 114, y + 6, 24, 18), QString(), t.mute, QColor(0xc4, 0x36, 0x1c), QStringLiteral("mute"));
-		pill(QRect(HDR - 86, y + 6, 24, 18), QString(), t.solo, theme::amber, QStringLiteral("solo"));
-		pill(QRect(HDR - 58, y + 6, 48, 18), QString(), false, theme::lcd, QStringLiteral("stop"));
+		keyFace(QRect(HDR - 114, y + 6, 24, 18), QString(), t.mute, QColor(0xc4, 0x36, 0x1c), QStringLiteral("mute"));
+		keyFace(QRect(HDR - 86, y + 6, 24, 18), QString(), t.solo, theme::amber, QStringLiteral("solo"));
+		keyFace(QRect(HDR - 58, y + 6, 48, 18), QString(), false, theme::lcd, QStringLiteral("stop"));
 		const QRect vr(12, y + 32, HDR - 24, 8);
 		theme::drawSlider(p, QRectF(vr).adjusted(4, 1, -4, -1), app->paramValue(t, AP_VOLUME), col);
 		const float pk =

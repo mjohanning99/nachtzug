@@ -67,6 +67,13 @@ decisions first within each part. Anything that changes the look starts as mocku
 
 - The faders (Volume and the like) could feel more real, "liquid": mockups made (studio, glass tube, rubber); left
   as they are for now.
+- The design language's open questions, decided (November 2026; codes 1A 2A 4A 5A 6A 7A 8A 9B 10A 11A 12A 15A): one
+  brand rust `#a9441f` outside the program; the other themes stay plain; icons on the website in rounded squares
+  and the small keys at the top right as normal keys; SemiBold 600 as the heaviest Grotesk weight; four radii by
+  role; one red `#c4361c`; no brass in the program; the name never letter-spaced on the website; joined keys
+  instead of round option buttons in Export, Chop and Arrange; comments and key heights corrected; Crimson Pro,
+  Barlow and Michroma removed from the manual; the three fader caps stay. Also the Arrange window, whose intro was
+  cut off at the bottom, is now as tall as its text. See section 12 of design-language.md.
 
 ## To do
 

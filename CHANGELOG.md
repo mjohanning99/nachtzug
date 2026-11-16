@@ -1,5 +1,13 @@
 # Changes
 
+## 0.3.0 (16 November 2026)
+
+- **Sounds of your own.** “Save sound…” keeps a sound you have made as a small file, with a name, a group and a star. The preset list shows the starred and recent ones, and “All sounds…” opens the sound library: a card index where every sound can be heard first, then used, renamed, shared or deleted. Sound files can be dragged into it.
+- **Note lengths.** Dragging a note’s end snaps to the grid; with Shift, any length.
+- **Choices as joined keys.** Export, Chop and Arrange use the same keys as the welcome window instead of round option buttons.
+- **Small fixes.** The welcome window’s choices work in pairs again, and the Arrange window shows its whole introduction.
+- **A tidier look.** One rust and one red throughout, the name never letter-spaced on the website, and a design language (docs/design-language.md) for anyone who would like to help.
+
 ## 0.2.1 (16 November 2026)
 
 - **The Mac download builds again.** One line the Mac’s compiler refuses had stopped the 0.2.0 release, so 0.2.0 came out without downloads; this version brings them, with everything 0.2.0 changed.

@@ -694,7 +694,7 @@ void SettingsDialog::fillSamples(const QString& select) {
 	QTreeWidgetItem* selectItem = nullptr;
 	auto bold = [](QTreeWidgetItem* it) {
 		QFont f = it->font(0);
-		f.setBold(true);
+		f.setWeight(QFont::DemiBold); // the Grotesk’s heaviest, 600
 		it->setFont(0, f);
 	};
 	// the library: categories, each folded until opened

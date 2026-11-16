@@ -52,7 +52,7 @@ stations:
   - { time: "23:21", stop: "Knob Street West", icon: knob, title: "A real synthesiser", short: "On every track, with live pictures of what each knob does, or a <b>Simple</b> page of eight big knobs." }
   - { time: "23:40", stop: "Loop Grid Abstellbahnhof", icon: grid, title: "Jam like a live set", short: "Start and stop patterns while it plays; every change waits for the next bar." }
   - { time: "23:52", stop: "Arrangement Viaduct Nord", icon: arrange, title: "From a loop to a song", short: "Lay out clips yourself, or let <b>Arrange</b> make an intro, a build-up, a break and an ending." }
-  - { time: "00:15", stop: "Sample Gbf", icon: wave, title: "Your own sounds", short: "65 sounds made for Nachtzug, nine of them from a night train, your samples, or a chopped drum loop." }
+  - { time: "00:15", stop: "Sample Gbf", icon: wave, title: "Your own sounds", short: "65 sounds made for Nachtzug, nine of them from a night train, your samples, or a chopped drum loop. And the sounds you make, kept under your own names." }
   - { time: "00:51", stop: "Berliner Schule Hbf", icon: export, title: "Take it with you", short: "Export a WAV, a file per track or MIDI. MIDI keyboards, knobs and clock all work." }
 
 gallery:

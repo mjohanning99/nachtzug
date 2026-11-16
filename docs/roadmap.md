@@ -20,6 +20,61 @@ clang-format with no warnings, main.cpp, model.cpp and widgets.cpp split). Still
 - On GitHub, by hand: the new social preview (Settings → Social preview, `assets/logo/social-preview.png`) and the
   repository's description.
 
+## 2a. Chords on every note, and a fuller sound (next)
+
+**"Each note plays" sounds bad (open).** With a chord shape such as "Seventh chord", "Follow chords" on, octave +1
+and the arpeggio off, the owner hears it as very discordant, the other shapes too. A first guess, building the chord
+from the song chord's tones round the note (`Song::chordVoicing`), sounded the same to the owner and was taken out
+again (16 November 2026). The cause is still to find; worth checking next: how the chord's voices meet the patch
+(Voices: Mono with a chord, glide, unison and detune, FM, drive on four notes at once), the chord's register and
+spacing (four notes within one octave, an octave up), the voices' levels (a chord four times as loud into the
+drive), and listening to one held note with each shape on a plain saw sound before anything else.
+
+**A fuller sound (ideas, to choose; screens start as mockups).** ★ marks the assistant's picks.
+
+- ★ An equaliser per track with a picture: low cut, low, mid (with its frequency) and high, as a curve to drag in the
+  Sound tab's effects; the mixer strip gets the three knobs (this is "A finished sound" below, made concrete).
+- ★ On the Simple page only a "Tone" knob (darker to brighter) and a "Low cut" switch; the full EQ on the Complete page.
+- An EQ and the "glue" compressor on the whole song, before the limiter.
+- ★ Filter: high-pass, band-pass and notch besides the low-pass types, and a release of its own (today A, D, S only).
+- ★ Echo: time in note values, feedback, tone, ping-pong; Berlin School lives on its echo.
+- ★ LFO: in time with the tempo, volume (tremolo) and pan as targets, a slow fade-in for delayed vibrato.
+- Oscillators: hard sync and ring modulation, a fine tune for oscillator 2 apart from the detune.
+- Velocity: how much a harder note opens the filter and raises the volume.
+- Reverb: size and damping.
+- ★ Saving sounds (agreed with the owner, 16 November 2026; mockups made, the library's look still to choose):
+  - The preset drop-down stays short: starred sounds and the ones used lately on top, then the built-in groups as
+    now, and "All sounds…" at the bottom, which opens the sound library. Beside it a key "Save sound…": name, group
+    (the track's suggested), optional words to find it by, a star to show it in the drop-down.
+  - The sound library, a window of its own: groups, a search, listening first (a short phrase on the track, nothing
+    changed until "Use"), star, rename, delete, share as a file and bring one in (dropping a file on it too).
+    Three looks drawn: A card index (groups left, cards, the chosen sound right), B ticket archive (tickets coloured
+    by group, filters on top), C plain list (one line per sound, sortable).
+    **Chosen: A, the card index.** Built in the program's own style, not the mockup's: no pills (words to find a sound
+    by as small engraved captions or soft text), the listen key a normal key with a lip and the ▶ symbol like the
+    transport keys (not round), and otherwise only the program's existing pieces: Bakelite keys, fields, switches,
+    captions, screwed panels.
+  - Building it, step by step: **1. done** (16 November 2026): `src/mysounds.cpp` saves, reads, renames, moves,
+    deletes and brings in sounds, stars them and remembers the ones used lately; songs and sound files share
+    `patchToJson`/`patchFromJson`; a self-test check. **2. done** (16 November 2026): "Save sound…" (a card
+    with a plus) beside "New sound" in the inspector and on the Complete page, and its dialog (`savesounddialog.cpp`:
+    name, group as joined keys, words, a star switch; `--dialog savesound` for pictures). **3. done:** the drop-down
+    lists only the starred sounds and the ones used lately under "My sounds", and "All sounds…" at the bottom (the
+    tall separators between the groups are gone; the headings mark them). **4. done** (`soundlibrary.cpp`): the card
+    index: shelves as keys on the left (My sounds, Starred, the four groups, Ready-made), a search and the cards in
+    the middle (a normal key with ▶ to listen first, the words as soft text), the chosen sound on the right (use,
+    star, rename, share as a file, delete), "Bring in a file…" and files dropped on the window; `--dialog library`.
+    **5. done:** a manual section "Keeping a sound of your own"
+    (5.2, both languages, with a picture of the library taken by `shots.py` from four sample sounds), index entries,
+    a sentence in the help's guide, and the arrows, Space and Return in the card list. Maybe later: the sound's
+    picture (the filter curve) on the library's right side. The owner still has to try it all with a mouse.
+  - One small file per sound in the user's data folder (for example `~/.local/share/Nachtzug/sounds/<group>/`),
+    outside the song, so every song sees them and they can be backed up and shared.
+- A mastering tool (the owner's wish, for later): the finished song made louder and even, before export. A first
+  idea: a "Master" page with a few plain controls (Loudness to a target such as streaming level, Warmth, Width,
+  Punch, a low and high shelf), a meter of loudness and peaks, and before/after listening; built on the EQ and the
+  glue compressor above.
+
 ## 2b. The German texts (later)
 
 The German program is impersonal now, like the manual: no "du" or "Sie". The welcome window and the Settings dialog

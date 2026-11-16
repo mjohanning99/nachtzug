@@ -18,7 +18,7 @@
 #include <QMessageBox>
 #include <QProgressDialog>
 #include <QPushButton>
-#include <QRadioButton>
+#include <QPushButton>
 #include <QSettings>
 #include <QSpinBox>
 #include <QStandardPaths>
@@ -72,53 +72,76 @@ ExportDialog::ExportDialog(App* a, QWidget* parent) : QDialog(parent), app(a) {
 	grid->addWidget(caption(tr("Make")), row, 0, Qt::AlignTop | Qt::AlignRight);
 	format = new QButtonGroup(this);
 	{
-		auto* box = new QVBoxLayout;
-		box->setSpacing(4);
-		const char* names[3] = {QT_TR_NOOP("One sound file (WAV)"), QT_TR_NOOP("A sound file for each track (stems)"),
-		                        QT_TR_NOOP("A MIDI file with the notes")};
-		const char* tips[3] = {
+		// joined keys, as in the welcome window; what the chosen kind does is said in a soft line beneath
+		const char* names[3] = {QT_TR_NOOP("One sound file"), QT_TR_NOOP("A file per track"), QT_TR_NOOP("MIDI notes")};
+		static const char* tips[3] = {
 		    QT_TR_NOOP("The whole song mixed into one file, ready to play anywhere"),
 		    QT_TR_NOOP("Every track that is heard in its own WAV file, in a new folder. They all start at the same "
 			           "moment and add up to the song, for mixing it in another program."),
 		    QT_TR_NOOP("The notes of every track, without the sound, for other music programs. Arpeggios, chords and "
 			           "quick repeats are written out as you hear them.")};
+		auto* col = new QVBoxLayout;
+		col->setSpacing(4);
+		auto* keys = new QHBoxLayout;
+		keys->setSpacing(0);
 		for (int i = 0; i < 3; i++) {
-			auto* r = new QRadioButton(tr(names[i]));
-			r->setToolTip(tr(tips[i]));
-			format->addButton(r, i);
-			box->addWidget(r);
+			auto* k = new QPushButton(tr(names[i]));
+			k->setObjectName(i == 0 ? "segL" : i == 2 ? "segR" : "segM");
+			k->setCheckable(true);
+			k->setToolTip(tr(tips[i]));
+			format->addButton(k, i);
+			keys->addWidget(k);
 		}
-		grid->addLayout(box, row++, 1);
+		keys->addStretch(1);
+		col->addLayout(keys);
+		auto* note = new QLabel;
+		note->setObjectName("dim");
+		note->setWordWrap(true);
+		col->addWidget(note);
+		grid->addLayout(col, row++, 1);
 		format->button(std::clamp(st.value(QStringLiteral("export/kind"), 0).toInt(), 0, 2))->setChecked(true);
+		auto say = [this, note] { note->setText(tr(tips[std::clamp(format->checkedId(), 0, 2)])); };
+		say();
+		connect(format, &QButtonGroup::idClicked, this, say);
 	}
-	// what to write
+	// what to write: the whole song or the loop, with how many times; the bars and the length beneath
 	grid->addWidget(caption(tr("What")), row, 0, Qt::AlignTop | Qt::AlignRight);
 	what = new QButtonGroup(this);
-	auto* whole = new QRadioButton;
-	auto* loopOnly = new QRadioButton;
+	auto* whole = new QPushButton(tr("The whole song"));
+	auto* loopOnly = new QPushButton(tr("The loop"));
+	whole->setObjectName("segL");
+	loopOnly->setObjectName("segR");
+	for (QPushButton* k : {whole, loopOnly})
+		k->setCheckable(true);
 	wholeText = new QLabel;
 	loopText = new QLabel;
+	for (QLabel* l : {wholeText, loopText})
+		l->setObjectName("dim");
 	what->addButton(whole, 0);
 	what->addButton(loopOnly, 1);
-	auto radioRow = [](QRadioButton* r, QLabel* l, QWidget* extra = nullptr, QLabel* after = nullptr) {
-		auto* h = new QHBoxLayout;
-		h->setSpacing(6);
-		h->addWidget(r);
-		h->addWidget(l);
-		if (extra) h->addWidget(extra);
-		if (after) h->addWidget(after);
-		h->addStretch(1);
-		l->setBuddy(r);
-		return h;
-	};
 	repeats = new QSpinBox;
 	repeats->setRange(1, 32);
 	repeats->setFixedWidth(64);
 	repeats->setValue(st.value(QStringLiteral("export/repeats"), 4).toInt());
 	repeats->setToolTip(tr("How many times the loop plays in the file"));
 	auto* times = new QLabel(tr("times"));
-	grid->addLayout(radioRow(whole, wholeText), row++, 1);
-	grid->addLayout(radioRow(loopOnly, loopText, repeats, times), row++, 1);
+	{
+		auto* col = new QVBoxLayout;
+		col->setSpacing(4);
+		auto* keys = new QHBoxLayout;
+		keys->setSpacing(0);
+		keys->addWidget(whole);
+		keys->addWidget(loopOnly);
+		keys->addSpacing(10);
+		keys->addWidget(repeats);
+		keys->addSpacing(6);
+		keys->addWidget(times);
+		keys->addStretch(1);
+		col->addLayout(keys);
+		col->addWidget(wholeText);
+		col->addWidget(loopText);
+		grid->addLayout(col, row++, 1);
+	}
 	const bool hasLoop = app->song.loopEnd > app->song.loopStart;
 	loopOnly->setEnabled(hasLoop);
 	(st.value(QStringLiteral("export/loop"), false).toBool() && hasLoop ? loopOnly : whole)->setChecked(true);
@@ -126,18 +149,25 @@ ExportDialog::ExportDialog(App* a, QWidget* parent) : QDialog(parent), app(a) {
 	endingCap = caption(tr("Ending"));
 	grid->addWidget(endingCap, row, 0, Qt::AlignTop | Qt::AlignRight);
 	ending = new QButtonGroup(this);
-	auto* ring = new QRadioButton(tr("Let the echoes and reverb ring out"));
-	auto* fade = new QRadioButton(tr("Fade out over the last bars"));
+	auto* ring = new QPushButton(tr("Let it ring out"));
+	auto* fade = new QPushButton(tr("Fade out"));
+	ring->setToolTip(tr("Let the echoes and reverb ring out after the last note"));
+	fade->setToolTip(tr("Fade out over the last bars"));
+	ring->setObjectName("segL");
+	fade->setObjectName("segR");
+	for (QPushButton* k : {ring, fade})
+		k->setCheckable(true);
 	ending->addButton(ring, 0);
 	ending->addButton(fade, 1);
 	(st.value(QStringLiteral("export/fade"), false).toBool() ? fade : ring)->setChecked(true);
 	endingBox = new QWidget;
 	{
-		auto* eb = new QVBoxLayout(endingBox);
+		auto* eb = new QHBoxLayout(endingBox);
 		eb->setContentsMargins(0, 0, 0, 0);
-		eb->setSpacing(8);
+		eb->setSpacing(0);
 		eb->addWidget(ring);
 		eb->addWidget(fade);
+		eb->addStretch(1);
 	}
 	grid->addWidget(endingBox, row++, 1);
 	// quality
@@ -260,12 +290,16 @@ void ExportDialog::updateInfo() {
 	RenderOptions whole = options();
 	whole.loopOnly = false;
 	const int lastBar = std::max(BAR, s.endTick()) / BAR + (std::max(BAR, s.endTick()) % BAR ? 1 : 0);
-	wholeText->setText(tr("The whole song: bars 1 to %1 (%2)").arg(lastBar).arg(minutes(renderLength(s, whole))));
+	wholeText->setText(tr("Bars 1 to %1 (%2)").arg(lastBar).arg(minutes(renderLength(s, whole))));
 	if (s.loopEnd > s.loopStart)
-		loopText->setText(
-		    tr("Only the loop, bars %1 to %2, played").arg(s.loopStart / BAR + 1).arg((s.loopEnd + BAR - 1) / BAR));
+		loopText->setText((repeats->value() == 1 ? tr("Bars %1 to %2, played once")
+		                                          : tr("Bars %1 to %2, played %3 times").arg(repeats->value()))
+		                      .arg(s.loopStart / BAR + 1)
+		                      .arg((s.loopEnd + BAR - 1) / BAR));
 	else
-		loopText->setText(tr("Only the loop (there is none yet)"));
+		loopText->setText(tr("There is no loop yet"));
+	wholeText->setVisible(what->checkedId() != 1);
+	loopText->setVisible(what->checkedId() == 1);
 	const RenderOptions o = options();
 	const double secs = renderLength(s, o) + (o.fadeOut ? 0.0 : 3.0);
 	const double bytes = secs * o.sampleRate * 2 * (o.bits / 8);

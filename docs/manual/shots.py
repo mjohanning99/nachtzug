@@ -16,9 +16,9 @@ OUT = os.path.join(HERE, 'img' if LANG == 'en' else 'img-de')
 TMP = tempfile.mkdtemp(prefix='nz-shots-')
 S = 2   # the pictures are taken at this scale
 
-def run(args, name):
+def run(args, name, extra_env=None):
     png, geo = os.path.join(TMP, name + '.png'), os.path.join(TMP, name + '.json')
-    env = dict(os.environ, QT_SCALE_FACTOR=str(S))
+    env = dict(os.environ, QT_SCALE_FACTOR=str(S), **(extra_env or {}))
     subprocess.run([EXE, '--screenshot', png, '--lang', LANG, '--geometry', geo] + args, env=env, check=True, timeout=120)
     g = json.load(open(geo)) if os.path.exists(geo) else {}
     return Image.open(png).convert('RGB'), g
@@ -111,6 +111,18 @@ t = g['tabs']; cut(img, (0, t[1], 780, t[1] + 300), 'lesson')
 for d in ['welcome', 'export', 'arrange', 'soundcard', 'samples', 'settings', 'chop']:
     img, _ = run(['--dialog', d], d); save(img, 'dlg-' + d)
 img, _ = run(['--guide'], 'guide'); save(img, 'guide')
+
+# the sound library, with four sounds of one's own in a data folder of its own (pictures run as Nachtzug-test)
+xdg = os.path.join(TMP, 'xdg')
+for name, group, words, star, cut_ in (('Night Shift Bass', 'bass', ['dark', 'squelchy'], True, .3),
+                                        ('Glass Arp', 'sequence', ['bright'], True, .7),
+                                        ('Tangerine Pad', 'pad', ['soft', 'warm'], False, .5),
+                                        ('Signal Box Pluck', 'sequence', [], False, .4)):
+    d = os.path.join(xdg, 'Nachtzug', 'Nachtzug-test', 'sounds', group)
+    os.makedirs(d, exist_ok=True)
+    json.dump({'format': 1, 'kind': 'nachtzug-sound', 'name': name, 'group': group, 'words': words, 'starred': star,
+               'patch': {'cutoff': cut_, 'res': .6}}, open(os.path.join(d, name + '.nzsound'), 'w'))
+img, _ = run(['--dialog', 'library'], 'library', {'XDG_DATA_HOME': xdg}); save(img, 'library')
 
 # the sample menu under a drum, with the Train submenu open (pictured by the window test). It is taken at normal
 # size: the test screen is too small for the whole menu at double size, so the picture is enlarged afterwards.
