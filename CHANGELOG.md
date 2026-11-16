@@ -1,5 +1,9 @@
 # Changes
 
+## 0.3.2 (16 November 2026)
+
+- **Linux packages build again.** Packages for openSUSE and Fedora, which are built with link-time optimisation, stopped with “No data signature found”. The sample library is now built in a way that works with any compiler settings, and a source folder without the samples stops at once with a clear message.
+
 ## 0.3.1 (16 November 2026)
 
 - **The old ligatures.** In Nachtzug Antiqua, ct and st have their historical arc again, a bow from the c or s onto the t, as in old books, and they show in all running text on the website and in the manuals, together with the tz that joins the name.

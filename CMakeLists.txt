@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(nachtzug VERSION 0.3.1 LANGUAGES CXX)
+project(nachtzug VERSION 0.3.2 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -45,7 +45,14 @@ endif()
 # the sample library, made by tools/samplegen: built into the program as :/samples/<Category>/<Name>.wav
 file(GLOB_RECURSE NACHTZUG_SAMPLES CONFIGURE_DEPENDS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/assets/samples assets/samples/*.wav)
 list(TRANSFORM NACHTZUG_SAMPLES PREPEND assets/samples/)
-qt_add_resources(nachtzug "sample_library" PREFIX "/samples" BASE assets/samples BIG_RESOURCES FILES ${NACHTZUG_SAMPLES})
+if(NOT NACHTZUG_SAMPLES)
+  message(FATAL_ERROR "No samples in assets/samples/: this copy of the source is incomplete. The .wav files there "
+    "are part of the source code, and Nachtzug can't be built without them.")
+endif()
+# an ordinary resource, not BIG_RESOURCES: that one has rcc look for a marker in a compiled object file, which isn't
+# there when a packager builds with link-time optimisation (-flto, the default for openSUSE and Fedora packages), so
+# the build stopped with "No data signature found"; at about 10 MB the samples don't need it
+qt_add_resources(nachtzug "sample_library" PREFIX "/samples" BASE assets/samples FILES ${NACHTZUG_SAMPLES})
 
 qt_add_translations(nachtzug TS_FILES i18n/nachtzug_de.ts RESOURCE_PREFIX /i18n LUPDATE_OPTIONS -no-obsolete -locations none)
 
