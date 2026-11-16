@@ -30,6 +30,27 @@
   <div class="bands" aria-hidden="true"></div>
 </section>
 
+<!-- ============================================================ who it's for: where Nachtzug starts, and the connections onwards -->
+<section class="paper alt who" id="who">
+  <header class="chap">
+    <div class="sign"><p class="kicker">{{ t.who_title }}</p><h2>{{ t.who_heading }}</h2></div>
+  </header>
+  <div class="who-text">
+    <p>{{ t.who_text }}</p>
+    <p>{{ t.who_more }}</p>
+  </div>
+  <p class="who-connections">{{ t.who_connections }}</p>
+  <div class="cards four">
+    {% for p in t.who_programs %}
+    <article class="card-plate">
+      <h3><a href="{{ p.url }}">{{ p.name }}</a></h3>
+      <p>{{ p.note }}</p>
+    </article>
+    {% endfor %}
+  </div>
+  <p class="who-after">{{ t.who_after }}</p>
+</section>
+
 <!-- ============================================================ what's on board: the yellow departure timetable, then the program itself -->
 <section class="paper journey" id="journey">
   <header class="chap">

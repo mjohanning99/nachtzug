@@ -29,6 +29,18 @@ hero:
 board: { platform: "Gleis", number: "3", train: "Nachtzug", to: "nach Berliner Schule", departure: "Abfahrt", time: "22 58", label: "Platform 3: the Nachtzug to Berlin School departs at 22:58" }
 timetable: { title: "Abfahrt", sub: "Departures · Nachtzug, platform 3", station: "Nachtzug Hbf", valid: "valid from", time: "Time", train: "Train", stop: "Stop · what’s on board", platform: "Platform", legend: "Hbf = Hauptbahnhof (main station) · Gbf = Güterbahnhof (goods station)" }
 
+who_title: "Fahrgäste · Who it’s for"
+who_heading: "A first step into making music"
+who_text: "Nachtzug is not meant to be a fully featured DAW. It is a GarageBand-style music maker aimed specifically at electronic music, such as acid or Berlin School. It is meant as a starting point, for those who have never made music before and know little or nothing about it."
+who_more: "For more advanced users, or once Nachtzug starts to feel limiting, we recommend more fully featured programs such as these. They usually take longer to learn and may cost money, but they can do much more."
+who_connections: "Anschlüsse · Connections"
+who_programs:
+  - { name: "LMMS", url: "https://lmms.io", note: "Free. Patterns, a piano roll and many instruments, for Linux, macOS and Windows." }
+  - { name: "Ardour", url: "https://ardour.org", note: "Free as source code; the ready-made downloads cost a small sum you choose. Strong at recording and mixing." }
+  - { name: "Bitwig Studio", url: "https://www.bitwig.com", note: "Paid. Made for electronic music, with a modular sound design system." }
+  - { name: "REAPER", url: "https://www.reaper.fm", note: "Free to try, then an inexpensive licence. Small, fast and endlessly adaptable." }
+who_after: "Songs made in Nachtzug can come along: export them as MIDI or as one WAV file per track."
+
 stations_title: "Fahrplan · What’s on board"
 stations_heading: "A night’s journey through Nachtzug"
 stations_intro: "Every stop is a part of the program, in the order you’d meet them."

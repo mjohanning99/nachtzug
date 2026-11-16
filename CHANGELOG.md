@@ -1,5 +1,10 @@
 # Changes
 
+## 0.2.1 (16 November 2026)
+
+- **The Mac download builds again.** One line the Mac’s compiler refuses had stopped the 0.2.0 release, so 0.2.0 came out without downloads; this version brings them, with everything 0.2.0 changed.
+- **Who it’s for**, near the top of the README and on the website: Nachtzug is a starting point, not a fully featured DAW, with programs to move on to.
+
 ## 0.2.0 (16 November 2026)
 
 A new look, inside and out, and many small things made nicer to use.

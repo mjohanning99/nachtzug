@@ -404,7 +404,7 @@ void VuMeter::paintEvent(QPaintEvent*) {
 	p.setFont(f);
 	p.setPen(marks);
 	p.drawText(QRectF(face.left(), face.bottom() - 25, face.width(), 10), Qt::AlignCenter, QStringLiteral("VU"));
-	f.setPixelSize(7.5);
+	f.setPixelSize(7); // whole pixels only (7.5 was rounded down to 7 anyway; Clang on the Mac refuses it)
 	f.setLetterSpacing(QFont::AbsoluteSpacing, 0);
 	p.setFont(f);
 	p.drawText(QRectF(face.left(), face.bottom() - 12, face.width() - 5, 10), Qt::AlignRight | Qt::AlignVCenter, label);

@@ -262,6 +262,13 @@ p.dropcap { margin-top: 1.1em; }
 .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr)); gap: 1.25rem; max-width: 74rem; margin: 0 auto; }
 .cards.small { grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); }
 .cards.five { grid-template-columns: repeat(auto-fit, minmax(12.75rem, 1fr)); }
+.cards.four { grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); max-width: 64rem; }
+// who it's for: the plain words, then the other programs as onward connections
+.who-text { max-width: 44rem; margin: 0 auto; font-size: 1.1rem; hyphens: auto; }
+.who-text p { margin: 0 0 1rem; }
+.who-connections { text-align: center; font: 400 1.05rem/1.2 "DIN", sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--soft); margin: 2.2rem 0 1rem; }
+.who .card-plate h3 a { color: inherit; text-decoration: none; border-bottom: 2px solid var(--link); }
+.who-after { text-align: center; margin: 2rem auto 0; max-width: 40rem; color: var(--soft); }
 .card-plate {
   position: relative; display: flex; flex-direction: column; padding: 1.5rem 1.4rem 1.35rem; border-radius: 8px; border: 1px solid var(--line);
   background-color: var(--panel);

@@ -29,6 +29,12 @@ Nachtzug is made for the kind of music that’s built from repeating synthesiser
 > [!NOTE]
 > Nachtzug is still a work in progress and bugs are to be expected. If you find one, I’d be grateful if you [told me about it](https://github.com/mjohanning99/nachtzug/issues).
 
+## Who it’s for
+
+Nachtzug is not meant to be a fully featured DAW. It is a GarageBand-style music maker aimed specifically at electronic music, such as acid or Berlin School. It is meant as a starting point, for those who have never made music before and know little or nothing about it.
+
+For more advanced users, or once Nachtzug starts to feel limiting, we recommend more fully featured programs such as [LMMS](https://lmms.io), [Ardour](https://ardour.org), [Bitwig Studio](https://www.bitwig.com) or [REAPER](https://www.reaper.fm). These usually take longer to learn and may cost money, but they can do much more. Songs made in Nachtzug can come along: export them as MIDI or as one WAV file per track.
+
 ## What’s in it
 
 - **Play along on your computer keyboard.** Three rows of letter keys play three octaves, and every key fits the song. A MIDI keyboard works too.

@@ -30,6 +30,18 @@ hero:
 board: { platform: "Gleis", number: "3", train: "Nachtzug", to: "nach Berliner Schule", departure: "Abfahrt", time: "22 58", label: "Gleis 3: Nachtzug nach Berliner Schule, Abfahrt 22:58" }
 timetable: { title: "Abfahrt", sub: "Nachtzug, Gleis 3", station: "Nachtzug Hbf", valid: "gültig ab", time: "Zeit", train: "Zug", stop: "Halt · was an Bord ist", platform: "Gleis", legend: "Hbf = Hauptbahnhof · Gbf = Güterbahnhof" }
 
+who_title: "Fahrgäste · Für wen"
+who_heading: "Ein erster Schritt ins Musikmachen"
+who_text: "Nachtzug will keine vollwertige DAW sein. Es ist ein Musikprogramm in der Art von GarageBand, gedacht speziell für elektronische Musik wie Acid oder Berliner Schule. Es ist als Einstieg gedacht, für alle, die noch nie Musik gemacht haben und wenig oder gar nichts darüber wissen."
+who_more: "Für Fortgeschrittene, oder sobald Nachtzug zu eng wird, empfehlen wir umfangreichere Programme wie diese. Sie brauchen meist mehr Einarbeitung und kosten unter Umständen Geld, können dafür aber viel mehr."
+who_connections: "Anschlüsse"
+who_programs:
+  - { name: "LMMS", url: "https://lmms.io", note: "Kostenlos. Patterns, eine Pianorolle und viele Instrumente, für Linux, macOS und Windows." }
+  - { name: "Ardour", url: "https://ardour.org", note: "Als Quellcode kostenlos; die fertigen Downloads kosten einen kleinen, frei wählbaren Betrag. Stark bei Aufnahme und Mischen." }
+  - { name: "Bitwig Studio", url: "https://www.bitwig.com", note: "Kostenpflichtig. Für elektronische Musik gemacht, mit einem modularen System für eigene Klänge." }
+  - { name: "REAPER", url: "https://www.reaper.fm", note: "Kostenlos zum Ausprobieren, danach eine günstige Lizenz. Klein, schnell und vielseitig anpassbar." }
+who_after: "In Nachtzug gemachte Songs lassen sich mitnehmen: als MIDI oder als eine WAV-Datei pro Spur exportiert."
+
 stations_title: "Fahrplan · An Bord"
 stations_heading: "Eine Nachtfahrt mit Nachtzug"
 stations_intro: "Jeder Halt ist ein Teil des Programms, in der Reihenfolge, in der man ihnen begegnet."
