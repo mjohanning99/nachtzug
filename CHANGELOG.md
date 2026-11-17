@@ -1,5 +1,9 @@
 # Changes
 
+## 0.3.3 (17 November 2026)
+
+- **The downloads for 0.3.2.** One of the self-test’s checks needs exact timing and failed on GitHub’s busy Mac, so 0.3.2 came out without downloads; the check now gives a busy computer room, and this version brings the downloads, with everything 0.3.2 changed.
+
 ## 0.3.2 (16 November 2026)
 
 - **Linux packages build again.** Packages for openSUSE and Fedora, which are built with link-time optimisation, stopped with “No data signature found”. The sample library is now built in a way that works with any compiler settings, and a source folder without the samples stops at once with a clear message.
