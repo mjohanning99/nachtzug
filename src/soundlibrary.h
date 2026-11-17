@@ -16,7 +16,7 @@ class QVBoxLayout;
 class SoundLibrary : public QDialog {
 	Q_OBJECT
 public:
-	// use: called with the sound to put on the selected track
+	// use: called with the sound to put on the selected track; empty when there is no such track (no Use key then)
 	SoundLibrary(App* app, std::function<void(const mysounds::Sound&)> use, QWidget* parent = nullptr);
 
 protected:

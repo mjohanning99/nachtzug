@@ -14,6 +14,11 @@
 #include <QImage>
 #include <QSettings>
 #include <QToolButton>
+#include <QApplication>
+#include <QCursor>
+#include <QHash>
+#include <QScreen>
+#include <cmath>
 
 namespace theme {
 
@@ -526,6 +531,11 @@ void drawSymbol(QPainter& p, const QString& kind, const QRectF& box, const QColo
 		p.drawRoundedRect(QRectF(10, 5, 6, 8), 1.5, 1.5);
 		p.setPen(accentLine);
 		p.drawLine(QPointF(9, 2), QPointF(9, 16));
+	} else if (kind == "zoomout" || kind == "zoomin") { // a magnifying glass, with a minus or a plus in it
+		p.drawEllipse(QPointF(7.5, 7.5), 5, 5);
+		p.drawLine(QPointF(11.2, 11.2), QPointF(16, 16));
+		p.drawLine(QPointF(5, 7.5), QPointF(10, 7.5));
+		if (kind == "zoomin") p.drawLine(QPointF(7.5, 5), QPointF(7.5, 10));
 	} else if (kind == "scissors") {
 		p.drawEllipse(QPointF(5, 13), 2.6, 2.6);
 		p.drawEllipse(QPointF(13, 13), 2.6, 2.6);
@@ -650,6 +660,16 @@ void drawSymbol(QPainter& p, const QString& kind, const QRectF& box, const QColo
 		p.drawLine(QPointF(14, 9.5), QPointF(14, 15.5));
 		p.drawLine(QPointF(11, 12.5), QPointF(17, 12.5));
 		p.setPen(line);
+	} else if (kind == "library") { // a card-index drawer: cards standing in an open tray
+		p.drawRoundedRect(QRectF(5.5, 2.5, 8, 7), 1.2, 1.2);
+		p.setPen(accentLine);
+		p.setBrush(wellHi);
+		p.drawRoundedRect(QRectF(3.5, 5, 8, 6.5), 1.2, 1.2);
+		p.setPen(line);
+		p.setBrush(wellHi);
+		p.drawRoundedRect(QRectF(2, 9, 14, 6.5), 1.6, 1.6);
+		p.drawLine(QPointF(7, 12.2), QPointF(11, 12.2));
+		p.setBrush(Qt::NoBrush);
 	} else if (kind == "keep") { // a pin
 		poly({{6.5, 2.5}, {11.5, 2.5}});
 		poly({{7.5, 2.5}, {7.5, 7}, {5, 10}, {13, 10}, {10.5, 7}, {10.5, 2.5}});
@@ -707,6 +727,104 @@ QIcon symbolIcon(const QString& kind, bool dark) {
 
 void loadKeyLook() {
 	symbolsOnly = QSettings().value(QStringLiteral("keys")).toString() == QLatin1String("symbols");
+	ownCursors = QSettings().value(QStringLiteral("ownCursors"), true).toBool();
+}
+
+// ---------------------------------------------------------------- cursors
+
+// one of Nachtzug's cursors, drawn on a 32 grid in the look's ink, cream and amber, each shape first as a wide light
+// rim so it shows on the dark looks too; hot: where the cursor points
+static QPixmap cursorPixmap(const QString& kind, qreal dpr, QPointF* hot) {
+	const int side = int(std::ceil(32 * dpr));
+	QPixmap pm(side, side);
+	pm.fill(Qt::transparent);
+	pm.setDevicePixelRatio(dpr);
+	QPainter p(&pm);
+	p.setRenderHint(QPainter::Antialiasing);
+	const QColor ink(0x2b, 0x26, 0x23), cream(0xf6, 0xf2, 0xea), amber(0xd8, 0x64, 0x2a), rim(0xff, 0xfa, 0xf2);
+	*hot = QPointF(16, 16);
+	for (int pass = 0; pass < 2; pass++) {
+		const bool under = pass == 0; // the rim, under everything
+		auto pen = [&](double w) {
+			return QPen(under ? rim : ink, under ? w + 2.4 : w, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+		};
+		auto poly = [&](std::initializer_list<QPointF> pts, const QColor& fill, double w = 1.6) {
+			p.setPen(pen(w));
+			p.setBrush(under ? rim : fill);
+			p.drawPolygon(QPolygonF(pts));
+		};
+		auto circle = [&](QPointF c, double r, const QColor& fill, double w = 1.6) {
+			p.setPen(pen(w));
+			p.setBrush(under ? rim : fill);
+			p.drawEllipse(c, r, r);
+		};
+		auto line = [&](QPointF a, QPointF b, double w) {
+			p.setPen(pen(w));
+			p.drawLine(a, b);
+		};
+		if (kind == QLatin1String("pencil")) { // lying from the lower left, its lead the point
+			const QPointF t(3, 29), u(std::sqrt(0.5), -std::sqrt(0.5)), v(std::sqrt(0.5), std::sqrt(0.5));
+			const double w = 3.6;
+			auto f = [&](double a, double b) { return t + a * u + b * v; };
+			poly({f(7, -w), f(23, -w), f(23, w), f(7, w)}, amber);                          // the body
+			poly({f(23, -w), f(26, -w), f(26, w), f(23, w)}, QColor(0xb1, 0xa3, 0x91));     // the ferrule
+			poly({f(26, -w), f(29.5, -w), f(29.5, w), f(26, w)}, QColor(0xe8, 0xa0, 0x90)); // the rubber
+			poly({f(0, 0), f(7, -w), f(7, w)}, QColor(0xe9, 0xd3, 0xa6));                   // the sharpened wood
+			poly({f(0, 0), f(2.6, -w * 0.37), f(2.6, w * 0.37)}, ink);                      // the lead
+			*hot = t;
+		} else if (kind == QLatin1String("scissors")) { // open, pointing up and to the left; they cut between the tips
+			line({15, 15}, {22.5, 27}, 2.4);
+			line({15, 15}, {27, 22.5}, 2.4);
+			const QColor steel(0x9a, 0x8f, 0x82);
+			poly({{2, 8.5}, {17, 13}, {15.5, 17}, {13, 16}}, steel);
+			poly({{8.5, 2}, {13, 17}, {17, 15.5}, {16, 13}}, steel);
+			circle({23, 27}, 3.6, amber, 1.8);
+			circle({27, 23}, 3.6, amber, 1.8);
+			if (!under) {
+				circle({23, 27}, 1.4, cream, 0.9);
+				circle({27, 23}, 1.4, cream, 0.9);
+				circle({15, 15}, 1.2, ink, 0.5); // the rivet
+			}
+			*hot = QPointF(5, 5);
+		} else if (kind == QLatin1String("turn")) { // up and down, open in the middle so the knob stays in sight
+			poly({{16, 1.5}, {22, 8}, {10, 8}}, cream);
+			poly({{16, 30.5}, {22, 24}, {10, 24}}, cream);
+		} else if (kind == QLatin1String("handle")) { // the end of a note, and the two ways it goes
+			poly({{14.5, 4}, {17.5, 4}, {17.5, 28}, {14.5, 28}}, amber);
+			poly({{1.5, 16}, {8, 10}, {8, 13.6}, {12.5, 13.6}, {12.5, 18.4}, {8, 18.4}, {8, 22}}, cream);
+			poly({{30.5, 16}, {24, 10}, {24, 13.6}, {19.5, 13.6}, {19.5, 18.4}, {24, 18.4}, {24, 22}}, cream);
+		}
+	}
+	return pm;
+}
+
+QCursor cursor(const QString& kind, Qt::CursorShape system) {
+	if (!ownCursors) return QCursor(system);
+	qreal dpr = 1; // as sharp as the sharpest screen; Qt scales it down on the others
+	for (QScreen* s : QGuiApplication::screens())
+		dpr = std::max(dpr, s->devicePixelRatio());
+	static QHash<QString, QCursor> made;
+	const QString key = kind + QLatin1Char('@') + QString::number(dpr);
+	if (!made.contains(key)) {
+		QPointF hot;
+		const QPixmap pm = cursorPixmap(kind, dpr, &hot);
+		made.insert(key, QCursor(pm, int(std::lround(hot.x())), int(std::lround(hot.y()))));
+	}
+	return made.value(key);
+}
+
+void setOwnCursor(QWidget* w, const QString& kind, Qt::CursorShape system) {
+	w->setProperty("cursorKind", kind);
+	w->setProperty("cursorSystem", int(system));
+	w->setCursor(cursor(kind, system));
+}
+
+void applyCursorLook() {
+	loadKeyLook();
+	for (QWidget* w : QApplication::allWidgets()) {
+		const QString kind = w->property("cursorKind").toString();
+		if (!kind.isEmpty()) w->setCursor(cursor(kind, Qt::CursorShape(w->property("cursorSystem").toInt())));
+	}
 }
 
 void symbolKey(QAbstractButton* b, const QString& kind, const QString& word, bool alone) {

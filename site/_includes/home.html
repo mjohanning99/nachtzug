@@ -30,25 +30,9 @@
   <div class="bands" aria-hidden="true"></div>
 </section>
 
-<!-- ============================================================ who it's for: where Nachtzug starts, and the connections onwards -->
-<section class="paper alt who" id="who">
-  <header class="chap">
-    <div class="sign"><p class="kicker">{{ t.who_title }}</p><h2>{{ t.who_heading }}</h2></div>
-  </header>
-  <div class="who-text">
-    <p>{{ t.who_text }}</p>
-    <p>{{ t.who_more }}</p>
-  </div>
-  <p class="who-connections">{{ t.who_connections }}</p>
-  <div class="cards four">
-    {% for p in t.who_programs %}
-    <article class="card-plate">
-      <h3><a href="{{ p.url }}">{{ p.name }}</a></h3>
-      <p>{{ p.note }}</p>
-    </article>
-    {% endfor %}
-  </div>
-  <p class="who-after">{{ t.who_after }}</p>
+<!-- ============================================================ the demo song: the video of the program playing it, with the sound -->
+<section class="paper listen-stop">
+  {% include player.html %}
 </section>
 
 <!-- ============================================================ what's on board: the yellow departure timetable, then the program itself -->
@@ -77,12 +61,6 @@
     </table>
     <p class="tt-legend">{{ t.timetable.legend }}</p>
   </div>
-  <figure class="playing well">
-    <video autoplay muted loop playsinline preload="metadata" poster="{{ '/assets/img/playing.jpg' | relative_url }}" aria-label="{{ t.hero.video_label }}">
-      <source src="{{ '/assets/img/playing.mp4' | relative_url }}" type="video/mp4">
-    </video>
-    <figcaption>{{ t.hero.caption }}</figcaption>
-  </figure>
   <div class="gallery">
     {% for g in t.gallery %}
     <figure class="well{% if g.wide %} wide{% endif %}">
@@ -181,8 +159,29 @@
   </p>
 </section>
 
+<!-- ============================================================ who it's for: where Nachtzug starts, and the connections onwards -->
+<section class="paper who" id="who">
+  <header class="chap">
+    <div class="sign"><p class="kicker">{{ t.who_title }}</p><h2>{{ t.who_heading }}</h2></div>
+  </header>
+  <div class="who-text">
+    <p>{{ t.who_text }}</p>
+    <p>{{ t.who_more }}</p>
+  </div>
+  <p class="who-connections">{{ t.who_connections }}</p>
+  <div class="cards four">
+    {% for p in t.who_programs %}
+    <article class="card-plate">
+      <h3><a href="{{ p.url }}">{{ p.name }}</a></h3>
+      <p>{{ p.note }}</p>
+    </article>
+    {% endfor %}
+  </div>
+  <p class="who-after">{{ t.who_after }}</p>
+</section>
+
 <!-- ============================================================ questions -->
-<section class="paper faq" id="faq">
+<section class="paper alt faq" id="faq">
   <header class="chap">
     <div class="sign"><p class="kicker">{{ t.faq_title }}</p><h2>{{ t.faq_heading }}</h2></div>
   </header>
@@ -194,6 +193,20 @@
     </details>
     {% endfor %}
   </div>
+</section>
+
+<!-- ============================================================ contact: bugs and ideas on GitHub, anything else by email -->
+<section class="paper contact" id="contact">
+  <header class="chap">
+    <div class="sign"><p class="kicker">{{ t.contact_title }}</p><h2>{{ t.contact_heading }}</h2></div>
+  </header>
+  <div class="who-text">
+    <p>{{ t.contact_text | replace: '%email%', site.email }}</p>
+  </div>
+  <p class="buttons">
+    <a class="keycap primary" href="mailto:{{ site.email }}">{{ t.contact_email }}</a>
+    <a class="keycap" href="{{ repo }}/issues/new/choose">{{ t.contact_issue }}</a>
+  </p>
 </section>
 
 </main>

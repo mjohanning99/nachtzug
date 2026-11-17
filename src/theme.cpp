@@ -174,7 +174,7 @@ QToolButton[transport="true"] { min-height: 30px; max-height: 30px; padding: 0 6
 QToolButton#exportKey { min-height: 62px; max-height: 62px; padding: 4px 4px 2px 4px; }
 QPushButton#tap { min-height: 26px; max-height: 26px; padding: 0 10px; font-weight: 600; }
 QToolButton#help { min-height: 16px; max-height: 16px; min-width: 20px; max-width: 20px; padding: 0; font-weight: 600; font-size: 11px; }
-QToolButton#inspectorTab { min-height: 0; max-height: 16777215; padding: 0; border-radius: 0 6px 6px 0; border-left: none; font-size: 15px; } /* the tab on the left edge, as tall as the window */
+QToolButton#inspectorTab { min-height: 0; max-height: 16000px; padding: 0; border-radius: 0 6px 6px 0; border-left: none; font-size: 15px; } /* the tab on the left edge, as tall as the window */
 /* the mixer strips' keys sit between the screws, so they are narrower: less room beside the word */
 QFrame#strip QPushButton#mute, QFrame#strip QPushButton[strip="true"] { padding: 0 2px; }
 QFrame#strip QPushButton#mute:pressed, QFrame#strip QPushButton#mute:checked, QFrame#strip QPushButton[strip="true"]:pressed,
@@ -264,6 +264,14 @@ QPushButton:pressed, QToolButton:pressed { background: qlineargradient(x1:0, y1:
 QPushButton:checked, QToolButton:checked { background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 @amberHi@, stop:0.962 @amber@, stop:0.967 @amberDeep@, stop:1 @amberDeep@);
   color: @accentInk@; border-color: @amberDeep@; padding: 2px 12px 1px 12px; }
 QPushButton:disabled, QToolButton:disabled { background: transparent; color: @rule@; border-color: @gridBar@; }
+/* joined keys (rounded on one side only) are painted another way, and their gradient falls a little lower: at 1.5×
+   and 2× their lip started a device pixel below the other keys'. These stops, 0.0125 earlier, put it on the same
+   line at every scale from 1× to 3× (measured) */
+QPushButton#segL, QPushButton#segR { background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 @keyTop@, stop:0.8825 @keyBot@, stop:0.8875 @keyDeep@, stop:1 @keyDeep@); }
+QPushButton#segL:hover, QPushButton#segR:hover { background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ffffff, stop:0.8825 @keyTop@, stop:0.8875 @keyDeep@, stop:1 @keyDeep@); }
+QPushButton#segL:pressed, QPushButton#segR:pressed { background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 @keyBot@, stop:0.9495 @keyBot@, stop:0.9545 @keyDeep@, stop:1 @keyDeep@); }
+QPushButton#segL:checked, QPushButton#segR:checked { background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 @amberHi@, stop:0.9495 @amber@, stop:0.9545 @amberDeep@, stop:1 @amberDeep@); }
+QPushButton#segL:disabled, QPushButton#segR:disabled { background: transparent; }
 QPushButton#primary, QToolButton#primary { background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 @keyHover@, stop:0.895 @key@, stop:0.900 #120f0d, stop:1 #120f0d); color: @keyInk@; border-color: #000000; }
 QPushButton#primary:hover, QToolButton#primary:hover { background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 @keyHover@, stop:0.895 @keyHover@, stop:0.900 #120f0d, stop:1 #120f0d); }
 QPushButton#primary:pressed, QToolButton#primary:pressed { background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 @key@, stop:0.962 @key@, stop:0.967 #120f0d, stop:1 #120f0d); padding: 2px 12px 1px 12px; }

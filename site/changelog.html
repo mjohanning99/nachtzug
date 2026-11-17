@@ -1,0 +1,17 @@
+---
+layout: default
+lang: en
+other_url: "/de/aenderungen.html"
+title: What changed
+---
+{% comment %} Every version, newest first: CHANGELOG.md itself, copied into _includes/ by prepare.sh. {% endcomment %}
+{% capture log %}{% include changelog.md %}{% endcapture %}
+<main id="top">
+<section class="paper legal changelog">
+  <div class="col">
+    <h1>What changed</h1>
+    <p>Every version of Nachtzug, the newest first, in plain words. The same list is in the source code as <a href="{{ site.repo }}/blob/main/CHANGELOG.md">CHANGELOG.md</a>, and each version’s downloads are on its <a href="{{ site.repo }}/releases">release page</a>.</p>
+    {{ log | remove_first: "# Changes" | replace: " | ", " &#124; " | markdownify }}
+  </div>
+</section>
+</main>

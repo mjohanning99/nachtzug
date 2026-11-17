@@ -26,7 +26,8 @@ private:
 	QLabel *title, *intro, *question, *note, *langLabel;
 	QPushButton *newBtn, *proBtn, *go;
 	// the window's look: each a pair of joined keys, the chosen one lit
-	QLabel *lookTitle, *keysLabel, *layoutLabel, *barsLabel;
-	QPushButton *keysWords, *keysSymbols, *layoutTop, *layoutBeside, *barsHidden, *barsShown;
+	QLabel *lookTitle, *keysLabel, *layoutLabel, *barsLabel, *cursorsLabel;
+	QPushButton *keysWords, *keysSymbols, *layoutTop, *layoutBeside, *barsHidden, *barsShown, *cursorsOwn,
+	    *cursorsSystem;
 	bool newcomer = true;
 };

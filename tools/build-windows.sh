@@ -43,6 +43,7 @@ done
 if [ -f /ucrt64/bin/SDL3.dll ]; then cp -f /ucrt64/bin/SDL3.dll "$DIST/"; fi
 # the licences: Nachtzug's own and those of Qt, SDL and the rest it carries (docs/THIRD-PARTY.md says which)
 mkdir -p "$DIST/licences"; cp LICENSE LICENSING.md docs/THIRD-PARTY.md "$DIST/licences/"; cp -r LICENSES "$DIST/licences/"
+tools/library-sources.sh --list "$DIST" "$DIST/licences"   # sources.txt: each library's package, licence and source
 
 # the finished folder must run on its own: with MSYS2 out of the way
 ( PATH="/c/Windows/System32:/c/Windows" NZ_TEST_PLATFORM=windows "$DIST/Nachtzug.exe" --selftest ) && echo "self-test of the finished program passed" \
@@ -54,7 +55,9 @@ for c in "/c/Program Files (x86)/Inno Setup 6/ISCC.exe" "/c/Program Files/Inno S
 done
 if [ -n "$ISCC" ]; then
     # absolute paths: Inno Setup reads relative ones from the .iss file's own folder
-    "$ISCC" //Qp "//DSourceDir=$(cygpath -wa "$DIST")" "//DOutDir=$(cygpath -wa build-windows)" assets/windows/nachtzug.iss
+    VERSION=$(sed -n 's/^project(nachtzug VERSION \([0-9.]*\).*/\1/p' CMakeLists.txt)
+    "$ISCC" //Qp "//DSourceDir=$(cygpath -wa "$DIST")" "//DOutDir=$(cygpath -wa build-windows)" "//DAppVersion=$VERSION" \
+        assets/windows/nachtzug.iss
     echo
     echo "Done: build-windows/Nachtzug-Setup.exe"
 else

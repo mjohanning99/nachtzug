@@ -21,6 +21,7 @@
 #include <QAbstractButton>
 #include <QAbstractSlider>
 #include <QAbstractSpinBox>
+#include <QAbstractItemView>
 #include <QComboBox>
 #include <QGroupBox>
 #include <QMouseEvent>
@@ -28,6 +29,7 @@
 #include <QTimer>
 #include <QMenu>
 #include <QElapsedTimer>
+#include <QPainter>
 #include <QPushButton>
 #include <QSpinBox>
 #include <QToolButton>
@@ -38,6 +40,31 @@
 #include <cmath>
 #include <functional>
 #include <cstdio>
+
+// How far a section's contents sit from the middle between its screws, in pixels (+ low, − high): the section
+// painted as it is, against its empty well painted alone; whatever differs is what the eye sees in it.
+static double offCentre(QGroupBox* g) {
+	const QImage real = g->grab().toImage().convertToFormat(QImage::Format_RGB32);
+	QImage empty(real.size(), QImage::Format_RGB32);
+	empty.fill(real.pixel(2, real.height() / 2)); // the panel beside the well
+	{
+		QPainter p(&empty);
+		theme::drawWell(p, QRectF(0, theme::GROUP_TOP, g->width(), g->height() - theme::GROUP_TOP));
+	}
+	const double top = theme::GROUP_TOP + 1.5, bottom = g->height() - 1.5; // the well's edges, as drawWell has them
+	int first = -1, last = -1;
+	for (int y = int(top) + 3; y < int(bottom) - 3; y++)
+		for (int x = 22; x < real.width() - 22; x++) { // clear of the screws
+			const QRgb a = real.pixel(x, y), b = empty.pixel(x, y);
+			if (std::abs(qRed(a) - qRed(b)) + std::abs(qGreen(a) - qGreen(b)) + std::abs(qBlue(a) - qBlue(b)) > 40) {
+				if (first < 0) first = y;
+				last = y;
+				break;
+			}
+		}
+	if (first < 0) return 0;
+	return ((first - top) - (bottom - 1 - last)) / 2;
+}
 
 void scheduleGuiTest(App& app, MainWindow& w) {
 	QTimer::singleShot(150000, &w, [] { // a test that hangs is a failed test
@@ -59,7 +86,7 @@ void scheduleGuiTest(App& app, MainWindow& w) {
 			const QList<QPushButton*> right = d.findChildren<QPushButton*>(QStringLiteral("segR"));
 			for (QPushButton* k : right)
 				k->click();
-			bool all = right.size() == 3;
+			bool all = right.size() == 4; // keys, timeline, scroll bars, cursors
 			for (QPushButton* k : right)
 				all = all && k->isChecked();
 			check(all, "each row of the welcome window keeps its own choice");
@@ -433,6 +460,49 @@ void scheduleGuiTest(App& app, MainWindow& w) {
 			check(app.liveChord() == Engine::NO_CHORD, "Esc goes back to the song's chords");
 			if (auto* b = qobject_cast<QPushButton*>(byLessonKey("noteKeys"))) b->click();
 			check(!app.chordKeys(), "the Notes switch turns Chords mode off");
+		}
+		dbg("timeline beside");
+		{ // the keys above the timeline and the Notes section wrap, so the window can still be small
+			QAction* top = w.findChild<QAction*>(QStringLiteral("timelineTopAct"));
+			if (top) top->trigger();
+			settle(30);
+			const int side = w.minimumSizeHint().width();
+			if (top) top->trigger();
+			settle(30);
+			check(top && side <= 1300, "with the timeline beside the tabs, the window fits a 1366 px laptop screen");
+		}
+		dbg("sections centred");
+		if (theme::tactile) { // the screwed wells: what is in a section sits as far from its top screws as its bottom
+		                      // ones
+			QStringList off;
+			const int wasTrack = app.selTrack, wasTab = tabs->currentIndex();
+			for (int tr = 0; tr < 2; tr++) {
+				app.selectTrack(app.song.tracks[size_t(tr == 0 ? 1 : 0)].id);
+				tabs->setCurrentIndex(1);
+				settle(40);
+				for (QGroupBox* g : w.findChildren<QGroupBox*>()) {
+					if (!g->isVisible() || g->property("folded").toBool() || g->height() < 40) continue;
+					const double d = offCentre(g);
+					if (std::abs(d) > 1.5) off << QStringLiteral("%1 (%2)").arg(g->title()).arg(d);
+				}
+			}
+			if (!off.isEmpty())
+				std::fprintf(stderr, "  off the middle: %s\n", qPrintable(off.join(QStringLiteral(", "))));
+			check(off.isEmpty(), "every section's contents sit in the middle between its screws");
+			app.selectTrack(wasTrack);
+			tabs->setCurrentIndex(wasTab);
+			settle(20);
+		}
+		dbg("separators in lists");
+		{
+			bool thin = false;
+			for (QComboBox* c : w.findChildren<QComboBox*>()) {
+				c->ensurePolished();
+				for (int i = 0; i < c->count(); i++)
+					if (c->itemData(i, Qt::AccessibleDescriptionRole).toString() == QLatin1String("separator"))
+						thin = c->view()->sizeHintForRow(i) < 12;
+			}
+			check(thin, "a separator in a drop-down list is a thin line, not an empty row");
 		}
 		dbg("preset preview");
 		{

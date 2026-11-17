@@ -1,4 +1,9 @@
 // The sound library: see soundlibrary.h.
+//
+// What's here: SoundLibrary, opened from "All sounds…" in the Sound tab's preset list (and by name for pictures):
+// reload(), the shelves, showCards(), showChosen(), listen() (a short phrase, nothing changed until Use), bringIn()
+// and dropped files, and the arrow keys in the cards.
+// Changes in the song file: none (Use changes the track's sound through App).
 #include "soundlibrary.h"
 #include "app.h"
 #include "widgets.h"
@@ -127,11 +132,12 @@ SoundLibrary::SoundLibrary(App* a, std::function<void(const mysounds::Sound&)> u
 	deleteKey = new QPushButton(tr("Delete"));
 	for (QPushButton* k : {useKey, starKey, renameKey, shareKey, deleteKey})
 		rv->addWidget(k);
+	useKey->setVisible(bool(use)); // opened with no synthesiser track selected: only to look, listen and tidy up
 	rv->addWidget(chosenNote);
 	row->addWidget(right);
 
 	connect(useKey, &QPushButton::clicked, this, [this] {
-		if (chosen < 0) return;
+		if (chosen < 0 || !use) return;
 		use(entries[size_t(chosen)].sound);
 		if (!entries[size_t(chosen)].builtIn) mysounds::noteUsed(entries[size_t(chosen)].sound);
 		accept();

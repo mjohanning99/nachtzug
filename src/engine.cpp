@@ -1,3 +1,11 @@
+// The audio engine: see engine.h. Everything here from setSong() to process() runs on the audio thread, or hands
+// over to it: no locks, no memory allocation, no Qt objects, no file access there (AGENTS.md).
+//
+// What's here: Engine::setSong(), push() and process() (the clips in time, arpeggios, chords, repeats, chance,
+// knob lines, the synths, drums, echo, reverb and limiter); and below "offline render" renderSong(), renderStems(),
+// renderLength(), audibleTracks() and stemFileName(), used by Export, --render, the MIDI export and the tests.
+// Changes in the song file: none.
+
 #include "engine.h"
 #include <QDir>
 #include <QFile>

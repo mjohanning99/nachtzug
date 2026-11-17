@@ -1,3 +1,12 @@
+// The Notes tab: the note grid, the on-screen keys under it, and the keys and settings around them.
+//
+// What's here: NoteEditor (the scale-locked grid for synth clips and the hit grid for drums: drawing, moving,
+// stretching, erasing, the right-click stamps), KeyPads (three rows of pads laid out like the letter keys, or the
+// chord pads in Chords mode), and EditorPanel (New idea, Vary, Clean up, Accent, Slide, Keep, transposing, how
+// notes are played, and the auto drummer's settings). EditorPanel is made by the main window; the inspector borrows
+// its How notes and drummer sections.
+// Changes in the song file: none.
+
 #include "editor.h"
 #include "app.h"
 #include "widgets.h"
@@ -516,8 +525,12 @@ void NoteEditor::mouseMoveEvent(QMouseEvent* e) {
 	if (!c || !t) return;
 	const int L = c->loopLen, g = app->grid;
 	if (drag == None) {
+		// a note's end is dragged longer or shorter, a note moved, and a click in the empty grid draws one
 		bool edge = false;
-		viewport()->setCursor(hitNote(p, &edge) >= 0 && edge ? Qt::SizeHorCursor : Qt::ArrowCursor);
+		const int hit = hitNote(p, &edge);
+		viewport()->setCursor(
+		    hit >= 0 ? (edge ? theme::cursor(QStringLiteral("handle"), Qt::SizeHorCursor) : QCursor(Qt::ArrowCursor))
+			         : theme::cursor(QStringLiteral("pencil"), Qt::ArrowCursor));
 		return;
 	}
 	if (drag == Erase) {
@@ -556,16 +569,17 @@ void NoteEditor::mouseMoveEvent(QMouseEvent* e) {
 		const Note& o = orig[size_t(drawIdx)];
 		dt = int(std::lround(xt(p.x()) / g)) * g - (o.start + o.len);
 	}
-	if (drag == Move) { // keep the whole selection inside the clip and the pitch range
-		int minS = INT_MAX, maxS = 0, minD = INT_MAX, maxD = INT_MIN;
+	if (drag == Move) { // keep the whole selection inside the clip and the pitch range, its ends too
+		int minS = INT_MAX, maxS = 0, maxE = 0, minD = INT_MAX, maxD = INT_MIN;
 		for (const Note& o : orig)
 			if (o.sel) {
 				minS = std::min(minS, o.start);
 				maxS = std::max(maxS, o.start);
+				maxE = std::max(maxE, o.start + o.len);
 				minD = std::min(minD, o.deg);
 				maxD = std::max(maxD, o.deg);
 			}
-		dt = std::clamp(dt, -minS, std::max(-minS, L - g - maxS));
+		dt = std::clamp(dt, -minS, std::max(-minS, std::min(L - g - maxS, L - maxE)));
 		dd = std::clamp(dd, DEG_MIN - minD, DEG_MAX - maxD);
 	}
 	if (dt == lastDt && dd == lastDd) return;
@@ -777,13 +791,25 @@ void KeyPads::paintEvent(QPaintEvent*) {
 	if (!t && !chords) return;
 	const int n = app->song.sc().n;
 	const int live = app->liveChord();
+	// the pad that lights for the chord playing: the one pressed, or (for a chord from a MIDI key) the first pad
+	// with that chord, middle row first; several pads share each chord, and only one should look held
+	int livePad = app->liveChordPad();
+	if (chords && live != Engine::NO_CHORD && livePad < 0)
+		for (int r : {1, 2, 0}) {
+			const int c = live - n * (r - 1);
+			if (c >= 0 && c < 10) {
+				livePad = r * 16 + c;
+				break;
+			}
+		}
 	for (int r = 0; r < (drumRow ? 1 : 3); r++) {
 		for (int c = 0; c < 10; c++) {
 			const QRectF pr = padRect(r, c);
 			const int code = r * 16 + c;
 			const int deg = drumRow ? c % dsp::D_COUNT : App::keyDegree(r, c, n);
 			// in Chords mode the pad of the chord playing stays lit, as the chord does
-			const bool held = app->keyHeld(code) || app->keyHeld(100 + code) || (chords && deg == live);
+			const bool held = app->keyHeld(code) || app->keyHeld(100 + code) ||
+			                  (chords && live != Engine::NO_CHORD && code == livePad);
 			const bool root = !drumRow && ((deg % n) + n) % n == 0;
 			const bool unused = drumRow && (r != 0 || c >= dsp::D_COUNT);
 			if (unused) {
@@ -881,7 +907,7 @@ static QLabel* dimLabel(const QString& text) {
 static QGroupBox* section(const QString& name, QHBoxLayout** lay) {
 	auto* g = new QGroupBox(name.toUpper());
 	*lay = new QHBoxLayout(g);
-	(*lay)->setContentsMargins(8, 6, 8, 6);
+	theme::wellMargins(*lay, 8, 6);
 	(*lay)->setSpacing(6);
 	return g;
 }
@@ -960,7 +986,10 @@ EditorPanel::EditorPanel(App* a, QWidget* parent) : QWidget(parent), app(a) {
 	theme::symbolKey(clear, QStringLiteral("clear"), tr("Clear"));
 	l->addWidget(clear);
 
-	notesGroup = section(tr("Notes"), &l);
+	// the longest section: its keys fold onto a second row when the editor is narrow (beside the timeline)
+	notesGroup = new QGroupBox(tr("Notes").toUpper());
+	auto* nl = new FlowLayout(notesGroup, 6, 6);
+	theme::wellMargins(nl, 8, 6);
 	notesGroup->setToolTip(tr("These act on the selected notes, or on every note when none are selected"));
 	row->addWidget(notesGroup);
 	accent = button(tr("Accent"), tr("Make the selected notes louder and brighter"));
@@ -999,15 +1028,10 @@ EditorPanel::EditorPanel(App* a, QWidget* parent) : QWidget(parent), app(a) {
 		b->setFixedWidth(27);
 		b->setStyleSheet(QStringLiteral("padding: 0;"));
 	}
-	l->addWidget(accent);
-	l->addWidget(slide);
-	l->addSpacing(3);
-	l->addWidget(chance);
-	l->addWidget(repeat);
-	l->addWidget(lean);
-	l->addWidget(keep);
-	l->addSpacing(3);
-	auto pair = [&](const QString& name, QPushButton* a, QPushButton* b) {
+	chance->setProperty("flowGap", 9);
+	for (QWidget* w : std::initializer_list<QWidget*>{accent, slide, chance, repeat, lean, keep})
+		nl->addWidget(w);
+	auto pair = [&](const QString& name, QPushButton* a, QPushButton* b, int gap) {
 		auto* w = new QWidget;
 		auto* h = new QHBoxLayout(w);
 		h->setContentsMargins(0, 0, 0, 0);
@@ -1016,12 +1040,12 @@ EditorPanel::EditorPanel(App* a, QWidget* parent) : QWidget(parent), app(a) {
 		h->addSpacing(2);
 		h->addWidget(a);
 		h->addWidget(b);
-		l->addWidget(w);
+		w->setProperty("flowGap", gap);
+		nl->addWidget(w);
 		return w;
 	};
-	stepBox = pair(tr("Step"), up, down);
-	l->addSpacing(2);
-	octBox = pair(tr("Octave"), octUp, octDown);
+	stepBox = pair(tr("Step"), up, down, 9);
+	octBox = pair(tr("Octave"), octUp, octDown, 8);
 	{ // the menus of the two drop-down keys
 		auto* cm = new QMenu(chance);
 		for (auto [pct, name] : {std::pair{100, QT_TR_NOOP("Always")},
@@ -1060,7 +1084,7 @@ EditorPanel::EditorPanel(App* a, QWidget* parent) : QWidget(parent), app(a) {
 	drummer->setObjectName("drummerBox");
 	drummer->setFixedWidth(300);
 	auto* dv = new QVBoxLayout(drummer);
-	dv->setContentsMargins(10, 10, 10, 8);
+	theme::wellMargins(dv, 10, 9);
 	dv->setSpacing(8);
 	autoBox = new Switch(tr("The drummer plays this clip"), Switch::Beside);
 	autoBox->setFocusPolicy(Qt::NoFocus);

@@ -14,6 +14,7 @@ class Switch;
 class QPushButton;
 class QStackedWidget;
 class QGroupBox;
+class QHBoxLayout;
 class FlowLayout;
 
 class SoundPanel : public QWidget {
@@ -22,7 +23,8 @@ public:
 	explicit SoundPanel(App* app, QWidget* parent = nullptr);
 	void setSimple(bool on); // the simple page: a few big knobs in plain words, instead of every knob
 	bool isSimple() const { return simple; }
-	QGroupBox* buildQuick();           // the inspector's Sound section
+	QGroupBox* buildQuick(); // the inspector's Sound section
+	void openLibrary(); // "All sounds…" and File > Sound library: the sound library, for the selected track's sound
 	void placeHowGroup(QLayout* host); // How notes are played: into the inspector, or back onto this tab (nullptr)
 signals:
 	void openSampleLibrary(); // the person wants the sample page of the settings
@@ -56,12 +58,12 @@ private:
 	void rollSound();
 	void mutateSound();
 	QComboBox* makePresetBox();
-	void fillPresetBox(QComboBox* box); // the ready-made sounds in groups, your own on top
-	void refreshMine();                 // your own sounds read again (after saving one), every preset list refilled
-	void saveSound();                   // "Save sound…"
-	void openLibrary();                 // "All sounds…": the sound library
-	static constexpr int MINE = 10000;  // a preset list entry at MINE + i is mine[i]
-	std::vector<mysounds::Sound> mine;  // your own sounds, as listed
+	void fillPresetBox(QComboBox* box);     // the ready-made sounds in groups, your own on top
+	void refreshMine();                     // your own sounds read again (after saving one), every preset list refilled
+	void saveSound();                       // "Save sound…"
+	QHBoxLayout* libraryPair(bool compact); // Save sound… and Library, joined
+	static constexpr int MINE = 10000;      // a preset list entry at MINE + i is mine[i]
+	std::vector<mysounds::Sound> mine;      // your own sounds, as listed
 	QComboBox* makeKitBox();
 	QPushButton* sampleButton(int drum);
 	void sampleMenu(int drum, QPushButton* under);

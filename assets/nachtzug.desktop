@@ -1,7 +1,8 @@
 [Desktop Entry]
 Type=Application
 Name=Nachtzug
-Comment=Make acid and Berlin School music: scale-locked synths, auto drummer, song timeline
+Comment=Make electronic music, such as acid or Berlin School, without knowing any music theory
+Comment[de]=Elektronische Musik wie Acid oder Berliner Schule machen, ohne Musiktheorie zu kennen
 Exec=nachtzug %f
 Icon=nachtzug
 Categories=AudioVideo;Audio;Music;Sequencer;

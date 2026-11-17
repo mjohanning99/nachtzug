@@ -1,3 +1,10 @@
+// Chop a loop: the dialog and the wave picture with its cuts (see chopdialog.h).
+//
+// What's here: ChopView (the wave and the cuts), ChopDialog (finding the hits, listening to a piece, putting the
+// pieces on the drums with App::chopOntoDrums()); chooseAndChop() and chop() are called from the Track menu, the
+// sample page of the settings and the drum track's Sound tab.
+// Changes in the song file: none (the pieces are saved in the sample library; the drums name them).
+
 #include "chopdialog.h"
 #include "app.h"
 #include "samples.h"
@@ -136,7 +143,8 @@ void ChopView::mousePressEvent(QMouseEvent* e) {
 void ChopView::mouseMoveEvent(QMouseEvent* e) {
 	const int x = int(e->position().x());
 	if (drag_ < 0) {
-		setCursor(cutNear(x) > 0 ? Qt::SizeHorCursor : Qt::PointingHandCursor);
+		setCursor(cutNear(x) > 0 ? theme::cursor(QStringLiteral("handle"), Qt::SizeHorCursor)
+		                         : QCursor(Qt::PointingHandCursor));
 		return;
 	}
 	if (!data_ || data_->frames() < 256) return; // too short to move cuts in

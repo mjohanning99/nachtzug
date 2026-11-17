@@ -8,6 +8,7 @@
 #include "widgets.h"
 #include "model.h"
 #include <QAbstractItemView>
+#include <QApplication>
 #include <QComboBox>
 #include <QCoreApplication>
 #include <QPointer>
@@ -20,6 +21,7 @@
 #include <QFormLayout>
 #include <QMenu>
 #include <QStyledItemDelegate>
+#include <algorithm>
 #include <functional>
 
 namespace theme {
@@ -32,11 +34,47 @@ void tidyForm(QFormLayout* form) {
 }
 
 namespace {
+// a drop-down's items as the style sheet draws them, and a separator as a thin rule like the menus' (a plain styled
+// delegate would draw it as an empty item, a gap that looks like something is missing)
+class ListDelegate : public QStyledItemDelegate {
+public:
+	using QStyledItemDelegate::QStyledItemDelegate;
+	static bool separator(const QModelIndex& i) {
+		return i.data(Qt::AccessibleDescriptionRole).toString() == QLatin1String("separator");
+	}
+	void paint(QPainter* p, const QStyleOptionViewItem& o, const QModelIndex& i) const override {
+		if (i.data(LIST_INDENT_ROLE).toBool()) { // under a heading: set in, in the list only
+			QStyleOptionViewItem opt = o;
+			initStyleOption(&opt, i);
+			opt.text = indent() + opt.text;
+			const QWidget* w = opt.widget;
+			(w ? w->style() : QApplication::style())->drawControl(QStyle::CE_ItemViewItem, &opt, p, w);
+			return;
+		}
+		if (!separator(i)) {
+			QStyledItemDelegate::paint(p, o, i);
+			return;
+		}
+		const int y = o.rect.center().y();
+		p->fillRect(QRect(o.rect.left() + 8, y, o.rect.width() - 16, 1), gridBar);
+	}
+	QSize sizeHint(const QStyleOptionViewItem& o, const QModelIndex& i) const override {
+		if (separator(i)) return QSize(1, 9); // as QMenu::separator: a line with 4 pixels above and below
+		QSize s = QStyledItemDelegate::sizeHint(o, i);
+		if (i.data(LIST_INDENT_ROLE).toBool()) s.rwidth() += o.fontMetrics.horizontalAdvance(indent());
+		return s;
+	}
+	static QString indent() { return QStringLiteral("   "); }
+};
+
 class WellPainter : public QObject {
 public:
 	using QObject::QObject;
 	bool eventFilter(QObject* o, QEvent* e) override {
-		if (e->type() == QEvent::Polish) round(o);
+		if (e->type() == QEvent::Polish) {
+			round(o);
+			if (auto* g = qobject_cast<QGroupBox*>(o)) fitKnobs(g);
+		}
 		if (e->type() == QEvent::Paint && o->property("nzRound").toBool() && o->inherits("QComboBoxPrivateContainer")) {
 			// Qt paints this window's background its own way, square, whatever the style sheet says: so here
 			auto* w = static_cast<QWidget*>(o);
@@ -64,14 +102,26 @@ public:
 	}
 
 private:
+	// a section whose knobs' names all fit on one line gives them room for one line only: an empty second line under
+	// every knob would lift them above the middle of the section. One long name keeps two lines for all of them, so
+	// the knobs of a section stay level.
+	static void fitKnobs(QGroupBox* g) {
+		const QList<Knob*> knobs = g->findChildren<Knob*>();
+		for (Knob* k : knobs)
+			k->ensurePolished(); // the section is polished before its knobs: their font is only right after this
+		const bool one =
+		    !knobs.isEmpty() && std::all_of(knobs.begin(), knobs.end(), [](Knob* k) { return k->nameFitsOneLine(); });
+		for (Knob* k : knobs)
+			k->setOneLine(one);
+	}
 	// a drop-down's list and a menu are windows of their own, square unless they are see-through outside their
 	// rounded shape: then the style sheet's border-radius shows, as on the boxes and keys they open from
 	static void round(QObject* o) {
 		QWidget* w = nullptr;
 		if (auto* box = qobject_cast<QComboBox*>(o)) {
-			if (!qobject_cast<QStyledItemDelegate*>(box->itemDelegate()))
-				box->setItemDelegate(new QStyledItemDelegate(box)); // so the style sheet's item rules apply
-			w = box->view()->window();                              // the list's window, made here and not shown yet
+			if (!dynamic_cast<ListDelegate*>(box->itemDelegate()))
+				box->setItemDelegate(new ListDelegate(box)); // so the style sheet's item rules apply
+			w = box->view()->window();                       // the list's window, made here and not shown yet
 		} else if (auto* menu = qobject_cast<QMenu*>(o))
 			w = menu;
 		if (!w || w->property("nzRound").toBool() || w->testAttribute(Qt::WA_WState_Created)) return;

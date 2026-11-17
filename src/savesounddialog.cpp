@@ -1,4 +1,8 @@
 // The "Save sound…" dialog: see savesounddialog.h.
+//
+// What's here: SaveSoundDialog, opened by "Save sound…" on the Sound tab and in the inspector (and by name for
+// pictures); trySave() writes the file with mysounds::save().
+// Changes in the song file: none.
 #include "savesounddialog.h"
 #include "widgets.h"
 #include <QDialogButtonBox>

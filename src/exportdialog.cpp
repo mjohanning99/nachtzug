@@ -1,3 +1,9 @@
+// Export: see exportdialog.h.
+//
+// What's here: ExportDialog and ExportDialog::run(), called from File > Export and the Export key in the top bar;
+// run() renders with renderSong(), renderStems() or writeMidiFile() and shows the progress and the last window.
+// Changes in the song file: none (the choices are kept as settings).
+
 #include "exportdialog.h"
 #include "app.h"
 #include "widgets.h"

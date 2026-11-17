@@ -1,5 +1,5 @@
 ; The Windows installer, made with Inno Setup by tools/build-windows.sh:
-;   ISCC /DSourceDir=<the finished program folder> /DOutDir=<where the installer goes> nachtzug.iss
+;   ISCC /DSourceDir=<the finished program folder> /DOutDir=<where the installer goes> /DAppVersion=<x.y.z> nachtzug.iss
 ; It installs for the person installing (no administrator needed), adds a Start menu entry, optionally a desktop
 ; icon, and opens .nachtzug songs with Nachtzug.
 
@@ -9,11 +9,16 @@
 #ifndef OutDir
   #define OutDir "..\..\build-windows"
 #endif
+; the version from CMakeLists.txt: Windows shows it under installed apps, and winget compares it to find updates
+#ifndef AppVersion
+  #define AppVersion "0.0.0"
+#endif
 
 [Setup]
 AppId={{6E1C3F4A-8B2D-4E5F-9A10-4E61C47A2711}
 AppName=Nachtzug
-AppVersion=0.1
+AppVersion={#AppVersion}
+VersionInfoVersion={#AppVersion}
 AppPublisher=Nachtzug
 DefaultDirName={autopf}\Nachtzug
 DefaultGroupName=Nachtzug

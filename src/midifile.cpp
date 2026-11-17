@@ -1,3 +1,9 @@
+// MIDI export: see midifile.h.
+//
+// What's here: gmDrumNote() and writeMidiFile(), used by Export and the self-test; the engine plays the song with
+// its note log on, and the small helpers below write the bytes of a standard MIDI file.
+// Changes in the song file: none.
+
 #include "midifile.h"
 #include <QFile>
 #include <QHash>

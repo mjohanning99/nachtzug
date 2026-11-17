@@ -1,3 +1,10 @@
+// MIDI: see midi.h.
+//
+// What's here: Midi, made once in main(): the input and output, received() (notes, learned knobs, clock, start and
+// stop), the clock thread that sends a clock out, learn() and forget(); addMidiActions() and midiMenuFor() for
+// the knobs' right-click menus. The choices are kept as settings.
+// Changes in the song file: none.
+
 #include "midi.h"
 #include "app.h"
 #include <QMenu>
@@ -65,9 +72,9 @@ void Midi::setInput(const QString& name) {
 
 // a message from a device, on the MIDI thread: the clock comes 24 times a beat, so its tempo is worked out here;
 // everything else goes over to the program's own thread
-void Midi::incoming(const uint8_t* b, int n) {
+void Midi::incoming(const uint8_t* b, int n, double when) {
 	if (b[0] == 0xf8) {
-		const double now = secondsNow();
+		const double now = when >= 0 ? when : secondsNow();
 		if (lastClock_ > 0) {
 			const double gap = now - lastClock_;
 			if (gap > 0.004 && gap < 0.2) {

@@ -1,3 +1,13 @@
+// The App: the one place the song is changed. It owns the song, the undo history, the selection, the clipboard,
+// recording, the loop grid's launching, the computer keyboard as an instrument, and the sound card.
+//
+// What's here: begin(), edit(), onBar() and tick() (changes held for the bar line), undo(), redo(), save(), load();
+// the transport (play, stop, seek); notes from the keys, MIDI and Chords mode (keyDown(), midiNote(), playChord());
+// knob moves written as lines (paramPress/Move/Release()); the clip commands (split, copy, paste, delete, loop);
+// the loop grid (launch(), launchScene(), cellToTimeline()); the sound card, the live input and recording a sample
+// (openAudio(), startLiveInput(), startCapture()). Every panel calls it; publish() hands the engine a new snapshot.
+// Changes in the song file: none here (songfile.cpp); save() and load() write and read the file through it.
+
 #include "app.h"
 #include "samples.h"
 #include "midi.h"
@@ -746,6 +756,7 @@ void App::keyDown(int code, int row, int col, bool bent) {
 		if (chordDown_.contains(code)) return;
 		chordDown_.insert(code);
 		playChord(keyDegree(row, col, song.sc().n), bent ? -1 : 0);
+		liveChordPad_ = row * 16 + col; // a few pads share a chord: only the one pressed lights up
 		return;
 	}
 	Track* t = curTrack();
@@ -878,6 +889,7 @@ void App::playChord(int deg, int alt) {
 	alt = std::clamp(alt, -1, 1);
 	liveChord_ = deg;
 	liveChordAlt_ = alt;
+	liveChordPad_ = -1;
 	engine->liveChordAlt.store(alt);
 	engine->liveChord.store(deg);
 	if (recording && isPlaying() && !song.liveMode) {
@@ -903,6 +915,7 @@ void App::releaseChord() {
 	if (liveChord_ == Engine::NO_CHORD) return;
 	liveChord_ = Engine::NO_CHORD;
 	liveChordAlt_ = 0;
+	liveChordPad_ = -1;
 	engine->liveChord.store(Engine::NO_CHORD);
 	engine->liveChordAlt.store(0);
 	chordTake_ = false;
@@ -955,6 +968,7 @@ void App::recordNote(const Down& d, qint64 durMs) {
 	}
 	n.start = local;
 	n.len = t->isDrums() ? 12 : std::max(12, int(double(durMs) * double(song.bpm) * PPQ / 60000.0));
+	n.len = std::max(3, std::min(n.len, c->loopLen - n.start)); // it ends where the pattern does, as drawn
 	n.acc = d.acc;
 	n.alt = t->isDrums() ? 0 : d.alt;
 	n.deg = d.deg - (t->follow && !t->isDrums() ? song.chordAt(tick / BAR) : 0);
@@ -1277,6 +1291,7 @@ void App::paste() {
 			n.sel = false;
 		for (Note n : clipNotes_) {
 			n.start = (n.start - first + at) % c->loopLen;
+			n.len = std::min(n.len, c->loopLen - n.start); // inside the pattern, as the grid shows it
 			n.sel = true;
 			c->notes.push_back(n);
 		}

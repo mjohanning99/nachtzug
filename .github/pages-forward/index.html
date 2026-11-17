@@ -1,0 +1,23 @@
+<!doctype html>
+<!-- The website moved from mjohanning99.github.io/nachtzug to nachtzugmusic.com. .github/workflows/pages.yml puts this
+     page on GitHub Pages twice, as index.html and as 404.html, so every old address, the manuals' included, goes on to
+     the same place at the new one. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Nachtzug has moved</title>
+<link rel="canonical" href="https://nachtzugmusic.com/">
+<script>
+  // /nachtzug/de/lizenzen.html → https://nachtzugmusic.com/de/lizenzen.html, keeping ?… and #…
+  var path = location.pathname.replace(/^\/nachtzug(\/|$)/, "/");
+  location.replace("https://nachtzugmusic.com" + path + location.search + location.hash);
+</script>
+<meta http-equiv="refresh" content="0; url=https://nachtzugmusic.com/">
+</head>
+<body>
+<p>Nachtzug has moved to <a href="https://nachtzugmusic.com/">nachtzugmusic.com</a>.</p>
+<p lang="de">Nachtzug ist umgezogen: <a href="https://nachtzugmusic.com/de/">nachtzugmusic.com</a>.</p>
+</body>
+</html>

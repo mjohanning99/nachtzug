@@ -20,7 +20,9 @@ class QLabel;
 class App;
 
 // Lays its widgets out left to right and starts a new row when the next one does not fit, so a row of tool
-// groups wraps onto a second line in a narrow window instead of making the window wider.
+// groups wraps onto a second line in a narrow window instead of making the window wider. A widget's property
+// "flowGap" sets the space before it (instead of the spacing), "flowRight" sends it to the right end of its row;
+// a section whose own keys flow folds onto more rows when the row is narrower than it.
 class FlowLayout : public QLayout {
 public:
 	explicit FlowLayout(QWidget* parent = nullptr, int hSpacing = 10, int vSpacing = 8)
@@ -55,6 +57,8 @@ public:
 
 private:
 	int place(const QRect& r, bool apply) const;
+	int gapBefore(QLayoutItem* it) const;
+	QSize itemSize(QLayoutItem* it, int width) const;
 	QList<QLayoutItem*> items_;
 	int h_, v_;
 	bool justify_ = false;
@@ -102,9 +106,17 @@ inline QIcon toolIcon(const QString& kind) {
 // tooltip). symbolKey() marks a key once; dressSymbolKeys() gives every marked key in a window its icon and text
 // again, after the look or that setting changed. alone: this key shows its symbol alone either way (M and S).
 inline bool symbolsOnly = false;
-void loadKeyLook(); // reads "keys" from the settings into symbolsOnly
+void loadKeyLook(); // reads "keys" and "ownCursors" from the settings into symbolsOnly and ownCursors
 void symbolKey(QAbstractButton* b, const QString& kind, const QString& word, bool alone = false);
 void dressSymbolKeys(QWidget* root);
+// Nachtzug's own cursors, where a cursor can say what a click will do: "pencil" (a click in the note grid draws a
+// note), "scissors" (a click cuts the clip), "turn" (a knob or fader goes up or down as the mouse does), "handle" (the
+// end of a note or clip, dragged). On unless Settings or the welcome window turned them off ("ownCursors"); then the
+// system's own shape. setOwnCursor() remembers the kind, so switching changes every such widget at once.
+inline bool ownCursors = true;
+QCursor cursor(const QString& kind, Qt::CursorShape system);
+void setOwnCursor(QWidget* w, const QString& kind, Qt::CursorShape system);
+void applyCursorLook(); // after the setting changed
 void loadFonts();
 QFont lcdFont(int pixelSize, bool bold = false);
 // Drawing helpers for the instrument look; in the flat themes they draw the plain versions.
@@ -129,6 +141,8 @@ void installWells(); // once, after the application is made: group boxes, top ba
 // of its lists, or the first knobs and their values). key: where the state is remembered between runs.
 void makeFoldable(QGroupBox* g, const QString& key, std::function<QString()> summary = {});
 void setFolded(QGroupBox* g, bool folded);
+// a drop-down item with this set to true is indented in the open list (under a heading), but not in the closed box
+constexpr int LIST_INDENT_ROLE = Qt::UserRole + 40;
 constexpr int GROUP_TOP = 17; // the room above a section's well, for its name
 void drawSlider(QPainter& p, const QRectF& slot, float value,
                 const QColor& fill); // a small horizontal fader in a sunken slot
@@ -139,6 +153,12 @@ QIcon mixerIcon(const QColor& c); // three faders, for the Mixer tab
 // a form laid out the same on every system: labels flush left, the boxes filling their column (a Mac would set the
 // labels flush right and keep the boxes narrow)
 void tidyForm(QFormLayout* form);
+// A section's margins that put its content in the middle of its well, as far from the top screws as from the bottom
+// ones: the section's name takes 3½ px more room than the well's top edge leaves, so the top margin is 2 px less than
+// the bottom one. vertical: the margin there would be on each side; side: left and right.
+inline void wellMargins(QLayout* l, int side, int vertical) {
+	l->setContentsMargins(side, vertical - 1, side, vertical + 1);
+}
 } // namespace theme
 
 class Knob : public QWidget {
@@ -167,7 +187,14 @@ public:
 		setFixedSize(sizeHint());
 		update();
 	} // a bigger knob, for the simple sound page
-	QSize sizeHint() const override { return {int(58 * scale), int((caption_ ? 50 : 78) * scale)}; }
+	QSize sizeHint() const override { return {int(58 * scale), int((caption_ ? 50 : oneLine_ ? 64 : 78) * scale)}; }
+	// room for one line of name under the knob instead of two: for a section whose knobs' names all fit on one line,
+	// so no empty line lifts them above the middle (see fitKnobs)
+	void setOneLine(bool on) {
+		oneLine_ = on;
+		setFixedSize(sizeHint());
+	}
+	bool nameFitsOneLine() const;
 	// the name goes in this label above the knob instead of under it, and the value while it is turned or pointed at
 	// (the top bar, where every control has its name in one row above it)
 	void setCaption(QLabel* caption);
@@ -194,6 +221,7 @@ private:
 	int startY = 0;
 	bool dragging = false, hover = false, marked = false;
 	double scale = 1.0;
+	bool oneLine_ = false;
 	QLabel* caption_ = nullptr;
 	void showCaption();
 	QColor accent = theme::amber;

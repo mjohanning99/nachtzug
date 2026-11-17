@@ -1,10 +1,11 @@
 # The Nachtzug website. Built with Jekyll; on GitHub Pages with _config.github.yml on top (.github/workflows/pages.yml).
 # Locally: sh prepare.sh, then bundle exec jekyll serve (see README.md).
 title: "Nachtzug"
-description: "Nachtzug is a DAW (digital audio workstation) made for beginners. It lets you create electronic music, in the style of the Berlin School for example, without much prior knowledge."
-url: "https://nachtzug.audio"     # change when the domain is decided
+description: "Nachtzug is a music program made for beginners. It lets you create electronic music, in the style of the Berlin School for example, without much prior knowledge."
+url: "https://nachtzugmusic.com"
 baseurl: ""
 repo: "https://github.com/mjohanning99/nachtzug"   # the source code, for the licence section
+email: "info@marvinjohanning.de"   # the contact section's address
 defaults:
   - scope: { path: "" }
     values: { lang: en }   # the page's language: en, or de for the German pages (de/, Impressum, Datenschutz)

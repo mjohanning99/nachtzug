@@ -146,7 +146,7 @@
     <div class="stripes"></div>
   </div>
   <p class="lede">Six steps, about ten minutes. A demo song is already waiting for you the moment Nachtzug starts, so you begin by listening and then change it one part at a time.</p>
-  <p id="welcome">The very first time you start Nachtzug, it asks which <b>language</b> you’d like to use and how you’d like to begin. <b>I am new to this</b> gives the Sound tab a few big knobs in plain words and opens a short guide; <b>I know synthesisers</b> shows every knob. Below, you choose how the window looks: keys with a symbol and a word, or the symbols alone; the timeline above the notes or beside them; and scroll bars hidden or shown. You can change all of it later in the settings.</p>
+  <p id="welcome">The very first time you start Nachtzug, it asks which <b>language</b> you’d like to use and how you’d like to begin. <b>I am new to this</b> gives the Sound tab a few big knobs in plain words and opens a short guide; <b>I know synthesisers</b> shows every knob. Below, you choose how the window looks: keys with a symbol and a word, or the symbols alone; the timeline above the notes or beside them; scroll bars hidden or shown; and Nachtzug’s own cursors, which show what a click will do (a pencil in the note grid, scissors, a knob’s arrows), or the system’s. You can change all of it later in the settings.</p>
   <figure style="width:62%; margin-left:auto; margin-right:auto"><img src="img/dlg-welcome.png" alt="The welcome window"><figcaption><b>FIG 1</b>The welcome window. You’ll only see it on the very first start.</figcaption></figure>
   <div class="task"><p><b>What you’ll do:</b> listen to the demo, give it a new bass line and a new sound, add a melody, turn it into a whole song and save it.</p><p><b>Time:</b> about ten minutes.</p></div>
   <ol class="steps">
@@ -418,7 +418,7 @@
 
   <h3 id="mysounds">Keeping a sound of your own</h3>
   <p>Found a sound you like? <span class="ctl">Save sound…</span>, beside <span class="ctl">New sound</span>, keeps it under a name as one of your own, outside the song, so every song can use it. Give it a name, a group and, if you like, a few words to find it by, and star it to have it listed on top of the preset list.</p>
-  <p>The preset list shows your starred sounds and the ones you used lately under <b>My sounds</b>. All the others are in the <b>sound library</b>: <span class="ctl">All sounds…</span> at the bottom of the list. The shelves on the left hold your own sounds, the starred ones, each group and the ready-made sounds; the search finds a sound by its name or its words. The <span class="key ico play"></span> on a card plays a short phrase with that sound without changing anything, and <span class="ctl">Use on this track</span> puts it on the track. The arrow keys choose a card, <span class="key">Space</span> listens and <span class="key">Return</span> uses it.</p>
+  <p>The preset list shows your starred sounds and the ones you used lately under <b>My sounds</b>. All the others are in the <b>sound library</b>: <span class="ctl">All sounds…</span> at the bottom of the list, or <b>File → Sound library…</b>. The shelves on the left hold your own sounds, the starred ones, each group and the ready-made sounds; the search finds a sound by its name or its words. The <span class="key ico play"></span> on a card plays a short phrase with that sound without changing anything, and <span class="ctl">Use on this track</span> puts it on the track. The arrow keys choose a card, <span class="key">Space</span> listens and <span class="key">Return</span> uses it.</p>
   <figure><img src="img/library.png" alt="The sound library"><figcaption><b>FIG 0</b>The sound library: shelves, the cards with a key to listen first, and the chosen sound with what you can do with it.</figcaption></figure>
   <p>Every sound of your own is a small file (<code>.nzsound</code>). <span class="ctl">Share as a file…</span> saves a copy wherever you like; a sound someone gave you comes in with <span class="ctl">Bring in a file…</span>, or by dropping the file on the library.</p>
 
@@ -519,7 +519,7 @@
     <tr><td>Delete</td><td><span class="ctl">Delete</span>, or the <span class="key">Delete</span> key.</td></tr>
     <tr><td id="fade">Fade in or out</td><td>Right-click → <b>Transition at the start</b> or <b>at the end</b>: a fade, a filter sweep, or both, one beat to four bars long. A dark wedge shows it.</td></tr>
   </table>
-  <p id="undo">Moves snap to whole beats; hold <span class="key">Shift</span> for sixteenth steps. <span class="key">Ctrl</span> + wheel or <span class="key">−</span> <span class="key">+</span> zoom in and out. And remember: <span class="key">↶</span> or <span class="nw"><span class="key">Ctrl</span>+<span class="key">Z</span></span> undoes anything.</p>
+  <p id="undo">Moves snap to whole beats; hold <span class="key">Shift</span> for sixteenth steps. <span class="key">Ctrl</span> + wheel or the two magnifying-glass keys at the right end zoom in and out. And remember: <span class="key">↶</span> or <span class="nw"><span class="key">Ctrl</span>+<span class="key">Z</span></span> undoes anything.</p>
 
   <h2 id="chords"><span class="n">7.2</span>Chords</h2>
   <p>Each bar has a chord. Tracks set to <span class="ctl">Follow chords</span> (bass, sequence and pad, to begin with) move their notes along with it, so a single one-bar pattern can play over a whole progression.</p>
@@ -598,6 +598,7 @@
     <tr><td>Open… <span class="nw"><span class="key">Ctrl</span>+<span class="key">O</span></span></td><td>Opens a <code>.nachtzug</code> song.</td></tr>
     <tr><td>Save <span class="nw"><span class="key">Ctrl</span>+<span class="key">S</span></span></td><td>Saves the song. Save as… adds <span class="key">Shift</span>.</td></tr>
     <tr><td>Export: sound file, tracks or MIDI… <span class="nw"><span class="key">Ctrl</span>+<span class="key">Shift</span>+<span class="key">E</span></span></td><td>The same as the <span class="ctl">Export</span> key (below).</td></tr>
+    <tr><td>Sound library…</td><td>Every ready-made sound and every sound of your own, to listen to and choose from (5.2).</td></tr>
     <tr><td>Settings… <span class="nw"><span class="key">Ctrl</span>+<span class="key">,</span></span></td><td>Language, colours, size, sound card, samples and MIDI (9.3).</td></tr>
   </table>
   <p>If there are unsaved changes, Nachtzug asks you before it closes or opens another song; the window title shows a <code>*</code> while there are.</p>
@@ -624,7 +625,7 @@
   <p>The <span class="key">⚙</span> key in the Output unit, or <b>File → Settings…</b> (<span class="nw"><span class="key">Ctrl</span>+<span class="key">,</span></span>), opens the settings. Every change counts straight away.</p>
   <table class="wide1">
     <thead><tr><th>Page</th><th>What you can set</th></tr></thead>
-    <tr><td><b>General</b></td><td>Language (from the next start), colours, <span class="ctl">Size</span>, whether the Sound tab opens Simple or Full, <span class="ctl">Keys</span> (symbol and word, or symbols only), <span class="ctl">Window</span> (the timeline above or beside the notes), the on-screen keys, the Undo note, the scroll bars and the welcome window.</td></tr>
+    <tr><td><b>General</b></td><td>Language (from the next start), colours, <span class="ctl">Size</span>, whether the Sound tab opens Simple or Full, <span class="ctl">Keys</span> (symbol and word, or symbols only), <span class="ctl">Window</span> (the timeline above or beside the notes), the on-screen keys, the Undo note, the scroll bars, Nachtzug’s own cursors and the welcome window.</td></tr>
     <tr><td><b>Sound card</b></td><td><span class="ctl">Sound system</span> (Automatic picks the best one; on Linux also PipeWire, PulseAudio, ALSA or JACK), <span class="ctl">Play through</span> (which speakers or headphones), <span class="ctl">Sample rate</span> and <span class="ctl">Buffer</span>. A line under them says what is running. <span class="ctl">Play a test tone</span> checks that sound comes out. <span class="ctl">Record from</span> picks the input, for recording samples and for the mixer’s Input strip.</td></tr>
     <tr><td><b>Samples</b></td><td>Your sample library (9.4).</td></tr>
     <tr><td><b>MIDI</b></td><td>Keyboards, controllers and clock (9.6).</td></tr>
@@ -868,7 +869,7 @@
     <tr><td>The sample library and the demo songs</td><td>CC0 1.0: public domain</td></tr>
     <tr><td>This manual and the pictures (the cover painting excepted)</td><td>CC BY-SA 4.0</td></tr>
   </table>
-  <p style="text-align: left; text-indent: 0; hyphens: manual">Everything you make with Nachtzug is yours, completely. Every licence in full, and every part Nachtzug is built on: <b>mjohanning99.github.io/nachtzug/licences.html</b>.</p>
+  <p style="text-align: left; text-indent: 0; hyphens: manual">Everything you make with Nachtzug is yours, completely. Every licence in full, and every part Nachtzug is built on: <b>nachtzugmusic.com/licences.html</b>.</p>
   <p class="small" style="text-align: left; text-indent: 0">Copyright © 2026 Marvin Johanning. Nachtzug is free software, distributed in the hope that it will be useful, but without any warranty. Thank you to everyone whose work it is built on!</p>
 </section>
 

@@ -1,3 +1,12 @@
+// The samples: the built-in library and your own (see samples.h).
+//
+// What's here: library(), displayName() and the rest for the built-in sounds (made by tools/samplegen, built in as
+// a resource); folder(), list(), get() (loaded once and kept), import(), saveRecording(), saveSound(), remove(),
+// rename(); readFile() (WAV and AIFF); and for chopping a loop findHits(), equalCuts(), slice(), guessBars().
+// Used by the drums' Sound tab, the settings, Chop, App and the song when it loads its samples.
+// Changes in the song file: none here; a drum names its sample as "nz:Group/Name" for a built-in one, or as the
+// file's name in the library folder.
+
 #include "samples.h"
 #include <QCoreApplication>
 #include <QDateTime>

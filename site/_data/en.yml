@@ -3,7 +3,9 @@
 lang: en
 other: { code: de, name: "Deutsch", url: "/de/" }
 title: "Nachtzug"
-description: "Nachtzug is a DAW (digital audio workstation) made for beginners. It lets you create electronic music, in the style of the Berlin School for example, without much prior knowledge."
+# the front page's title in search results and browser tabs: the name alone is shared with night trains, an album and bands
+home_title: "Nachtzug – a free music program for beginners"
+description: "Make electronic music, such as acid or Berlin School, without knowing any music theory. Nachtzug is a free music program made for beginners, for Linux, macOS and Windows."
 og_image_alt: "The Nachtzug enamel sign under Hans Baluschek’s painting of a big-city railway station at night"
 ticker: ["ABFAHRT 22:58 · GLEIS 3 · NACHTZUG NACH BERLIN SCHOOL", "EVERY NOTE IS IN THE SCALE · NOTHING CAN SOUND WRONG", "NEXT STOP: ACID JUNCTION · PLEASE MIND THE SQUELCH", "HOLD SHIFT FOR THE RIGHT WRONG NOTES", "THE DRUMMER NEVER GETS TIRED"]
 
@@ -19,18 +21,17 @@ nav:
   back: "Back to the platform ↑"
 
 hero:
-  lead: "Nachtzug is a DAW (digital audio workstation) made for beginners. It lets you create electronic music, in the style of the Berlin School for example, without much prior knowledge. You don’t need to know any music theory either: Nachtzug is built so that every note automatically lands in the right scale."
+  lead: "Nachtzug is a music program made for beginners. It lets you create electronic music, in the style of the Berlin School for example, without much prior knowledge. You don’t need to know any music theory either: Nachtzug is built so that every note automatically lands in the right scale."
   cta: "Einsteigen, bitte!"
   cta_sub: "Download Nachtzug, it’s free"
   cta_for: "For %system%, it’s free"   # when the page knows your computer (site.js)
   video_label: "Nachtzug playing its demo song: the display counts the bars, the level meters move and the playhead crosses the timeline"
-  caption: "The demo song playing: eight seconds, without the sound."
 
 board: { platform: "Gleis", number: "3", train: "Nachtzug", to: "nach Berliner Schule", departure: "Abfahrt", time: "22 58", label: "Platform 3: the Nachtzug to Berlin School departs at 22:58" }
 timetable: { title: "Abfahrt", sub: "Departures · Nachtzug, platform 3", station: "Nachtzug Hbf", valid: "valid from", time: "Time", train: "Train", stop: "Stop · what’s on board", platform: "Platform", legend: "Hbf = Hauptbahnhof (main station) · Gbf = Güterbahnhof (goods station)" }
 
 who_title: "Fahrgäste · Who it’s for"
-who_heading: "A first step into making music"
+who_heading: "Made for first steps, not for everything"
 who_text: "Nachtzug is not meant to be a fully featured DAW. It is a GarageBand-style music maker aimed specifically at electronic music, such as acid or Berlin School. It is meant as a starting point, for those who have never made music before and know little or nothing about it."
 who_more: "For more advanced users, or once Nachtzug starts to feel limiting, we recommend more fully featured programs such as these. They usually take longer to learn and may cost money, but they can do much more."
 who_connections: "Anschlüsse · Connections"
@@ -41,6 +42,13 @@ who_programs:
   - { name: "REAPER", url: "https://www.reaper.fm", note: "Free to try, then an inexpensive licence. Small, fast and endlessly adaptable." }
 who_after: "Songs made in Nachtzug can come along: export them as MIDI or as one WAV file per track."
 
+listen:
+  title: "Nachtzug demo song"
+  play: "Play the demo song"
+  pause: "Pause"
+  seek: "Where in the song: click or drag to move, or use the arrow keys"
+  caption: "The demo song, made in Nachtzug and arranged by “Arrange for me”. Free to use (CC0)."
+  download: "Download it (MP3)"
 stations_title: "Fahrplan · What’s on board"
 stations_heading: "A night’s journey through Nachtzug"
 stations_intro: "Every stop is a part of the program, in the order you’d meet them."
@@ -152,6 +160,12 @@ faq:
   - q: "Where are my songs kept?"
     a: "Wherever you save them, as <code>.nachtzug</code> files. They’re plain text inside (JSON), so they’re small and will still open in many years."
 
+contact_title: "Auskunft · Contact"
+contact_heading: "Get in touch"
+contact_text: "Found a bug, or have an idea for Nachtzug? GitHub is the best place for it, where others can see it and add to it. For anything else, an email reaches me directly: <a href=\"mailto:%email%\">%email%</a>."
+contact_email: "Write an email"
+contact_issue: "Report a bug or an idea"
+
 footer:
   word: "Gute Fahrt!"
   sub: "Have a good journey."
@@ -162,7 +176,7 @@ footer:
     - title: "Reading"
       links: [ { label: "Operation manual", file: "Nachtzug-Manual.pdf" }, { label: "Bedienungsanleitung", file: "Nachtzug-Handbuch.pdf", lang: de }, { label: "Build it yourself", href: "#readme" } ]
     - title: "Open"
-      links: [ { label: "Licences and credits", page: "/licences.html" }, { label: "Source code", repo: "" }, { label: "Changes", repo: "/blob/main/CHANGELOG.md" } ]
+      links: [ { label: "Licences and credits", page: "/licences.html" }, { label: "Source code", repo: "" }, { label: "What changed", page: "/changelog.html" } ]
     - title: "About"
-      links: [ { label: "Impressum", page: "/impressum.html", lang: de }, { label: "Datenschutz", page: "/datenschutz.html", lang: de }, { label: "marvinjohanning.de", url: "https://marvinjohanning.de" } ]
+      links: [ { label: "Impressum", page: "/impressum.html", lang: de }, { label: "Datenschutz", page: "/datenschutz.html", lang: de }, { label: "Contact", href: "#contact" }, { label: "marvinjohanning.de", url: "https://marvinjohanning.de" } ]
   line: "© 2026 Marvin Johanning · the program under the GNU GPL, the sounds in the public domain, the manuals and pictures under CC BY-SA 4.0"

@@ -1,5 +1,5 @@
-// The small things around the page: the departure board in the top bar, the conductor's punch on a ticket, and the
-// size, version and date of the downloads.
+// The small things around the page: the departure board in the top bar, the conductor's punch on a ticket, the
+// size, version and date of the downloads, and the demo song's player.
 (() => {
   'use strict';
   // the departure board: its lines, in the page's language, are in data-lines
@@ -86,4 +86,56 @@
   }
   openTarget();
   window.addEventListener('hashchange', openTarget);
+
+  // the demo song's clip (_includes/player.html): the key plays and pauses; the groove shows how far the song has
+  // got, and a click, a drag or the arrow keys move in it. The song is only fetched once it is asked for.
+  const groove = document.querySelector('.groove-player');
+  if (groove) {
+    const audio = groove.querySelector('audio');
+    const key = groove.querySelector('.keycap');
+    const use = key.querySelector('use');
+    const wave = groove.querySelector('.wave');
+    const bars = [...wave.children];
+    const now = groove.querySelector('.now');
+    const length = parseFloat(groove.dataset.seconds) || 1;
+    const clock = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+    let shown = -1;
+    let wanted = null;   // a place chosen before the song has loaded
+    const show = (s) => {
+      const lit = Math.round(s / length * bars.length);
+      if (lit !== shown) { bars.forEach((b, i) => b.classList.toggle('done', i < lit)); shown = lit; }
+      now.textContent = clock(s);
+      wave.setAttribute('aria-valuenow', Math.round(s));
+      wave.setAttribute('aria-valuetext', clock(s));
+    };
+    const go = (s) => {
+      s = Math.min(Math.max(s, 0), length);
+      if (audio.readyState >= 1) audio.currentTime = s; else wanted = s;
+      show(s);
+    };
+    const pressed = (on) => {
+      key.classList.toggle('on', on);
+      use.setAttribute('href', on ? '#i-pause' : '#i-play');
+      const label = on ? key.dataset.pause : key.dataset.play;
+      key.setAttribute('aria-label', label);
+      key.title = label;
+    };
+    audio.addEventListener('loadedmetadata', () => { if (wanted !== null) { audio.currentTime = wanted; wanted = null; } });
+    // the video goes with the sound: playing starts it, pausing stops it (until then it loops silently)
+    const video = groove.closest('.clip') && groove.closest('.clip').querySelector('video');
+    audio.addEventListener('play', () => { pressed(true); if (video) video.play().catch(() => {}); });
+    audio.addEventListener('pause', () => { pressed(false); if (video) video.pause(); });
+    audio.addEventListener('timeupdate', () => show(audio.currentTime));
+    audio.addEventListener('ended', () => { pressed(false); go(0); });
+    key.addEventListener('click', () => { if (audio.paused) audio.play(); else audio.pause(); });
+    const at = (e) => { const r = wave.getBoundingClientRect(); return (e.clientX - r.left) / r.width * length; };
+    wave.addEventListener('pointerdown', (e) => { wave.setPointerCapture(e.pointerId); go(at(e)); });
+    wave.addEventListener('pointermove', (e) => { if (wave.hasPointerCapture(e.pointerId)) go(at(e)); });
+    wave.addEventListener('keydown', (e) => {
+      const here = wanted ?? audio.currentTime;
+      const to = { ArrowLeft: here - 5, ArrowRight: here + 5, Home: 0, End: length }[e.key];
+      if (to !== undefined) { e.preventDefault(); go(to); }
+      else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); key.click(); }
+    });
+  }
 })();

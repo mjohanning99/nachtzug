@@ -141,6 +141,8 @@ public:
 	void releaseChord();         // back to the song's own chords
 	int liveChord() const { return liveChord_; } // Engine::NO_CHORD when none
 	int liveChordAlt() const { return liveChordAlt_; }
+	// the pad (row × 16 + column) whose key set the chord; -1 when it came from elsewhere (a MIDI key, a lesson)
+	int liveChordPad() const { return liveChordPad_; }
 	static int keyDegree(int row, int col, int scaleSize) { return col + scaleSize * (row - 1); }
 	// knobs: with Record on and the song playing, moves are written along the timeline
 	void paramPress(int trackId, int param);
@@ -242,6 +244,7 @@ private:
 	bool chordKeys_ = false;
 	int liveChord_ = Engine::NO_CHORD;
 	int liveChordAlt_ = 0;
+	int liveChordPad_ = -1;
 	int chordFromBar_ = 0;      // recording chords: the first bar to write
 	bool chordTake_ = false;    // an undo step for this recording of chords was made
 	bool chordWriting_ = false; // the chord last pressed is being written into the bars

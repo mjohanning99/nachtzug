@@ -1,10 +1,13 @@
-# Builds the website (site/, Jekyll) and puts it on GitHub Pages: mjohanning99.github.io/nachtzug.
-# On the public GitHub repository only; the private repository builds the site with .forgejo/workflows/site.yml.
-name: Website
+# Keeps the old address of the website, mjohanning99.github.io/nachtzug, working: GitHub Pages serves only a page that
+# sends every visitor on to the same place at nachtzugmusic.com (.github/pages-forward/index.html, as index.html and
+# as 404.html, so any old path is caught). Copies of Nachtzug up to 0.3.4 open their manual at the old address.
+# The website itself is built and put on our own server by .forgejo/workflows/site.yml, at each version.
+name: Website forwarding
 
 on:
   push:
     branches: [main]
+    paths: [".github/pages-forward/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 
 permissions:
@@ -21,22 +24,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.3"
-          bundler-cache: true
-          working-directory: site
-      - name: Build
-        working-directory: site
-        env:
-          JEKYLL_ENV: production
-          TZ: Europe/Berlin
+      - name: The forwarding page
         run: |
-          sh prepare.sh
-          bundle exec jekyll build --config _config.yml,_config.github.yml
+          mkdir -p out
+          cp .github/pages-forward/index.html out/index.html
+          cp .github/pages-forward/index.html out/404.html
+          touch out/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: site/_site
+          path: out
 
   deploy:
     needs: build

@@ -1,7 +1,8 @@
-# Added on top of _config.yml for GitHub Pages (.github/workflows/pages.yml):
+# Added on top of _config.yml for the public website, nachtzugmusic.com (.forgejo/workflows/site.yml):
 #   bundle exec jekyll build --config _config.yml,_config.github.yml
-# The site lives under /nachtzug there, and the program and its source come from the latest GitHub release.
-url: "https://mjohanning99.github.io"
-baseurl: "/nachtzug"
+# The program and its source come from the latest GitHub release. The old address, mjohanning99.github.io/nachtzug/,
+# only forwards visitors here (.github/workflows/pages.yml).
+url: "https://nachtzugmusic.com"
+baseurl: ""
 release_downloads: "https://github.com/mjohanning99/nachtzug/releases/latest/download/"
 release_api: "https://api.github.com/repos/mjohanning99/nachtzug/releases/latest"

@@ -1,3 +1,9 @@
+// MIDI in and out on each system's own service: see midiio.h. One MidiIO::Impl per system, chosen by the compiler:
+// CoreMIDI on macOS, the multimedia functions on Windows, the ALSA sequencer elsewhere.
+//
+// What's here: MidiIO (ok(), inputs(), outputs(), listen(), sendTo(), send()) three times over; used by Midi only.
+// Changes in the song file: none.
+
 #include "midiio.h"
 #include <atomic>
 #include <mutex>

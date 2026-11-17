@@ -1,3 +1,10 @@
+// The song timeline: see timeline.h.
+//
+// What's here: Timeline, made by the main window: the paint functions in the order they are drawn, the mouse
+// (moving, stretching and cutting clips, drawing knob lines, the loop row and the chord lane), and the menus of a
+// clip, a chord, a track, a knob lane and Add track. The editing itself goes through App.
+// Changes in the song file: none.
+
 #include "timeline.h"
 #include "app.h"
 #include "widgets.h"
@@ -135,7 +142,7 @@ void Timeline::resizeEvent(QResizeEvent*) {
 }
 void Timeline::setScissors(bool on) {
 	scissors = on;
-	viewport()->setCursor(on ? Qt::CrossCursor : Qt::ArrowCursor);
+	viewport()->setCursor(on ? theme::cursor(QStringLiteral("scissors"), Qt::CrossCursor) : QCursor(Qt::ArrowCursor));
 }
 
 void Timeline::followPlayhead() {
@@ -836,7 +843,9 @@ void Timeline::mouseMoveEvent(QMouseEvent* e) {
 		if (inLane && row >= 0 && row < int(app->song.tracks.size()) && p.x() >= HDR)
 			viewport()->setCursor(lanePointAt(row, p, nullptr) >= 0 ? Qt::SizeAllCursor : Qt::CrossCursor);
 		else
-			viewport()->setCursor(clipAt(p, nullptr, &edge) && edge ? Qt::SizeHorCursor : Qt::ArrowCursor);
+			viewport()->setCursor(clipAt(p, nullptr, &edge) && edge
+			                          ? theme::cursor(QStringLiteral("handle"), Qt::SizeHorCursor)
+									  : QCursor(Qt::ArrowCursor));
 		return;
 	}
 	if (drag == Volume) {

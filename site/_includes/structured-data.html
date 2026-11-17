@@ -1,0 +1,58 @@
+{% comment %} For search engines, on the front pages: what Nachtzug is, the site, and the demo song, in the schema.org
+words they read. {% endcomment %}
+{% if page.lang == "de" %}{% assign manual = "Nachtzug-Handbuch.pdf" %}{% else %}{% assign manual = "Nachtzug-Manual.pdf" %}{% endif %}
+{% assign d = site.data.demo_song %}{% assign total = d.seconds | round %}{% assign mins = total | divided_by: 60 %}{% assign secs = total | modulo: 60 %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": {{ site.url | append: "/#nachtzug" | jsonify }},
+      "name": "Nachtzug",
+      "description": {{ t.description | jsonify }},
+      "url": {{ site.url | append: page.url | jsonify }},
+      "inLanguage": {{ page.lang | jsonify }},
+      "availableLanguage": ["en", "de"],
+      "applicationCategory": "MultimediaApplication",
+      "applicationSubCategory": "Music",
+      "operatingSystem": "Linux, macOS, Windows",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+      "isAccessibleForFree": true,
+      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "downloadUrl": {{ site.repo | append: "/releases/latest" | jsonify }},
+      "releaseNotes": {{ site.url | append: "/changelog.html" | jsonify }},
+      "softwareHelp": {{ site.url | append: "/downloads/" | append: manual | jsonify }},
+      "screenshot": {{ site.url | append: "/assets/img/social-preview.png" | jsonify }},
+      "author": { "@id": {{ site.url | append: "/#author" | jsonify }} },
+      "audio": { "@id": {{ site.url | append: "/#demo-song" | jsonify }} },
+      "sameAs": [{{ site.repo | jsonify }}]
+    },
+    {
+      "@type": "Person",
+      "@id": {{ site.url | append: "/#author" | jsonify }},
+      "name": "Marvin Johanning",
+      "url": "https://marvinjohanning.de"
+    },
+    {
+      "@type": "AudioObject",
+      "@id": {{ site.url | append: "/#demo-song" | jsonify }},
+      "name": {{ t.listen.title | jsonify }},
+      "description": {{ t.listen.caption | jsonify }},
+      "contentUrl": {{ site.url | append: "/assets/audio/demo.mp3" | jsonify }},
+      "encodingFormat": "audio/mpeg",
+      "duration": "PT{{ mins }}M{{ secs }}S",
+      "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "creator": { "@id": {{ site.url | append: "/#author" | jsonify }} }
+    },
+    {
+      "@type": "WebSite",
+      "@id": {{ site.url | append: "/#website" | jsonify }},
+      "name": "Nachtzug",
+      "url": {{ site.url | append: "/" | jsonify }},
+      "inLanguage": ["en", "de"],
+      "publisher": { "@id": {{ site.url | append: "/#author" | jsonify }} }
+    }
+  ]
+}
+</script>

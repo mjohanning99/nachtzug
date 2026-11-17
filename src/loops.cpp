@@ -1,3 +1,10 @@
+// The loop grid: see loops.h.
+//
+// What's here: LoopGrid, made by the main window for the Loops view: fitCells() and the paint functions in the
+// order they are drawn, the mouse (starting and stopping cells, a track's volume, the menus of a cell and a chord);
+// the launching itself is in App (launch(), launchScene()).
+// Changes in the song file: none.
+
 #include "loops.h"
 #include <QWheelEvent>
 #include "app.h"

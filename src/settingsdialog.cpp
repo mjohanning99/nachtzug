@@ -1,3 +1,9 @@
+// Settings and recording a sample: see settingsdialog.h.
+//
+// What's here: SettingsDialog with its pages (General, Sound card, Samples, MIDI), opened by
+// MainWindow::showSettings(); RecordDialog, opened from the Samples page and the drums' Sound tab.
+// Changes in the song file: none (settings are kept apart from songs).
+
 #include "settingsdialog.h"
 #include "chopdialog.h"
 #include "midi.h"
@@ -266,6 +272,16 @@ QWidget* SettingsDialog::generalPage() {
 		if (hooks.scrollBars) hooks.scrollBars(on);
 	});
 	v->addWidget(bars);
+	auto* cursors =
+	    new Switch(tr("Nachtzug’s own cursors (a pencil in the note grid, scissors, a knob’s arrows)"), Switch::Beside);
+	cursors->setToolTip(tr("Where the cursor can show what a click will do, Nachtzug draws its own. Switched off, "
+	                       "the cursors are the system’s everywhere."));
+	cursors->setChecked(theme::ownCursors);
+	connect(cursors, &QAbstractButton::toggled, this, [](bool on) {
+		QSettings().setValue(QStringLiteral("ownCursors"), on);
+		theme::applyCursorLook();
+	});
+	v->addWidget(cursors);
 	auto* welcome = new QPushButton(tr("Show the welcome window next time"));
 	welcome->setToolTip(tr("The window that asks how you would like to start, shown the first time Nachtzug opens"));
 	connect(welcome, &QPushButton::clicked, this, [welcome] {

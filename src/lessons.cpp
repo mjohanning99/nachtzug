@@ -1,3 +1,10 @@
+// The lessons: the overlay that leads through them, and the lessons themselves (see lessons.h).
+//
+// What's here: LessonOverlay (the shade, the lit-up hole, the card, and poll(), which checks whether a step is
+// done), and makeLessons(): acid, beat, move, chords and song, each a list of steps found by the main window's
+// widgets. Called from Help > Lessons and startLesson(); the GUI test runs one.
+// Changes in the song file: none (a lesson changes the song only as a person would, through App).
+
 #include "lessons.h"
 #include "app.h"
 #include "widgets.h"

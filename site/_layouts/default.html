@@ -2,17 +2,21 @@
   Every page, in its language: page.lang is en (the default, _config.yml) or de, and every word comes from _data/<lang>.yml.
   The language switch goes to the same page in the other language: the other front page, or page.other_url.
 {% endcomment %}{% assign t = site.data[page.lang] %}{% if page.lang == 'de' %}{% assign home = '/de/' | relative_url %}{% else %}{% assign home = '/' | relative_url %}{% endif %}{% assign there = page.other_url | default: t.other.url %}<!doctype html>
-<html lang="{% if page.lang == 'de' %}de{% else %}en-GB{% endif %}">
+<html lang="{% if page.lang == 'de' %}de{% else %}en-GB{% endif %}" class="no-js">
 <head>
   <meta charset="utf-8">
+  <script>document.documentElement.classList.remove('no-js')</script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% if page.title %}{{ page.title }} · {% endif %}{{ t.title }}</title>
+  <title>{% if page.title %}{{ page.title }} · {{ t.title }}{% elsif page.home %}{{ t.home_title }}{% else %}{{ t.title }}{% endif %}</title>
   <meta name="description" content="{{ page.description | default: t.description }}">
-  {% if page.home %}<link rel="alternate" hreflang="{{ page.lang }}" href="{{ site.url }}{{ page.url | relative_url }}">
+  <link rel="canonical" href="{{ site.url }}{{ page.url | relative_url }}">
+  {% comment %} a page with a twin in the other language says so; the Impressum and Datenschutz have none {% endcomment %}{% if page.home or page.other_url and page.other_url != "/" %}<link rel="alternate" hreflang="{{ page.lang }}" href="{{ site.url }}{{ page.url | relative_url }}">
   <link rel="alternate" hreflang="{{ t.other.code }}" href="{{ site.url }}{{ there | relative_url }}">
-  <link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ '/' | relative_url }}">
-  {% endif %}<meta property="og:title" content="{{ t.title }}">
-  <meta property="og:description" content="{{ t.description }}">
+  {% endif %}{% if page.home %}<link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ '/' | relative_url }}">
+  {% include structured-data.html %}
+  {% endif %}<meta property="og:title" content="{% if page.home %}{{ t.home_title }}{% else %}{{ page.title | default: t.title }} · {{ t.title }}{% endif %}">
+  <meta property="og:description" content="{{ page.description | default: t.description }}">
+  <meta property="og:site_name" content="Nachtzug">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="{% if page.lang == 'de' %}de_DE{% else %}en_GB{% endif %}">
   <meta property="og:url" content="{{ site.url }}{{ page.url | relative_url }}">
@@ -21,6 +25,11 @@
   <meta property="og:image:height" content="640">
   <meta property="og:image:alt" content="{{ t.og_image_alt }}">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{% if page.home %}{{ t.home_title }}{% else %}{{ page.title | default: t.title }} · {{ t.title }}{% endif %}">
+  <meta name="twitter:description" content="{{ page.description | default: t.description }}">
+  <meta name="twitter:image" content="{{ site.url }}{{ '/assets/img/social-preview.png' | relative_url }}">
+  <meta name="twitter:image:alt" content="{{ t.og_image_alt }}">
+  <meta name="author" content="Marvin Johanning">
   <meta name="theme-color" content="#ebe5d8" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#2b2623" media="(prefers-color-scheme: dark)">
   <meta name="nz-base" content="{{ '/' | relative_url }}">

@@ -5,13 +5,13 @@
 <h1 align="center">Nachtzug</h1>
 
 <p align="center">
-  A DAW (digital audio workstation) made for beginners.<br>
+  Make electronic music, such as acid or Berlin School, without knowing any music theory.<br>
   Nachtzug is built so that every note automatically lands in the right scale.
 </p>
 
 <p align="center">
   <a href="https://github.com/mjohanning99/nachtzug/releases/latest"><b>Download</b></a> ·
-  <a href="https://mjohanning99.github.io/nachtzug/">Website</a> ·
+  <a href="https://nachtzugmusic.com/">Website</a> ·
   <a href="docs/Nachtzug-Manual.pdf">Manual</a> ·
   <a href="docs/Nachtzug-Handbuch.pdf" hreflang="de">Handbuch</a>
 </p>
@@ -28,12 +28,6 @@ Nachtzug is made for the kind of music that’s built from repeating synthesiser
 
 > [!NOTE]
 > Nachtzug is still a work in progress and bugs are to be expected. If you find one, I’d be grateful if you [told me about it](https://github.com/mjohanning99/nachtzug/issues).
-
-## Who it’s for
-
-Nachtzug is not meant to be a fully featured DAW. It is a GarageBand-style music maker aimed specifically at electronic music, such as acid or Berlin School. It is meant as a starting point, for those who have never made music before and know little or nothing about it.
-
-For more advanced users, or once Nachtzug starts to feel limiting, we recommend more fully featured programs such as [LMMS](https://lmms.io), [Ardour](https://ardour.org), [Bitwig Studio](https://www.bitwig.com) or [REAPER](https://www.reaper.fm). These usually take longer to learn and may cost money, but they can do much more. Songs made in Nachtzug can come along: export them as MIDI or as one WAV file per track.
 
 ## What’s in it
 
@@ -146,6 +140,20 @@ That’s your first song! If you’d like a guided tour instead, choose **Help �
 | **Inside the program** | **F1** (or the **?** at the top right) opens a short guide, **Help → Lessons** has five guided tours, and almost every button and knob explains itself when you rest the mouse on it |
 | **What’s new** | [`CHANGELOG.md`](CHANGELOG.md) |
 
+## Made for first steps, not for everything
+
+Nachtzug is not meant to be a fully featured DAW. It is a GarageBand-style music maker aimed specifically at electronic music, such as acid or Berlin School. It is meant as a starting point, for those who have never made music before and know little or nothing about it.
+
+For more advanced users, or once Nachtzug starts to feel limiting, we recommend more fully featured programs such as [LMMS](https://lmms.io), [Ardour](https://ardour.org), [Bitwig Studio](https://www.bitwig.com) or [REAPER](https://www.reaper.fm). These usually take longer to learn and may cost money, but they can do much more. Songs made in Nachtzug can come along: export them as MIDI or as one WAV file per track.
+
+## How Nachtzug was made
+
+Nachtzug was made with the help of various LLMs (large language models) and other AI tools, both local and API-based. A non-exhaustive list includes various Claude models, MiniMax-M3.1-Flash and DeepSeek-V4-Flash, as well as local models such as Qwen3.8-Flash-Next, Qwen3.8-27B and Kolibri, and the AI upscaler 4xRealWebPhoto for upscaling the low-resolution art used as the cover image. The images themselves are not AI-generated.
+
+The program itself, however, contains no AI integration. It sends nothing to a server, no large model download is needed and no language model is involved in the actual creation of music within the program. Ideas, Vary, Clean up, Arrange and the auto drummer are ordinary parts of the program: they follow fixed rules and roll dice with a random generator, much like the arpeggiator on a synthesiser. They give you something to start from, and the music you make with them is yours.
+
+What this means for copyright and the licences is explained in [`LICENSING.md`](LICENSING.md#made-with-ai-what-it-means-for-copyright).
+
 ## Licence
 
 Nachtzug is free: use it, share it and change it. **The music you make with it is yours, completely**, and so are the built-in sounds once they’re in your song.
@@ -187,27 +195,13 @@ Nachtzug builds from the release’s source without a network: the sample librar
 
 | Where | What’s in it |
 |---|---|
-| `src/dsp.h` | Sound generation: oscillators, ladder filter, envelopes, synth voices, drum machine, echo, reverb, limiter. |
-| `src/model.*` | The song: tracks, clips, notes, scales, chords, the synth settings’ names and explanations. |
-| `src/songfile.cpp`, `src/sounds.cpp` | Saving and opening songs; the presets, kits and rolled sounds. |
-| `src/ideas.cpp`, `src/drummer.cpp`, `src/cleanup.cpp`, `src/patterns.h` | The pattern generators, Vary, new tracks, the demo song and Arrange; the auto drummer; Clean up; the helpers they share. |
-| `src/engine.*` | The audio engine: plays the song in time, runs the synths and effects, renders WAV files. |
-| `src/app.*` | Editing commands, named undo steps, clipboard, recording, the loop grid’s launching, the sound card. |
-| `src/main.cpp`, `src/cli.*` | Starting the program; the command line, `--render` and the pictures. |
-| `src/selftest.*`, `src/guitest.*`, `src/parity.*` | The self-test, the window tests, and the parity record for tidy-ups. |
-| `src/mainwindow.*` | The window, menus, top bar, the panels and the How to guide. |
-| `src/inspector.*` | The inspector on the left. |
-| `src/editor.*`, `src/soundpanel.*`, `src/mixer.*` | The Notes, Sound and Mixer tabs. |
-| `src/timeline.*`, `src/loops.*` | The song timeline and the loop grid. |
-| `src/widgets.h`, `src/theme.cpp`, `src/drawing.cpp`, `src/panels.cpp`, `src/controls.cpp` | The look and the program’s own controls: the colour themes and style sheet; drawing the wells, displays, keys and icons; the wells, folding sections and rounded lists; knobs, switches, meters, the display. |
-| `src/samples.*`, `src/chopdialog.*` | Samples: the library, WAV and AIFF reading, importing, recording, chopping a loop. |
-| `src/midiio.*`, `src/midi.*`, `src/midifile.*` | MIDI on each system’s own service, learned knobs, clock, and the MIDI file export. |
-| `src/lessons.*`, `src/autosave.*` | The guided lessons; the spare copy of unsaved work. |
-| `src/exportdialog.*`, `src/settingsdialog.*`, `src/welcome.*` | The export window, the settings and the first-start window. |
+| `src/` | The program. [AGENTS.md](AGENTS.md#a-map-of-the-code) has a map of every file, and each file starts with a note on what it holds. |
 | `tools/samplegen/`, `assets/samples/` | The program that synthesises the sample library, and the library it wrote. |
 | `tools/fonts/`, `assets/fonts/nachtzug/` | The scripts that build the Nachtzug type family (Antiqua, Initialen, Ornamente, Grotesk), and the fonts. |
 | `tools/logo/`, `assets/logo/` | The enamel-sign logo and the scripts that draw it, make the icons and the picture for shared links. |
 | `tools/build-appimage.sh`, `tools/build-macos.sh`, `tools/build-windows.sh` | Packing the program for Linux, macOS and Windows. |
+| `tools/library-sources.sh` | Lists the libraries inside each download, with their licences, and fetches their exact source for the release. |
+| `tools/site_audio.sh` | Renders the demo song, arranged, for the website's player (`site/assets/audio/`). |
 | `tools/readme_shots.py`, `tools/site_shots.py`, `tools/animation.sh` | The screenshots for this README and for the website, and the animation of the program playing. |
 | `tools/kolibri/` | Scripts that rework the German texts with a German language model running locally. |
 | `site/` | The website, built with Jekyll (see `site/README.md`). |

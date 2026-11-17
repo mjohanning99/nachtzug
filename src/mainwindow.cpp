@@ -1,3 +1,12 @@
+// The main window: the top bar, the menus, the tabs, the timeline or loop grid and the inspector, and how they are
+// arranged; the computer keyboard as an instrument; and the dialogs that belong to the window.
+//
+// What's here: MainWindow's constructor, buildTopBar(), buildMenus(); sync() after every change and frame() about
+// 30 times a second; arrangePanels() and the layout settings; mapKey() (the letter keys play notes); opening,
+// saving and new songs; Arrange for me, the How to guide (showHelp(), keysPage()), the lessons menu, the settings
+// and the other dialogs by name (showDialog(), for pictures and tests). Made once in main().
+// Changes in the song file: none (opening and saving go through App).
+
 #include "mainwindow.h"
 #include "savesounddialog.h"
 #include "soundlibrary.h"
@@ -59,12 +68,6 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-static QLabel* dimLabel(const QString& text) {
-	auto* l = new QLabel(text);
-	l->setObjectName("dim");
-	return l;
-}
-
 // the top bar's grid: the row of names, the gap under it, the gap between the two rows of controls, the margins
 constexpr int TB_LABEL = 11, TB_GAP_TOP = 4, TB_GAP_ROWS = 6, TB_PAD = 8;
 
@@ -107,10 +110,21 @@ MainWindow::MainWindow(App* a) : app(a) {
 	auto* bv = new QVBoxLayout(bottom);
 	bv->setContentsMargins(0, 4, 0, 0);
 	bv->setSpacing(4);
-	// the bar above the bottom area: Song / Loops switch, Add track, then the tools of whichever view is shown
-	auto* bar = new QHBoxLayout;
+	// the bar above the bottom area: Song / Loops switch, Add track, then the tools of whichever view is shown, in
+	// groups that wrap onto a second row when the timeline is narrow (beside the tabs on a small screen)
+	auto* barBox = new QWidget;
+	auto* bar = new FlowLayout(barBox, 6, 4);
 	bar->setContentsMargins(8, 0, 8, 0);
-	bar->setSpacing(6);
+	auto group = [](std::initializer_list<QWidget*> keys, int gap, int spacing = 6) { // keys that stay together
+		auto* w = new QWidget;
+		auto* h = new QHBoxLayout(w);
+		h->setContentsMargins(0, 0, 0, 0);
+		h->setSpacing(spacing);
+		for (QWidget* k : keys)
+			h->addWidget(k);
+		w->setProperty("flowGap", gap);
+		return w;
+	};
 	auto plain = [](const QString& text, const QString& tip) {
 		auto* b = new QPushButton(text);
 		b->setFocusPolicy(Qt::NoFocus);
@@ -125,22 +139,12 @@ MainWindow::MainWindow(App* a) : app(a) {
 	songMode->setChecked(true);
 	songMode->setObjectName("segL");
 	loopMode->setObjectName("segR"); // one switch with two positions
-	auto* seg = new QHBoxLayout;
-	seg->setSpacing(0);
-	seg->addWidget(songMode);
-	seg->addWidget(loopMode);
-	bar->addLayout(seg);
-	bar->addSpacing(10);
+	bar->addWidget(group({songMode, loopMode}, 0, 0));
 	auto* addTrack = plain(tr("+  Add track"),
 	                       tr("Add a bass line, sequence, pad, lead or drums. Each comes with a ready pattern."));
 	addTrack->setObjectName("primary");
+	addTrack->setProperty("flowGap", 16);
 	bar->addWidget(addTrack);
-	bar->addSpacing(14);
-
-	songTools = new QWidget;
-	auto* st = new QHBoxLayout(songTools);
-	st->setContentsMargins(0, 0, 0, 0);
-	st->setSpacing(6);
 	// a symbol and a short word on each key; the tooltip says what it does in full (the scissors need no word)
 	auto* scissors = plain(QString(), tr("Scissors: while this is on, clicking a clip cuts it in two at that spot"));
 	scissors->setCheckable(true);
@@ -161,45 +165,38 @@ MainWindow::MainWindow(App* a) : app(a) {
 	for (auto& [key, kind] : toolKeys)
 		theme::symbolKey(key, kind, key->text(), kind == QLatin1String("scissors"));
 	arrangeBtn->setProperty("lesson", "arrange");
-	auto* zoomOut = plain(QStringLiteral("−"), tr("Show more of the song (Ctrl + mouse wheel)"));
-	zoomOut->setFixedWidth(34);
-	auto* zoomIn = plain(QStringLiteral("+"), tr("Show the song larger (Ctrl + mouse wheel)"));
-	zoomIn->setFixedWidth(34);
-	st->addWidget(dup);
-	st->addWidget(loopSel);
-	st->addWidget(cutHere);
-	st->addWidget(scissors);
-	st->addSpacing(8);
-	st->addWidget(del);
-	st->addSpacing(8);
-	st->addWidget(arrangeBtn);
-	st->addStretch(1);
-	st->addSpacing(12);
-	st->addWidget(dimLabel(tr("Zoom")));
-	st->addWidget(zoomOut);
-	st->addWidget(zoomIn);
-	bar->addWidget(songTools, 1);
+	// zooming: a magnifying glass with a minus or a plus, joined as a pair; their words are in the tooltips
+	auto* zoomOut = plain(QString(), tr("show more of the song (Ctrl + mouse wheel)"));
+	auto* zoomIn = plain(QString(), tr("show the song larger (Ctrl + mouse wheel)"));
+	theme::symbolKey(zoomOut, QStringLiteral("zoomout"), tr("Zoom out"), true);
+	theme::symbolKey(zoomIn, QStringLiteral("zoomin"), tr("Zoom in"), true);
+	zoomOut->setObjectName("segL");
+	zoomIn->setObjectName("segR");
+	zoomOut->setFixedWidth(38);
+	zoomIn->setFixedWidth(38);
+	del->setProperty("flowGap", 14);
+	arrangeBtn->setProperty("flowGap", 14);
+	QWidget* zoom = group({zoomOut, zoomIn}, 18, 0);
+	zoom->setProperty("flowRight", true);
+	songTools = {group({dup, loopSel, cutHere, scissors}, 20), del, arrangeBtn, zoom};
+	for (QWidget* w : songTools)
+		bar->addWidget(w);
 
-	loopTools = new QWidget;
-	auto* lt = new QHBoxLayout(loopTools);
-	lt->setContentsMargins(0, 0, 0, 0);
-	lt->setSpacing(6);
 	auto* stopAll = plain(tr("Stop all"), tr("Stop every cell on the next bar"));
 	auto* addCol = plain(tr("+  Column"), tr("Add another column of cells"));
 	auto* delCell = plain(tr("Delete cell"), tr("Delete the selected cell (Delete key)"));
 	theme::symbolKey(stopAll, QStringLiteral("stopall"), tr("Stop all"));
 	theme::symbolKey(addCol, QStringLiteral("column"), tr("Column", "key: add a column of cells"));
 	theme::symbolKey(delCell, QStringLiteral("delete"), tr("Delete"));
-	lt->addWidget(stopAll);
-	lt->addWidget(addCol);
-	lt->addSpacing(14);
-	lt->addWidget(delCell);
-	lt->addStretch(1);
+	delCell->setProperty("flowGap", 20);
 	// no long hint here: the loop grid sits beside the editor and a long line of text would push the window wider;
 	// the cells explain themselves when you hover over them
-	bar->addWidget(loopTools, 1);
-	loopTools->hide();
-	bv->addLayout(bar);
+	loopTools = {group({stopAll, addCol}, 20), delCell};
+	for (QWidget* w : loopTools) {
+		bar->addWidget(w);
+		w->hide();
+	}
+	bv->addWidget(barBox);
 
 	bottomStack = new QStackedWidget;
 	timeline = new Timeline(app);
@@ -684,6 +681,9 @@ void MainWindow::buildMenus() {
 	file->addAction(tr("Export: sound file, tracks or MIDI…"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_E), this,
 	                [this] { exportWav(); });
 	file->addSeparator();
+	// every sound, ready-made and your own, as cards: to listen, pick one for the selected track, tidy up your own
+	file->addAction(tr("Sound library…"), this, [this] { sound->openLibrary(); })
+	    ->setStatusTip(tr("Every ready-made sound and every sound of your own, to listen to and choose from"));
 	file->addAction(tr("Settings…"), QKeySequence::Preferences, this, [this] { showSettings(); })
 	    ->setMenuRole(QAction::PreferencesRole);
 	file->addSeparator();
@@ -982,8 +982,10 @@ void MainWindow::sync() {
 	loopMode->setChecked(s.liveMode);
 	// narrow things first, then turn the divider: otherwise both wide toolbars briefly sit side by side
 	// and the window grows to fit them
-	songTools->setVisible(!s.liveMode);
-	loopTools->setVisible(s.liveMode);
+	for (QWidget* w : songTools)
+		w->setVisible(!s.liveMode);
+	for (QWidget* w : loopTools)
+		w->setVisible(s.liveMode);
 	editor->setCompact(s.liveMode);
 	bottomStack->setCurrentIndex(s.liveMode ? 1 : 0);
 	if (s.liveMode != shownLive) {
@@ -1534,9 +1536,8 @@ void MainWindow::closeEvent(QCloseEvent* e) {
 // The operation manual, on the website: in the program's language
 void MainWindow::openManual() {
 	const bool german = QLocale().language() == QLocale::German;
-	QDesktopServices::openUrl(
-	    QUrl(german ? QStringLiteral("https://mjohanning99.github.io/nachtzug/downloads/Nachtzug-Handbuch.pdf")
-		            : QStringLiteral("https://mjohanning99.github.io/nachtzug/downloads/Nachtzug-Manual.pdf")));
+	QDesktopServices::openUrl(QUrl(german ? QStringLiteral("https://nachtzugmusic.com/downloads/Nachtzug-Handbuch.pdf")
+	                                      : QStringLiteral("https://nachtzugmusic.com/downloads/Nachtzug-Manual.pdf")));
 }
 
 // Every key and mouse move worth knowing, on the help's second tab. The key names come from Qt, so they read as on

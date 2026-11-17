@@ -1,3 +1,9 @@
+// The Mixer tab: see mixer.h.
+//
+// What's here: Fader (the volume fader with its level meter) and MixerPanel: rebuild() when tracks come or go,
+// sync() after every change, tick() for the meters; made by the main window.
+// Changes in the song file: none.
+
 #include "mixer.h"
 #include "midi.h"
 #include "app.h"
@@ -30,7 +36,7 @@ static QString panText(float x) {
 Fader::Fader(QWidget* parent) : QWidget(parent), accent(theme::amber) {
 	setMinimumSize(46, 120);
 	setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-	setCursor(Qt::SizeVerCursor);
+	theme::setOwnCursor(this, QStringLiteral("turn"), Qt::SizeVerCursor);
 	setFocusPolicy(Qt::NoFocus);
 	setToolTip(tr("Volume. Drag up or down, hold Shift for small steps, double-click to reset. The bar beside it shows "
 	              "the level."));
@@ -55,29 +61,76 @@ void Fader::paintEvent(QPaintEvent*) {
 	QPainter p(this);
 	p.setRenderHint(QPainter::Antialiasing);
 	const double top = 8, bottom = height() - 8, h = bottom - top;
-	// slot with the filled part below the handle
-	const QRectF slot(11, top, 6, h);
-	p.setPen(Qt::NoPen);
-	p.setBrush(theme::slot());
-	p.drawRoundedRect(slot, 3, 3);
 	const double y = bottom - double(val) * h;
-	p.setBrush(accent);
-	p.drawRoundedRect(QRectF(11, y, 6, bottom - y), 3, 3);
+	const double mh = std::sqrt(double(peak)) * h;
+	if (!theme::tactile) { // the flat looks: flat parts
+		// slot with the filled part below the handle
+		p.setPen(Qt::NoPen);
+		p.setBrush(theme::slot());
+		p.drawRoundedRect(QRectF(11, top, 6, h), 3, 3);
+		p.setBrush(accent);
+		p.drawRoundedRect(QRectF(11, y, 6, bottom - y), 3, 3);
+		// level meter
+		p.setBrush(theme::slot());
+		p.drawRoundedRect(QRectF(30, top, 6, h), 3, 3);
+		if (mh > 1) {
+			p.setBrush(peak > 0.85f ? theme::lcd : theme::ink);
+			p.drawRoundedRect(QRectF(30, bottom - mh, 6, mh), 3, 3);
+		}
+		// handle
+		p.setPen(QPen(theme::capEdge, 1.5));
+		p.setBrush(theme::cap);
+		p.drawRoundedRect(QRectF(2, y - 7, 24, 14), 3, 3);
+		p.setPen(QPen(theme::capInk, 1.5));
+		p.drawLine(QPointF(6, y), QPointF(22, y));
+		return;
+	}
+	// Bakelite: made as the sliders in the window and the timeline are, a groove sunk into the panel (shaded on the
+	// side the light does not reach), the filled part raised in it, and a moulded cap that casts a shadow
+	auto groove = [&](const QRectF& r) {
+		QLinearGradient g(r.topLeft(), r.topRight());
+		g.setColorAt(0, theme::gridBar.darker(118));
+		g.setColorAt(0.45, theme::gridBar);
+		g.setColorAt(1, theme::gridBar.lighter(110));
+		p.setPen(QPen(theme::rule, 1));
+		p.setBrush(g);
+		p.drawRoundedRect(r, r.width() / 2, r.width() / 2);
+	};
+	auto filled = [&](const QRectF& r, const QColor& c) {
+		QLinearGradient g(r.topLeft(), r.topRight());
+		g.setColorAt(0, c);
+		g.setColorAt(1, c.lighter(115));
+		p.setPen(QPen(c.darker(140), 1));
+		p.setBrush(g);
+		p.drawRoundedRect(r, r.width() / 2, r.width() / 2);
+	};
+	const QRectF slot(10, top, 8, h);
+	groove(slot);
+	filled(QRectF(slot.left(), std::min(y, bottom - slot.width()), slot.width(), std::max(slot.width(), bottom - y)),
+	       accent);
 	// level meter
 	const QRectF meter(30, top, 6, h);
-	p.setBrush(theme::slot());
-	p.drawRoundedRect(meter, 3, 3);
-	const double mh = std::sqrt(double(peak)) * h;
+	groove(meter);
 	if (mh > 1) {
-		p.setBrush(peak > 0.85f ? theme::lcd : theme::ink);
-		p.drawRoundedRect(QRectF(30, bottom - mh, 6, mh), 3, 3);
+		const QColor c = peak > 0.85f ? theme::lcd : theme::ink;
+		p.setPen(Qt::NoPen);
+		p.setBrush(c);
+		p.drawRoundedRect(QRectF(meter.left() + 1, bottom - std::max(mh, 4.0), 4, std::max(mh, 4.0) - 1), 2, 2);
 	}
-	// handle
-	p.setPen(QPen(theme::capEdge, 1.5));
-	p.setBrush(theme::cap);
-	p.drawRoundedRect(QRectF(2, y - 7, 24, 14), 3, 3);
-	p.setPen(QPen(theme::capInk, 1.5));
-	p.drawLine(QPointF(6, y), QPointF(22, y));
+	// the cap
+	const QRectF cap(2, y - 7, 24, 14);
+	p.setPen(Qt::NoPen);
+	p.setBrush(QColor(0, 0, 0, 50));
+	p.drawRoundedRect(cap.translated(0, 1.5), 3, 3);
+	QLinearGradient cg(cap.topLeft(), cap.bottomLeft());
+	cg.setColorAt(0, QColor(0x57, 0x50, 0x4b));
+	cg.setColorAt(0.5, QColor(0x2e, 0x2a, 0x27));
+	cg.setColorAt(1, QColor(0x1a, 0x17, 0x16));
+	p.setPen(QPen(QColor(0x0d, 0x0b, 0x0a), 1));
+	p.setBrush(cg);
+	p.drawRoundedRect(cap, 3, 3);
+	p.setPen(QPen(theme::amber, 1.6, Qt::SolidLine, Qt::RoundCap));
+	p.drawLine(QPointF(cap.left() + 4, y), QPointF(cap.right() - 4, y));
 }
 
 void Fader::mousePressEvent(QMouseEvent* e) {

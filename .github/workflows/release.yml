@@ -1,6 +1,7 @@
 # For every version tag (v0.1.0 …): builds Nachtzug for Linux (an AppImage, in Debian 13), macOS (a disk image, on
 # Apple Silicon) and Windows (an installer), each checked with its self-test, and puts them on the version's GitHub
-# release with the source code and both manuals. The website's download tickets point at the latest release.
+# release with the source code, both manuals, and for each download the exact source of the libraries inside it
+# (tools/library-sources.sh), as their licences ask. The website's download tickets point at the latest release.
 # "Run workflow" on the Actions page builds all three without releasing anything, to try a change out.
 name: Release
 
@@ -26,6 +27,9 @@ jobs:
           DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
             build-essential pkg-config cmake qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-l10n-tools qt6-qpa-plugins qt6-wayland \
             libsdl2-dev libasound2-dev libgl-dev file curl git ca-certificates
+          # Debian's source lists too, for the libraries' sources
+          sed -i 's/^Types: deb$/Types: deb deb-src/' /etc/apt/sources.list.d/debian.sources
+          apt-get update
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -33,27 +37,39 @@ jobs:
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           sh tools/build-appimage.sh
+      - name: The libraries' sources
+        run: |
+          tools/library-sources.sh build-appimage/AppDir dist/Nachtzug-Linux-library-sources
+          tar -cf dist/Nachtzug-Linux-library-sources.tar -C dist Nachtzug-Linux-library-sources
       - uses: actions/upload-artifact@v4
         with:
           name: linux
-          path: dist/Nachtzug-x86_64.AppImage
+          path: |
+            dist/Nachtzug-x86_64.AppImage
+            dist/Nachtzug-Linux-library-sources.tar
           if-no-files-found: error
 
   macos:
     runs-on: macos-15
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+      HOMEBREW_NO_INSTALL_CLEANUP: "1"
     steps:
       - uses: actions/checkout@v4
       - name: The disk image
-        env:
-          HOMEBREW_NO_AUTO_UPDATE: "1"
-          HOMEBREW_NO_INSTALL_CLEANUP: "1"
         run: |
           tools/build-macos.sh
           mv build-macos/Nachtzug.dmg Nachtzug-macOS.dmg
+      - name: The libraries' sources
+        run: |
+          tools/library-sources.sh build-macos/Nachtzug.app Nachtzug-macOS-library-sources
+          tar -cf Nachtzug-macOS-library-sources.tar Nachtzug-macOS-library-sources
       - uses: actions/upload-artifact@v4
         with:
           name: macos
-          path: Nachtzug-macOS.dmg
+          path: |
+            Nachtzug-macOS.dmg
+            Nachtzug-macOS-library-sources.tar
           if-no-files-found: error
 
   windows:
@@ -80,10 +96,16 @@ jobs:
           tools/build-windows.sh
           test -f build-windows/Nachtzug-Setup.exe
           mv build-windows/Nachtzug-Setup.exe Nachtzug-Windows-Setup.exe
+      - name: The libraries' sources
+        run: |
+          tools/library-sources.sh build-windows/package/Nachtzug Nachtzug-Windows-library-sources
+          tar -cf Nachtzug-Windows-library-sources.tar Nachtzug-Windows-library-sources
       - uses: actions/upload-artifact@v4
         with:
           name: windows
-          path: Nachtzug-Windows-Setup.exe
+          path: |
+            Nachtzug-Windows-Setup.exe
+            Nachtzug-Windows-library-sources.tar
           if-no-files-found: error
 
   release:
@@ -112,5 +134,8 @@ jobs:
             dist/Nachtzug-macOS.dmg
             dist/Nachtzug-Windows-Setup.exe
             dist/Nachtzug-source.tar.gz
+            dist/Nachtzug-Linux-library-sources.tar
+            dist/Nachtzug-macOS-library-sources.tar
+            dist/Nachtzug-Windows-library-sources.tar
             docs/Nachtzug-Manual.pdf
             docs/Nachtzug-Handbuch.pdf

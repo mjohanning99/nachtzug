@@ -54,6 +54,7 @@ find "$P/imageformats" -name '*.dylib' ! -name 'libqjpeg.dylib' ! -name 'libqgif
 # the licences: Nachtzug's own and those of Qt, SDL and the rest it carries (docs/THIRD-PARTY.md says which)
 L="$APP/Contents/Resources/licences"; rm -rf "$L"; mkdir -p "$L"
 cp LICENSE LICENSING.md docs/THIRD-PARTY.md "$L/"; cp -R LICENSES "$L/"
+tools/library-sources.sh --list "$APP" "$L"   # sources.txt: each library's formula, version, licence and source
 echo "Signing the app for this Mac…"
 codesign --force --deep --sign - "$APP"
 

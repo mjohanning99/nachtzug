@@ -1,3 +1,9 @@
+// The inspector: see inspector.h.
+//
+// What's here: Inspector, made by the main window; sync() after every change, adopt() when the layout changes;
+// the Sound section is built by SoundPanel::buildQuick(), How notes and the drummer are EditorPanel's own.
+// Changes in the song file: none.
+
 #include "inspector.h"
 #include <QFormLayout>
 #include "app.h"
@@ -58,7 +64,7 @@ Inspector::Inspector(App* a, SoundPanel* s, EditorPanel* e, QWidget* parent)
 	// ---- the track: level, place, sends, mute and solo
 	auto* g = new QGroupBox(tr("Track").toUpper());
 	auto* tv = new QVBoxLayout(g);
-	tv->setContentsMargins(8, 8, 8, 4);
+	theme::wellMargins(tv, 8, 6);
 	tv->setSpacing(4);
 	auto* vr = new QHBoxLayout;
 	vr->setSpacing(8);

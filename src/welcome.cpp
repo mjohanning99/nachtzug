@@ -1,3 +1,9 @@
+// The first-start window: see welcome.h.
+//
+// What's here: WelcomeDialog, shown by main() the first time Nachtzug starts (and for its picture); its choices are
+// written to the settings when it closes.
+// Changes in the song file: none.
+
 #include "welcome.h"
 #include "widgets.h"
 #include <QComboBox>
@@ -86,7 +92,7 @@ WelcomeDialog::WelcomeDialog(std::function<void(const QString&)> set, QWidget* p
 	cards->addWidget(newBtn, 1);
 	cards->addWidget(proBtn, 1);
 	v->addLayout(cards);
-	// how the window looks: three choices, each two joined keys
+	// how the window looks: four choices, each two joined keys
 	lookTitle = new QLabel;
 	lookTitle->setObjectName("title");
 	v->addWidget(lookTitle);
@@ -121,6 +127,7 @@ WelcomeDialog::WelcomeDialog(std::function<void(const QString&)> set, QWidget* p
 	pair(0, keysLabel, keysWords, keysSymbols, st.value(QStringLiteral("keys")).toString() != QLatin1String("symbols"));
 	pair(1, layoutLabel, layoutTop, layoutBeside, st.value(QStringLiteral("layout/timelineTop"), true).toBool());
 	pair(2, barsLabel, barsHidden, barsShown, !st.value(QStringLiteral("scrollBars"), false).toBool());
+	pair(3, cursorsLabel, cursorsOwn, cursorsSystem, st.value(QStringLiteral("ownCursors"), true).toBool());
 	look->setColumnStretch(1, 1);
 	v->addLayout(look);
 	note = new QLabel;
@@ -161,6 +168,7 @@ WelcomeDialog::WelcomeDialog(std::function<void(const QString&)> set, QWidget* p
 		            keysSymbols->isChecked() ? QStringLiteral("symbols") : QStringLiteral("words"));
 		st.setValue(QStringLiteral("layout/timelineTop"), layoutTop->isChecked());
 		st.setValue(QStringLiteral("scrollBars"), barsShown->isChecked());
+		st.setValue(QStringLiteral("ownCursors"), cursorsOwn->isChecked());
 		accept();
 	});
 	retranslate();
@@ -177,7 +185,7 @@ void WelcomeDialog::retranslate() {
 	title->setText(tr("<span style=\"font-size:22px; font-weight:600; letter-spacing:2px\">Welcome aboard </span>"
 	                  "<span style=\"font-size:22px; font-weight:600\">Nachtzug</span>"));
 	intro->setText(
-	    tr("Nachtzug is a DAW (digital audio workstation) made for beginners. It lets you create electronic "
+	    tr("Nachtzug is a music program made for beginners. It lets you create electronic "
 		   "music, in the style of the Berlin School for example, without much prior knowledge. You don’t need "
 		   "to know any music theory either: Nachtzug is built so that every note automatically lands in the "
 		   "right scale."));
@@ -198,6 +206,12 @@ void WelcomeDialog::retranslate() {
 	barsLabel->setText(tr("Scroll bars"));
 	barsHidden->setText(tr("Hidden"));
 	barsShown->setText(tr("Shown"));
+	cursorsLabel->setText(tr("Cursors"));
+	cursorsOwn->setText(tr("Nachtzug’s own"));
+	cursorsOwn->setToolTip(tr("Where the cursor can show what a click will do, Nachtzug draws its own: a pencil in the "
+	                          "note grid, scissors, a knob’s arrows"));
+	cursorsSystem->setText(tr("The system’s"));
+	cursorsSystem->setToolTip(tr("The cursors of your computer, everywhere"));
 	note->setText(tr("You can change all of these any time in Settings (the ⚙ key at the top right)."));
 	go->setText(tr("Start making music"));
 	if (layout())

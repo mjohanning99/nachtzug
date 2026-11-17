@@ -17,9 +17,19 @@
 
 Knob::Knob(const QString& l, QWidget* parent) : QWidget(parent), label(l) {
 	setFixedSize(sizeHint());
-	setCursor(Qt::SizeVerCursor);
+	theme::setOwnCursor(this, QStringLiteral("turn"), Qt::SizeVerCursor);
 	setFocusPolicy(Qt::NoFocus);
 	setToolTip(tr("Drag up or down. Hold Shift for small steps. Double-click to reset."));
+}
+
+bool Knob::nameFitsOneLine() const {
+	QFont f = font();
+	f.setPixelSize(11);
+	f.setLetterSpacing(QFont::AbsoluteSpacing, 0.3);
+	const QFontMetrics fm(f); // wrapped as paintEvent wraps it
+	const QRect r =
+	    fm.boundingRect(QRect(0, 0, int(width() / scale), 1000), Qt::AlignHCenter | Qt::TextWordWrap, label);
+	return r.height() < 2 * fm.lineSpacing();
 }
 
 void Knob::setValue(float v) {
@@ -48,6 +58,9 @@ void Knob::paintEvent(QPaintEvent*) {
 	if (!isEnabled()) p.setOpacity(0.45); // a knob that does nothing just now looks faded
 	p.setRenderHint(QPainter::Antialiasing);
 	p.scale(scale, scale); // everything below is drawn at the normal size
+	// with room for one line of name, the drawing would sit high: the scale's ticks reach the top, a short name ends
+	// a few pixels above the bottom. Two pixels lower, it is in the middle of its box.
+	if (oneLine_) p.translate(0, 2);
 	const int W = int(width() / scale);
 	const QRectF dial((W - 44) / 2.0, 2, 44, 44);
 	if (theme::tactile) { // a ribbed black knob on a printed scale, with a coloured ring showing the value
@@ -609,22 +622,40 @@ bool Toast::eventFilter(QObject* o, QEvent* e) {
 
 // ---------------------------------------------------------------- FlowLayout
 
+// the space before an item on its row: the layout's spacing, or the item's own "flowGap"
+int FlowLayout::gapBefore(QLayoutItem* it) const {
+	const QWidget* w = it->widget();
+	const QVariant g = w ? w->property("flowGap") : QVariant();
+	return g.isValid() ? g.toInt() : h_;
+}
+
+// an item as wide as it likes, unless the row is narrower and it can fold its own contents (a section whose
+// keys flow too): then the row's width, and as tall as that makes it
+QSize FlowLayout::itemSize(QLayoutItem* it, int width) const {
+	QSize s = it->sizeHint();
+	if (s.width() > width && it->hasHeightForWidth()) {
+		s.setWidth(std::max(width, it->minimumSize().width()));
+		s.setHeight(std::max(s.height(), it->heightForWidth(s.width())));
+	}
+	return s;
+}
+
 QSize FlowLayout::sizeHint() const { // everything on one row
 	int w = 0, hgt = 0, n = 0;
 	for (QLayoutItem* it : items_) {
 		if (it->isEmpty()) continue;
 		const QSize s = it->sizeHint();
-		w += s.width() + (n++ ? h_ : 0);
+		w += s.width() + (n++ ? gapBefore(it) : 0);
 		hgt = std::max(hgt, s.height());
 	}
 	const QMargins m = contentsMargins();
 	return QSize(w + m.left() + m.right(), hgt + m.top() + m.bottom());
 }
 
-QSize FlowLayout::minimumSize() const { // as narrow as the widest single item
+QSize FlowLayout::minimumSize() const { // as narrow as the widest single item (or what it folds down to)
 	QSize s;
 	for (QLayoutItem* it : items_)
-		if (!it->isEmpty()) s = s.expandedTo(it->sizeHint());
+		if (!it->isEmpty()) s = s.expandedTo(it->hasHeightForWidth() ? it->minimumSize() : it->sizeHint());
 	const QMargins m = contentsMargins();
 	return s + QSize(m.left() + m.right(), m.top() + m.bottom());
 }
@@ -637,30 +668,35 @@ int FlowLayout::place(const QRect& r, bool apply) const {
 	int x = 0;
 	for (QLayoutItem* it : items_) {
 		if (it->isEmpty()) continue;
-		const int w = it->sizeHint().width();
-		if (!rows.back().empty() && x + w > area.width()) {
+		const int w = itemSize(it, area.width()).width();
+		const int gap = rows.back().empty() ? 0 : gapBefore(it);
+		if (!rows.back().empty() && x + gap + w > area.width()) {
 			rows.emplace_back();
 			x = 0;
 		}
+		x += (rows.back().empty() ? 0 : gapBefore(it)) + w;
 		rows.back().push_back(it);
-		x += w + h_;
 	}
 	int y = area.y();
 	for (const auto& row : rows) {
 		if (row.empty()) continue;
-		int used = -h_, lineH = 0, growW = 0;
+		int used = 0, lineH = 0, growW = 0;
 		for (QLayoutItem* it : row) {
-			const QSize s = it->sizeHint();
-			used += s.width() + h_;
+			const QSize s = itemSize(it, area.width());
+			used += s.width() + (it == row.front() ? 0 : gapBefore(it));
 			lineH = std::max(lineH, justify_ ? std::max(s.height(), it->heightForWidth(s.width())) : s.height());
 			if (it->maximumSize().width() > s.width()) growW += s.width();
 		}
-		const int extra = justify_ && growW > 0 ? std::max(0, area.width() - used) : 0;
+		const int spare = std::max(0, area.width() - used);
+		const int extra = justify_ && growW > 0 ? spare : 0;
 		if (apply) {
 			int cx = area.x(), given = 0, growSeen = 0;
 			for (QLayoutItem* it : row) {
-				const QSize s = it->sizeHint();
+				const QSize s = itemSize(it, area.width());
 				int w = s.width();
+				if (it != row.front()) cx += gapBefore(it);
+				// an item marked "flowRight" goes to the right end of its row, and those after it with it
+				if (!justify_ && it->widget() && it->widget()->property("flowRight").toBool()) cx += spare;
 				if (extra > 0 &&
 				    it->maximumSize().width() > s.width()) { // a share of the extra, the last one takes what is left
 					growSeen += s.width();
@@ -668,8 +704,9 @@ int FlowLayout::place(const QRect& r, bool apply) const {
 					w += upTo - given;
 					given = upTo;
 				}
-				it->setGeometry(QRect(cx, y, w, justify_ ? lineH : s.height()));
-				cx += w + h_;
+				// the row's height, as a box layout gives it: an item that cannot be as tall sits in the middle
+				it->setGeometry(QRect(cx, y, w, lineH));
+				cx += w;
 			}
 		}
 		y += lineH + v_;

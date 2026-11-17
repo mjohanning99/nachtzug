@@ -1,5 +1,23 @@
 # Changes
 
+## 0.3.5 (17 November 2026)
+
+- **Sharp on Linux with Wayland.** The AppImage was missing part of Qt’s Wayland support, so on a Wayland desktop it quietly ran through X11 instead: on a scaled screen the cursor came out tiny and ignored the cursor theme. It now runs on Wayland itself.
+- **Cursors that say what a click does.** A pencil over the note grid, a handle at the end of a note or clip, scissors when cutting, and up and down arrows over knobs and faders. They’re on unless switched off, in the welcome window or in Settings.
+- **Zoom with a magnifying glass.** The zoom keys above the timeline show a magnifying glass with a minus or a plus instead of the word “Zoom”, so the row fits on a laptop’s screen.
+- **Fits a laptop.** With the timeline beside the tabs, the keys above it and in the Notes section wrap onto more rows when there is no room, so the window goes down to about 1170 pixels wide instead of 1780.
+- **The sound library from the menu.** File → Sound library… opens it from anywhere, not only from the bottom of a preset list.
+- **Save sound… and Library side by side**, as a joined pair at the end of the sound row, and every section’s contents sit in the middle between its screws.
+- **Mixer faders like the other sliders**: a sunk groove and a moulded cap in the Bakelite look.
+- **Small fixes.** Joined keys such as Save sound… | Library have their lip on the same line as the others on high-resolution screens; in Chords mode only the pad pressed lights up, not its twin in the next row; notes end inside their pattern; drop-down lists show a separator as a thin line instead of an empty row; the German guide speaks impersonally throughout.
+- **The website and the README start with Nachtzug itself.** The section on who it’s for, and on the programs to move on to, comes near the end now, and the animation at the top shows today’s look.
+- **What Nachtzug is, in plain words.** Software centres, the menus and the README now say “Make electronic music, such as acid or Berlin School, without knowing any music theory” instead of “DAW made for beginners”. The README and the website’s licences page also say how Nachtzug was made: with the help of AI tools, while the program itself contains no AI; LICENSING.md and the licences page explain what that means for copyright.
+- **The libraries’ sources on every release.** Each download carries libraries such as Qt, and some of their licences ask that their exact source code go along with them. The release now has it beside each download, and each download lists every library inside it with its version and licence.
+- **A home of its own.** The website is now at nachtzugmusic.com, on a server in Germany that keeps no record of visits; the old address forwards there, so links in older versions keep working. It also says how to get in touch, lists what changed in every version, and plays the demo song, to hear what Nachtzug sounds like before downloading it.
+- **Windows knows the version.** The installer told Windows that every version was 0.1; “Installed apps” now shows the real one.
+- **Homebrew on a Mac.** `brew install mjohanning99/nachtzug/nachtzug` installs Nachtzug, and `brew upgrade` keeps it up to date.
+- **A steadier self-test.** The check that Nachtzug follows the tempo of an incoming MIDI clock no longer depends on how busy the computer is; on GitHub’s busy Macs it had held up two releases.
+
 ## 0.3.4 (17 November 2026)
 
 - **Builds on Debian 12 and Ubuntu 24.04.** Building Nachtzug needed Qt 6.7, which these systems don’t have; it now builds with Qt 6.4 or newer, and looks just the same.

@@ -8,6 +8,7 @@
 // Changes in the song file: none (it saves and opens a song in the temporary folder, to check the round trip).
 #include "selftest.h"
 #include <algorithm>
+#include <chrono>
 #include <QRegularExpression>
 #include <QImage>
 #include "widgets.h"
@@ -86,6 +87,8 @@ struct Test {
 	void testerFindings();
 	void pumpDips();
 	void stylePictures();
+	void padsAndPatternEnds();
+	void ownCursors();
 };
 
 // a session: tracks, ideas, sounds, playing and recording, knob lines, clips, the loop grid, the song's
@@ -1245,24 +1248,26 @@ void Test::midiLoopBack() {
 	send({0x89, 38, 0});
 	wait(20);
 	app.selectTrack(bassId);
-	// follow a clock at 133 BPM, then its start and stop
+	// follow a clock at 133 BPM, then its start and stop. The ticks carry the times they would arrive at from a device
+	// (eight beats, ending now), so the tempo heard is the clock's, however busy the machine is (GitHub's Macs once
+	// stretched slept-for ticks to 130 BPM); a little jitter mustn't move it either
 	m.setFollowClock(true);
-	// each tick on its own time, the way a device sends them; when the machine stalls (GitHub's busy Macs), the ticks
-	// carry on from the late one instead of catching up in a burst, which Nachtzug rightly takes for a broken clock
-	QElapsedTimer ct;
-	ct.start();
-	const qint64 gap = qint64(60.0 / 133.0 / 24.0 * 1e9);
-	qint64 next = 0;
-	for (int i = 0; i < 24 * 8; i++) {
-		while (ct.nsecsElapsed() < next)
-			QThread::usleep(200);
-		send({0xf8});
-		next = std::max(next, ct.nsecsElapsed() - gap / 2) + gap;
-	}
-	wait(100);
-	if (std::fabs(app.song.bpm - 133.f) >= 2.0f)
-		std::fprintf(stderr, "  clock in: followed to %.1f BPM\n", double(app.song.bpm));
-	check(std::fabs(app.song.bpm - 133.f) < 2.0f, "the song follows the tempo of an incoming clock");
+	const auto followed = [&](double bpm, double jitter) {
+		const double gap = 60.0 / bpm / 24.0;
+		const double start =
+		    std::chrono::duration<double>(std::chrono::steady_clock::now().time_since_epoch()).count() - 24 * 8 * gap;
+		for (int i = 0; i < 24 * 8; i++) {
+			const uint8_t tick = 0xf8;
+			m.incoming(&tick, 1, start + i * gap + (i % 2 ? jitter : -jitter));
+		}
+		wait(100);
+		if (std::fabs(app.song.bpm - float(bpm)) >= 1.0f)
+			std::fprintf(stderr, "  clock in: %.1f BPM followed to %.1f\n", bpm, double(app.song.bpm));
+		return std::fabs(app.song.bpm - float(bpm)) < 1.0f;
+	};
+	check(followed(133.0, 0.0), "the song follows the tempo of an incoming clock");
+	check(followed(118.0, 0.0005),
+	      "a clock that wobbles by half a millisecond, like a USB keyboard's, is followed too");
 	send({0xfa});
 	wait(100);
 	pump(2); // the self-test has no sound card: the engine runs when pumped
@@ -1656,6 +1661,50 @@ void Test::stylePictures() {
 	check(pictures > 0 && broken == 0, "every picture in the style sheet loads");
 }
 
+// Found by the owner in November 2026: in Chords mode only the pad pressed lights up, though another pad has the same
+// chord; and a note never reaches past the end of its pattern, where the grid stops.
+void Test::padsAndPatternEnds() {
+	app.setSong(demoSong(), QString());
+	int bassId = -1;
+	for (const Track& t : app.song.tracks)
+		if (t.role == R_BASS) bassId = t.id;
+	app.selectTrack(bassId);
+	app.setChordKeys(true);
+	const int n = app.song.sc().n;
+	app.keyDown(n, 0, n); // the low row's key a scale up: the key note's chord, as the middle row's first key
+	app.keyUp(n);
+	check(app.liveChord() == 0, "a low-row key a scale above plays the key note's chord");
+	check(app.liveChordPad() == n, "the pad pressed is the one that lights, not the other pad with that chord");
+	app.midiNote(60, 100, true);
+	app.midiNote(60, 0, false);
+	check(app.liveChordPad() == -1, "a chord from a MIDI key belongs to no one pad");
+	app.setChordKeys(false);
+
+	// a long note copied from a long pattern and pasted near the end of a short one ends where the short one does
+	const int longId = app.createClip(bassId, 40 * BAR), shortId = app.createClip(bassId, 50 * BAR);
+	app.edit([&](Song& s) {
+		Clip* a = s.clip(longId);
+		a->loopLen = a->len = 4 * BAR;
+		a->notes.clear();
+		Note nt;
+		nt.start = BAR - 24;
+		nt.len = 96;
+		nt.sel = true;
+		a->notes.push_back(nt);
+		s.clip(shortId)->notes.clear();
+	});
+	app.focus = App::FocusEditor;
+	app.editClip = longId;
+	app.copy();
+	app.editClip = shortId;
+	app.seek(0); // the playhead outside the clip: pasted where it was
+	app.paste();
+	const Clip* c = app.song.clip(shortId);
+	check(c && c->loopLen == BAR && c->notes.size() == 1 && c->notes[0].start == BAR - 24 && c->notes[0].len == 24,
+	      "a pasted note ends at the end of its pattern");
+	pump(10);
+}
+
 int selfTest() {
 	Test t;
 	t.session();
@@ -1680,6 +1729,35 @@ int selfTest() {
 	t.testerFindings();
 	t.pumpDips();
 	t.stylePictures();
+	t.padsAndPatternEnds();
+	t.ownCursors();
 	std::printf(t.problems ? "self-test: %d problem(s)\n" : "self-test passed\n", t.problems);
 	return t.problems ? 1 : 0;
+}
+
+// Nachtzug's own cursors: drawn for every kind, pointing where they should, and the system's when switched off
+void Test::ownCursors() {
+	const bool was = theme::ownCursors;
+	theme::ownCursors = true;
+	for (const char* kind : {"pencil", "scissors", "turn", "handle"}) {
+		const QCursor c = theme::cursor(QLatin1String(kind), Qt::ArrowCursor);
+		const QPixmap pm = c.pixmap();
+		check(c.shape() == Qt::BitmapCursor && !pm.isNull() && pm.width() >= 32,
+		      "each of Nachtzug's cursors is drawn, at least 32 pixels wide");
+		const QImage im = pm.toImage().convertToFormat(QImage::Format_ARGB32);
+		int seen = 0;
+		for (int y = 0; y < im.height(); y++)
+			for (int x = 0; x < im.width(); x++)
+				if (qAlpha(im.pixel(x, y)) > 128) seen++;
+		check(seen > im.width() * im.height() / 20, "each cursor has something to see");
+	}
+	check(theme::cursor(QStringLiteral("pencil"), Qt::ArrowCursor).hotSpot().y() > 24,
+	      "the pencil points with its lead, at the bottom left");
+	check(theme::cursor(QStringLiteral("scissors"), Qt::CrossCursor).hotSpot().x() < 8,
+	      "the scissors cut between their tips, at the top left");
+	theme::ownCursors = false;
+	check(theme::cursor(QStringLiteral("pencil"), Qt::ArrowCursor).shape() == Qt::ArrowCursor &&
+	          theme::cursor(QStringLiteral("turn"), Qt::SizeVerCursor).shape() == Qt::SizeVerCursor,
+	      "with Nachtzug's cursors switched off, the system's shapes are used");
+	theme::ownCursors = was;
 }

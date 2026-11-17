@@ -1,3 +1,9 @@
+// The spare copy: see autosave.h.
+//
+// What's here: Autosave, made once in main(); check() runs on its timer, writeNow() on demand, leftovers() and
+// offerRecovery() at start-up, finish() when the program ends normally.
+// Changes in the song file: none (the copy is an ordinary song file, beside a small session-….json about it).
+
 #include "autosave.h"
 #include "app.h"
 #include <QDir>

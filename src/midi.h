@@ -48,8 +48,9 @@ public:
 	QString lastHeard() const { return last_; }
 	float clockBpm() const; // the tempo of the clock coming in, 0 if none
 	static QString targetForParam(int param);
-	// for tests: a message as if it came from a device (any thread), and a stand-in for the output
-	void incoming(const uint8_t* bytes, int length);
+	// for tests: a message as if it came from a device (any thread), and a stand-in for the output; a test can say
+	// when it arrived (seconds on the steady clock), so a clock's tempo doesn't depend on how busy the machine is
+	void incoming(const uint8_t* bytes, int length, double when = -1);
 	std::function<void(const uint8_t*, int)> sendHook;
 
 signals:

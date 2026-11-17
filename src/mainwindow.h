@@ -72,7 +72,7 @@ private:
 	class QSplitter* split;
 	QWidget* bottomArea = nullptr;
 	bool shownLive = false;
-	QWidget *songTools, *loopTools;
+	QList<QWidget*> songTools, loopTools; // the groups of keys above the timeline, and above the loop grid
 	QPushButton *songMode, *loopMode;
 	void setLoopsMode(bool on);
 	EditorPanel* editor;

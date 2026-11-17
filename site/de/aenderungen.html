@@ -1,0 +1,20 @@
+---
+layout: default
+lang: de
+other_url: "/changelog.html"
+title: Änderungen
+---
+{% comment %} Jede Version, die neueste zuerst: CHANGELOG.md selbst, von prepare.sh nach _includes/ kopiert; die Liste
+wird auf Englisch geführt. {% endcomment %}
+{% capture log %}{% include changelog.md %}{% endcapture %}
+<main id="top">
+<section class="paper legal changelog">
+  <div class="col">
+    <h1>Änderungen</h1>
+    <p>Jede Version von Nachtzug, die neueste zuerst. Die Liste wird auf Englisch geführt, so wie im Quellcode (<a href="{{ site.repo }}/blob/main/CHANGELOG.md">CHANGELOG.md</a>); die Downloads jeder Version liegen auf ihrer <a href="{{ site.repo }}/releases">Release-Seite</a>.</p>
+    <div lang="en">
+    {{ log | remove_first: "# Changes" | replace: " | ", " &#124; " | markdownify }}
+    </div>
+  </div>
+</section>
+</main>

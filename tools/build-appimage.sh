@@ -74,8 +74,20 @@ export LINUXDEPLOY_OUTPUT_VERSION="$VERSION"
     --icon-file "$APPDIR/usr/share/icons/hicolor/512x512/apps/nachtzug.png" \
     --plugin qt >"$BUILD/linuxdeploy.log" 2>&1 || { tail -40 "$BUILD/linuxdeploy.log"; exit 1; }
 
+# the rest of Qt's Wayland support, which linuxdeploy leaves out: without the shell integration (xdg-shell) the
+# Wayland plugin can't open a window, and Nachtzug falls back to X11 through XWayland, small and unthemed cursor and
+# all on a scaled screen. The second linuxdeploy run below brings in the libraries these plugins need.
+PLUGINS=$("$QMAKE" -query QT_INSTALL_PLUGINS)
+DEPS=""
+for d in wayland-shell-integration wayland-decoration-client wayland-graphics-integration-client; do
+    [ -d "$PLUGINS/$d" ] || { echo "Missing: $PLUGINS/$d (Debian: qt6-wayland)"; exit 1; }
+    mkdir -p "$APPDIR/usr/plugins/$d"
+    cp "$PLUGINS/$d"/*.so "$APPDIR/usr/plugins/$d/"
+    DEPS="$DEPS --deploy-deps-only=$APPDIR/usr/plugins/$d"
+done
+
 # the licences of everything the AppImage carries: Nachtzug's own, and Debian's copyright file of each package
-# that a bundled library comes from (Debian keeps those complete); where to get their source is in THIRD-PARTY.md
+# that a bundled library comes from (Debian keeps those complete); sources.txt lists each package's source
 DOC="$APPDIR/usr/share/doc/nachtzug"
 mkdir -p "$DOC/third-party"
 cp "$ROOT/LICENSE" "$ROOT/LICENSING.md" "$ROOT/docs/THIRD-PARTY.md" "$DOC/"
@@ -86,11 +98,12 @@ if command -v dpkg >/dev/null 2>&1; then
         pkg=$(dpkg -S "$(basename "$lib")" 2>/dev/null | head -1 | cut -d: -f1)
         [ -n "$pkg" ] && [ -f "/usr/share/doc/$pkg/copyright" ] && cp "/usr/share/doc/$pkg/copyright" "$DOC/third-party/$pkg.txt"
     done
-    ( cd "$DOC/third-party" && ls | sed 's/\.txt$//' > ../packages.txt )
-    echo "  licences of $(wc -l < "$DOC/packages.txt") bundled packages"
+    echo "  licences of $(ls "$DOC/third-party" | wc -l) bundled packages"
+    "$ROOT/tools/library-sources.sh" --list "$APPDIR" "$DOC"
 fi
 
-"$TOOLS/linuxdeploy-x86_64.AppImage" --appdir "$APPDIR" --output appimage >>"$BUILD/linuxdeploy.log" 2>&1 || { tail -40 "$BUILD/linuxdeploy.log"; exit 1; }
+# shellcheck disable=SC2086 # DEPS is a list of options
+"$TOOLS/linuxdeploy-x86_64.AppImage" --appdir "$APPDIR" $DEPS --output appimage >>"$BUILD/linuxdeploy.log" 2>&1 || { tail -40 "$BUILD/linuxdeploy.log"; exit 1; }
 
 # ---- check the packed program too
 echo "Checking the AppImage"

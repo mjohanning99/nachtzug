@@ -10,7 +10,7 @@ but can’t play the keyboard and know no music theory. Every decision is weighe
 not a full DAW and isn’t meant to become one; a feature that makes Nachtzug harder to understand needs a very good
 reason.
 
-C++20, Qt 6 Widgets, SDL2 for sound, CMake. Linux, macOS and Windows. About 16,000 lines in `src/`.
+C++20, Qt 6 Widgets, SDL2 for sound, CMake. Linux, macOS and Windows. About 26,000 lines in `src/`.
 
 ## Promises to the person using it
 
@@ -39,9 +39,100 @@ These are what make Nachtzug friendly. Don’t break them.
   allocation, no Qt objects, no file access. If you need something new across the threads, add an atomic or an
   `EngineEvent`.
 - **Sound generation** is in `src/dsp.h` (header only, no Qt). Keep it that way so `tools/samplegen` can use it too.
-- **The song** (`src/model.*`) also holds the pattern generators and the auto drummer.
-- **The window** is split into one file per panel; `src/widgets.*` holds the shared look (themes, screwed wells,
-  knobs, the display). Use those instead of styling controls by hand, so all six colour themes keep working.
+- **The song** (`src/model.*`) is a plain value; the pattern generators, the auto drummer and Clean up sit beside it
+  and need no window, so the tests can run them.
+- **The window** is split into one file per panel; `src/widgets.h` and the four files behind it hold the shared look
+  (themes, screwed wells, knobs, the display). Use those instead of styling controls by hand, so all six colour themes
+  keep working.
+
+### A map of the code
+
+Every `.cpp` file starts with a note: what it is for, **What’s here** (its main functions and where they are called
+from) and **Changes in the song file**. Read the note before the file; a new file gets one in the same shape.
+
+| File | What it holds | Window? |
+|---|---|---|
+| `dsp.h` | Sound generation: oscillators, the ladder filter, envelopes, voices, the drum machine, echo, reverb, limiter | no, and no Qt |
+| `model.*` | The song, its tracks, clips and notes; scales, chords, the synth settings’ names and explanations | no |
+| `songfile.cpp` | Saving and opening `.nachtzug` files, with the defaults for older songs | no |
+| `sounds.cpp` | The presets, drum kits, rolled and mutated sounds | no |
+| `ideas.cpp`, `drummer.cpp`, `cleanup.cpp`, `patterns.h` | The pattern generators, Vary, new tracks, the demo song and Arrange; the auto drummer; Clean up; their shared helpers | no |
+| `engine.*` | The audio engine (the audio thread) and rendering to WAV, stems and the note log | no |
+| `samples.*` | The built-in sample library and your own: reading WAV and AIFF, importing, recording, chopping | no |
+| `mysounds.*` | Your own sounds as `.nzsound` files, stars and “used lately” | no |
+| `midiio.*`, `midi.*`, `midifile.*` | MIDI on each system’s own service; notes, learned knobs and the clock; the MIDI file export | `midi.cpp` adds the knobs’ menus |
+| `app.*` | The App: the one place the song is changed (undo, `onBar()`), the transport, recording, the loop grid’s launching, the sound card | no |
+| `autosave.*` | The spare copy of unsaved work | asks at start-up |
+| `main.cpp`, `cli.*` | Starting the program; the command line, `--render` and the pictures | |
+| `selftest.*`, `guitest.*`, `parity.*` | The self-test, the GUI test and tooltip check, the parity record | |
+| `mainwindow.*` | The window: top bar, menus, how the panels are arranged, the letter keys as an instrument, the guide | yes |
+| `inspector.*` | The column beside the timeline: the selected track at a glance | yes |
+| `editor.*` | The Notes tab: the note grid, the on-screen keys and chord pads, the keys around them | yes |
+| `soundpanel.*` | The Sound tab: every knob (Complete) or a few (Simple), presets, the drums’ samples | yes |
+| `mixer.*` | The Mixer tab: a strip per track and the master | yes |
+| `timeline.*`, `loops.*` | The song timeline with its knob lines, and the loop grid | yes |
+| `widgets.h`, `theme.cpp`, `drawing.cpp`, `panels.cpp`, `controls.cpp` | The look: themes and style sheet; painted parts and icons; wells and folding sections; knobs, switches, meters, the display | yes |
+| `soundlibrary.*`, `savesounddialog.*` | The sound library (the card index) and “Save sound…” | yes |
+| `exportdialog.*`, `settingsdialog.*`, `chopdialog.*`, `welcome.*` | Export; Settings and recording a sample; chopping a loop; the first-start window | yes |
+| `lessons.*` | The guided lessons over the real window | yes |
+
+### Short names
+
+The same short names mean the same thing everywhere; don’t bring in new one-letter names for anything else.
+
+| Name | What it holds |
+|---|---|
+| `deg` | a scale degree (0 is the root; `DEG_MIN` to `DEG_MAX` in the note grid), with `alt` the semitone off the scale |
+| `tick` | a position in ticks: `PPQ` (96) to a quarter note, `BAR` (384) to a bar |
+| `bar` | a bar number, from 0 |
+| `s`, `t`, `c`, `n` | a `Song`, a `Track`, a `Clip`, a `Note` |
+| `id` | a track’s or clip’s id, which stays the same while tracks move; an index into `song.tracks` is a `row` or `i` |
+| `scene` | a column of the loop grid (on screen it is called a column) |
+| `a`, `app` | the App (`a` as a constructor’s argument, `app` as the member) |
+| `p` | a `QPainter` in paint code |
+| `e` | the event in an event handler |
+| `ppt` | pixels per tick, the zoom of the timeline and the note grid |
+| `i`, `j`; `x`, `y` | counters; positions on screen |
+
+### Invariants that are easy to break
+
+- **A song change without `begin()`.** Every change to `App::song` is an undo step: `begin()` first, or `edit()` /
+  `onBar()`, which call it. Then `touch()` (which `edit()` calls) sends the song to the engine and repaints.
+- **A change while playing that bypasses `onBar()`.** It lands mid-bar and the music stumbles.
+- **Allocating, locking or touching Qt on the audio thread.** Everything `Engine::process()` calls runs there. A
+  `std::vector` that grows, a `QString`, a `qDebug()` or a mutex is enough to cause clicks.
+- **A new song field without a default in `Song::fromJson`,** or a saved field renamed or given a new meaning: older
+  songs stop opening, or open wrong.
+- **A random choice outside the seeded generator.** The ideas take their randomness from the generator they are
+  given; `std::random_device` or the App’s own generator in their place breaks parity and the tests.
+- **Qt in `dsp.h`.** `tools/samplegen` builds it without Qt.
+- **A control without a tooltip,** or a text without `tr()`.
+- **Styling a control by hand** instead of with the look’s parts: it looks right in one theme and wrong in five.
+
+### Known traps
+
+- **Track ids and indexes.** `App::selTrack`, `EngineEvent::track`, `NoteEvent::track` and `Song::track(id)` use
+  ids; the screen order and MIDI targets such as `"vol:2"` (the third track) use indexes into `song.tracks`.
+  `Song::trackIndex()` turns an id into an index.
+- **Other notes on other systems.** The C++ library’s random distributions differ (GCC on Linux and Windows, Clang
+  on a Mac), so a seed gives other patterns on a Mac: tests check what holds for any pattern, never particular notes.
+- **Timing checks on busy machines.** GitHub’s Mac runners stall; a check that waits a fixed time or sleeps between
+  messages fails there. Where the code measures time, let the check hand it the times instead: the incoming clock
+  check gives each tick its own (`Midi::incoming(…, when)`), so it hears the clock’s tempo however busy the machine.
+- **The Mac’s Clang is stricter than GCC,** and the release builds stop on any warning: check new code with Clang and
+  `-Wall -Wextra -Werror` before a release.
+- **Qt 6.4 is the oldest Qt supported** (Debian 12, Ubuntu 24.04). A newer call, such as `QFont::setFeature` (6.7),
+  needs a `QT_VERSION_CHECK` around it.
+- **No SVG in the downloads.** The packages carry no SVG plugin; small pictures in the style sheet are drawn as PNG,
+  and the self-test checks they load.
+- **The samples are an ordinary Qt resource.** `BIG_RESOURCES` breaks link-time optimised builds (openSUSE, Fedora)
+  with “No data signature found”.
+- **Windows (MSYS2):** a path “Nachtzug” also means `Nachtzug.exe`, so emptying a folder called Nachtzug beside the
+  program deletes the program; `tools/build-windows.sh` packs into `build-windows/package/Nachtzug` for that reason.
+- **macOS (Homebrew):** `sdl2` is sdl2-compat, which loads SDL3 at start; `macdeployqt` can’t see that, so
+  `tools/build-macos.sh` copies SDL3 into the app by hand.
+- **`nachtzug --version` doesn’t exist;** it opens the window and waits. Use `QT_QPA_PLATFORM=offscreen` for any run
+  without a screen.
 
 ## Building and testing
 

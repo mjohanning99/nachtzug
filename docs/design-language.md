@@ -420,7 +420,7 @@ selected page runs into the page. When you add a rounded thing inside another, s
 | Drop-down arrow | 10×6 px, 1.7 px round stroke, 6 px from the edge; the arrow zone 18 px |
 | Menu | padding `4px 0`, item `4px 22px 4px 14px`, margin `0 4px` |
 | Tooltip | padding 4 px |
-| Section (`QGroupBox`, Bakelite) | `GROUP_TOP` 17 px above the well for its name, padding `5px 8px 3px 8px`, title 10 px in from the left |
+| Section (`QGroupBox`, Bakelite) | `GROUP_TOP` 17 px above the well for its name, padding `5px 8px 3px 8px`, title 10 px in from the left; content margins by `wellMargins` (6.7) |
 | Section folded | a 32 px high long key |
 | Scroll bar | 12 px, handle radius 5, min 24 px; hidden by default (see 6.18) |
 | Tab | padding `6px 20px`, top margin 5 px for the unselected; the selected one is 5 px taller (`margin-top: 0`, `padding-bottom: 11px`) and neighbours overlap by 1 px |
@@ -552,7 +552,8 @@ Disabled: the name and border `rule`.
 
 `Knob` (`controls.cpp`): drag up or down (170 px for the whole range; Shift 700 px for small steps), double-click to
 reset, no keyboard focus; the cursor is a vertical size cursor; its default tooltip says so. Its size is 58×78 px
-(50 high when its name is in a caption above), or ×`scale` for the Sound tab’s simple page (`setScale`).
+(50 high when its name is in a caption above; 64 high, drawn 2 px lower, when every knob of its section has a
+one-line name, see 6.7), or ×`scale` for the Sound tab’s simple page (`setScale`).
 
 Tactile drawing, in a 44 px dial: a printed scale of 11 marks over 270° starting at 225° (the longer ones at 0, 5 and
 10, radius 20.5 to 23 and 22, 1.4 and 0.9 px, in `dim`); a value ring of 36 px diameter, 2.5 px, in `gridBar` with the
@@ -597,6 +598,19 @@ group’s name stands above the well, 10 px with 2.5 px spacing, `GROUP_TOP` (17
 content 17 px (units) or 8 px (groups, strips) in from the sides, clear of the corner screws; in a strip the keys sit between the screws
 (`0, 8, 0` margins and slimmer key padding). Flat themes: a 1 px `rule` box, radius 6, name inset on the border.
 
+**In the middle between the screws** (November 2026, the owner noticed sections whose content sat nearer the top
+screws, or the bottom ones). A section’s content sits as far from its top screws as from its bottom ones:
+
+- set a section’s margins with `theme::wellMargins(layout, side, vertical)`, never by hand: the name above takes
+  3½ px more than the well’s top edge leaves, so the top margin is 2 px less than the bottom one;
+- content shorter than its row (the row is as tall as its tallest section) is centred, not pinned to the top: no
+  stretch under a column of keys alone, a stretch above it too; labelled lists (`stacked`) keep their own height;
+- a knob keeps room for a second line of name only if one knob of its section needs it (`fitKnobs` on polish), and
+  a knob with one line is drawn 2 px lower in its box, so its ticks and its name are equally far from the edges.
+
+The GUI test measures every section on the Sound tab (synthesiser and drums): what is painted in it, against its
+empty well, must be within 1.5 px of the middle.
+
 **Foldable sections**: `makeFoldable(group, key, summary)`. The name is “▾ Name” (open) or “▸ Name” (folded); clicking the name
 folds the section into a **long key** (32 px high, radius 5) showing ▸, the name and a one-line summary in 11 px `dim`
 (by default the choices of its drop-downs, or the first three knobs and values, separated by “·”). The state is remembered per
@@ -637,9 +651,13 @@ the output. Per-track and per-strip levels are the thin bars described in 6.12 a
 
 ### 6.12 Faders, sliders and level bars
 
-- **Mixer fader** (`Fader`, 46×120 minimum): a 6 px slot (radius 3) with the filled part in the track’s colour, a 6 px
-  level bar beside it (`ink`, changing to `lcd` above 85 %), and a handle 24×14 (radius 3, `cap` with a `capEdge` edge and a
-  `capInk` centre line). Shift gives fine steps.
+- **Mixer fader** (`Fader`, 46×120 minimum): made as the other sliders are (November 2026, the owner asked for them
+  to look the same). In Bakelite an 8 px groove (radius 4, sunk: a gradient `gridBar.darker(118)`, `gridBar`,
+  `gridBar.lighter(110)` across it, a `rule` edge), the filled part raised in it in the track’s colour (lighter to one
+  side, a `darker(140)` edge), a 6 px level bar beside it in the same groove (`ink`, changing to `lcd` above 85 %), and
+  a handle 24×14 (radius 3) moulded like the timeline’s cap: a soft shadow under it, a dark top-down gradient body and
+  an `accent` grip line across it. In the flat looks: a flat 6 px slot, a `cap` handle with a `capEdge` edge and a
+  `capInk` line. Shift gives fine steps.
 - **Slider** in the window (`QSlider`, Bakelite): an 8 px groove (radius 4, a top-down gradient `slotDeep`, `slot`, `slotHi`),
   filled part in the accent, handle an 18×26 cap picture drawn as PNG (dark moulded body, a light line at the top, a
   3 px accent line down it, a soft shadow).
@@ -934,4 +952,6 @@ Questions found while this document was first written, and what the owner decide
 13. **Comments**: `widgets.h` lists every symbol, and the `Lcd` comment describes both looks.
 14. **Manual fonts**: Crimson Pro, Barlow and Michroma removed; the manual uses only the fonts it declares.
 15. **Faders**: the three caps stay, as decided after the mockups: the mixer fader is a channel fader, the window’s
-    slider a moulded control, the timeline header’s a small one painted in a row of other painted parts.
+    slider a moulded control, the timeline header’s a small one painted in a row of other painted parts. Their
+    material is one (November 2026): the mixer fader has the same sunk groove, raised fill and moulded, shaded cap
+    as the others, where it had been flat.

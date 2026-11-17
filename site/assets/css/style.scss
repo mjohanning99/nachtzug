@@ -234,9 +234,34 @@ code { font-size: .86em; background: var(--well); padding: .05em .2em; border-ra
 .tt-legend { margin: .4rem 0 0; padding-top: .55rem; border-top: 3px solid #151515; font-size: .9rem; }
 
 // the program playing, under the timetable
-.playing { max-width: 66rem; margin: 3.5rem auto 0; padding: var(--clear) var(--clear) .9rem; }
-.playing video { display: block; width: 100%; height: auto; border-radius: 3px; box-shadow: 0 1px 6px -2px rgba(0, 0, 0, .45); }
-.playing figcaption { margin-top: .6rem; text-align: center; font-size: .92rem; color: var(--soft); font-style: italic; }
+// the demo song as one clip, right under the opening: the video, and under it the key, the song's loudness in a sunk
+// groove and the time, in one well
+.listen-stop { padding-top: 3rem; padding-bottom: 0; }
+.clip { max-width: 60rem; margin: 0 auto; }
+.clip-well { padding: var(--clear) var(--clear) 1rem; }
+.clip-well video { display: block; width: 100%; height: auto; border-radius: 3px; box-shadow: 0 1px 6px -2px rgba(0, 0, 0, .45); }
+.clip figcaption { margin-top: .6rem; text-align: center; font-size: .92rem; color: var(--soft); font-style: italic; }
+.groove-player { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 1.2rem; align-items: center; padding: 1rem 0 0; }
+.groove-player .keycap { --px: 1.1em; }
+.groove-player .ico { width: 1.05em; height: 1.05em; display: block; }
+.groove-player audio { display: none; }
+.groove-player .wave {
+  height: 64px; border-radius: 4px; background: var(--well); box-shadow: var(--well-shadow); cursor: pointer; touch-action: none;
+  display: flex; align-items: center; gap: 1px; padding: 6px 8px;
+  span { flex: 1; height: calc(var(--h) * 100%); min-height: 2px; border-radius: 1px; background: var(--rule); pointer-events: none; }
+  span.done { background: var(--accent); }
+  &:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+}
+.groove-player .lcd-time { font: 700 1.35rem/1 "DIN Condensed", sans-serif; letter-spacing: .08em; padding: .45rem .7rem; white-space: nowrap; }
+// without JavaScript: the browser's own player in place of the key and the groove
+.no-js .groove-player { grid-template-columns: 1fr; }
+.no-js .groove-player > :not(audio) { display: none; }
+.no-js .groove-player audio { display: block; width: 100%; }
+@media (max-width: 640px) {
+  .listen-stop { padding-top: 2rem; }
+  .groove-player { grid-template-columns: auto minmax(0, 1fr); }
+  .groove-player .lcd-time { grid-column: 1 / -1; justify-self: start; }
+}
 
 // ---------------------------------------------------------------- sections and chapter heads, as in the manual
 .paper { --bg: var(--paper); background: var(--bg); padding: 5.5rem 1.25rem; }
@@ -498,7 +523,7 @@ pre {
 }
 
 // ---------------------------------------------------------------- licence, Impressum, Datenschutz
-.licence .buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem; margin: 2.5rem 0 0; }
+.licence .buttons, .contact .buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem; margin: 2.5rem 0 0; }
 .legal .small { font-size: .9rem; color: var(--soft); text-indent: 0; text-align: left; }
 .legal { padding-top: 7rem; }
 .legal h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: 0 0 .3rem; }

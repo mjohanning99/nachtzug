@@ -1,3 +1,11 @@
+// The Sound tab: see soundpanel.h.
+//
+// What's here: SoundPanel: the Complete pages (buildSynthPage(), buildDrumPage()) and the Simple ones
+// (buildSimpleSynth(), buildSimpleDrums()), the pictures in each section (graph()), the preset and kit lists, New
+// sound, Mutate, Save sound… and the sound library, the drums' samples, and buildQuick() for the inspector's Sound
+// section. sync() after every change, syncMoving() while playing; made by the main window.
+// Changes in the song file: none (a track saves its sound's values, songfile.cpp).
+
 #include "soundpanel.h"
 #include "savesounddialog.h"
 #include "soundlibrary.h"
@@ -54,7 +62,8 @@ static QPushButton* button(const QString& text, const QString& tip) {
 static QGroupBox* group(const QString& name, QHBoxLayout** lay) {
 	auto* g = new QGroupBox(name.toUpper());
 	*lay = new QHBoxLayout(g);
-	(*lay)->setContentsMargins(8, 8, 8, 4);
+	theme::wellMargins(*lay, 8, 6);
+	(*lay)->setAlignment(Qt::AlignVCenter); // in a row of taller sections, in the middle, not at the top
 	(*lay)->setSpacing(4);
 	return g;
 }
@@ -70,7 +79,7 @@ static QWidget* stacked(
 		g->addWidget(widget, r, 1);
 		r++;
 	}
-	g->setRowStretch(r, 1);
+	w->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed); // in the middle of its section, not at the top
 	return w;
 }
 
@@ -570,6 +579,26 @@ QComboBox* SoundPanel::patchCombo(int param) {
 	    paramTip(param));
 }
 
+// Save sound… and the sound library, joined: into the library, and out of it. compact: the library key shows only
+// its symbol (in the inspector, which is narrow)
+QHBoxLayout* SoundPanel::libraryPair(bool compact) {
+	auto* keep = button(tr("Save sound…"), tr("Keep this sound under a name as one of your own, for every song"));
+	theme::symbolKey(keep, QStringLiteral("savesound"), tr("Save sound…"));
+	connect(keep, &QPushButton::clicked, this, [this] { saveSound(); });
+	auto* lib = button(tr("Library", "key: the sound library"),
+	                   tr("The sound library: every ready-made sound and every sound of your own, to listen to and "
+	                      "choose from"));
+	theme::symbolKey(lib, QStringLiteral("library"), tr("Library", "key: the sound library"), compact);
+	connect(lib, &QPushButton::clicked, this, [this] { openLibrary(); });
+	keep->setObjectName("segL");
+	lib->setObjectName("segR");
+	auto* pair = new QHBoxLayout;
+	pair->setSpacing(0);
+	pair->addWidget(keep);
+	pair->addWidget(lib);
+	return pair;
+}
+
 QWidget* SoundPanel::buildSynthPage() {
 	// the sections wrap onto as many rows as the width needs, each row stretched to the full width, in the order the
 	// sound flows; a section folds shut when its name is clicked
@@ -583,10 +612,16 @@ QWidget* SoundPanel::buildSynthPage() {
 		return g;
 	};
 
-	add(group(tr("Sound"), &l), "sound");
+	// the sound's row: the list, then making one (New sound, Mutate), and at the right end the way into the sound
+	// library and out of it, as a joined pair; packed, not spread out like the knobs of the other sections
+	QGroupBox* soundGroup = add(group(tr("Sound"), &l), "sound");
+	soundGroup->setProperty("noSpread", true);
+	theme::wellMargins(l, 14, 6); // and clear of the screws at both ends
 	l->setSpacing(6);
 	presetBox = makePresetBox();
+	presetBox->setMinimumWidth(220);
 	l->addWidget(presetBox);
+	l->addSpacing(14);
 	auto* roll = button(tr("New sound", "key: roll a new sound"),
 	                    tr("Roll new sound: build a brand new sound that suits this kind of track"));
 	roll->setObjectName("primary");
@@ -597,23 +632,21 @@ QWidget* SoundPanel::buildSynthPage() {
 	connect(mutate, &QPushButton::clicked, this, [this] { mutateSound(); });
 	l->addWidget(roll);
 	l->addWidget(mutate);
-	auto* keep = button(tr("Save sound…"), tr("Keep this sound under a name as one of your own, for every song"));
-	theme::symbolKey(keep, QStringLiteral("savesound"), tr("Save sound…"));
-	connect(keep, &QPushButton::clicked, this, [this] { saveSound(); });
-	l->addWidget(keep);
 	resume = button(tr("Resume lines"),
 	                tr("Some knobs were set by hand, which paused their lines. This brings the lines back."));
 	resume->setCheckable(true);
 	resume->setChecked(true);
 	connect(resume, &QPushButton::clicked, this, [this] { app->resumeMoves(app->selTrack); });
 	l->addWidget(resume);
+	l->addStretch(1);
+	l->addLayout(libraryPair(false));
 
 	// how notes are played belongs to the track: it lives in the inspector, and comes back here when that is hidden
 	howGroup = new QGroupBox(tr("How notes are played").toUpper());
 	{
 		// labels in one column and the choices in another, as in the drummer's settings
 		auto* form = new QFormLayout(howGroup);
-		form->setContentsMargins(10, 10, 10, 8); // as the drummer's, so their columns line up in the inspector
+		theme::wellMargins(form, 10, 9); // as the drummer's, so their columns line up in the inspector
 		form->setVerticalSpacing(7);
 		form->setHorizontalSpacing(10);
 		theme::tidyForm(form);
@@ -765,6 +798,7 @@ QWidget* SoundPanel::buildDrumPage() {
 		connect(hear, &QPushButton::clicked, this, [this, d] { app->audition(app->selTrack, d, true); });
 		auto* col = new QVBoxLayout;
 		col->setSpacing(4);
+		col->addStretch(1); // the two keys in the middle of the section, as the knobs are
 		col->addWidget(hear);
 		col->addWidget(sampleButton(d));
 		col->addStretch(1);
@@ -808,12 +842,14 @@ Knob* SoundPanel::kitKnob(const QString& label, int idx, float def) {
 
 // when a row is stretched, the controls inside each section spread out evenly instead of bunching at the left
 void SoundPanel::spread(QWidget* page) {
-	for (QGroupBox* g : page->findChildren<QGroupBox*>())
+	for (QGroupBox* g : page->findChildren<QGroupBox*>()) {
+		if (g->property("noSpread").toBool()) continue; // a row packed on purpose (the Sound section)
 		if (auto* inner = qobject_cast<QHBoxLayout*>(g->layout())) {
 			const int n = inner->count();
 			for (int k = n; k >= 0; k--)
 				inner->insertStretch(k, 1);
 		}
+	}
 }
 
 void SoundPanel::rollSound() {
@@ -836,7 +872,7 @@ void SoundPanel::mutateSound() {
 QGroupBox* SoundPanel::buildQuick() {
 	auto* g = new QGroupBox(tr("Sound").toUpper());
 	auto* v = new QVBoxLayout(g);
-	v->setContentsMargins(8, 8, 8, 4);
+	theme::wellMargins(v, 8, 6);
 	v->setSpacing(6);
 	quickPages = new QStackedWidget;
 	{ // synthesizer
@@ -859,13 +895,10 @@ QGroupBox* SoundPanel::buildQuick() {
 		roll->setObjectName("primary");
 		theme::symbolKey(roll, QStringLiteral("dice"), roll->text());
 		connect(roll, &QPushButton::clicked, this, [this] { rollSound(); });
-		auto* keep = button(tr("Save sound…"), tr("Keep this sound under a name as one of your own, for every song"));
-		theme::symbolKey(keep, QStringLiteral("savesound"), tr("Save sound…"));
-		connect(keep, &QPushButton::clicked, this, [this] { saveSound(); });
 		auto* rk = new QHBoxLayout;
 		rk->setSpacing(6);
 		rk->addWidget(roll, 1);
-		rk->addWidget(keep);
+		rk->addLayout(libraryPair(true));
 		sv->addLayout(rk);
 		auto* ks = new QHBoxLayout;
 		ks->setSpacing(0);
@@ -1108,6 +1141,10 @@ void SoundPanel::fillPresetBox(QComboBox* box) {
 			head->setFont(hf);
 		}
 	};
+	auto under = [&](const QString& text, int data) { // a sound under its heading: set in, in the open list only
+		box->addItem(text, data);
+		box->setItemData(box->count() - 1, true, theme::LIST_INDENT_ROLE);
+	};
 	box->addItem(tr("Custom sound"), -1);
 	// your own, kept short: the starred ones, then the ones used lately; the rest are in the sound library
 	std::vector<size_t> order;
@@ -1119,31 +1156,30 @@ void SoundPanel::fillPresetBox(QComboBox* box) {
 	if (!order.empty()) {
 		heading(tr("My sounds"));
 		for (size_t i : order)
-			box->addItem(QStringLiteral("   ") + mine[i].name + (mine[i].starred ? QStringLiteral("  ★") : QString()),
-			             MINE + int(i));
+			under(mine[i].name + (mine[i].starred ? QStringLiteral("  ★") : QString()), MINE + int(i));
 	}
 	// the ready-made ones in groups, each under a heading that cannot be picked
 	for (const char* group : {"Bass", "Sequence and pluck", "Pad", "Lead"}) {
 		heading(ui(group));
 		for (size_t i = 0; i < presets().size(); i++)
-			if (presetGroup(presets()[i].name) == QLatin1String(group))
-				box->addItem(QStringLiteral("   ") + ui(presets()[i].name), int(i));
+			if (presetGroup(presets()[i].name) == QLatin1String(group)) under(ui(presets()[i].name), int(i));
 	}
 	box->addItem(tr("All sounds…"), -3); // the sound library
 	box->blockSignals(false);
 }
 
 void SoundPanel::openLibrary() {
-	SoundLibrary lib(
-	    app,
-	    [this](const mysounds::Sound& s) {
-		    app->edit(
-		        [&](Song& song) {
-			        if (Track* t = song.track(app->selTrack)) t->patch = s.patch;
-		        },
-		        tr("Preset"));
-	    },
-	    window());
+	const Track* cur = app->curTrack();
+	std::function<void(const mysounds::Sound&)> use;
+	if (cur && !cur->isDrums()) // a sound can go on a synthesiser track; with drums selected the library only shows
+		use = [this](const mysounds::Sound& s) {
+			app->edit(
+			    [&](Song& song) {
+				    if (Track* t = song.track(app->selTrack)) t->patch = s.patch;
+			    },
+			    tr("Preset"));
+		};
+	SoundLibrary lib(app, use, window());
 	lib.exec();
 	refreshMine();
 }

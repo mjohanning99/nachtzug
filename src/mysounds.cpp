@@ -1,4 +1,8 @@
 // Your own sounds, saved as small files: see mysounds.h.
+//
+// What's here: groupName(), folder(), all(), read(), save(), writeTo(), rename(), remove(), setStarred(), bringIn(),
+// noteUsed(), recent(); used by the Sound tab's preset lists, "Save sound…", the sound library and the self-test.
+// Changes in the song file: none (a .nzsound file writes its sound with the song's patchToJson(), songfile.cpp).
 #include "mysounds.h"
 #include <QDir>
 #include <QFile>

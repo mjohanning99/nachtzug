@@ -28,7 +28,7 @@ WHERE = [('nav', 'Navigation oben (kurze Tasten)'), ('ticker', 'Laufschrift im D
 SYSTEM = '''Du bist ein erfahrener deutscher Texter und Lektor für Websites. Du überarbeitest die deutsche Website eines Musikprogramms.
 
 DAS PROGRAMM
-Nachtzug ist eine für Anfänger gedachte DAW (Digital Audio Workstation), die es ermöglicht, elektronische Musik, z. B. im Stil der Berliner Schule, ohne große Vorkenntnisse zu erstellen. Musiktheorie ist nicht nötig, denn alle Noten landen automatisch in der korrekten Tonleiter. Kostenlos, freie Software, für Linux, macOS und Windows.
+Nachtzug ist ein für Anfänger gedachtes Musikprogramm, das es ermöglicht, elektronische Musik, z. B. im Stil der Berliner Schule, ohne große Vorkenntnisse zu erstellen. Musiktheorie ist nicht nötig, denn alle Noten landen automatisch in der korrekten Tonleiter. Kostenlos, freie Software, für Linux, macOS und Windows.
 
 DIE WEBSITE
 Sie ist wie ein Bahnhof gestaltet: ein Zugzielanzeiger, ein gelber Abfahrtsplan, Emailleschilder als Überschriften, Edmondson-Fahrkarten zum Herunterladen. Bahn-Anspielungen sind erwünscht, müssen aber natürlich klingen, wie es ein Deutscher sagen würde (z. B. „Einsteigen, bitte!“, „Freifahrt“, „Gute Fahrt!“). Wortspiele, die im Deutschen schief klingen (z. B. „Frei mitfahren“), durch etwas Besseres ersetzen.

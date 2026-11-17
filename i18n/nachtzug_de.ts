@@ -1629,14 +1629,6 @@ Mit Umschalt kommen die richtigen falschen Noten: ein Halbton außerhalb der Ton
         <translation>Arrangieren lassen</translation>
     </message>
     <message>
-        <source>Show more of the song (Ctrl + mouse wheel)</source>
-        <translation>Mehr vom Song zeigen (Strg + Mausrad)</translation>
-    </message>
-    <message>
-        <source>Show the song larger (Ctrl + mouse wheel)</source>
-        <translation>Den Song größer zeigen (Strg + Mausrad)</translation>
-    </message>
-    <message>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
@@ -2002,6 +1994,22 @@ Mit Umschalt kommen die richtigen falschen Noten: ein Halbton außerhalb der Ton
         <translation>Arrangieren lassen: aus den Patterns einen ganzen Song machen, mit Intro, Aufbau, Hauptteil, Break und Schluss</translation>
     </message>
     <message>
+        <source>show more of the song (Ctrl + mouse wheel)</source>
+        <translation>mehr vom Song zeigen (Strg + Mausrad)</translation>
+    </message>
+    <message>
+        <source>show the song larger (Ctrl + mouse wheel)</source>
+        <translation>den Song größer zeigen (Strg + Mausrad)</translation>
+    </message>
+    <message>
+        <source>Zoom out</source>
+        <translation>Herauszoomen</translation>
+    </message>
+    <message>
+        <source>Zoom in</source>
+        <translation>Hineinzoomen</translation>
+    </message>
+    <message>
         <source>Key · Scale</source>
         <translation>Tonart · Tonleiter</translation>
     </message>
@@ -2028,6 +2036,14 @@ Mit Umschalt kommen die richtigen falschen Noten: ein Halbton außerhalb der Ton
     <message>
         <source>Export: sound file, tracks or MIDI…</source>
         <translation>Export: Audiodatei, Spuren oder MIDI…</translation>
+    </message>
+    <message>
+        <source>Sound library…</source>
+        <translation>Klangbibliothek …</translation>
+    </message>
+    <message>
+        <source>Every ready-made sound and every sound of your own, to listen to and choose from</source>
+        <translation>Alle fertigen und alle eigenen Klänge, zum Anhören und Auswählen</translation>
     </message>
     <message>
         <source>Redo</source>
@@ -2475,7 +2491,7 @@ Mit Umschalt kommen die richtigen falschen Noten: ein Halbton außerhalb der Ton
     </message>
     <message>
         <source>&lt;h3&gt;1 · Listen&lt;/h3&gt;&lt;p&gt;Press &lt;b&gt;Space&lt;/b&gt; (or the ▶ key in the Transport unit at the top). The song repeats the stretch under the bar marked &lt;b&gt;LOOP&lt;/b&gt; in the timeline. Drag in the Loop row to mark another stretch, or switch &lt;b&gt;Loop&lt;/b&gt; off to play the whole song.&lt;/p&gt;&lt;h3&gt;2 · Pick a track and change its pattern&lt;/h3&gt;&lt;p&gt;The timeline has one row per track. Click a clip (a coloured block) and the &lt;b&gt;Notes&lt;/b&gt; tab shows its pattern.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;New idea&lt;/b&gt; writes a new pattern for you. &lt;b&gt;Vary&lt;/b&gt; changes a note or two.&lt;/li&gt;&lt;li&gt;Click in the grid to add a note, drag to make it longer, drag a note to move it, &lt;b&gt;right-click a note to delete it&lt;/b&gt;.&lt;/li&gt;&lt;li&gt;While the song plays, new ideas, mutes and chord changes wait for the next bar, so they always land in time.&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;3 · Shape the sound&lt;/h3&gt;&lt;p&gt;The &lt;b&gt;Sound&lt;/b&gt; tab holds the selected track’s synthesiser, in the order the sound flows: Oscillators, Filter, Amp envelope, Effects. Pick a preset, press &lt;b&gt;New sound&lt;/b&gt; (the die) for a fresh one, or turn knobs. The small pictures show what the knobs do; drag on the filter picture to sweep it. &lt;b&gt;View → Simple sound page&lt;/b&gt; switches between a few big knobs in plain words and every knob of the synthesiser. Like a sound? &lt;b&gt;Save sound…&lt;/b&gt; keeps it for every song, and &lt;b&gt;All sounds…&lt;/b&gt; at the bottom of the preset list opens your sound library.&lt;/p&gt;&lt;p&gt;To make a sound change over time, press the &lt;b&gt;Lines&lt;/b&gt; button on a track in the timeline, pick a knob such as Cutoff, and click to draw a line. Or switch on record (the ● key) and turn a knob while the song plays.&lt;/p&gt;&lt;h3&gt;4 · Play along&lt;/h3&gt;&lt;p&gt;The letter keys play the selected track: rows &lt;b&gt;Z–/&lt;/b&gt;, &lt;b&gt;A–;&lt;/b&gt; and &lt;b&gt;Q–P&lt;/b&gt; are three octaves. The pads under the note grid show which key plays which note; you can also click them. With the &lt;b&gt;In time&lt;/b&gt; switch on, what you play is pulled onto the beat. With record on (the ● key), it is written into the clip.&lt;/p&gt;&lt;h3&gt;5 · Build the song&lt;/h3&gt;&lt;p&gt;In the timeline, drag clips to move them and drag a clip’s right edge to make it longer. &lt;b&gt;Copy&lt;/b&gt;, the scissors and &lt;b&gt;Delete&lt;/b&gt; are above the timeline; right-click a clip for fades and filter sweeps. Click a bar in the &lt;b&gt;Chords&lt;/b&gt; row to change the chord there. &lt;b&gt;+ Add track&lt;/b&gt; adds a bass line, sequence, pad, lead or drums. The &lt;b&gt;Mixer&lt;/b&gt; tab balances the tracks.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Arrange&lt;/b&gt;, above the timeline, turns your patterns into a whole song: an intro, a build-up, a main part, a break and an ending. The &lt;b&gt;Export&lt;/b&gt; key at the top right saves the result as a sound file.&lt;/p&gt;&lt;h3&gt;Trying things out&lt;/h3&gt;&lt;p&gt;Nothing is lost by trying: the &lt;b&gt;↶&lt;/b&gt; key beside the display takes back the last change, and &lt;b&gt;↷&lt;/b&gt; brings it back again. After a big change, such as a new idea or a deleted track, a note at the bottom of the window offers &lt;b&gt;Undo&lt;/b&gt; as well.&lt;/p&gt;&lt;h3&gt;Loops: play with patterns live&lt;/h3&gt;&lt;p&gt;Switch the bottom area from &lt;b&gt;Song&lt;/b&gt; to &lt;b&gt;Loops&lt;/b&gt;. Each track has a row of cells, and each cell is a pattern that repeats. Click a cell and it starts on the next bar, replacing what that track was playing; click it again to stop it. The cell you clicked last has a ring around it and is the one the &lt;b&gt;Notes&lt;/b&gt; tab shows. To change a playing cell’s notes without stopping it, Shift + click it. Click an empty cell to get a new idea there. The numbered buttons along the bottom start a whole column at once. The &lt;b&gt;Chords&lt;/b&gt; row above the cells shows the chords, one box per bar, repeating in that order; click a box to change it.&lt;/p&gt;&lt;p&gt;Switch &lt;b&gt;Record&lt;/b&gt; on while you do this and everything you start is written into the song timeline, so a jam becomes a song. Switch back to &lt;b&gt;Song&lt;/b&gt; to see and edit it.&lt;/p&gt;&lt;h3&gt;Drums&lt;/h3&gt;&lt;p&gt;Drum clips start with the &lt;b&gt;auto drummer&lt;/b&gt;: choose a style and how hard it plays, and it adds fills by itself. Switch off &lt;b&gt;The drummer plays this clip&lt;/b&gt; to place hits yourself. Every drum can also play your own sound: on the drum track’s &lt;b&gt;Sound&lt;/b&gt; tab, click &lt;b&gt;Built-in&lt;/b&gt; under a drum and pick a sound from the Nachtzug library (rest the mouse on one to hear it), or import or record your own.&lt;/p&gt;&lt;p&gt;Rest the mouse on anything for a short explanation. Every key is on the &lt;b&gt;Keys and mouse&lt;/b&gt; tab.&lt;/p&gt;</source>
-        <translation>&lt;h3&gt;1 · Zuhören&lt;/h3&gt;&lt;p&gt;Die &lt;b&gt;Leertaste&lt;/b&gt; drücken (oder die ▶-Taste im Transportbereich oben). Der Song wiederholt den Abschnitt unter dem Balken &lt;b&gt;LOOP&lt;/b&gt; in der Zeitleiste. In der Loop-Zeile ziehen, um einen anderen Abschnitt zu markieren, oder &lt;b&gt;Loop&lt;/b&gt; ausschalten, um den ganzen Song zu spielen.&lt;/p&gt;&lt;h3&gt;2 · Eine Spur wählen und ihr Pattern ändern&lt;/h3&gt;&lt;p&gt;Die Zeitleiste hat eine Zeile pro Spur. Ein Klick auf einen Clip (einen farbigen Block) zeigt sein Pattern im Reiter &lt;b&gt;Noten&lt;/b&gt;.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;Neue Idee&lt;/b&gt; schreibt ein neues Pattern. &lt;b&gt;Variieren&lt;/b&gt; ändert ein, zwei Noten.&lt;/li&gt;&lt;li&gt;Ein Klick ins Raster setzt eine Note, Ziehen verlängert sie, Ziehen an einer Note verschiebt sie, &lt;b&gt;Rechtsklick auf eine Note löscht sie&lt;/b&gt;.&lt;/li&gt;&lt;li&gt;Während der Song läuft, warten neue Ideen, Stummschaltungen und Akkordwechsel auf den nächsten Takt, damit sie immer im Takt kommen.&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;3 · Den Klang formen&lt;/h3&gt;&lt;p&gt;Der Reiter &lt;b&gt;Sound&lt;/b&gt; enthält den Synthesizer der ausgewählten Spur, in der Reihenfolge, in der der Klang entsteht: Oszillatoren, Filter, Amp-Hüllkurve, Effekte. Man wählt ein Preset, drückt &lt;b&gt;Neu würfeln&lt;/b&gt; für einen frischen Klang oder dreht an den Reglern. Die kleinen Bilder zeigen, was die Regler tun; Ziehen im Filterbild fährt den Filter. &lt;b&gt;Ansicht → Einfache Sound-Seite&lt;/b&gt; schaltet zwischen wenigen großen Reglern in klaren Worten und jedem Regler des Synthesizers um. Ein Klang gefällt? &lt;b&gt;Klang speichern …&lt;/b&gt; behält ihn für jeden Song, und &lt;b&gt;Alle Klänge …&lt;/b&gt; unten in der Presetliste öffnet die eigene Klangbibliothek.&lt;/p&gt;&lt;p&gt;Damit sich ein Klang mit der Zeit ändert, auf einer Spur in der Zeitleiste &lt;b&gt;Kurven&lt;/b&gt; drücken, einen Regler wie Cutoff wählen und klicken, um eine Kurve zu zeichnen. Oder die Aufnahme einschalten (die ●-Taste) und einen Regler drehen, während der Song läuft.&lt;/p&gt;&lt;h3&gt;4 · Mitspielen&lt;/h3&gt;&lt;p&gt;Die Buchstabentasten spielen die ausgewählte Spur: Die Reihen &lt;b&gt;Y–-&lt;/b&gt;, &lt;b&gt;A–Ö&lt;/b&gt; und &lt;b&gt;Q–P&lt;/b&gt; sind drei Oktaven. Die Felder unter dem Notenraster zeigen, welche Taste welche Note spielt; sie lassen sich auch anklicken. Mit dem Schalter &lt;b&gt;Im Takt&lt;/b&gt; wird das Gespielte auf den Schlag gezogen. Mit eingeschalteter Aufnahme (die ●-Taste) wird es in den Clip geschrieben.&lt;/p&gt;&lt;h3&gt;5 · Den Song bauen&lt;/h3&gt;&lt;p&gt;In der Zeitleiste verschiebt Ziehen die Clips, und Ziehen an der rechten Kante eines Clips verlängert ihn. &lt;b&gt;Duplizieren&lt;/b&gt;, die Schere und &lt;b&gt;Löschen&lt;/b&gt; stehen über der Zeitleiste; Rechtsklick auf einen Clip bietet Ein- und Ausblenden und Filterfahrten. Ein Klick auf einen Takt in der Zeile &lt;b&gt;Akkorde&lt;/b&gt; ändert dort den Akkord. &lt;b&gt;+ Spur hinzufügen&lt;/b&gt; fügt eine Bassline, Sequenz, ein Pad, Lead oder Drums hinzu. Der Reiter &lt;b&gt;Mixer&lt;/b&gt; gleicht die Spuren aus.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Arrangieren&lt;/b&gt; über der Zeitleiste macht aus den Patterns einen ganzen Song: Intro, Build-up, Hauptteil, Break und Outro. Die Taste &lt;b&gt;Export&lt;/b&gt; oben rechts speichert das Ergebnis als Audiodatei.&lt;/p&gt;&lt;h3&gt;Ausprobieren&lt;/h3&gt;&lt;p&gt;Beim Ausprobieren geht nichts verloren: Die Taste &lt;b&gt;↶&lt;/b&gt; neben der Anzeige nimmt die letzte Änderung zurück, &lt;b&gt;↷&lt;/b&gt; stellt sie wieder her. Nach großen Änderungen, etwa einer neuen Idee oder einer gelöschten Spur, bietet ein Hinweis unten im Fenster ebenfalls &lt;b&gt;Rückgängig&lt;/b&gt; an.&lt;/p&gt;&lt;h3&gt;Loops: live mit Patterns spielen&lt;/h3&gt;&lt;p&gt;Schalte den unteren Bereich von &lt;b&gt;Song&lt;/b&gt; auf &lt;b&gt;Loops&lt;/b&gt; um. Jede Spur hat eine Reihe Zellen, und jede Zelle ist ein Pattern, das sich wiederholt. Ein Klick auf eine Zelle startet sie am nächsten Takt und ersetzt, was die Spur gerade spielt; ein weiterer Klick stoppt sie. Die zuletzt geklickte Zelle hat einen Ring und ist die, die der Reiter &lt;b&gt;Noten&lt;/b&gt; zeigt. Um die Noten einer laufenden Zelle zu ändern, ohne sie zu stoppen, wird sie mit Umschalt angeklickt. Ein Klick auf eine leere Zelle bringt eine neue Idee. Die nummerierten Knöpfe unten starten eine ganze Spalte auf einmal. Die Zeile &lt;b&gt;Akkorde&lt;/b&gt; über den Zellen zeigt die Akkorde, ein Kästchen pro Takt, in dieser Reihenfolge wiederholt; ein Klick auf ein Kästchen ändert es.&lt;/p&gt;&lt;p&gt;Wird dabei die &lt;b&gt;Aufnahme&lt;/b&gt; eingeschaltet, wird alles Gestartete in die Song-Zeitleiste geschrieben: Aus einer Jam wird ein Song. Zurück auf &lt;b&gt;Song&lt;/b&gt; schalten, um ihn zu sehen und zu bearbeiten.&lt;/p&gt;&lt;h3&gt;Drums&lt;/h3&gt;&lt;p&gt;Drum-Clips beginnen mit dem &lt;b&gt;Auto-Drummer&lt;/b&gt;: Es werden ein Stil und die Spielstärke gewählt, und er fügt von selbst Fills ein. Mit ausgeschaltetem &lt;b&gt;Der Drummer spielt diesen Clip&lt;/b&gt; werden die Schläge selbst gesetzt. Jeder Drumsound kann auch einen eigenen Sound spielen: Im Reiter &lt;b&gt;Sound&lt;/b&gt; der Drum-Spur unter einem Sound auf &lt;b&gt;Eingebaut&lt;/b&gt; klicken und einen Sound aus der Nachtzug-Bibliothek wählen (ruht die Maus darauf, ist er zu hören) oder einen eigenen importieren oder aufnehmen.&lt;/p&gt;&lt;p&gt;Ruht die Maus auf etwas, erscheint eine kurze Erklärung. Alle Tasten stehen im Reiter &lt;b&gt;Tasten und Maus&lt;/b&gt;.&lt;/p&gt;</translation>
+        <translation>&lt;h3&gt;1 · Zuhören&lt;/h3&gt;&lt;p&gt;Die &lt;b&gt;Leertaste&lt;/b&gt; drücken (oder die ▶-Taste im Transportbereich oben). Der Song wiederholt den Abschnitt unter dem Balken &lt;b&gt;LOOP&lt;/b&gt; in der Zeitleiste. In der Loop-Zeile ziehen, um einen anderen Abschnitt zu markieren, oder &lt;b&gt;Loop&lt;/b&gt; ausschalten, um den ganzen Song zu spielen.&lt;/p&gt;&lt;h3&gt;2 · Eine Spur wählen und ihr Pattern ändern&lt;/h3&gt;&lt;p&gt;Die Zeitleiste hat eine Zeile pro Spur. Ein Klick auf einen Clip (einen farbigen Block) zeigt sein Pattern im Reiter &lt;b&gt;Noten&lt;/b&gt;.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;Neue Idee&lt;/b&gt; schreibt ein neues Pattern. &lt;b&gt;Variieren&lt;/b&gt; ändert ein, zwei Noten.&lt;/li&gt;&lt;li&gt;Ein Klick ins Raster setzt eine Note, Ziehen verlängert sie, Ziehen an einer Note verschiebt sie, &lt;b&gt;Rechtsklick auf eine Note löscht sie&lt;/b&gt;.&lt;/li&gt;&lt;li&gt;Während der Song läuft, warten neue Ideen, Stummschaltungen und Akkordwechsel auf den nächsten Takt, damit sie immer im Takt kommen.&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;3 · Den Klang formen&lt;/h3&gt;&lt;p&gt;Der Reiter &lt;b&gt;Sound&lt;/b&gt; enthält den Synthesizer der ausgewählten Spur, in der Reihenfolge, in der der Klang entsteht: Oszillatoren, Filter, Amp-Hüllkurve, Effekte. Man wählt ein Preset, drückt &lt;b&gt;Neu würfeln&lt;/b&gt; für einen frischen Klang oder dreht an den Reglern. Die kleinen Bilder zeigen, was die Regler tun; Ziehen im Filterbild fährt den Filter. &lt;b&gt;Ansicht → Einfache Sound-Seite&lt;/b&gt; schaltet zwischen wenigen großen Reglern in klaren Worten und jedem Regler des Synthesizers um. Ein Klang gefällt? &lt;b&gt;Klang speichern …&lt;/b&gt; behält ihn für jeden Song, und &lt;b&gt;Alle Klänge …&lt;/b&gt; unten in der Presetliste öffnet die eigene Klangbibliothek.&lt;/p&gt;&lt;p&gt;Damit sich ein Klang mit der Zeit ändert, auf einer Spur in der Zeitleiste &lt;b&gt;Kurven&lt;/b&gt; drücken, einen Regler wie Cutoff wählen und klicken, um eine Kurve zu zeichnen. Oder die Aufnahme einschalten (die ●-Taste) und einen Regler drehen, während der Song läuft.&lt;/p&gt;&lt;h3&gt;4 · Mitspielen&lt;/h3&gt;&lt;p&gt;Die Buchstabentasten spielen die ausgewählte Spur: Die Reihen &lt;b&gt;Y–-&lt;/b&gt;, &lt;b&gt;A–Ö&lt;/b&gt; und &lt;b&gt;Q–P&lt;/b&gt; sind drei Oktaven. Die Felder unter dem Notenraster zeigen, welche Taste welche Note spielt; sie lassen sich auch anklicken. Mit dem Schalter &lt;b&gt;Im Takt&lt;/b&gt; wird das Gespielte auf den Schlag gezogen. Mit eingeschalteter Aufnahme (die ●-Taste) wird es in den Clip geschrieben.&lt;/p&gt;&lt;h3&gt;5 · Den Song bauen&lt;/h3&gt;&lt;p&gt;In der Zeitleiste verschiebt Ziehen die Clips, und Ziehen an der rechten Kante eines Clips verlängert ihn. &lt;b&gt;Duplizieren&lt;/b&gt;, die Schere und &lt;b&gt;Löschen&lt;/b&gt; stehen über der Zeitleiste; Rechtsklick auf einen Clip bietet Ein- und Ausblenden und Filterfahrten. Ein Klick auf einen Takt in der Zeile &lt;b&gt;Akkorde&lt;/b&gt; ändert dort den Akkord. &lt;b&gt;+ Spur hinzufügen&lt;/b&gt; fügt eine Bassline, Sequenz, ein Pad, Lead oder Drums hinzu. Der Reiter &lt;b&gt;Mixer&lt;/b&gt; gleicht die Spuren aus.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Arrangieren&lt;/b&gt; über der Zeitleiste macht aus den Patterns einen ganzen Song: Intro, Build-up, Hauptteil, Break und Outro. Die Taste &lt;b&gt;Export&lt;/b&gt; oben rechts speichert das Ergebnis als Audiodatei.&lt;/p&gt;&lt;h3&gt;Ausprobieren&lt;/h3&gt;&lt;p&gt;Beim Ausprobieren geht nichts verloren: Die Taste &lt;b&gt;↶&lt;/b&gt; neben der Anzeige nimmt die letzte Änderung zurück, &lt;b&gt;↷&lt;/b&gt; stellt sie wieder her. Nach großen Änderungen, etwa einer neuen Idee oder einer gelöschten Spur, bietet ein Hinweis unten im Fenster ebenfalls &lt;b&gt;Rückgängig&lt;/b&gt; an.&lt;/p&gt;&lt;h3&gt;Loops: live mit Patterns spielen&lt;/h3&gt;&lt;p&gt;Den unteren Bereich von &lt;b&gt;Song&lt;/b&gt; auf &lt;b&gt;Loops&lt;/b&gt; umschalten. Jede Spur hat eine Reihe Zellen, und jede Zelle ist ein Pattern, das sich wiederholt. Ein Klick auf eine Zelle startet sie am nächsten Takt und ersetzt, was die Spur gerade spielt; ein weiterer Klick stoppt sie. Die zuletzt geklickte Zelle hat einen Ring und ist die, die der Reiter &lt;b&gt;Noten&lt;/b&gt; zeigt. Um die Noten einer laufenden Zelle zu ändern, ohne sie zu stoppen, wird sie mit Umschalt angeklickt. Ein Klick auf eine leere Zelle bringt eine neue Idee. Die nummerierten Knöpfe unten starten eine ganze Spalte auf einmal. Die Zeile &lt;b&gt;Akkorde&lt;/b&gt; über den Zellen zeigt die Akkorde, ein Kästchen pro Takt, in dieser Reihenfolge wiederholt; ein Klick auf ein Kästchen ändert es.&lt;/p&gt;&lt;p&gt;Wird dabei die &lt;b&gt;Aufnahme&lt;/b&gt; eingeschaltet, wird alles Gestartete in die Song-Zeitleiste geschrieben: Aus einer Jam wird ein Song. Zurück auf &lt;b&gt;Song&lt;/b&gt; schalten, um ihn zu sehen und zu bearbeiten.&lt;/p&gt;&lt;h3&gt;Drums&lt;/h3&gt;&lt;p&gt;Drum-Clips beginnen mit dem &lt;b&gt;Auto-Drummer&lt;/b&gt;: Es werden ein Stil und die Spielstärke gewählt, und er fügt von selbst Fills ein. Mit ausgeschaltetem &lt;b&gt;Der Drummer spielt diesen Clip&lt;/b&gt; werden die Schläge selbst gesetzt. Jeder Drumsound kann auch einen eigenen Sound spielen: Im Reiter &lt;b&gt;Sound&lt;/b&gt; der Drum-Spur unter einem Sound auf &lt;b&gt;Eingebaut&lt;/b&gt; klicken und einen Sound aus der Nachtzug-Bibliothek wählen (ruht die Maus darauf, ist er zu hören) oder einen eigenen importieren oder aufnehmen.&lt;/p&gt;&lt;p&gt;Ruht die Maus auf etwas, erscheint eine kurze Erklärung. Alle Tasten stehen im Reiter &lt;b&gt;Tasten und Maus&lt;/b&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;h3&gt;More to try&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;Lessons&lt;/b&gt; (Help menu) walk you through a song step by step, in the real program.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Chance&lt;/b&gt;, &lt;b&gt;Repeat&lt;/b&gt; and &lt;b&gt;Keep&lt;/b&gt; in the Notes tab: notes that play only sometimes, quick drum rolls, and notes Vary leaves alone. Select notes first.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Chords mode&lt;/b&gt;: switch &lt;b&gt;Keys play&lt;/b&gt; above the on-screen keys to &lt;b&gt;Chords&lt;/b&gt; (Ctrl+J), and the letter keys move every track that follows the chords to a new chord while it plays. &lt;b&gt;Esc&lt;/b&gt; goes back.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Pump&lt;/b&gt; in the mixer makes a track duck on every kick. The &lt;b&gt;Input&lt;/b&gt; strip plays a guitar or a voice through a filter.&lt;/li&gt;&lt;li&gt;In the preset and kit lists, &lt;b&gt;rest the mouse&lt;/b&gt; on a sound to hear it. &lt;b&gt;Track → Chop a loop across the drums&lt;/b&gt; cuts a drum loop onto the pads.&lt;/li&gt;&lt;li&gt;A &lt;b&gt;MIDI keyboard&lt;/b&gt; plays along; right-click a knob and choose &lt;b&gt;Learn MIDI control&lt;/b&gt; to turn it from a controller. &lt;b&gt;Export&lt;/b&gt; also makes a file per track, or a MIDI file.&lt;/li&gt;&lt;/ul&gt;</source>
@@ -4201,6 +4217,14 @@ Die getönten Zeilen sind die Töne des Akkords: Sie passen immer.</translation>
         <translation>Scrollbalken neben den Noten, der Zeitleiste, den Loops und den Bereichen. Ohne sie scrollt man mit dem Mausrad oder dem Trackpad; Umschalt + Mausrad scrollt zur Seite.</translation>
     </message>
     <message>
+        <source>Nachtzug’s own cursors (a pencil in the note grid, scissors, a knob’s arrows)</source>
+        <translation>Nachtzugs eigene Mauszeiger (ein Stift im Notenraster, eine Schere, die Pfeile eines Reglers)</translation>
+    </message>
+    <message>
+        <source>Where the cursor can show what a click will do, Nachtzug draws its own. Switched off, the cursors are the system’s everywhere.</source>
+        <translation>Wo der Mauszeiger zeigen kann, was ein Klick bewirkt, zeichnet Nachtzug einen eigenen. Ausgeschaltet sind es überall die Mauszeiger des Systems.</translation>
+    </message>
+    <message>
         <source>Show the welcome window next time</source>
         <translation>Begrüßungsfenster beim nächsten Start zeigen</translation>
     </message>
@@ -4807,6 +4831,15 @@ Nach oben oder unten ziehen, Umschalt für kleine Schritte, Doppelklick setzt zu
     <message>
         <source>Keep this sound under a name as one of your own, for every song</source>
         <translation>Diesen Klang unter einem Namen als eigenen behalten, für jeden Song</translation>
+    </message>
+    <message>
+        <source>Library</source>
+        <comment>key: the sound library</comment>
+        <translation>Bibliothek</translation>
+    </message>
+    <message>
+        <source>The sound library: every ready-made sound and every sound of your own, to listen to and choose from</source>
+        <translation>Die Klangbibliothek: alle fertigen und alle eigenen Klänge, zum Anhören und Auswählen</translation>
     </message>
     <message>
         <source>Follow chords</source>
@@ -5578,8 +5611,8 @@ oder Datei → Neuer Song mit frischen Ideen wählen für einen Song, in dem all
         <translation>&lt;span style=&quot;font-size:22px; font-weight:600; letter-spacing:2px&quot;&gt;Willkommen im &lt;/span&gt;&lt;span style=&quot;font-size:22px; font-weight:600&quot;&gt;Nachtzug&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>Nachtzug is a DAW (digital audio workstation) made for beginners. It lets you create electronic music, in the style of the Berlin School for example, without much prior knowledge. You don’t need to know any music theory either: Nachtzug is built so that every note automatically lands in the right scale.</source>
-        <translation>Nachtzug ist eine für Anfänger gedachte DAW – Digital Audio Workstation –, die es ermöglicht, elektronische Musik, z. B. im Stil der Berliner Schule, ohne große Vorkenntnisse zu erstellen. Auch ist es nicht nötig, sich mit Musiktheorie auszukennen. Denn: Nachtzug ist so aufgebaut, dass alle Noten automatisch in der korrekten Tonleiter landen.</translation>
+        <source>Nachtzug is a music program made for beginners. It lets you create electronic music, in the style of the Berlin School for example, without much prior knowledge. You don’t need to know any music theory either: Nachtzug is built so that every note automatically lands in the right scale.</source>
+        <translation>Nachtzug ist ein für Anfänger gedachtes Musikprogramm, das es ermöglicht, elektronische Musik, z. B. im Stil der Berliner Schule, ohne große Vorkenntnisse zu erstellen. Auch ist es nicht nötig, sich mit Musiktheorie auszukennen. Denn: Nachtzug ist so aufgebaut, dass alle Noten automatisch in der korrekten Tonleiter landen.</translation>
     </message>
     <message>
         <source>Language</source>
@@ -5648,6 +5681,26 @@ oder Datei → Neuer Song mit frischen Ideen wählen für einen Song, in dem all
     <message>
         <source>Shown</source>
         <translation>Eingeblendet</translation>
+    </message>
+    <message>
+        <source>Cursors</source>
+        <translation>Mauszeiger</translation>
+    </message>
+    <message>
+        <source>Nachtzug’s own</source>
+        <translation>Nachtzugs eigene</translation>
+    </message>
+    <message>
+        <source>Where the cursor can show what a click will do, Nachtzug draws its own: a pencil in the note grid, scissors, a knob’s arrows</source>
+        <translation>Wo der Mauszeiger zeigen kann, was ein Klick bewirkt, zeichnet Nachtzug einen eigenen: einen Stift im Notenraster, eine Schere, die Pfeile eines Reglers</translation>
+    </message>
+    <message>
+        <source>The system’s</source>
+        <translation>Die des Systems</translation>
+    </message>
+    <message>
+        <source>The cursors of your computer, everywhere</source>
+        <translation>Überall die Mauszeiger des Computers</translation>
     </message>
     <message>
         <source>You can change all of these any time in Settings (the ⚙ key at the top right).</source>

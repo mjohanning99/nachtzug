@@ -1,0 +1,32 @@
+{% comment %} The demo song as one clip, right under the opening: the video of Nachtzug playing it, and under it one key
+to play and pause, the song drawn as its loudness in a sunk groove (click or drag to move in it) and the time. Playing
+starts the video with the sound; pausing stops both (before that, the video loops silently). The song and its loudness
+come from tools/site_audio.sh: the files in assets/audio/, the loudness in _data/demo_song.json. site.js makes it
+play; without JavaScript, the browser's own player shows under the video instead. {% endcomment %}
+{% assign d = site.data.demo_song %}
+{% assign total = d.seconds | round %}
+{% assign mins = total | divided_by: 60 %}
+{% assign secs = total | modulo: 60 | prepend: "0" | slice: -2, 2 %}
+<figure class="clip" id="listen">
+  <div class="well clip-well">
+    <video autoplay muted loop playsinline preload="metadata" poster="{{ '/assets/img/playing.jpg' | relative_url }}" aria-label="{{ t.hero.video_label }}">
+      <source src="{{ '/assets/img/playing.mp4' | relative_url }}" type="video/mp4">
+    </video>
+    <div class="groove-player" data-seconds="{{ d.seconds }}">
+      <button class="keycap big lit" type="button" aria-label="{{ t.listen.play }}" title="{{ t.listen.play }}"
+              data-play="{{ t.listen.play }}" data-pause="{{ t.listen.pause }}">
+        <svg class="ico" aria-hidden="true"><use href="#i-play"/></svg>
+      </button>
+      <div class="wave" role="slider" tabindex="0" aria-label="{{ t.listen.seek }}" title="{{ t.listen.seek }}"
+           aria-valuemin="0" aria-valuemax="{{ total }}" aria-valuenow="0" aria-valuetext="0:00">
+        {% for p in d.peaks %}<span style="--h:{{ p }}"></span>{% endfor %}
+      </div>
+      <span class="lcd-face lcd-time"><span class="now">0:00</span> / {{ mins }}:{{ secs }}</span>
+      <audio controls preload="none">
+        <source src="{{ '/assets/audio/demo.opus' | relative_url }}" type='audio/ogg; codecs="opus"'>
+        <source src="{{ '/assets/audio/demo.mp3' | relative_url }}" type="audio/mpeg">
+      </audio>
+    </div>
+  </div>
+  <figcaption>{{ t.listen.caption }} <a href="{{ '/assets/audio/demo.mp3' | relative_url }}" download="Nachtzug-demo-song.mp3">{{ t.listen.download }}</a></figcaption>
+</figure>

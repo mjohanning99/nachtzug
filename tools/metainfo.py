@@ -33,6 +33,9 @@ def releases():
 	found = []
 	for line in CHANGELOG.read_text(encoding="utf-8").splitlines():
 		m = HEADING.match(line)
+		if not m and line.startswith("## "):
+			# a version not dated yet, "## 0.3.5 (unreleased)": not ready to publish
+			sys.exit(f"CHANGELOG.md: \"{line[3:]}\" needs its date, as in \"## 0.3.5 (18 November 2026)\"")
 		if m:
 			date = datetime.datetime.strptime(m.group(2), "%d %B %Y").date().isoformat()
 			found.append((m.group(1), date, []))
