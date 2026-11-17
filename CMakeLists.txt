@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(nachtzug VERSION 0.3.3 LANGUAGES CXX)
+project(nachtzug VERSION 0.3.4 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -10,7 +10,8 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
+# Qt 6.4 is the oldest tried (Debian 12, Ubuntu 24.04); an older one stops here with its version, not mid-build
+find_package(Qt6 6.4 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(SDL2 REQUIRED)
 
 # every source file in src/ is built, so adding a file needs no change here
@@ -76,7 +77,19 @@ elseif(WIN32)
 else()
   install(TARGETS nachtzug RUNTIME DESTINATION bin)
   install(FILES assets/nachtzug.desktop DESTINATION share/applications)
+  # the icon at every size the desktops ask for (tools/logo/make_icons.sh makes them), and as an SVG
+  foreach(size 16 24 32 48 64 128 256)
+    install(FILES assets/icons/nachtzug-${size}.png DESTINATION share/icons/hicolor/${size}x${size}/apps
+            RENAME nachtzug.png)
+  endforeach()
   install(FILES assets/logo.png DESTINATION share/icons/hicolor/512x512/apps RENAME nachtzug.png)
-  install(FILES LICENSE LICENSING.md docs/THIRD-PARTY.md DESTINATION share/doc/nachtzug)
-  install(DIRECTORY LICENSES DESTINATION share/doc/nachtzug)
+  install(FILES assets/nachtzug.svg DESTINATION share/icons/hicolor/scalable/apps)
+  # what software centres show about Nachtzug, and the .nachtzug song file, so it opens with a double-click
+  install(FILES assets/io.github.mjohanning99.nachtzug.metainfo.xml DESTINATION share/metainfo)
+  install(FILES assets/nachtzug-mime.xml DESTINATION share/mime/packages RENAME nachtzug.xml)
+  # the licences where Fedora, openSUSE and Arch look for them (LICENSING.md links to the others by their paths);
+  # the list of the AppImage's libraries with the documentation
+  install(FILES LICENSE LICENSING.md DESTINATION share/licenses/nachtzug)
+  install(DIRECTORY LICENSES DESTINATION share/licenses/nachtzug)
+  install(FILES docs/THIRD-PARTY.md DESTINATION share/doc/nachtzug)
 endif()

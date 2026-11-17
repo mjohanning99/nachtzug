@@ -18,7 +18,7 @@ A one-page overview with the colours, typefaces, real parts and the brand is
 - **Colours are never typed into a new widget.** Take them from the theme (section 3), so that all six colour themes
   keep working.
 - **Anything that changes the look of Nachtzug starts as mockups** for the owner to choose from, and is built only
-  after the choice (`docs/roadmap.md`, `docs/polish-list.md`). This document describes what was chosen; it is not a
+  after the choice. This document describes what was chosen; it is not a
   licence to restyle.
 - Where this document and the code differ, the code is what the program does, and the difference belongs in
   section 12.
@@ -908,7 +908,7 @@ the ligature, the subtitle in Antiqua and the “operation manual” line in ita
 12. **Scroll areas** in the window: let `applyScrollBars()` hide the bars; set `noHBar` for vertical-only ones; Shift + wheel scrolls sideways.
 13. **The tests**: `--selftest`, `--guitest`, `--check-tooltips`; and for a pure tidy-up `tools/parity.sh`.
 14. **Pictures that show the program** (README, website, manual) are retaken by their scripts, never by hand.
-15. **Record the decision** in `docs/polish-list.md` and, if it is a rule, here.
+15. **Record the decision**: if it is a rule, here.
 
 ## 12. Decisions on the open questions
 

@@ -690,8 +690,12 @@ void Emblem::paintEvent(QPaintEvent*) {
 	QFont f(QStringLiteral("Nachtzug Grotesk"));
 	f.setWeight(QFont::DemiBold);
 	f.setPixelSize(18);
-	f.setFeature(QFont::Tag("liga"), 1); // the t and z joined on one rail
+	// the t and z joined on one rail; liga is on by default, so a Qt before 6.7 (Debian 12, Ubuntu 24.04), which
+	// can't name features, still joins them
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+	f.setFeature(QFont::Tag("liga"), 1);
 	f.setFeature(QFont::Tag("dlig"), 1);
+#endif
 	const QString name = QStringLiteral("Nachtzug");
 	const bool named = width() >= QFontMetrics(f).horizontalAdvance(name) + 4 && height() >= 80;
 	const int side = named ? 56 : std::min(width(), height());

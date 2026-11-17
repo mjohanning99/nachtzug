@@ -103,12 +103,13 @@ void scheduleGuiTest(App& app, MainWindow& w) {
 			auto* box = w.findChild<QSpinBox*>(QStringLiteral("readout"));
 			check(box && QApplication::focusWidget() != box, "the tempo box does not take the keyboard at start-up");
 			if (box) box->setFocus();
+			// the taps keep to one clock, 0.4 s apart from the first, so a slow click doesn't stretch the beat
+			QElapsedTimer t;
+			t.start();
 			for (int i = 0; i < 4; i++) {
-				tap->click();
-				QElapsedTimer t;
-				t.start();
-				while (t.elapsed() < 400)
+				while (t.elapsed() < 400 * i)
 					QApplication::processEvents();
+				tap->click();
 			}
 			check(box && std::abs(box->value() - 150) <= 3 && std::abs(app.song.bpm - 150.f) <= 3.f,
 			      "four taps 0.4 s apart set the tempo to about 150, and the tempo box shows it");

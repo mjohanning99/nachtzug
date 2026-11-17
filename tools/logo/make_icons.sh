@@ -1,7 +1,8 @@
 #!/bin/sh
 # Makes the program's icons from the logo's SVG files (needs rsvg-convert, ImageMagick and Python with Pillow):
 #   assets/logo.png (512, the program's own mark and the Linux icon), assets/logo-small.png (for 24 px and below),
-#   assets/logo/enamel-sign.png (the sign for the README), assets/nachtzug.icns (macOS), assets/windows/nachtzug.ico
+#   assets/logo/enamel-sign.png (the sign for the README), assets/nachtzug.icns (macOS), assets/windows/nachtzug.ico,
+#   assets/icons/nachtzug-*.png (the Linux icon at each size)
 set -eu
 cd "$(dirname "$0")/../../assets"
 T=$(mktemp -d)
@@ -12,6 +13,9 @@ cp logo/enamel-flat.svg nachtzug.svg
 for s in 32 48 64 128 256; do rsvg-convert -w $s logo/enamel-flat.svg -o "$T/f$s.png"; done
 for s in 16 24; do rsvg-convert -w $s logo/enamel-tiny.svg -o "$T/f$s.png"; done
 magick "$T/f16.png" "$T/f24.png" "$T/f32.png" "$T/f48.png" "$T/f64.png" "$T/f128.png" "$T/f256.png" windows/nachtzug.ico
+# Linux: one PNG per size the desktops ask for (CMakeLists.txt installs them next to the SVG and logo.png)
+mkdir -p icons
+for s in 16 24 32 48 64 128 256; do cp "$T/f$s.png" "icons/nachtzug-$s.png"; done
 # macOS: the icon sits on Apple's grid, 824 of 1024, with room around it; ICNS holds PNGs of each size
 python3 - "$T" <<'PY'
 import struct, sys, subprocess, os

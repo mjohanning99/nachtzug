@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The .nachtzug song file, for Linux desktops: it gets Nachtzug's icon and opens in Nachtzug with a double-click.
+     The same name as MimeType in nachtzug.desktop; on a Mac, Info.plist.in declares the file instead. -->
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/x-nachtzug">
+    <comment>Nachtzug song</comment>
+    <comment xml:lang="de">Nachtzug-Song</comment>
+    <sub-class-of type="application/json"/>
+    <generic-icon name="audio-x-generic"/>
+    <icon name="nachtzug"/>
+    <glob pattern="*.nachtzug"/>
+  </mime-type>
+</mime-info>

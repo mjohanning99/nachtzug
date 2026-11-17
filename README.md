@@ -165,7 +165,11 @@ If you’d like to work on Nachtzug, yourself or with an AI agent, [AGENTS.md](A
 
 ### What you need
 
-A C++20 compiler (GCC 12 or newer, or a recent Clang), CMake 3.20 or newer, Qt 6 (Widgets, plus the Linguist tools for the translations), SDL2 and, on Linux, the ALSA library for MIDI. Sound goes out through SDL2, which works with PipeWire, PulseAudio, ALSA and JACK (and Core Audio on a Mac).
+A C++20 compiler (GCC 12 or newer, or a recent Clang), CMake 3.20 or newer, Qt 6.4 or newer (Widgets, plus the Linguist tools for the translations), SDL2 and, on Linux, the ALSA library for MIDI. Sound goes out through SDL2, which works with PipeWire, PulseAudio, ALSA and JACK (and Core Audio on a Mac).
+
+### For packagers
+
+Nachtzug builds from the release’s source without a network: the sample library (`assets/samples/`, made by `tools/samplegen`) and the fonts (`assets/fonts/`) come with the source, so nothing is downloaded or generated outside CMake. `cmake --install` puts in place the program, the desktop file, the icon (16 to 512 px and an SVG), the AppStream file `io.github.mjohanning99.nachtzug.metainfo.xml`, the song file type `application/x-nachtzug` and the licences in `share/licenses/nachtzug`. To check a build on a machine without a screen or sound card: `QT_QPA_PLATFORM=offscreen SDL_AUDIODRIVER=dummy nachtzug --selftest`. The program is GPL-3.0-or-later, the samples CC0-1.0, the fonts OFL-1.1, and the texts and pictures CC-BY-SA-4.0 ([LICENSING.md](LICENSING.md)).
 
 ### Command-line options
 

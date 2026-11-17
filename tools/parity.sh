@@ -1,5 +1,5 @@
 #!/bin/sh
-# Proves that a tidy-up of the code changed nothing Nachtzug does (docs/refactor-plan.md, "Ground rules").
+# Proves that a tidy-up of the code changed nothing Nachtzug does (AGENTS.md, "Code style").
 #
 #     tools/parity.sh baseline     before the change: records what the program does now
 #     tools/parity.sh check        after it: records again and compares, file by file

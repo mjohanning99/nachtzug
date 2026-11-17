@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- What Linux software centres (GNOME Software, KDE Discover) and package lists show about Nachtzug.
+     The description is the website's (site/_data/en.yml and de.yml): a change there belongs here too.
+     The releases are made from CHANGELOG.md by tools/metainfo.py; don't edit them by hand. -->
+<component type="desktop-application">
+  <id>io.github.mjohanning99.nachtzug</id>
+  <name>Nachtzug</name>
+  <summary>DAW made for beginners</summary>
+  <summary xml:lang="de">Für Anfänger gedachte DAW</summary>
+  <metadata_license>CC-BY-SA-4.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <developer id="io.github.mjohanning99">
+    <name>Marvin Johanning</name>
+  </developer>
+
+  <description>
+    <p>Nachtzug is a DAW (digital audio workstation) made for beginners. It lets you create electronic music, in the style of the Berlin School for example, without much prior knowledge. You don’t need to know any music theory either: Nachtzug is built so that every note automatically lands in the right scale.</p>
+    <p xml:lang="de">Nachtzug ist eine für Anfänger gedachte DAW – Digital Audio Workstation –, die es ermöglicht, elektronische Musik, z. B. im Stil der Berliner Schule, ohne große Vorkenntnisse zu erstellen. Auch ist es nicht nötig, sich mit Musiktheorie auszukennen. Denn: Nachtzug ist so aufgebaut, dass alle Noten automatisch in der korrekten Tonleiter landen.</p>
+    <ul>
+      <li>Play along on your keyboard: three rows of letter keys play three octaves, every key a note of the song’s scale.</li>
+      <li xml:lang="de">Auf der Tastatur mitspielen: Drei Reihen Buchstabentasten spielen drei Oktaven, jede Taste eine Note der Tonleiter des Songs.</li>
+      <li>Ideas at a press: New idea writes an acid line, a Berlin School sequence, chords or a beat; Vary changes a note or two.</li>
+      <li xml:lang="de">Ideen auf Knopfdruck: Neue Idee schreibt eine Acid-Linie, eine Sequenz der Berliner Schule, Akkorde oder einen Beat; Variieren ändert ein, zwei Noten.</li>
+      <li>A tireless drummer: pick a style and how hard it plays; it adds fills by itself.</li>
+      <li xml:lang="de">Ein unermüdlicher Drummer: Stil und Spielstärke wählen – Fills spielt er von selbst.</li>
+      <li>A real synthesiser on every track, with live pictures of what each knob does, or a Simple page of eight big knobs.</li>
+      <li xml:lang="de">Ein echter Synthesizer auf jeder Spur, mit Live-Bildern von jedem Regler – oder eine Seite Einfach mit acht großen Reglern.</li>
+      <li>Jam like a live set: start and stop patterns while it plays; every change waits for the next bar.</li>
+      <li xml:lang="de">Jammen wie in einem Live-Set: Patterns starten und stoppen, während es spielt; jede Änderung wartet auf den nächsten Takt.</li>
+      <li>From a loop to a song: lay out clips yourself, or let Arrange make an intro, a build-up, a break and an ending.</li>
+      <li xml:lang="de">Vom Loop zum Song: Die Clips lassen sich von Hand anlegen, oder Arrangieren macht ein Intro, einen Aufbau, einen Break und ein Ende.</li>
+      <li>Your own sounds: 65 sounds made for Nachtzug, nine of them from a night train, your samples, or a chopped drum loop. And the sounds you make, kept under your own names.</li>
+      <li xml:lang="de">Eigene Klänge: 65 Klänge, eigens für Nachtzug gemacht, neun davon aus einem Nachtzug, eigene Samples oder ein zerlegter Drumloop. Dazu die selbst gebauten Klänge, unter eigenem Namen aufbewahrt.</li>
+      <li>Take it with you: export a WAV, a file per track or MIDI. MIDI keyboards, knobs and clock all work.</li>
+      <li xml:lang="de">Zum Mitnehmen: Export als WAV, eine Datei pro Spur oder MIDI. MIDI-Keyboards, Regler und Clock funktionieren alle.</li>
+      <li>Nothing breaks: every change can be undone, and a spare copy is kept in case of a crash.</li>
+      <li xml:lang="de">Nichts geht kaputt: Jede Änderung lässt sich rückgängig machen, und für den Fall eines Absturzes liegt eine Ersatzkopie bereit.</li>
+      <li>Five lessons walk you through the real program, one step at a time.</li>
+      <li xml:lang="de">Fünf Lektionen führen Schritt für Schritt durch das echte Programm.</li>
+    </ul>
+  </description>
+
+  <launchable type="desktop-id">nachtzug.desktop</launchable>
+  <provides>
+    <binary>nachtzug</binary>
+    <mediatype>application/x-nachtzug</mediatype>
+  </provides>
+  <keywords>
+    <keyword>acid</keyword>
+    <keyword>Berlin School</keyword>
+    <keyword>synthesiser</keyword>
+    <keyword>synthesizer</keyword>
+    <keyword>sequencer</keyword>
+    <keyword>drum machine</keyword>
+    <keyword>MIDI</keyword>
+    <keyword xml:lang="de">Berliner Schule</keyword>
+    <keyword xml:lang="de">Synthesizer</keyword>
+    <keyword xml:lang="de">Sequenzer</keyword>
+    <keyword xml:lang="de">Drumcomputer</keyword>
+  </keywords>
+  <supports>
+    <control>keyboard</control>
+    <control>pointing</control>
+  </supports>
+  <content_rating type="oars-1.1"/>
+
+  <url type="homepage">https://mjohanning99.github.io/nachtzug/</url>
+  <url type="bugtracker">https://github.com/mjohanning99/nachtzug/issues</url>
+  <url type="help">https://mjohanning99.github.io/nachtzug/downloads/Nachtzug-Manual.pdf</url>
+  <url type="vcs-browser">https://github.com/mjohanning99/nachtzug</url>
+
+  <branding>
+    <color type="primary" scheme_preference="light">#ebe5d8</color>
+    <color type="primary" scheme_preference="dark">#2b2623</color>
+  </branding>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>The note grid with a bass line, the inspector on the left and the timeline above</caption>
+      <caption xml:lang="de">Das Notenraster mit einer Basslinie, links der Inspektor, darüber die Zeitleiste</caption>
+      <image>https://raw.githubusercontent.com/mjohanning99/nachtzug/main/docs/screenshots/notes.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>The Sound tab: oscillators, filter, envelopes and effects</caption>
+      <caption xml:lang="de">Der Reiter Sound: Oszillatoren, Filter, Hüllkurven und Effekte</caption>
+      <image>https://raw.githubusercontent.com/mjohanning99/nachtzug/main/docs/screenshots/sound.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>The mixer with a strip per track</caption>
+      <caption xml:lang="de">Der Mixer mit einem Kanal pro Spur</caption>
+      <image>https://raw.githubusercontent.com/mjohanning99/nachtzug/main/docs/screenshots/mixer.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>The loop grid: rows of patterns, one row per track</caption>
+      <caption xml:lang="de">Das Loopraster: Reihen von Patterns, eine Reihe pro Spur</caption>
+      <image>https://raw.githubusercontent.com/mjohanning99/nachtzug/main/docs/screenshots/loops.png</image>
+    </screenshot>
+  </screenshots>
+
+  <releases>
+    <release version="0.3.4" date="2026-11-17">
+      <url type="details">https://github.com/mjohanning99/nachtzug/releases/tag/v0.3.4</url>
+      <description>
+        <ul>
+          <li><em>Builds on Debian 12 and Ubuntu 24.04.</em> Building Nachtzug needed Qt 6.7, which these systems don’t have; it now builds with Qt 6.4 or newer, and looks just the same.</li>
+          <li><em>More at home on Linux.</em> Installed from source or from a package, Nachtzug now shows up properly in software centres such as GNOME Software and KDE Discover, with its description, pictures and what each version changed. Songs open in Nachtzug with a double-click, and the icon comes in every size the desktop asks for.</li>
+          <li><em>For packagers</em>, a short section in the README: what the source contains and what gets installed.</li>
+          <li><em>Tidier source.</em> Some working notes had been published with the source by mistake; they are no longer part of it.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.3.3" date="2026-11-17">
+      <url type="details">https://github.com/mjohanning99/nachtzug/releases/tag/v0.3.3</url>
+      <description>
+        <ul>
+          <li><em>The downloads for 0.3.2.</em> One of the self-test’s checks needs exact timing and failed on GitHub’s busy Mac, so 0.3.2 came out without downloads; the check now gives a busy computer room, and this version brings the downloads, with everything 0.3.2 changed.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.3.2" date="2026-11-16">
+      <url type="details">https://github.com/mjohanning99/nachtzug/releases/tag/v0.3.2</url>
+      <description>
+        <ul>
+          <li><em>Linux packages build again.</em> Packages for openSUSE and Fedora, which are built with link-time optimisation, stopped with “No data signature found”. The sample library is now built in a way that works with any compiler settings, and a source folder without the samples stops at once with a clear message.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.3.1" date="2026-11-16">
+      <url type="details">https://github.com/mjohanning99/nachtzug/releases/tag/v0.3.1</url>
+      <description>
+        <ul>
+          <li><em>The old ligatures.</em> In Nachtzug Antiqua, ct and st have their historical arc again, a bow from the c or s onto the t, as in old books, and they show in all running text on the website and in the manuals, together with the tz that joins the name.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.3.0" date="2026-11-16">
+      <url type="details">https://github.com/mjohanning99/nachtzug/releases/tag/v0.3.0</url>
+      <description>
+        <ul>
+          <li><em>Sounds of your own.</em> “Save sound…” keeps a sound you have made as a small file, with a name, a group and a star. The preset list shows the starred and recent ones, and “All sounds…” opens the sound library: a card index where every sound can be heard first, then used, renamed, shared or deleted. Sound files can be dragged into it.</li>
+          <li><em>Note lengths.</em> Dragging a note’s end snaps to the grid; with Shift, any length.</li>
+          <li><em>Choices as joined keys.</em> Export, Chop and Arrange use the same keys as the welcome window instead of round option buttons.</li>
+          <li><em>Small fixes.</em> The welcome window’s choices work in pairs again, and the Arrange window shows its whole introduction.</li>
+          <li><em>A tidier look.</em> One rust and one red throughout, the name never letter-spaced on the website, and a design language (docs/design-language.md) for anyone who would like to help.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.2.1" date="2026-11-16">
+      <url type="details">https://github.com/mjohanning99/nachtzug/releases/tag/v0.2.1</url>
+      <description>
+        <ul>
+          <li><em>The Mac download builds again.</em> One line the Mac’s compiler refuses had stopped the 0.2.0 release, so 0.2.0 came out without downloads; this version brings them, with everything 0.2.0 changed.</li>
+          <li><em>Who it’s for</em>, near the top of the README and on the website: Nachtzug is a starting point, not a fully featured DAW, with programs to move on to.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.2.0" date="2026-11-16">
+      <url type="details">https://github.com/mjohanning99/nachtzug/releases/tag/v0.2.0</url>
+      <description>
+        <p>A new look, inside and out, and many small things made nicer to use.</p>
+        <ul>
+          <li><em>A new top bar.</em> Transport, song and output in three plates of the same height, with a real VU meter. At the top left, the square sign with “Nachtzug” under it.</li>
+          <li><em>Keys with symbols.</em> Every key shows a symbol and a word, or only the symbol: chosen in the welcome window or in Settings. Tick boxes are now sliding switches, and drop-down lists and menus have rounded corners.</li>
+          <li><em>Tidier windows.</em> Scroll bars stay hidden unless wanted (Settings → Window; Shift and the mouse wheel scroll sideways). The note grid opens on the clip’s notes. The timeline’s clips have the loop grid’s colours, and the labels are shorter.</li>
+          <li><em>Help in two tabs.</em> F1 opens a guide in five steps and a second tab with every key and mouse move. Both point to the operation manual, which Help → Operation manual opens.</li>
+          <li><em>German without “du”.</em> The German program speaks impersonally now, like the manual.</li>
+          <li><em>Small fixes.</em> Clean up puts every note on the grid chosen. Tap tempo shows the tempo it set. Folding a part of the inspector no longer makes it wider, and the closed inspector’s tab is an even key down the edge. The icon has the right size in the Mac Dock, and the fader handles and drop-down arrows show in every download.</li>
+          <li><em>A new logo and cover.</em> The tz on a lighter enamel sign, and Hans Baluschek’s painting “Großstadtbahnhof” (1904) on the cover. The tz ligatures in Nachtzug’s own fonts run as one even rail.</li>
+          <li><em>A website</em>, in English and German, laid out like a railway station: the downloads as tickets, the licences and credits in full, an Impressum and a privacy notice.</li>
+          <li><em>The manuals</em> have new pictures, a page of credits and licences, and Windows on the cover.</li>
+          <li><em>Under the bonnet.</em> The code is split into smaller files and laid out evenly, with a check that it still behaves exactly the same. For anyone who would like to help, AGENTS.md explains the layout.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.1.1" date="2026-11-15">
+      <url type="details">https://github.com/mjohanning99/nachtzug/releases/tag/v0.1.1</url>
+      <description>
+        <ul>
+          <li><em>Ready-made downloads for Mac and Windows.</em> A disk image for Macs with Apple Silicon (macOS 15 or newer) and an installer for Windows 10 and 11, built and self-tested on GitHub for every release. This is the first Windows version: please tell me if anything goes wrong.</li>
+          <li>The Windows build script no longer deletes the program it has just built (MSYS2 counts “Nachtzug” and “Nachtzug.exe” as the same name).</li>
+          <li>The Mac and Windows downloads carry the licences of everything inside them.</li>
+          <li>Forms for bug reports and ideas on GitHub.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.1.0" date="2026-11-15">
+      <url type="details">https://github.com/mjohanning99/nachtzug/releases/tag/v0.1.0</url>
+      <description>
+        <p>The first public version of Nachtzug, a little music machine for acid and Berlin School music.</p>
+        <ul>
+          <li>Synthesiser tracks whose notes are always in the song’s scale, played on the letter keys, a MIDI keyboard or drawn in the note grid. Hold Shift for the right wrong notes.</li>
+          <li>Ideas at the press of a button (acid lines, Berlin School sequences, chords, melodies, beats), Vary, and Clean up for what you played in.</li>
+          <li>An auto drummer with seven styles, Energy and fills.</li>
+          <li>A full synthesiser per track with pictures of what each knob does, and a Simple page with eight big knobs.</li>
+          <li>A song timeline, a loop grid for jamming, Arrange for me, a mixer, recorded knob moves, samples and chopped loops.</li>
+          <li>Export as WAV, as one file per track, or as MIDI.</li>
+          <li>English and German, five lessons, and a printed operation manual in both languages.</li>
+          <li>For Linux (an AppImage for distributions from 2025 on, or built from source) and macOS (built with one script). Windows is ready but not yet tried on a real Windows computer.</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
+</component>

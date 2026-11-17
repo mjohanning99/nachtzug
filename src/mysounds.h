@@ -2,7 +2,7 @@
 // One small file per sound (.nzsound, JSON) in the user's data folder, under sounds/<group>/, so sounds can be
 // backed up and shared by copying files.
 // What's here: Sound, folder(), all(), read(), save(), rename(), remove(), setStarred(), bringIn(), noteUsed(),
-// recent(). The window that shows them is the sound library (see roadmap.md, "Saving sounds").
+// recent(). The window that shows them is the sound library (soundlibrary.cpp).
 #pragma once
 #include "model.h"
 #include <QString>

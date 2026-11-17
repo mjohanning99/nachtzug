@@ -1,5 +1,12 @@
 # Changes
 
+## 0.3.4 (17 November 2026)
+
+- **Builds on Debian 12 and Ubuntu 24.04.** Building Nachtzug needed Qt 6.7, which these systems don’t have; it now builds with Qt 6.4 or newer, and looks just the same.
+- **More at home on Linux.** Installed from source or from a package, Nachtzug now shows up properly in software centres such as GNOME Software and KDE Discover, with its description, pictures and what each version changed. Songs open in Nachtzug with a double-click, and the icon comes in every size the desktop asks for.
+- **For packagers**, a short section in the README: what the source contains and what gets installed.
+- **Tidier source.** Some working notes had been published with the source by mistake; they are no longer part of it.
+
 ## 0.3.3 (17 November 2026)
 
 - **The downloads for 0.3.2.** One of the self-test’s checks needs exact timing and failed on GitHub’s busy Mac, so 0.3.2 came out without downloads; the check now gives a busy computer room, and this version brings the downloads, with everything 0.3.2 changed.

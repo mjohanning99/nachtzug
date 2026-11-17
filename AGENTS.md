@@ -135,7 +135,7 @@ When a change shows on screen, update what describes it, in both languages:
 | The built-in guide and lessons | `src/mainwindow.cpp`, `src/lessons.cpp` | translated with the rest |
 | The README and website | `README.md`, `site/` | see `site/README.md` |
 | What changed | `CHANGELOG.md` | one section per version, in plain words |
-| What comes next | `docs/roadmap.md`, `docs/polish-list.md` | the larger steps in order; the small fixes the owner noticed |
+| What comes next | `docs/roadmap.md`, `docs/polish-list.md` (private repository only) | the larger steps in order; the small fixes the owner noticed |
 
 ## Licences
 
