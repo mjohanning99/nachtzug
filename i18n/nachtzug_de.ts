@@ -175,6 +175,10 @@
         <source>Copied into the song timeline at bar %1.</source>
         <translation>In die Song-Zeitleiste kopiert, bei Takt %1.</translation>
     </message>
+    <message>
+        <source>Repeat a part</source>
+        <translation>Einen Teil wiederholen</translation>
+    </message>
 </context>
 <context>
     <name>Autosave</name>
@@ -789,24 +793,55 @@ Aus: Die Schläge werden von Hand ins Raster gesetzt.</translation>
         <source>Ask the drummer for a new take</source>
         <translation>Den Drummer um einen neuen Take bitten</translation>
     </message>
+    <message>
+        <source>%1 sixteenths</source>
+        <translation>%1 Sechzehntel</translation>
+    </message>
+    <message>
+        <source>%1 bars</source>
+        <translation>%1 Takte</translation>
+    </message>
+    <message>
+        <source>1 beat</source>
+        <translation>1 Schlag</translation>
+    </message>
+    <message>
+        <source>%1 beats</source>
+        <translation>%1 Schläge</translation>
+    </message>
+</context>
+<context>
+    <name>EqCurve</name>
+    <message>
+        <source>Equaliser</source>
+        <translation>Equalizer</translation>
+    </message>
+    <message>
+        <source>The equaliser: how loud each pitch comes out, the deepest on the left, the highest on the right.
+Drag a point: up for more, down for less. The middle point and the low cut on the left also move sideways.
+Double-click a point to put it back. With the keys: Tab picks a point, the arrows move it, Delete puts it back.</source>
+        <translation>Der Equalizer: wie laut jede Tonhöhe herauskommt, links die tiefsten, rechts die höchsten.
+Einen Punkt ziehen: nach oben für mehr, nach unten für weniger. Der mittlere Punkt und der Low-Cut links lassen sich auch seitwärts schieben.
+Doppelklick setzt einen Punkt zurück. Mit den Tasten: Tab wählt einen Punkt, die Pfeiltasten verschieben ihn, Entf setzt ihn zurück.</translation>
+    </message>
 </context>
 <context>
     <name>ExportDialog</name>
     <message>
-        <source>CD quality: 44.1 kHz, 16-bit (plays everywhere)</source>
-        <translation>CD-Qualität: 44,1 kHz, 16 Bit (läuft überall)</translation>
+        <source>CD quality: 44.1&#x202f;kHz, 16-bit (plays everywhere)</source>
+        <translation>CD-Qualität: 44,1&#x202f;kHz, 16&#x202f;Bit (läuft überall)</translation>
     </message>
     <message>
-        <source>48 kHz, 16-bit (for video)</source>
-        <translation>48 kHz, 16 Bit (für Video)</translation>
+        <source>48&#x202f;kHz, 16-bit (for video)</source>
+        <translation>48&#x202f;kHz, 16&#x202f;Bit (für Video)</translation>
     </message>
     <message>
-        <source>Studio: 48 kHz, 24-bit (for mastering)</source>
-        <translation>Studio: 48 kHz, 24 Bit (zum Mastern)</translation>
+        <source>Studio: 48&#x202f;kHz, 24-bit (for mastering)</source>
+        <translation>Studio: 48&#x202f;kHz, 24&#x202f;Bit (zum Mastern)</translation>
     </message>
     <message>
-        <source>High resolution: 96 kHz, 24-bit</source>
-        <translation>Hohe Auflösung: 96 kHz, 24 Bit</translation>
+        <source>High resolution: 96&#x202f;kHz, 24-bit</source>
+        <translation>Hohe Auflösung: 96&#x202f;kHz, 24&#x202f;Bit</translation>
     </message>
     <message>
         <source>Export the song</source>
@@ -1188,10 +1223,6 @@ Mit Umschalt kommen die richtigen falschen Noten: ein Halbton außerhalb der Ton
 <context>
     <name>Lcd</name>
     <message>
-        <source>The display: where the song is (bar and beat), which track the letter keys play, and short messages. The wave on the left is what you hear.</source>
-        <translation>Die Anzeige: wo der Song gerade ist (Takt und Schlag), welche Spur die Buchstabentasten spielen, und kurze Meldungen. Die Welle links zeigt, was zu hören ist.</translation>
-    </message>
-    <message>
         <source>CHANGE LANDS ON THE NEXT BAR</source>
         <translation>ÄNDERUNG KOMMT AM NÄCHSTEN TAKT</translation>
     </message>
@@ -1215,6 +1246,10 @@ Mit Umschalt kommen die richtigen falschen Noten: ein Halbton außerhalb der Ton
         <source>BAR %1 · BEAT %2</source>
         <translation>TAKT %1 · SCHLAG %2</translation>
     </message>
+    <message>
+        <source>The display: where the song is (bar and beat, and the part of the song), which track the letter keys play, and short messages. The wave on the left is what you hear.</source>
+        <translation>Die Anzeige: wo der Song gerade ist (Takt und Schlag, und der Teil des Songs), welche Spur die Buchstabentasten spielen, und kurze Meldungen. Die Welle links zeigt, was zu hören ist.</translation>
+    </message>
 </context>
 <context>
     <name>LessonOverlay</name>
@@ -1231,8 +1266,8 @@ Mit Umschalt kommen die richtigen falschen Noten: ein Halbton außerhalb der Ton
         <translation>Weiter</translation>
     </message>
     <message>
-        <source>Stop the lesson. You can start it again from Help &gt; Lessons.</source>
-        <translation>Die Lektion beenden. Sie lässt sich unter Hilfe &gt; Lektionen wieder starten.</translation>
+        <source>Stop the lesson. You can start it again from Help → Lessons.</source>
+        <translation>Die Lektion beenden. Sie lässt sich unter Hilfe → Lektionen wieder starten.</translation>
     </message>
     <message>
         <source>Go back to the step before</source>
@@ -1299,8 +1334,8 @@ Mit Umschalt kommen die richtigen falschen Noten: ein Halbton außerhalb der Ton
         <translation>Jetzt &lt;b&gt;Resonanz&lt;/b&gt; aufdrehen (&lt;b&gt;Squelch&lt;/b&gt; auf der einfachen Seite). Das Filter beginnt bei jeder Note zu klingeln und zu quietschen.</translation>
     </message>
     <message>
-        <source>That is an acid line. Save it with &lt;b&gt;File ▸ Save&lt;/b&gt; (Ctrl+S), or carry on with the next lesson, &lt;b&gt;Build a beat&lt;/b&gt;.</source>
-        <translation>Das ist eine Acid-Line. Sie lässt sich mit &lt;b&gt;Datei ▸ Speichern&lt;/b&gt; (Strg+S) sichern, oder es geht weiter mit der nächsten Lektion, &lt;b&gt;Einen Beat bauen&lt;/b&gt;.</translation>
+        <source>That is an acid line. Save it with &lt;b&gt;File → Save&lt;/b&gt; (Ctrl+S), or carry on with the next lesson, &lt;b&gt;Build a beat&lt;/b&gt;.</source>
+        <translation>Das ist eine Acid-Line. Sie lässt sich mit &lt;b&gt;Datei → Speichern&lt;/b&gt; (Strg+S) sichern, oder es geht weiter mit der nächsten Lektion, &lt;b&gt;Einen Beat bauen&lt;/b&gt;.</translation>
     </message>
     <message>
         <source>Build a beat</source>
@@ -1718,10 +1753,6 @@ Mit Umschalt kommen die richtigen falschen Noten: ein Halbton außerhalb der Ton
         <translation>Abspielen (Leertaste startet und stoppt)</translation>
     </message>
     <message>
-        <source>Stop (Space starts and stops)</source>
-        <translation>Stopp (Leertaste startet und stoppt)</translation>
-    </message>
-    <message>
         <source>Record: while this is on and the song plays, the notes you play and the knobs you turn are written into the song (Ctrl+R)</source>
         <translation>Aufnahme: Solange dies an ist und der Song läuft, werden die gespielten Noten und die gedrehten Regler in den Song geschrieben (Strg+R)</translation>
     </message>
@@ -1972,10 +2003,6 @@ Mit Umschalt kommen die richtigen falschen Noten: ein Halbton außerhalb der Ton
         <translation>Duplizieren</translation>
     </message>
     <message>
-        <source>Duplicate: put a copy of the selected clips right after them (Ctrl+D)</source>
-        <translation>Duplizieren: eine Kopie der ausgewählten Clips direkt dahinter setzen (Strg+D)</translation>
-    </message>
-    <message>
         <source>Loop</source>
         <comment>key: put the loop round the selected clips</comment>
         <translation>Loopen</translation>
@@ -2010,6 +2037,10 @@ Mit Umschalt kommen die richtigen falschen Noten: ein Halbton außerhalb der Ton
         <translation>Hineinzoomen</translation>
     </message>
     <message>
+        <source>Stop (Space starts and stops). Pressed again: back to the start, and echoes still ringing fall silent</source>
+        <translation>Stopp (Leertaste startet und stoppt). Erneut gedrückt: zurück zum Anfang, nachklingende Echos verstummen</translation>
+    </message>
+    <message>
         <source>Key · Scale</source>
         <translation>Tonart · Tonleiter</translation>
     </message>
@@ -2039,7 +2070,7 @@ Mit Umschalt kommen die richtigen falschen Noten: ein Halbton außerhalb der Ton
     </message>
     <message>
         <source>Sound library…</source>
-        <translation>Klangbibliothek …</translation>
+        <translation>Klangbibliothek…</translation>
     </message>
     <message>
         <source>Every ready-made sound and every sound of your own, to listen to and choose from</source>
@@ -2482,20 +2513,12 @@ Mit Umschalt kommen die richtigen falschen Noten: ein Halbton außerhalb der Ton
         <translation>&lt;p&gt;All das und noch viel mehr steht in der Bedienungsanleitung.&lt;/p&gt;</translation>
     </message>
     <message>
-        <source>&lt;span style=&quot;font-size:22px; font-weight:600; letter-spacing:3px&quot;&gt;NACHTZUG&lt;/span&gt;&lt;br&gt;Make a song in five steps. Nachtzug is built so that every note automatically lands in the right scale.</source>
-        <translation>&lt;span style=&quot;font-size:22px; font-weight:600; letter-spacing:3px&quot;&gt;NACHTZUG&lt;/span&gt;&lt;br&gt;In fünf Schritten zum Song. Nachtzug ist so aufgebaut, dass alle Noten automatisch in der korrekten Tonleiter landen.</translation>
+        <source>&lt;span style=&quot;font-size:22px; font-weight:600&quot;&gt;Nachtzug&lt;/span&gt;&lt;br&gt;Make a song in five steps. Nachtzug is built so that every note automatically lands in the right scale.</source>
+        <translation>&lt;span style=&quot;font-size:22px; font-weight:600&quot;&gt;Nachtzug&lt;/span&gt;&lt;br&gt;In fünf Schritten zum Song. Nachtzug ist so aufgebaut, dass alle Noten automatisch in der korrekten Tonleiter landen.</translation>
     </message>
     <message>
         <source>&lt;b&gt;Everything in detail: the operation manual.&lt;/b&gt; Nachtzug comes with a proper manual, an A5 booklet (a PDF, in English and German) with pictures of every part, sound recipes, patch sheets and a table of every key. It is well worth a look: &lt;b&gt;Help → Operation manual&lt;/b&gt;, or the key below.</source>
         <translation>&lt;b&gt;Alles im Detail: die Bedienungsanleitung.&lt;/b&gt; Zu Nachtzug gehört eine richtige Anleitung, ein A5-Heft (als PDF, auf Deutsch und Englisch) mit Bildern von jedem Teil, Klangrezepten, Patchbögen und einer Tabelle aller Tasten. Ein Blick hinein lohnt sich: &lt;b&gt;Hilfe → Bedienungsanleitung&lt;/b&gt; oder die Taste unten.</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;1 · Listen&lt;/h3&gt;&lt;p&gt;Press &lt;b&gt;Space&lt;/b&gt; (or the ▶ key in the Transport unit at the top). The song repeats the stretch under the bar marked &lt;b&gt;LOOP&lt;/b&gt; in the timeline. Drag in the Loop row to mark another stretch, or switch &lt;b&gt;Loop&lt;/b&gt; off to play the whole song.&lt;/p&gt;&lt;h3&gt;2 · Pick a track and change its pattern&lt;/h3&gt;&lt;p&gt;The timeline has one row per track. Click a clip (a coloured block) and the &lt;b&gt;Notes&lt;/b&gt; tab shows its pattern.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;New idea&lt;/b&gt; writes a new pattern for you. &lt;b&gt;Vary&lt;/b&gt; changes a note or two.&lt;/li&gt;&lt;li&gt;Click in the grid to add a note, drag to make it longer, drag a note to move it, &lt;b&gt;right-click a note to delete it&lt;/b&gt;.&lt;/li&gt;&lt;li&gt;While the song plays, new ideas, mutes and chord changes wait for the next bar, so they always land in time.&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;3 · Shape the sound&lt;/h3&gt;&lt;p&gt;The &lt;b&gt;Sound&lt;/b&gt; tab holds the selected track’s synthesiser, in the order the sound flows: Oscillators, Filter, Amp envelope, Effects. Pick a preset, press &lt;b&gt;New sound&lt;/b&gt; (the die) for a fresh one, or turn knobs. The small pictures show what the knobs do; drag on the filter picture to sweep it. &lt;b&gt;View → Simple sound page&lt;/b&gt; switches between a few big knobs in plain words and every knob of the synthesiser. Like a sound? &lt;b&gt;Save sound…&lt;/b&gt; keeps it for every song, and &lt;b&gt;All sounds…&lt;/b&gt; at the bottom of the preset list opens your sound library.&lt;/p&gt;&lt;p&gt;To make a sound change over time, press the &lt;b&gt;Lines&lt;/b&gt; button on a track in the timeline, pick a knob such as Cutoff, and click to draw a line. Or switch on record (the ● key) and turn a knob while the song plays.&lt;/p&gt;&lt;h3&gt;4 · Play along&lt;/h3&gt;&lt;p&gt;The letter keys play the selected track: rows &lt;b&gt;Z–/&lt;/b&gt;, &lt;b&gt;A–;&lt;/b&gt; and &lt;b&gt;Q–P&lt;/b&gt; are three octaves. The pads under the note grid show which key plays which note; you can also click them. With the &lt;b&gt;In time&lt;/b&gt; switch on, what you play is pulled onto the beat. With record on (the ● key), it is written into the clip.&lt;/p&gt;&lt;h3&gt;5 · Build the song&lt;/h3&gt;&lt;p&gt;In the timeline, drag clips to move them and drag a clip’s right edge to make it longer. &lt;b&gt;Copy&lt;/b&gt;, the scissors and &lt;b&gt;Delete&lt;/b&gt; are above the timeline; right-click a clip for fades and filter sweeps. Click a bar in the &lt;b&gt;Chords&lt;/b&gt; row to change the chord there. &lt;b&gt;+ Add track&lt;/b&gt; adds a bass line, sequence, pad, lead or drums. The &lt;b&gt;Mixer&lt;/b&gt; tab balances the tracks.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Arrange&lt;/b&gt;, above the timeline, turns your patterns into a whole song: an intro, a build-up, a main part, a break and an ending. The &lt;b&gt;Export&lt;/b&gt; key at the top right saves the result as a sound file.&lt;/p&gt;&lt;h3&gt;Trying things out&lt;/h3&gt;&lt;p&gt;Nothing is lost by trying: the &lt;b&gt;↶&lt;/b&gt; key beside the display takes back the last change, and &lt;b&gt;↷&lt;/b&gt; brings it back again. After a big change, such as a new idea or a deleted track, a note at the bottom of the window offers &lt;b&gt;Undo&lt;/b&gt; as well.&lt;/p&gt;&lt;h3&gt;Loops: play with patterns live&lt;/h3&gt;&lt;p&gt;Switch the bottom area from &lt;b&gt;Song&lt;/b&gt; to &lt;b&gt;Loops&lt;/b&gt;. Each track has a row of cells, and each cell is a pattern that repeats. Click a cell and it starts on the next bar, replacing what that track was playing; click it again to stop it. The cell you clicked last has a ring around it and is the one the &lt;b&gt;Notes&lt;/b&gt; tab shows. To change a playing cell’s notes without stopping it, Shift + click it. Click an empty cell to get a new idea there. The numbered buttons along the bottom start a whole column at once. The &lt;b&gt;Chords&lt;/b&gt; row above the cells shows the chords, one box per bar, repeating in that order; click a box to change it.&lt;/p&gt;&lt;p&gt;Switch &lt;b&gt;Record&lt;/b&gt; on while you do this and everything you start is written into the song timeline, so a jam becomes a song. Switch back to &lt;b&gt;Song&lt;/b&gt; to see and edit it.&lt;/p&gt;&lt;h3&gt;Drums&lt;/h3&gt;&lt;p&gt;Drum clips start with the &lt;b&gt;auto drummer&lt;/b&gt;: choose a style and how hard it plays, and it adds fills by itself. Switch off &lt;b&gt;The drummer plays this clip&lt;/b&gt; to place hits yourself. Every drum can also play your own sound: on the drum track’s &lt;b&gt;Sound&lt;/b&gt; tab, click &lt;b&gt;Built-in&lt;/b&gt; under a drum and pick a sound from the Nachtzug library (rest the mouse on one to hear it), or import or record your own.&lt;/p&gt;&lt;p&gt;Rest the mouse on anything for a short explanation. Every key is on the &lt;b&gt;Keys and mouse&lt;/b&gt; tab.&lt;/p&gt;</source>
-        <translation>&lt;h3&gt;1 · Zuhören&lt;/h3&gt;&lt;p&gt;Die &lt;b&gt;Leertaste&lt;/b&gt; drücken (oder die ▶-Taste im Transportbereich oben). Der Song wiederholt den Abschnitt unter dem Balken &lt;b&gt;LOOP&lt;/b&gt; in der Zeitleiste. In der Loop-Zeile ziehen, um einen anderen Abschnitt zu markieren, oder &lt;b&gt;Loop&lt;/b&gt; ausschalten, um den ganzen Song zu spielen.&lt;/p&gt;&lt;h3&gt;2 · Eine Spur wählen und ihr Pattern ändern&lt;/h3&gt;&lt;p&gt;Die Zeitleiste hat eine Zeile pro Spur. Ein Klick auf einen Clip (einen farbigen Block) zeigt sein Pattern im Reiter &lt;b&gt;Noten&lt;/b&gt;.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;Neue Idee&lt;/b&gt; schreibt ein neues Pattern. &lt;b&gt;Variieren&lt;/b&gt; ändert ein, zwei Noten.&lt;/li&gt;&lt;li&gt;Ein Klick ins Raster setzt eine Note, Ziehen verlängert sie, Ziehen an einer Note verschiebt sie, &lt;b&gt;Rechtsklick auf eine Note löscht sie&lt;/b&gt;.&lt;/li&gt;&lt;li&gt;Während der Song läuft, warten neue Ideen, Stummschaltungen und Akkordwechsel auf den nächsten Takt, damit sie immer im Takt kommen.&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;3 · Den Klang formen&lt;/h3&gt;&lt;p&gt;Der Reiter &lt;b&gt;Sound&lt;/b&gt; enthält den Synthesizer der ausgewählten Spur, in der Reihenfolge, in der der Klang entsteht: Oszillatoren, Filter, Amp-Hüllkurve, Effekte. Man wählt ein Preset, drückt &lt;b&gt;Neu würfeln&lt;/b&gt; für einen frischen Klang oder dreht an den Reglern. Die kleinen Bilder zeigen, was die Regler tun; Ziehen im Filterbild fährt den Filter. &lt;b&gt;Ansicht → Einfache Sound-Seite&lt;/b&gt; schaltet zwischen wenigen großen Reglern in klaren Worten und jedem Regler des Synthesizers um. Ein Klang gefällt? &lt;b&gt;Klang speichern …&lt;/b&gt; behält ihn für jeden Song, und &lt;b&gt;Alle Klänge …&lt;/b&gt; unten in der Presetliste öffnet die eigene Klangbibliothek.&lt;/p&gt;&lt;p&gt;Damit sich ein Klang mit der Zeit ändert, auf einer Spur in der Zeitleiste &lt;b&gt;Kurven&lt;/b&gt; drücken, einen Regler wie Cutoff wählen und klicken, um eine Kurve zu zeichnen. Oder die Aufnahme einschalten (die ●-Taste) und einen Regler drehen, während der Song läuft.&lt;/p&gt;&lt;h3&gt;4 · Mitspielen&lt;/h3&gt;&lt;p&gt;Die Buchstabentasten spielen die ausgewählte Spur: Die Reihen &lt;b&gt;Y–-&lt;/b&gt;, &lt;b&gt;A–Ö&lt;/b&gt; und &lt;b&gt;Q–P&lt;/b&gt; sind drei Oktaven. Die Felder unter dem Notenraster zeigen, welche Taste welche Note spielt; sie lassen sich auch anklicken. Mit dem Schalter &lt;b&gt;Im Takt&lt;/b&gt; wird das Gespielte auf den Schlag gezogen. Mit eingeschalteter Aufnahme (die ●-Taste) wird es in den Clip geschrieben.&lt;/p&gt;&lt;h3&gt;5 · Den Song bauen&lt;/h3&gt;&lt;p&gt;In der Zeitleiste verschiebt Ziehen die Clips, und Ziehen an der rechten Kante eines Clips verlängert ihn. &lt;b&gt;Duplizieren&lt;/b&gt;, die Schere und &lt;b&gt;Löschen&lt;/b&gt; stehen über der Zeitleiste; Rechtsklick auf einen Clip bietet Ein- und Ausblenden und Filterfahrten. Ein Klick auf einen Takt in der Zeile &lt;b&gt;Akkorde&lt;/b&gt; ändert dort den Akkord. &lt;b&gt;+ Spur hinzufügen&lt;/b&gt; fügt eine Bassline, Sequenz, ein Pad, Lead oder Drums hinzu. Der Reiter &lt;b&gt;Mixer&lt;/b&gt; gleicht die Spuren aus.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Arrangieren&lt;/b&gt; über der Zeitleiste macht aus den Patterns einen ganzen Song: Intro, Build-up, Hauptteil, Break und Outro. Die Taste &lt;b&gt;Export&lt;/b&gt; oben rechts speichert das Ergebnis als Audiodatei.&lt;/p&gt;&lt;h3&gt;Ausprobieren&lt;/h3&gt;&lt;p&gt;Beim Ausprobieren geht nichts verloren: Die Taste &lt;b&gt;↶&lt;/b&gt; neben der Anzeige nimmt die letzte Änderung zurück, &lt;b&gt;↷&lt;/b&gt; stellt sie wieder her. Nach großen Änderungen, etwa einer neuen Idee oder einer gelöschten Spur, bietet ein Hinweis unten im Fenster ebenfalls &lt;b&gt;Rückgängig&lt;/b&gt; an.&lt;/p&gt;&lt;h3&gt;Loops: live mit Patterns spielen&lt;/h3&gt;&lt;p&gt;Den unteren Bereich von &lt;b&gt;Song&lt;/b&gt; auf &lt;b&gt;Loops&lt;/b&gt; umschalten. Jede Spur hat eine Reihe Zellen, und jede Zelle ist ein Pattern, das sich wiederholt. Ein Klick auf eine Zelle startet sie am nächsten Takt und ersetzt, was die Spur gerade spielt; ein weiterer Klick stoppt sie. Die zuletzt geklickte Zelle hat einen Ring und ist die, die der Reiter &lt;b&gt;Noten&lt;/b&gt; zeigt. Um die Noten einer laufenden Zelle zu ändern, ohne sie zu stoppen, wird sie mit Umschalt angeklickt. Ein Klick auf eine leere Zelle bringt eine neue Idee. Die nummerierten Knöpfe unten starten eine ganze Spalte auf einmal. Die Zeile &lt;b&gt;Akkorde&lt;/b&gt; über den Zellen zeigt die Akkorde, ein Kästchen pro Takt, in dieser Reihenfolge wiederholt; ein Klick auf ein Kästchen ändert es.&lt;/p&gt;&lt;p&gt;Wird dabei die &lt;b&gt;Aufnahme&lt;/b&gt; eingeschaltet, wird alles Gestartete in die Song-Zeitleiste geschrieben: Aus einer Jam wird ein Song. Zurück auf &lt;b&gt;Song&lt;/b&gt; schalten, um ihn zu sehen und zu bearbeiten.&lt;/p&gt;&lt;h3&gt;Drums&lt;/h3&gt;&lt;p&gt;Drum-Clips beginnen mit dem &lt;b&gt;Auto-Drummer&lt;/b&gt;: Es werden ein Stil und die Spielstärke gewählt, und er fügt von selbst Fills ein. Mit ausgeschaltetem &lt;b&gt;Der Drummer spielt diesen Clip&lt;/b&gt; werden die Schläge selbst gesetzt. Jeder Drumsound kann auch einen eigenen Sound spielen: Im Reiter &lt;b&gt;Sound&lt;/b&gt; der Drum-Spur unter einem Sound auf &lt;b&gt;Eingebaut&lt;/b&gt; klicken und einen Sound aus der Nachtzug-Bibliothek wählen (ruht die Maus darauf, ist er zu hören) oder einen eigenen importieren oder aufnehmen.&lt;/p&gt;&lt;p&gt;Ruht die Maus auf etwas, erscheint eine kurze Erklärung. Alle Tasten stehen im Reiter &lt;b&gt;Tasten und Maus&lt;/b&gt;.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;More to try&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;Lessons&lt;/b&gt; (Help menu) walk you through a song step by step, in the real program.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Chance&lt;/b&gt;, &lt;b&gt;Repeat&lt;/b&gt; and &lt;b&gt;Keep&lt;/b&gt; in the Notes tab: notes that play only sometimes, quick drum rolls, and notes Vary leaves alone. Select notes first.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Chords mode&lt;/b&gt;: switch &lt;b&gt;Keys play&lt;/b&gt; above the on-screen keys to &lt;b&gt;Chords&lt;/b&gt; (Ctrl+J), and the letter keys move every track that follows the chords to a new chord while it plays. &lt;b&gt;Esc&lt;/b&gt; goes back.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Pump&lt;/b&gt; in the mixer makes a track duck on every kick. The &lt;b&gt;Input&lt;/b&gt; strip plays a guitar or a voice through a filter.&lt;/li&gt;&lt;li&gt;In the preset and kit lists, &lt;b&gt;rest the mouse&lt;/b&gt; on a sound to hear it. &lt;b&gt;Track → Chop a loop across the drums&lt;/b&gt; cuts a drum loop onto the pads.&lt;/li&gt;&lt;li&gt;A &lt;b&gt;MIDI keyboard&lt;/b&gt; plays along; right-click a knob and choose &lt;b&gt;Learn MIDI control&lt;/b&gt; to turn it from a controller. &lt;b&gt;Export&lt;/b&gt; also makes a file per track, or a MIDI file.&lt;/li&gt;&lt;/ul&gt;</source>
-        <translation>&lt;h3&gt;Mehr zum Ausprobieren&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;Lektionen&lt;/b&gt; (Menü Hilfe) führen Schritt für Schritt durch einen Song, im echten Programm.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Häufigkeit&lt;/b&gt;, &lt;b&gt;Wiederholen&lt;/b&gt; und &lt;b&gt;Behalten&lt;/b&gt; im Reiter Noten: Noten, die nur manchmal spielen, schnelle Trommelwirbel und Noten, die Variieren in Ruhe lässt. Zuerst Noten auswählen.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Akkordmodus&lt;/b&gt;: &lt;b&gt;Tasten spielen&lt;/b&gt; über den Bildschirmtasten auf &lt;b&gt;Akkorde&lt;/b&gt; umstellen (Strg+J), und die Buchstabentasten schieben jede Spur, die den Akkorden folgt, zu einem neuen Akkord, während sie spielt. &lt;b&gt;Esc&lt;/b&gt; kehrt zurück.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Pumpen&lt;/b&gt; im Mixer lässt eine Spur bei jeder Kick wegducken. Der Kanalzug &lt;b&gt;Eingang&lt;/b&gt; spielt eine Gitarre oder eine Stimme durch ein Filter.&lt;/li&gt;&lt;li&gt;In den Listen der Presets und Kits &lt;b&gt;die Maus ruhen lassen&lt;/b&gt;, um einen Klang zu hören. &lt;b&gt;Spur → Loop auf die Drums verteilen&lt;/b&gt; schneidet einen Drum-Loop auf die Pads.&lt;/li&gt;&lt;li&gt;Ein &lt;b&gt;MIDI-Keyboard&lt;/b&gt; spielt mit; Rechtsklick auf einen Regler und &lt;b&gt;MIDI-Steuerung lernen&lt;/b&gt;, um ihn von einem Controller aus zu drehen. &lt;b&gt;Export&lt;/b&gt; macht auch eine Datei pro Spur oder eine MIDI-Datei.&lt;/li&gt;&lt;/ul&gt;</translation>
     </message>
     <message>
         <source>Getting started</source>
@@ -2518,8 +2541,225 @@ Mit Umschalt kommen die richtigen falschen Noten: ein Halbton außerhalb der Ton
         <translation>Erste Lektion starten</translation>
     </message>
     <message>
-        <source>A guided tour: the program points at one thing at a time and waits until you have tried it. All lessons are in Help &gt; Lessons.</source>
-        <translation>Eine geführte Tour: Das Programm zeigt auf eine Sache nach der anderen und wartet, bis sie ausprobiert wurde. Alle Lektionen stehen unter Hilfe &gt; Lektionen.</translation>
+        <source>A guided tour: the program points at one thing at a time and waits until you have tried it. All lessons are in Help → Lessons.</source>
+        <translation>Eine geführte Tour: Das Programm zeigt auf eine Sache nach der anderen und wartet, bis sie ausprobiert wurde. Alle Lektionen stehen unter Hilfe → Lektionen.</translation>
+    </message>
+    <message>
+        <source>Click a part in the Parts row</source>
+        <translation>Klick auf einen Teil in der Zeile „Teile“</translation>
+    </message>
+    <message>
+        <source>Select its clips and move the playhead there; double-click to rename it, drag its left edge to move it</source>
+        <translation>Seine Clips auswählen und die Abspielposition dorthin setzen; Doppelklick zum Umbenennen, Ziehen an der linken Kante zum Verschieben</translation>
+    </message>
+    <message>
+        <source>New from a starter song…</source>
+        <translation>Neu aus einem Startersong…</translation>
+    </message>
+    <message>
+        <source>A short song for each style, to listen to and start from</source>
+        <translation>Ein kurzer Song für jeden Stil, zum Anhören und Weitermachen</translation>
+    </message>
+    <message>
+        <source>Open recent</source>
+        <translation>Zuletzt geöffnet</translation>
+    </message>
+    <message>
+        <source>%1 (not found)</source>
+        <translation>%1 (nicht gefunden)</translation>
+    </message>
+    <message>
+        <source>No longer in %1</source>
+        <translation>Nicht mehr in %1</translation>
+    </message>
+    <message>
+        <source>No songs yet</source>
+        <translation>Noch keine Songs</translation>
+    </message>
+    <message>
+        <source>Clear the list</source>
+        <translation>Liste leeren</translation>
+    </message>
+    <message>
+        <source>Forget the songs listed here (the songs themselves stay where they are)</source>
+        <translation>Die hier aufgeführten Songs vergessen (die Songs selbst bleiben, wo sie sind)</translation>
+    </message>
+    <message>
+        <source>Song not found</source>
+        <translation>Song nicht gefunden</translation>
+    </message>
+    <message>
+        <source>“%1” is no longer in %2, so it was taken off the list of recent songs.</source>
+        <translation>„%1“ ist nicht mehr in %2 und wurde deshalb aus der Liste der zuletzt geöffneten Songs genommen.</translation>
+    </message>
+    <message>
+        <source>“%1” is open as a new song. Change anything you like; Save keeps it under a name of your own.</source>
+        <translation>„%1“ ist als neuer Song geöffnet. Alles darf verändert werden; Speichern legt ihn unter einem eigenen Namen ab.</translation>
+    </message>
+    <message>
+        <source>Continue</source>
+        <comment>key: continue the song as a long journey</comment>
+        <translation>Fortsetzen</translation>
+    </message>
+    <message>
+        <source>Continue for a long journey: the song goes on for as many minutes as you like, growing slowly out of your patterns</source>
+        <translation>Als lange Reise fortsetzen: Der Song läuft so viele Minuten weiter wie gewünscht und wächst dabei langsam aus den eigenen Patterns</translation>
+    </message>
+    <message>
+        <source>Continue the song for a long journey…</source>
+        <translation>Den Song als lange Reise fortsetzen …</translation>
+    </message>
+    <message>
+        <source>Add a track first: the journey grows out of the patterns in the song.</source>
+        <translation>Zuerst eine Spur hinzufügen: Die Reise wächst aus den Patterns des Songs.</translation>
+    </message>
+    <message>
+        <source>Continue the song</source>
+        <translation>Den Song fortsetzen</translation>
+    </message>
+    <message>
+        <source>&lt;b style=&quot;font-size:16px&quot;&gt;Continue for a long journey&lt;/b&gt;&lt;br&gt;The song goes on for as many minutes as you like, growing slowly out of your patterns: a note changes here and there, the filters open and close over minutes, parts come and go, and there is a breakdown and a return. The key and the chords stay. Undo takes it all back.</source>
+        <translation>&lt;b style=&quot;font-size:16px&quot;&gt;Als lange Reise fortsetzen&lt;/b&gt;&lt;br&gt;Der Song läuft so viele Minuten weiter wie gewünscht und wächst dabei langsam aus den eigenen Patterns: Hier und da ändert sich eine Note, die Filter öffnen und schließen sich über Minuten, Teile kommen und gehen, und es gibt einen Breakdown und eine Rückkehr. Tonart und Akkorde bleiben. Rückgängig nimmt alles wieder zurück.</translation>
+    </message>
+    <message>
+        <source>How many minutes the journey lasts, at the song’s tempo</source>
+        <translation>Wie viele Minuten die Reise dauert, im Tempo des Songs</translation>
+    </message>
+    <message>
+        <source>minutes</source>
+        <translation>Minuten</translation>
+    </message>
+    <message>
+        <source>Continue for</source>
+        <translation>Fortsetzen für</translation>
+    </message>
+    <message>
+        <source>Character</source>
+        <translation>Charakter</translation>
+    </message>
+    <message>
+        <source>Calm</source>
+        <translation>Ruhig</translation>
+    </message>
+    <message>
+        <source>Evolving</source>
+        <translation>Wandelnd</translation>
+    </message>
+    <message>
+        <source>Restless</source>
+        <translation>Unruhig</translation>
+    </message>
+    <message>
+        <source>Calm: long parts, a small change now and then, gentle filter lines</source>
+        <translation>Ruhig: lange Teile, ab und zu eine kleine Änderung, sanfte Filterkurven</translation>
+    </message>
+    <message>
+        <source>Evolving: a note changes every sixteen bars, parts rest now and then, the filters sweep</source>
+        <translation>Wandelnd: alle sechzehn Takte ändert sich eine Note, Teile pausieren ab und zu, die Filter fahren auf und zu</translation>
+    </message>
+    <message>
+        <source>Restless: changes every eight bars, new ideas on new ground, deep sweeps</source>
+        <translation>Unruhig: Änderungen alle acht Takte, neue Ideen auf neuem Terrain, tiefe Filterfahrten</translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation>Start</translation>
+    </message>
+    <message>
+        <source>After the end</source>
+        <translation>Nach dem Ende</translation>
+    </message>
+    <message>
+        <source>After the selection</source>
+        <translation>Nach der Auswahl</translation>
+    </message>
+    <message>
+        <source>The journey starts after the last clip; nothing in the song changes</source>
+        <translation>Die Reise beginnt nach dem letzten Clip; am Song ändert sich nichts</translation>
+    </message>
+    <message>
+        <source>The journey starts after the selected clips and replaces everything after them</source>
+        <translation>Die Reise beginnt nach den ausgewählten Clips und ersetzt alles danach</translation>
+    </message>
+    <message>
+        <source>End with a fade-out</source>
+        <translation>Mit Ausblenden enden</translation>
+    </message>
+    <message>
+        <source>At the end the parts leave one by one and the last ones fade away; switched off, the journey stops at full strength, ready to be continued again</source>
+        <translation>Am Ende gehen die Teile nacheinander, die letzten werden ausgeblendet; ausgeschaltet endet die Reise in voller Stärke und lässt sich erneut fortsetzen</translation>
+    </message>
+    <message>
+        <source>Long parts and slow changes, for listening far into the night.</source>
+        <translation>Lange Teile und langsame Änderungen, zum Hören bis tief in die Nacht.</translation>
+    </message>
+    <message>
+        <source>More happens: new ideas, deeper sweeps, parts that come and go.</source>
+        <translation>Mehr passiert: neue Ideen, tiefere Filterfahrten, Teile, die kommen und gehen.</translation>
+    </message>
+    <message>
+        <source>A change every few phrases, like a sequence that slowly turns.</source>
+        <translation>Alle paar Phrasen eine Änderung, wie eine Sequenz, die sich langsam dreht.</translation>
+    </message>
+    <message>
+        <source>From bar %1; what comes after it now is replaced.</source>
+        <translation>Ab Takt %1; was jetzt danach kommt, wird ersetzt.</translation>
+    </message>
+    <message>
+        <source>From bar %1, after the last clip.</source>
+        <translation>Ab Takt %1, nach dem letzten Clip.</translation>
+    </message>
+    <message>
+        <source>%1 bars, about %2; the whole song then lasts %3.</source>
+        <translation>%1 Takte, etwa %2; der ganze Song dauert dann %3.</translation>
+    </message>
+    <message>
+        <source>It begins on the next bar line.</source>
+        <translation>Sie beginnt am nächsten Taktstrich.</translation>
+    </message>
+    <message>
+        <source>Continue</source>
+        <translation>Fortsetzen</translation>
+    </message>
+    <message>
+        <source>Write the journey into the song</source>
+        <translation>Die Reise in den Song schreiben</translation>
+    </message>
+    <message>
+        <source>Close without changing anything</source>
+        <translation>Schließen, ohne etwas zu ändern</translation>
+    </message>
+    <message>
+        <source>Long journey</source>
+        <translation>Lange Reise</translation>
+    </message>
+    <message>
+        <source>The journey is written: %1 more minutes. Press Space to hear it.</source>
+        <translation>Die Reise ist geschrieben: %1 Minuten mehr. Mit der Leertaste ist sie zu hören.</translation>
+    </message>
+    <message>
+        <source>&lt;h3&gt;The echo and the LFO in time&lt;/h3&gt;&lt;p&gt;The whole song shares one echo. Its &lt;b&gt;Echo time&lt;/b&gt; is a note value, so the repeats stay in time with the song: &lt;b&gt;Dotted 1/8&lt;/b&gt; makes a sequence ripple, the sound of Berlin School. &lt;b&gt;Echo tone&lt;/b&gt; makes each repeat darker, and &lt;b&gt;Ping-pong&lt;/b&gt; bounces them between the speakers. Set the LFO’s &lt;b&gt;Timing&lt;/b&gt; to &lt;b&gt;In time&lt;/b&gt; and its movement follows the beat: a filter sweep over two bars, or &lt;b&gt;LFO to volume&lt;/b&gt; on 1/16 with the square shape for a chopped pad.&lt;/p&gt;</source>
+        <translation>&lt;h3&gt;Das Echo und der LFO im Takt&lt;/h3&gt;&lt;p&gt;Der ganze Song teilt sich ein Echo. Seine &lt;b&gt;Echozeit&lt;/b&gt; ist ein Notenwert, damit die Wiederholungen im Takt des Songs bleiben: Mit &lt;b&gt;Punktierte 1/8&lt;/b&gt; beginnt eine Sequenz zu perlen – der Klang der Berliner Schule. &lt;b&gt;Echo-Klang&lt;/b&gt; macht jede Wiederholung dunkler, und &lt;b&gt;Ping-Pong&lt;/b&gt; lässt sie zwischen den Lautsprechern springen. Wird der &lt;b&gt;Takt&lt;/b&gt; des LFO auf &lt;b&gt;Im Takt&lt;/b&gt; gestellt, folgt seine Bewegung dem Schlag: ein Filterschwung über zwei Takte oder, mit &lt;b&gt;LFO → Lautstärke&lt;/b&gt; auf 1/16 und der Rechteck-Form, ein zerhacktes Pad.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>The equaliser’s picture</source>
+        <translation>Das Bild des Equalizers</translation>
+    </message>
+    <message>
+        <source>Drag a point up, down or sideways; or Tab to pick one, the arrows to move it, Delete to put it back</source>
+        <translation>Einen Punkt nach oben, unten oder seitwärts ziehen; oder mit Tab einen wählen, mit den Pfeiltasten verschieben, mit Entf zurücksetzen</translation>
+    </message>
+    <message>
+        <source>Duplicate: put a copy of the selected clips right after them; with a part selected, a copy of the whole part, and everything after it moves along (Ctrl+D)</source>
+        <translation>Duplizieren: eine Kopie der ausgewählten Clips direkt dahinter setzen; ist ein Teil ausgewählt, eine Kopie des ganzen Teils, und alles danach rückt weiter (Strg+D)</translation>
+    </message>
+    <message>
+        <source>&lt;h3&gt;1 · Listen&lt;/h3&gt;&lt;p&gt;Press &lt;b&gt;Space&lt;/b&gt; (or the ▶ key in the Transport unit at the top). The song repeats the stretch under the bar marked &lt;b&gt;LOOP&lt;/b&gt; in the timeline. Drag in the Loop row to mark another stretch, or switch &lt;b&gt;Loop&lt;/b&gt; off to play the whole song.&lt;/p&gt;&lt;h3&gt;2 · Pick a track and change its pattern&lt;/h3&gt;&lt;p&gt;The timeline has one row per track. Click a clip (a coloured block) and the &lt;b&gt;Notes&lt;/b&gt; tab shows its pattern.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;New idea&lt;/b&gt; writes a new pattern for you. &lt;b&gt;Vary&lt;/b&gt; changes a note or two.&lt;/li&gt;&lt;li&gt;Click in the grid to add a note, drag to make it longer, drag a note to move it, &lt;b&gt;right-click a note to delete it&lt;/b&gt;.&lt;/li&gt;&lt;li&gt;While the song plays, new ideas, mutes and chord changes wait for the next bar, so they always land in time.&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;3 · Shape the sound&lt;/h3&gt;&lt;p&gt;The &lt;b&gt;Sound&lt;/b&gt; tab holds the selected track’s synthesiser, in the order the sound flows: Oscillators, Filter, Amp envelope, Effects. Pick a preset, press &lt;b&gt;New sound&lt;/b&gt; (the die) for a fresh one, or turn knobs. The small pictures show what the knobs do; drag on the filter picture to sweep it. &lt;b&gt;View → Simple sound page&lt;/b&gt; switches between a few big knobs in plain words and every knob of the synthesiser. Like a sound? &lt;b&gt;Save sound…&lt;/b&gt; keeps it for every song, and &lt;b&gt;All sounds…&lt;/b&gt; at the bottom of the preset list opens your sound library.&lt;/p&gt;&lt;p&gt;To make a sound change over time, press the &lt;b&gt;Lines&lt;/b&gt; button on a track in the timeline, pick a knob such as Cutoff, and click to draw a line. Or switch on record (the ● key) and turn a knob while the song plays.&lt;/p&gt;&lt;h3&gt;4 · Play along&lt;/h3&gt;&lt;p&gt;The letter keys play the selected track: rows &lt;b&gt;Z–/&lt;/b&gt;, &lt;b&gt;A–;&lt;/b&gt; and &lt;b&gt;Q–P&lt;/b&gt; are three octaves. The pads under the note grid show which key plays which note; you can also click them. With the &lt;b&gt;In time&lt;/b&gt; switch on, what you play is pulled onto the beat. With record on (the ● key), it is written into the clip.&lt;/p&gt;&lt;h3&gt;5 · Build the song&lt;/h3&gt;&lt;p&gt;In the timeline, drag clips to move them and drag a clip’s right edge to make it longer. &lt;b&gt;Copy&lt;/b&gt;, the scissors and &lt;b&gt;Delete&lt;/b&gt; are above the timeline; right-click a clip for fades and filter sweeps. Click a bar in the &lt;b&gt;Chords&lt;/b&gt; row to change the chord there. &lt;b&gt;+ Add track&lt;/b&gt; adds a bass line, sequence, pad, lead or drums. The &lt;b&gt;Mixer&lt;/b&gt; tab balances the tracks.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Arrange&lt;/b&gt;, above the timeline, turns your patterns into a whole song: an intro, a build-up, a main part, a break and an ending, each named in the &lt;b&gt;Parts&lt;/b&gt; row at the top of the timeline. Click a part to select its clips (&lt;b&gt;Loop&lt;/b&gt; then repeats just that part), double-click it to rename it, drag its left edge to move it; right-click a part to loop it or play from it, or the row to name a part yourself. &lt;b&gt;Continue&lt;/b&gt;, beside it, lets the song go on for as many minutes as you like, a long journey that grows slowly out of your patterns, with parts coming and going and the filters opening over minutes. The &lt;b&gt;Export&lt;/b&gt; key at the top right saves the result as a sound file.&lt;/p&gt;&lt;h3&gt;Trying things out&lt;/h3&gt;&lt;p&gt;Nothing is lost by trying: the &lt;b&gt;↶&lt;/b&gt; key beside the display takes back the last change, and &lt;b&gt;↷&lt;/b&gt; brings it back again. After a big change, such as a new idea or a deleted track, a note at the bottom of the window offers &lt;b&gt;Undo&lt;/b&gt; as well.&lt;/p&gt;&lt;h3&gt;Loops: play with patterns live&lt;/h3&gt;&lt;p&gt;Switch the bottom area from &lt;b&gt;Song&lt;/b&gt; to &lt;b&gt;Loops&lt;/b&gt;. Each track has a row of cells, and each cell is a pattern that repeats. Click a cell and it starts on the next bar, replacing what that track was playing; click it again to stop it. The cell you clicked last has a ring around it and is the one the &lt;b&gt;Notes&lt;/b&gt; tab shows. To change a playing cell’s notes without stopping it, Shift + click it. Click an empty cell to get a new idea there. The numbered buttons along the bottom start a whole column at once. The &lt;b&gt;Chords&lt;/b&gt; row above the cells shows the chords, one box per bar, repeating in that order; click a box to change it.&lt;/p&gt;&lt;p&gt;Switch &lt;b&gt;Record&lt;/b&gt; on while you do this and everything you start is written into the song timeline, so a jam becomes a song. Switch back to &lt;b&gt;Song&lt;/b&gt; to see and edit it.&lt;/p&gt;&lt;h3&gt;Drums&lt;/h3&gt;&lt;p&gt;Drum clips start with the &lt;b&gt;auto drummer&lt;/b&gt;: choose a style and how hard it plays, and it adds fills by itself. Switch off &lt;b&gt;The drummer plays this clip&lt;/b&gt; to place hits yourself. Every drum can also play your own sound: on the drum track’s &lt;b&gt;Sound&lt;/b&gt; tab, click &lt;b&gt;Built-in&lt;/b&gt; under a drum and pick a sound from the Nachtzug library (rest the mouse on one to hear it), or import or record your own.&lt;/p&gt;&lt;p&gt;Rest the mouse on anything for a short explanation. Every key is on the &lt;b&gt;Keys and mouse&lt;/b&gt; tab.&lt;/p&gt;</source>
+        <translation>&lt;h3&gt;1 · Zuhören&lt;/h3&gt;&lt;p&gt;Die &lt;b&gt;Leertaste&lt;/b&gt; drücken (oder die ▶-Taste im Transportbereich oben). Der Song wiederholt den Abschnitt unter dem Balken &lt;b&gt;LOOP&lt;/b&gt; in der Zeitleiste. In der Loop-Zeile ziehen, um einen anderen Abschnitt zu markieren, oder &lt;b&gt;Loop&lt;/b&gt; ausschalten, um den ganzen Song zu spielen.&lt;/p&gt;&lt;h3&gt;2 · Eine Spur wählen und ihr Pattern ändern&lt;/h3&gt;&lt;p&gt;Die Zeitleiste hat eine Zeile pro Spur. Ein Klick auf einen Clip (einen farbigen Block) zeigt sein Pattern im Reiter &lt;b&gt;Noten&lt;/b&gt;.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;Neue Idee&lt;/b&gt; schreibt ein neues Pattern. &lt;b&gt;Variieren&lt;/b&gt; ändert ein, zwei Noten.&lt;/li&gt;&lt;li&gt;Ein Klick ins Raster setzt eine Note, Ziehen verlängert sie, Ziehen an einer Note verschiebt sie, &lt;b&gt;Rechtsklick auf eine Note löscht sie&lt;/b&gt;.&lt;/li&gt;&lt;li&gt;Während der Song läuft, warten neue Ideen, Stummschaltungen und Akkordwechsel auf den nächsten Takt, damit sie immer im Takt kommen.&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;3 · Den Klang formen&lt;/h3&gt;&lt;p&gt;Der Reiter &lt;b&gt;Sound&lt;/b&gt; enthält den Synthesizer der ausgewählten Spur, in der Reihenfolge, in der der Klang entsteht: Oszillatoren, Filter, Amp-Hüllkurve, Effekte. Man wählt ein Preset, drückt &lt;b&gt;Neu würfeln&lt;/b&gt; für einen frischen Klang oder dreht an den Reglern. Die kleinen Bilder zeigen, was die Regler tun; Ziehen im Filterbild fährt den Filter. &lt;b&gt;Ansicht → Einfache Sound-Seite&lt;/b&gt; schaltet zwischen wenigen großen Reglern in klaren Worten und jedem Regler des Synthesizers um. Ein Klang gefällt? &lt;b&gt;Klang speichern …&lt;/b&gt; behält ihn für jeden Song, und &lt;b&gt;Alle Klänge …&lt;/b&gt; unten in der Presetliste öffnet die eigene Klangbibliothek.&lt;/p&gt;&lt;p&gt;Damit sich ein Klang mit der Zeit ändert, auf einer Spur in der Zeitleiste &lt;b&gt;Kurven&lt;/b&gt; drücken, einen Regler wie Cutoff wählen und klicken, um eine Kurve zu zeichnen. Oder die Aufnahme einschalten (die ●-Taste) und einen Regler drehen, während der Song läuft.&lt;/p&gt;&lt;h3&gt;4 · Mitspielen&lt;/h3&gt;&lt;p&gt;Die Buchstabentasten spielen die ausgewählte Spur: Die Reihen &lt;b&gt;Y–-&lt;/b&gt;, &lt;b&gt;A–Ö&lt;/b&gt; und &lt;b&gt;Q–P&lt;/b&gt; sind drei Oktaven. Die Felder unter dem Notenraster zeigen, welche Taste welche Note spielt; sie lassen sich auch anklicken. Mit dem Schalter &lt;b&gt;Im Takt&lt;/b&gt; wird das Gespielte auf den Schlag gezogen. Mit eingeschalteter Aufnahme (die ●-Taste) wird es in den Clip geschrieben.&lt;/p&gt;&lt;h3&gt;5 · Den Song bauen&lt;/h3&gt;&lt;p&gt;In der Zeitleiste verschiebt Ziehen die Clips, und Ziehen an der rechten Kante eines Clips verlängert ihn. &lt;b&gt;Duplizieren&lt;/b&gt;, die Schere und &lt;b&gt;Löschen&lt;/b&gt; stehen über der Zeitleiste; Rechtsklick auf einen Clip bietet Ein- und Ausblenden und Filterfahrten. Ein Klick auf einen Takt in der Zeile &lt;b&gt;Akkorde&lt;/b&gt; ändert dort den Akkord. &lt;b&gt;+ Spur hinzufügen&lt;/b&gt; fügt eine Bassline, Sequenz, ein Pad, Lead oder Drums hinzu. Der Reiter &lt;b&gt;Mixer&lt;/b&gt; gleicht die Spuren aus.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Arrangieren&lt;/b&gt; über der Zeitleiste macht aus den Patterns einen ganzen Song: Intro, Build-up, Hauptteil, Break und Outro, jeder Teil benannt in der Zeile &lt;b&gt;Teile&lt;/b&gt; oben in der Zeitleiste. Ein Klick auf einen Teil wählt seine Clips aus (&lt;b&gt;Loop&lt;/b&gt; wiederholt dann genau diesen Teil), ein Doppelklick benennt ihn um, Ziehen an seiner linken Kante verschiebt ihn; ein Rechtsklick auf einen Teil loopt ihn oder spielt ab dort, ein Rechtsklick in die Zeile benennt selbst einen Teil. &lt;b&gt;Fortsetzen&lt;/b&gt; daneben lässt den Song so viele Minuten weiterlaufen wie gewünscht: eine lange Reise, die langsam aus den eigenen Patterns wächst, mit Teilen, die kommen und gehen, und Filtern, die sich über Minuten öffnen. Die Taste &lt;b&gt;Export&lt;/b&gt; oben rechts speichert das Ergebnis als Audiodatei.&lt;/p&gt;&lt;h3&gt;Ausprobieren&lt;/h3&gt;&lt;p&gt;Beim Ausprobieren geht nichts verloren: Die Taste &lt;b&gt;↶&lt;/b&gt; neben der Anzeige nimmt die letzte Änderung zurück, &lt;b&gt;↷&lt;/b&gt; stellt sie wieder her. Nach großen Änderungen, etwa einer neuen Idee oder einer gelöschten Spur, bietet ein Hinweis unten im Fenster ebenfalls &lt;b&gt;Rückgängig&lt;/b&gt; an.&lt;/p&gt;&lt;h3&gt;Loops: live mit Patterns spielen&lt;/h3&gt;&lt;p&gt;Den unteren Bereich von &lt;b&gt;Song&lt;/b&gt; auf &lt;b&gt;Loops&lt;/b&gt; umschalten. Jede Spur hat eine Reihe Zellen, und jede Zelle ist ein Pattern, das sich wiederholt. Ein Klick auf eine Zelle startet sie am nächsten Takt und ersetzt, was die Spur gerade spielt; ein weiterer Klick stoppt sie. Die zuletzt geklickte Zelle hat einen Ring und ist die, die der Reiter &lt;b&gt;Noten&lt;/b&gt; zeigt. Um die Noten einer laufenden Zelle zu ändern, ohne sie zu stoppen, wird sie mit Umschalt angeklickt. Ein Klick auf eine leere Zelle bringt eine neue Idee. Die nummerierten Knöpfe unten starten eine ganze Spalte auf einmal. Die Zeile &lt;b&gt;Akkorde&lt;/b&gt; über den Zellen zeigt die Akkorde, ein Kästchen pro Takt, in dieser Reihenfolge wiederholt; ein Klick auf ein Kästchen ändert es.&lt;/p&gt;&lt;p&gt;Wird dabei die &lt;b&gt;Aufnahme&lt;/b&gt; eingeschaltet, wird alles Gestartete in die Song-Zeitleiste geschrieben: Aus einer Jam wird ein Song. Zurück auf &lt;b&gt;Song&lt;/b&gt; schalten, um ihn zu sehen und zu bearbeiten.&lt;/p&gt;&lt;h3&gt;Drums&lt;/h3&gt;&lt;p&gt;Drum-Clips beginnen mit dem &lt;b&gt;Auto-Drummer&lt;/b&gt;: Es werden ein Stil und die Spielstärke gewählt, und er fügt von selbst Fills ein. Mit ausgeschaltetem &lt;b&gt;Der Drummer spielt diesen Clip&lt;/b&gt; werden die Schläge selbst gesetzt. Jeder Drumsound kann auch einen eigenen Sound spielen: Im Reiter &lt;b&gt;Sound&lt;/b&gt; der Drum-Spur unter einem Sound auf &lt;b&gt;Eingebaut&lt;/b&gt; klicken und einen Sound aus der Nachtzug-Bibliothek wählen (ruht die Maus darauf, ist er zu hören) oder einen eigenen importieren oder aufnehmen.&lt;/p&gt;&lt;p&gt;Ruht die Maus auf etwas, erscheint eine kurze Erklärung. Alle Tasten stehen im Reiter &lt;b&gt;Tasten und Maus&lt;/b&gt;.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;h3&gt;More to try&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;File → New from a starter song…&lt;/b&gt; holds a short, finished song for each style, to listen to and make your own; &lt;b&gt;File → Open recent&lt;/b&gt; has the songs you opened or saved lately.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Lessons&lt;/b&gt; (Help menu) walk you through a song step by step, in the real program.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Chance&lt;/b&gt;, &lt;b&gt;Repeat&lt;/b&gt; and &lt;b&gt;Keep&lt;/b&gt; in the Notes tab: notes that play only sometimes, quick drum rolls, and notes Vary leaves alone. Select notes first.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Chords mode&lt;/b&gt;: switch &lt;b&gt;Keys play&lt;/b&gt; above the on-screen keys to &lt;b&gt;Chords&lt;/b&gt; (Ctrl+J), and the letter keys move every track that follows the chords to a new chord while it plays. &lt;b&gt;Esc&lt;/b&gt; goes back.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Pump&lt;/b&gt; in the mixer makes a track duck on every kick. The &lt;b&gt;Input&lt;/b&gt; strip plays a guitar or a voice through a filter.&lt;/li&gt;&lt;li&gt;The &lt;b&gt;Equaliser&lt;/b&gt; at the end of the Sound tab, and &lt;b&gt;Low&lt;/b&gt;, &lt;b&gt;Mid&lt;/b&gt; and &lt;b&gt;High&lt;/b&gt; in the mixer, make a track darker, brighter or lighter in the low end. &lt;b&gt;Low cut&lt;/b&gt; on everything but the bass and the kick clears up a muddy mix. The Simple page has a big &lt;b&gt;Tone&lt;/b&gt; knob and a &lt;b&gt;Low cut&lt;/b&gt; switch for the same.&lt;/li&gt;&lt;li&gt;In the preset and kit lists, &lt;b&gt;rest the mouse&lt;/b&gt; on a sound to hear it. &lt;b&gt;Track → Chop a loop across the drums&lt;/b&gt; cuts a drum loop onto the pads.&lt;/li&gt;&lt;li&gt;A &lt;b&gt;MIDI keyboard&lt;/b&gt; plays along; right-click a knob and choose &lt;b&gt;Learn MIDI control&lt;/b&gt; to turn it from a controller. &lt;b&gt;Export&lt;/b&gt; also makes a file per track, or a MIDI file.&lt;/li&gt;&lt;/ul&gt;</source>
+        <translation>&lt;h3&gt;Mehr zum Ausprobieren&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;Datei → Neu aus einem Startersong…&lt;/b&gt; hält für jeden Stil einen kurzen, fertigen Song bereit, zum Anhören und Weitermachen; unter &lt;b&gt;Datei → Zuletzt geöffnet&lt;/b&gt; stehen die zuletzt geöffneten oder gespeicherten Songs.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Lektionen&lt;/b&gt; (Menü Hilfe) führen Schritt für Schritt durch einen Song, im echten Programm.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Häufigkeit&lt;/b&gt;, &lt;b&gt;Wiederholen&lt;/b&gt; und &lt;b&gt;Behalten&lt;/b&gt; im Reiter Noten: Noten, die nur manchmal spielen, schnelle Trommelwirbel und Noten, die Variieren in Ruhe lässt. Zuerst Noten auswählen.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Akkordmodus&lt;/b&gt;: &lt;b&gt;Tasten spielen&lt;/b&gt; über den Bildschirmtasten auf &lt;b&gt;Akkorde&lt;/b&gt; umstellen (Strg+J), und die Buchstabentasten schieben jede Spur, die den Akkorden folgt, zu einem neuen Akkord, während sie spielt. &lt;b&gt;Esc&lt;/b&gt; kehrt zurück.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Pumpen&lt;/b&gt; im Mixer lässt eine Spur bei jeder Kick wegducken. Der Kanalzug &lt;b&gt;Eingang&lt;/b&gt; spielt eine Gitarre oder eine Stimme durch ein Filter.&lt;/li&gt;&lt;li&gt;Der &lt;b&gt;Equalizer&lt;/b&gt; am Ende des Reiters Sound sowie &lt;b&gt;Tief&lt;/b&gt;, &lt;b&gt;Mitte&lt;/b&gt; und &lt;b&gt;Hoch&lt;/b&gt; im Mixer machen eine Spur dunkler, heller oder leichter in den Tiefen. &lt;b&gt;Low-Cut&lt;/b&gt; auf allem außer Bass und Bassdrum räumt einen matschigen Mix auf. Die Seite Einfach hat dafür einen großen Regler &lt;b&gt;Klangfarbe&lt;/b&gt; und den Schalter &lt;b&gt;Low-Cut&lt;/b&gt;.&lt;/li&gt;&lt;li&gt;In den Listen der Presets und Kits &lt;b&gt;die Maus ruhen lassen&lt;/b&gt;, um einen Klang zu hören. &lt;b&gt;Spur → Loop auf die Drums verteilen&lt;/b&gt; schneidet einen Drum-Loop auf die Pads.&lt;/li&gt;&lt;li&gt;Ein &lt;b&gt;MIDI-Keyboard&lt;/b&gt; spielt mit; Rechtsklick auf einen Regler und &lt;b&gt;MIDI-Steuerung lernen&lt;/b&gt;, um ihn von einem Controller aus zu drehen. &lt;b&gt;Export&lt;/b&gt; macht auch eine Datei pro Spur oder eine MIDI-Datei.&lt;/li&gt;&lt;/ul&gt;</translation>
     </message>
 </context>
 <context>
@@ -2782,6 +3022,30 @@ Er lässt sich in den Einstellungen auf der Seite Audio wählen.</translation>
     <message>
         <source>Volume</source>
         <translation>Lautstärke</translation>
+    </message>
+    <message>
+        <source>Low: more or less of this track’s deep end, its weight and warmth. Double-click for flat.</source>
+        <translation>Tief: mehr oder weniger vom tiefen Bereich dieser Spur, ihrem Gewicht und ihrer Wärme. Doppelklick für neutral.</translation>
+    </message>
+    <message>
+        <source>Mid: more or less of this track’s middle, where it sounds hollow or honking. Its pitch is on the Sound tab. Double-click for flat.</source>
+        <translation>Mitte: mehr oder weniger von der Mitte dieser Spur, wo sie hohl oder näselnd klingt. Ihre Tonhöhe wird im Sound-Reiter eingestellt. Doppelklick für neutral.</translation>
+    </message>
+    <message>
+        <source>High: more or less of this track’s top end, its air and sparkle. Double-click for flat.</source>
+        <translation>Hoch: mehr oder weniger vom hohen Bereich dieser Spur, ihrer Luft und ihrem Glanz. Doppelklick für neutral.</translation>
+    </message>
+    <message>
+        <source>the low end of %1</source>
+        <translation>die Tiefen von %1</translation>
+    </message>
+    <message>
+        <source>the middle of %1</source>
+        <translation>die Mitten von %1</translation>
+    </message>
+    <message>
+        <source>the high end of %1</source>
+        <translation>die Höhen von %1</translation>
     </message>
 </context>
 <context>
@@ -3127,10 +3391,6 @@ Er lässt sich in den Einstellungen auf der Seite Audio wählen.</translation>
         <translation>Typ</translation>
     </message>
     <message>
-        <source>Low-pass 24 dB|Low-pass 12 dB|Band-pass|High-pass</source>
-        <translation>Tiefpass 24 dB|Tiefpass 12 dB|Bandpass|Hochpass</translation>
-    </message>
-    <message>
         <source>Attack</source>
         <translation>Attack</translation>
     </message>
@@ -3279,10 +3539,6 @@ Er lässt sich in den Einstellungen auf der Seite Audio wählen.</translation>
         <translation>Wie viel lauter und heller betonte Noten sind.</translation>
     </message>
     <message>
-        <source>The filter type. Low-pass removes the highs; band-pass keeps a narrow middle band; high-pass removes the lows.</source>
-        <translation>Der Filtertyp. Tiefpass entfernt die Höhen; Bandpass lässt ein schmales Mittelband durch; Hochpass entfernt die Tiefen.</translation>
-    </message>
-    <message>
         <source>How quickly the filter opens when a note starts.</source>
         <translation>Wie schnell der Filter aufgeht, wenn eine Note beginnt.</translation>
     </message>
@@ -3321,10 +3577,6 @@ Er lässt sich in den Einstellungen auf der Seite Audio wählen.</translation>
     <message>
         <source>The shape of the LFO’s slow movement: smooth up and down, a jump between two values, or random steps.</source>
         <translation>Die Form der langsamen LFO-Bewegung: sanft auf und ab, ein Sprung zwischen zwei Werten, oder zufällige Stufen.</translation>
-    </message>
-    <message>
-        <source>How fast the LFO moves.</source>
-        <translation>Wie schnell sich der LFO bewegt.</translation>
     </message>
     <message>
         <source>How much the LFO moves the filter: slow sweeps or a wobble.</source>
@@ -3731,6 +3983,214 @@ Er lässt sich in den Einstellungen auf der Seite Audio wählen.</translation>
         <source>QWERTYUIOP</source>
         <translation>QWERTZUIOP</translation>
     </message>
+    <message>
+        <source>Drop</source>
+        <translation>Drop</translation>
+    </message>
+    <message>
+        <source>Drifting in</source>
+        <translation>Hineingleiten</translation>
+    </message>
+    <message>
+        <source>Rising</source>
+        <translation>Aufstieg</translation>
+    </message>
+    <message>
+        <source>Cruising</source>
+        <translation>Dahinziehen</translation>
+    </message>
+    <message>
+        <source>New ground</source>
+        <translation>Neues Terrain</translation>
+    </message>
+    <message>
+        <source>Breakdown</source>
+        <translation>Breakdown</translation>
+    </message>
+    <message>
+        <source>Acid</source>
+        <translation>Acid</translation>
+    </message>
+    <message>
+        <source>A squelchy bass line over busy acid house drums</source>
+        <translation>Quietschende Basslinie über treibenden Acid-House-Drums</translation>
+    </message>
+    <message>
+        <source>Berlin School</source>
+        <translation>Berliner Schule</translation>
+    </message>
+    <message>
+        <source>Rolling sequences, string chords and a slow tune</source>
+        <translation>Rollende Sequenzen, Streicherakkorde, langsame Melodie</translation>
+    </message>
+    <message>
+        <source>The steady krautrock beat, a driving bass and an arpeggio</source>
+        <translation>Krautrock-Beat, treibender Bass und ein Arpeggio</translation>
+    </message>
+    <message>
+        <source>Broken electro drums, a bouncing bass and bell chords</source>
+        <translation>Gebrochene Electro-Drums, hüpfender Bass, Glockenakkorde</translation>
+    </message>
+    <message>
+        <source>Slow and deep: a half-time beat, a drone and a plucked arpeggio</source>
+        <translation>Langsam und tief: Halftime-Beat, Drone, gezupftes Arpeggio</translation>
+    </message>
+    <message>
+        <source>Return</source>
+        <translation>Rückkehr</translation>
+    </message>
+    <message>
+        <source>Peak</source>
+        <translation>Höhepunkt</translation>
+    </message>
+    <message>
+        <source>Fading out</source>
+        <translation>Ausklang</translation>
+    </message>
+    <message>
+        <source>Breather</source>
+        <translation>Atempause</translation>
+    </message>
+    <message>
+        <source>Afterglow</source>
+        <translation>Nachglühen</translation>
+    </message>
+    <message>
+        <source>1/8 triplet</source>
+        <translation>1/8-Triole</translation>
+    </message>
+    <message>
+        <source>1/4 triplet</source>
+        <translation>1/4-Triole</translation>
+    </message>
+    <message>
+        <source>1/2</source>
+        <translation>1/2</translation>
+    </message>
+    <message>
+        <source>1/32</source>
+        <translation>1/32</translation>
+    </message>
+    <message>
+        <source>LFO timing</source>
+        <translation>LFO-Takt</translation>
+    </message>
+    <message>
+        <source>Free|In time</source>
+        <translation>Frei|Im Takt</translation>
+    </message>
+    <message>
+        <source>LFO to volume</source>
+        <translation>LFO → Lautstärke</translation>
+    </message>
+    <message>
+        <source>LFO to pan</source>
+        <translation>LFO → Panorama</translation>
+    </message>
+    <message>
+        <source>LFO fade-in</source>
+        <translation>LFO-Einsatz</translation>
+    </message>
+    <message>
+        <source>open</source>
+        <translation>offen</translation>
+    </message>
+    <message>
+        <source>How fast the LFO moves. In time, how long one sweep lasts, as a note value.</source>
+        <translation>Wie schnell sich der LFO bewegt. Im Takt: wie lange eine Bewegung dauert, als Notenwert.</translation>
+    </message>
+    <message>
+        <source>Free: the LFO moves at its own speed. In time: it follows the song’s tempo, and the rate knob picks a note value, from eight bars to a thirty-second note.</source>
+        <translation>Frei: Der LFO bewegt sich in eigenem Tempo. Im Takt: Er folgt dem Tempo des Songs, und der Rate-Regler wählt einen Notenwert, von acht Takten bis zur Zweiunddreißigstel.</translation>
+    </message>
+    <message>
+        <source>How much the LFO moves the volume: a gentle throb, or a chopped, stuttering sound with the square shape.</source>
+        <translation>Wie stark der LFO die Lautstärke bewegt: ein sanftes Pulsieren oder, mit der Rechteck-Form, ein zerhackter, stotternder Klang.</translation>
+    </message>
+    <message>
+        <source>How much the LFO moves the sound between the left and the right speaker.</source>
+        <translation>Wie stark der LFO den Klang zwischen linkem und rechtem Lautsprecher bewegt.</translation>
+    </message>
+    <message>
+        <source>How slowly the LFO fades in after a note starts, so a held note begins still and then starts to sway: a delayed vibrato.</source>
+        <translation>Wie langsam der LFO nach dem Anschlag einer Note einsetzt: Eine gehaltene Note beginnt ruhig und gerät dann ins Schwingen – ein verzögertes Vibrato.</translation>
+    </message>
+    <message>
+        <source>Low-pass 24 dB|Low-pass 12 dB|Band-pass|High-pass|Notch</source>
+        <translation>Tiefpass 24 dB|Tiefpass 12 dB|Bandpass|Hochpass|Kerbfilter</translation>
+    </message>
+    <message>
+        <source>Low cut</source>
+        <translation>Low-Cut</translation>
+    </message>
+    <message>
+        <source>Mid</source>
+        <translation>Mitte</translation>
+    </message>
+    <message>
+        <source>Mid pitch</source>
+        <translation>Mittenhöhe</translation>
+    </message>
+    <message>
+        <source>As amp</source>
+        <translation>wie Amp</translation>
+    </message>
+    <message>
+        <source>The filter type. Low-pass removes the highs; band-pass keeps a narrow middle band; high-pass removes the lows; notch takes out a narrow band and keeps the rest.</source>
+        <translation>Der Filtertyp. Tiefpass entfernt die Höhen; Bandpass lässt ein schmales Mittelband durch; Hochpass entfernt die Tiefen; der Kerbfilter nimmt ein schmales Band heraus und lässt den Rest durch.</translation>
+    </message>
+    <message>
+        <source>How quickly the filter closes after a note ends. All the way down, it follows the amp envelope’s release, as it always did.</source>
+        <translation>Wie schnell sich der Filter nach dem Ende einer Note schließt. Ganz nach links gedreht folgt er dem Release der Amp-Hüllkurve, wie bisher.</translation>
+    </message>
+    <message>
+        <source>Takes away the deepest notes and rumble below this pitch, so the track leaves room for the bass and the kick. Off all the way down.</source>
+        <translation>Nimmt die tiefsten Töne und das Rumpeln unterhalb dieser Tonhöhe weg, damit die Spur Platz für Bass und Kick lässt. Ganz nach links gedreht aus.</translation>
+    </message>
+    <message>
+        <source>More or less of the low end: weight and warmth. Flat in the middle.</source>
+        <translation>Mehr oder weniger Tiefen: Gewicht und Wärme. In der Mitte neutral.</translation>
+    </message>
+    <message>
+        <source>More or less of the middle, where a sound is hollow or honking. Flat in the middle; Mid pitch says where.</source>
+        <translation>Mehr oder weniger Mitten, wo ein Klang hohl oder näselnd wirkt. In der Mitte neutral; „Mittenhöhe“ legt fest, wo.</translation>
+    </message>
+    <message>
+        <source>Where the Mid knob lifts or lowers: low for body, high for bite.</source>
+        <translation>Wo der Mitte-Regler anhebt oder absenkt: tief für Fülle, hoch für Biss.</translation>
+    </message>
+    <message>
+        <source>More or less of the top end: air and sparkle, or a softer, darker sound. Flat in the middle.</source>
+        <translation>Mehr oder weniger Höhen: Luft und Glanz, oder ein weicherer, dunklerer Klang. In der Mitte neutral.</translation>
+    </message>
+    <message>
+        <source>Filter release</source>
+        <translation>Filter-Release</translation>
+    </message>
+    <message>
+        <source>EQ low cut</source>
+        <translation>EQ Low-Cut</translation>
+    </message>
+    <message>
+        <source>EQ low</source>
+        <translation>EQ tief</translation>
+    </message>
+    <message>
+        <source>EQ mid</source>
+        <translation>EQ Mitte</translation>
+    </message>
+    <message>
+        <source>EQ mid pitch</source>
+        <translation>EQ Mittenhöhe</translation>
+    </message>
+    <message>
+        <source>EQ high</source>
+        <translation>EQ hoch</translation>
+    </message>
+    <message>
+        <source>%1&#x202f;cents</source>
+        <translation>%1&#x202f;Cent</translation>
+    </message>
 </context>
 <context>
     <name>NoteEditor</name>
@@ -4023,12 +4483,12 @@ Die getönten Zeilen sind die Töne des Akkords: Sie passen immer.</translation>
         <translation>Das war fast still. Ist der richtige Eingang gewählt und in den Audio-Einstellungen des Systems aufgedreht?</translation>
     </message>
     <message>
-        <source>Recorded %1 s. It was so loud it clipped; turn the input down for a cleaner take.</source>
-        <translation>%1 s aufgenommen. Es war so laut, dass es übersteuert hat; für eine saubere Aufnahme den Eingang etwas herunterdrehen.</translation>
+        <source>Recorded %1&#x202f;s. It was so loud it clipped; turn the input down for a cleaner take.</source>
+        <translation>%1&#x202f;s aufgenommen. Es war so laut, dass es übersteuert hat; für eine saubere Aufnahme den Eingang etwas herunterdrehen.</translation>
     </message>
     <message>
-        <source>Recorded %1 s. Save it, or record again.</source>
-        <translation>%1 s aufgenommen. Speichern oder neu aufnehmen.</translation>
+        <source>Recorded %1&#x202f;s. Save it, or record again.</source>
+        <translation>%1&#x202f;s aufgenommen. Speichern oder neu aufnehmen.</translation>
     </message>
 </context>
 <context>
@@ -4217,16 +4677,12 @@ Die getönten Zeilen sind die Töne des Akkords: Sie passen immer.</translation>
         <translation>Scrollbalken neben den Noten, der Zeitleiste, den Loops und den Bereichen. Ohne sie scrollt man mit dem Mausrad oder dem Trackpad; Umschalt + Mausrad scrollt zur Seite.</translation>
     </message>
     <message>
-        <source>Nachtzug’s own cursors (a pencil in the note grid, scissors, a knob’s arrows)</source>
-        <translation>Nachtzugs eigene Mauszeiger (ein Stift im Notenraster, eine Schere, die Pfeile eines Reglers)</translation>
-    </message>
-    <message>
         <source>Where the cursor can show what a click will do, Nachtzug draws its own. Switched off, the cursors are the system’s everywhere.</source>
         <translation>Wo der Mauszeiger zeigen kann, was ein Klick bewirkt, zeichnet Nachtzug einen eigenen. Ausgeschaltet sind es überall die Mauszeiger des Systems.</translation>
     </message>
     <message>
-        <source>Show the welcome window next time</source>
-        <translation>Begrüßungsfenster beim nächsten Start zeigen</translation>
+        <source>Show the first-time welcome again</source>
+        <translation>Die Begrüßung vom ersten Start noch einmal zeigen</translation>
     </message>
     <message>
         <source>The window that asks how you would like to start, shown the first time Nachtzug opens</source>
@@ -4249,8 +4705,8 @@ Die getönten Zeilen sind die Töne des Akkords: Sie passen immer.</translation>
         <translation>Lautsprecher oder Kopfhörer, aus denen der Sound kommt.</translation>
     </message>
     <message>
-        <source>How many samples per second. 48 kHz suits almost everything; the sound card may pick its own.</source>
-        <translation>Wie viele Samples pro Sekunde. 48 kHz passt fast immer; die Soundkarte kann auch ihre eigene Rate wählen.</translation>
+        <source>How many samples per second. 48&#x202f;kHz suits almost everything; the sound card may pick its own.</source>
+        <translation>Wie viele Samples pro Sekunde. 48&#x202f;kHz passt fast immer; die Soundkarte kann auch ihre eigene Rate wählen.</translation>
     </message>
     <message>
         <source>How much sound is prepared ahead. Smaller reacts faster to the keys; larger is safer against crackles.</source>
@@ -4309,12 +4765,12 @@ Die getönten Zeilen sind die Töne des Akkords: Sie passen immer.</translation>
         <translation>%1 (nicht gefunden)</translation>
     </message>
     <message>
-        <source>%1 samples (%2 ms)</source>
-        <translation>%1 Samples (%2 ms)</translation>
+        <source>%1 samples (%2&#x202f;ms)</source>
+        <translation>%1 Samples (%2&#x202f;ms)</translation>
     </message>
     <message>
-        <source>Playing through %1 at %2 Hz, %3 samples ahead (%4 ms).</source>
-        <translation>Wiedergabe über %1 mit %2 Hz, %3 Samples voraus (%4 ms)</translation>
+        <source>Playing through %1 at %2&#x202f;Hz, %3 samples ahead (%4&#x202f;ms).</source>
+        <translation>Wiedergabe über %1 mit %2&#x202f;Hz, %3 Samples voraus (%4&#x202f;ms)</translation>
     </message>
     <message>
         <source>No sound: %1</source>
@@ -4376,6 +4832,10 @@ Nachtzug wechselt zurück zum Standardausgang.</translation>
     <message>
         <source>%1%</source>
         <translation>%1 %</translation>
+    </message>
+    <message>
+        <source>Nachtzug’s own cursors (a knob over knobs, a pencil in the note grid, scissors …)</source>
+        <translation>Nachtzugs eigene Mauszeiger (ein Drehknopf über Reglern, ein Stift im Notenraster, eine Schere …)</translation>
     </message>
     <message>
         <source>The microphone or line input: for recording your own samples, and for playing live through the Input strip of the mixer</source>
@@ -4569,6 +5029,14 @@ Nachtzug wechselt zurück zum Standardausgang.</translation>
         <source>No samples yet. Import a sound file or record one.</source>
         <translation>Noch keine Samples. Audiodatei importieren oder aufnehmen.</translation>
     </message>
+    <message>
+        <source>When Nachtzug opens, show the starter songs and recent songs</source>
+        <translation>Beim Öffnen die Startersongs und die zuletzt geöffneten Songs zeigen</translation>
+    </message>
+    <message>
+        <source>The window with a starter song for each style and your recent songs. File → New from a starter song… opens it any time.</source>
+        <translation>Das Fenster mit einem Startersong für jeden Stil und den zuletzt geöffneten Songs. Datei → Neu aus einem Startersong… öffnet es jederzeit.</translation>
+    </message>
 </context>
 <context>
     <name>SoundLibrary</name>
@@ -4590,7 +5058,7 @@ Nachtzug wechselt zurück zum Standardausgang.</translation>
     </message>
     <message>
         <source>Bring in a file…</source>
-        <translation>Datei hereinholen …</translation>
+        <translation>Datei hereinholen…</translation>
     </message>
     <message>
         <source>A sound someone shared with you (a .nzsound file); files can also be dropped on this window</source>
@@ -4606,11 +5074,11 @@ Nachtzug wechselt zurück zum Standardausgang.</translation>
     </message>
     <message>
         <source>Rename…</source>
-        <translation>Umbenennen …</translation>
+        <translation>Umbenennen…</translation>
     </message>
     <message>
         <source>Share as a file…</source>
-        <translation>Als Datei weitergeben …</translation>
+        <translation>Als Datei weitergeben…</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -4650,7 +5118,7 @@ Nachtzug wechselt zurück zum Standardausgang.</translation>
     </message>
     <message>
         <source>No sounds of your own here yet. “Save sound…” on the Sound tab keeps one.</source>
-        <translation>Hier gibt es noch keine eigenen Klänge. „Klang speichern …“ im Reiter Sound behält einen.</translation>
+        <translation>Hier gibt es noch keine eigenen Klänge. „Klang speichern…“ im Reiter Sound behält einen.</translation>
     </message>
     <message>
         <source>Nothing found.</source>
@@ -4662,7 +5130,7 @@ Nachtzug wechselt zurück zum Standardausgang.</translation>
     </message>
     <message>
         <source>Ready-made sounds can be used and shared; save a changed one with “Save sound…” to keep it as your own.</source>
-        <translation>Fertige Klänge lassen sich verwenden und weitergeben; einen veränderten mit „Klang speichern …“ als eigenen behalten.</translation>
+        <translation>Fertige Klänge lassen sich verwenden und weitergeben; einen veränderten mit „Klang speichern…“ als eigenen behalten.</translation>
     </message>
     <message>
         <source>★ Starred</source>
@@ -4680,18 +5148,14 @@ Nachtzug wechselt zurück zum Standardausgang.</translation>
 <context>
     <name>SoundPanel</name>
     <message>
-        <source>Which pitches the filter lets through, from 20 Hz on the left to 20 kHz on the right.
+        <source>Which pitches the filter lets through, from 20&#x202f;Hz on the left to 20&#x202f;kHz on the right.
 Drag here: left and right move the cutoff, up and down the resonance.</source>
-        <translation>Welche Tonhöhen der Filter durchlässt, von 20 Hz links bis 20 kHz rechts.
+        <translation>Welche Tonhöhen der Filter durchlässt, von 20&#x202f;Hz links bis 20&#x202f;kHz rechts.
 Hier ziehen: Links und rechts verschieben den Cutoff, oben und unten die Resonanz.</translation>
     </message>
     <message>
         <source>The waveform the oscillators make together</source>
         <translation>Die Wellenform, die die Oszillatoren zusammen erzeugen</translation>
-    </message>
-    <message>
-        <source>The LFO: a slow, repeating movement you can send to the filter, the pitch or the pulse width</source>
-        <translation>Der LFO: eine langsame, wiederkehrende Bewegung, die sich auf den Filter, die Tonhöhe oder die Pulsbreite schicken lässt</translation>
     </message>
     <message>
         <source>The envelope: how the sound rises when a note starts (A), falls to its held level (D, S), and fades when the note ends (R).
@@ -4826,7 +5290,7 @@ Nach oben oder unten ziehen, Umschalt für kleine Schritte, Doppelklick setzt zu
     </message>
     <message>
         <source>Save sound…</source>
-        <translation>Klang speichern …</translation>
+        <translation>Klang speichern…</translation>
     </message>
     <message>
         <source>Keep this sound under a name as one of your own, for every song</source>
@@ -4943,7 +5407,7 @@ Nach oben oder unten ziehen, Umschalt für kleine Schritte, Doppelklick setzt zu
     </message>
     <message>
         <source>All sounds…</source>
-        <translation>Alle Klänge …</translation>
+        <translation>Alle Klänge…</translation>
     </message>
     <message>
         <source>Save sound</source>
@@ -5238,10 +5702,6 @@ Nach oben oder unten ziehen, Umschalt für kleine Schritte, Doppelklick setzt zu
         <translation>Echozeit</translation>
     </message>
     <message>
-        <source>Echo time, locked to the tempo</source>
-        <translation>Echozeit, an das Tempo gekoppelt</translation>
-    </message>
-    <message>
         <source>Echo repeats</source>
         <translation>Feedback</translation>
     </message>
@@ -5264,6 +5724,201 @@ Nach oben oder unten ziehen, Umschalt für kleine Schritte, Doppelklick setzt zu
     <message>
         <source>How dark the reverb is: high damping takes the brightness out of the echoes of the room</source>
         <translation>Wie dunkel der Hall ist: Starke Dämpfung nimmt den Echos des Raums die Helligkeit</translation>
+    </message>
+    <message>
+        <source>The LFO: a slow, repeating movement you can send to the filter, the pitch, the pulse width, the volume or the pan</source>
+        <translation>Der LFO: eine langsame, sich wiederholende Bewegung für Filter, Tonhöhe, Pulsbreite, Lautstärke oder Panorama</translation>
+    </message>
+    <message>
+        <source>Timing</source>
+        <translation>Takt</translation>
+    </message>
+    <message>
+        <source>the echo repeats</source>
+        <translation>das Feedback</translation>
+    </message>
+    <message>
+        <source>How far apart the echo’s repeats are, as a note value, so they stay in time with the song, also when the tempo changes. Shared by every track.</source>
+        <translation>Wie weit die Wiederholungen des Echos auseinanderliegen, als Notenwert – so bleiben sie im Takt des Songs, auch wenn sich das Tempo ändert. Gilt für alle Spuren.</translation>
+    </message>
+    <message>
+        <source>Echo tone</source>
+        <translation>Echo-Klang</translation>
+    </message>
+    <message>
+        <source>How dark the echo’s repeats are: to the left each repeat sounds darker and further away than the one before, as on an old tape echo; to the right they stay bright.</source>
+        <translation>Wie dunkel die Wiederholungen des Echos sind: nach links klingt jede Wiederholung dunkler und ferner als die vorige, wie bei einem alten Bandecho; nach rechts bleiben sie hell.</translation>
+    </message>
+    <message>
+        <source>the echo tone</source>
+        <translation>den Echo-Klang</translation>
+    </message>
+    <message>
+        <source>Ping-pong</source>
+        <translation>Ping-Pong</translation>
+    </message>
+    <message>
+        <source>On: the echo’s repeats bounce between the left and the right speaker. Off: they all come from the middle.</source>
+        <translation>An: Die Wiederholungen des Echos springen zwischen linkem und rechtem Lautsprecher hin und her. Aus: Alle kommen aus der Mitte.</translation>
+    </message>
+    <message>
+        <source>Equaliser</source>
+        <translation>Equalizer</translation>
+    </message>
+    <message>
+        <source>5 · Equaliser</source>
+        <translation>5 · Equalizer</translation>
+    </message>
+    <message>
+        <source>Tone</source>
+        <translation>Klangfarbe</translation>
+    </message>
+    <message>
+        <source>Neutral</source>
+        <translation>Neutral</translation>
+    </message>
+    <message>
+        <source>Darker %1%</source>
+        <translation>Dunkler %1&#x202f;%</translation>
+    </message>
+    <message>
+        <source>Brighter %1%</source>
+        <translation>Heller %1&#x202f;%</translation>
+    </message>
+    <message>
+        <source>Darker or brighter: turns the deep and the high end against each other, like the tone knob on a radio. In the middle the sound is as it is.</source>
+        <translation>Dunkler oder heller: dreht Tiefen und Höhen gegeneinander, wie der Klangregler an einem Radio. In der Mitte bleibt der Klang, wie er ist.</translation>
+    </message>
+    <message>
+        <source>darker</source>
+        <translation>dunkler</translation>
+    </message>
+    <message>
+        <source>brighter</source>
+        <translation>heller</translation>
+    </message>
+    <message>
+        <source>Low cut</source>
+        <translation>Low-Cut</translation>
+    </message>
+    <message>
+        <source>Takes away the deepest rumble below about 100 Hz, so this track leaves room for the bass and the kick drum. Best left off on the bass itself.</source>
+        <translation>Nimmt das tiefste Rumpeln unter etwa 100 Hz weg, damit diese Spur Platz für Bass und Bassdrum lässt. Beim Bass selbst besser aus lassen.</translation>
+    </message>
+</context>
+<context>
+    <name>StartWindow</name>
+    <message>
+        <source>Start</source>
+        <translation>Start</translation>
+    </message>
+    <message>
+        <source>What would you like to play?</source>
+        <translation>Was soll gespielt werden?</translation>
+    </message>
+    <message>
+        <source>Start from one of these songs and make it your own, or carry on with one of yours.</source>
+        <translation>Mit einem dieser Songs beginnen und ihn zum eigenen machen – oder an einem eigenen weiterarbeiten.</translation>
+    </message>
+    <message>
+        <source>Starter songs</source>
+        <translation>Startersongs</translation>
+    </message>
+    <message>
+        <source>Short songs made with Nachtzug, one for each style. One opens as a new song of your own: the starter itself stays as it is.</source>
+        <translation>Kurze, mit Nachtzug gemachte Songs, einer für jeden Stil. Er öffnet sich als neuer, eigener Song: Der Startersong selbst bleibt, wie er ist.</translation>
+    </message>
+    <message>
+        <source>Open “%1” as a new song</source>
+        <translation>„%1“ als neuen Song öffnen</translation>
+    </message>
+    <message>
+        <source>Listen: a few bars from the middle of “%1”; nothing is opened</source>
+        <translation>Anhören: ein paar Takte aus der Mitte von „%1“; nichts wird geöffnet</translation>
+    </message>
+    <message>
+        <source>Listen</source>
+        <translation>Anhören</translation>
+    </message>
+    <message>
+        <source>%1 BPM · %2 %3</source>
+        <translation>%1 BPM · %2 %3</translation>
+    </message>
+    <message>
+        <source>Missing</source>
+        <translation>Fehlt</translation>
+    </message>
+    <message>
+        <source>Your songs</source>
+        <translation>Eigene Songs</translation>
+    </message>
+    <message>
+        <source>The songs you opened or saved lately, newest first</source>
+        <translation>Die zuletzt geöffneten oder gespeicherten Songs, der neueste zuerst</translation>
+    </message>
+    <message>
+        <source>Open “%1” from %2</source>
+        <translation>„%1“ aus %2 öffnen</translation>
+    </message>
+    <message>
+        <source>“%1” is no longer in %2</source>
+        <translation>„%1“ ist nicht mehr in %2</translation>
+    </message>
+    <message>
+        <source>Not found in %1</source>
+        <translation>Nicht gefunden in %1</translation>
+    </message>
+    <message>
+        <source>The songs you open or save will be listed here.</source>
+        <translation>Hier erscheinen die Songs, die geöffnet oder gespeichert werden.</translation>
+    </message>
+    <message>
+        <source>Open…</source>
+        <translation>Öffnen…</translation>
+    </message>
+    <message>
+        <source>Choose a song file (.nachtzug) to open</source>
+        <translation>Eine Song-Datei (.nachtzug) zum Öffnen wählen</translation>
+    </message>
+    <message>
+        <source>Click a song to open it, or ▶ to listen first.</source>
+        <translation>Einen Song anklicken, um ihn zu öffnen, oder ▶, um ihn erst anzuhören.</translation>
+    </message>
+    <message>
+        <source>Show this window when Nachtzug starts</source>
+        <translation>Dieses Fenster beim Start von Nachtzug zeigen</translation>
+    </message>
+    <message>
+        <source>Empty song</source>
+        <translation>Leerer Song</translation>
+    </message>
+    <message>
+        <source>A new song with nothing in it yet</source>
+        <translation>Ein neuer Song, in dem noch nichts ist</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Schließen</translation>
+    </message>
+    <message>
+        <source>Carry on with the song that is open</source>
+        <translation>Mit dem geöffneten Song weitermachen</translation>
+    </message>
+    <message>
+        <source>Listening to “%1”. Click it to open it.</source>
+        <translation>„%1“ ist zu hören. Ein Klick darauf öffnet ihn.</translation>
+    </message>
+    <message>
+        <source>Getting “%1” ready to listen to…</source>
+        <translation>„%1“ wird zum Anhören vorbereitet…</translation>
+    </message>
+    <message>
+        <source>Also in Settings → General. File → New from a starter song… opens it any time.</source>
+        <translation>Auch in Einstellungen → Allgemein. Datei → Neu aus einem Startersong… öffnet es jederzeit.</translation>
+    </message>
+    <message>
+        <source>No sound output is open, so nothing can be heard. Settings → Audio picks one.</source>
+        <translation>Keine Tonausgabe geöffnet, daher ist nichts zu hören. Unter Einstellungen → Audio lässt sich eine wählen.</translation>
     </message>
 </context>
 <context>
@@ -5592,6 +6247,86 @@ oder Datei → Neuer Song mit frischen Ideen wählen für einen Song, in dem all
         <source> copy</source>
         <translation> Kopie</translation>
     </message>
+    <message>
+        <source>No parts named yet: right-click here to name one, such as “Intro” or “Break”</source>
+        <translation>Noch keine Teile benannt: Rechtsklick hier, um einen zu benennen, etwa „Intro“ oder „Break“</translation>
+    </message>
+    <message>
+        <source>PARTS</source>
+        <translation>TEILE</translation>
+    </message>
+    <message>
+        <source>The song’s parts: Intro, Build-up, Break… Click a part to select it, double-click to rename it, right-click for more.</source>
+        <translation>Die Teile des Songs: Intro, Build-up, Break … Klick auf einen Teil wählt ihn aus, Doppelklick benennt ihn um, Rechtsklick bietet mehr.</translation>
+    </message>
+    <message>
+        <source>Drag to move where “%1” begins.</source>
+        <translation>Ziehen, um den Anfang von „%1“ zu verschieben.</translation>
+    </message>
+    <message>
+        <source>Right-click or double-click to name a part of the song from this bar on, for example “Intro” or “Break”. Arrange for me names its parts by itself.</source>
+        <translation>Rechtsklick oder Doppelklick, um ab diesem Takt einen Teil des Songs zu benennen, etwa „Intro“ oder „Break“. „Arrangieren“ benennt seine Teile von selbst.</translation>
+    </message>
+    <message>
+        <source>%1, bars %2 to %3. Click to select its clips (Loop then repeats just this part) and move the playhead there; while the song plays, it jumps there at the next bar. Double-click to rename it, drag its left edge to move it, right-click for more.</source>
+        <translation>%1, Takt %2 bis %3. Ein Klick wählt seine Clips aus (Loop wiederholt dann genau diesen Teil) und setzt die Abspielposition dorthin; läuft der Song, springt er am nächsten Takt dorthin. Doppelklick benennt ihn um, Ziehen an der linken Kante verschiebt ihn, Rechtsklick bietet mehr.</translation>
+    </message>
+    <message>
+        <source>Move a part</source>
+        <translation>Teil verschieben</translation>
+    </message>
+    <message>
+        <source>%1 begins in bar %2</source>
+        <translation>%1 beginnt in Takt %2</translation>
+    </message>
+    <message>
+        <source>Name of the part: choose one or type your own</source>
+        <translation>Name des Teils: einen wählen oder einen eigenen eingeben</translation>
+    </message>
+    <message>
+        <source>Rename part</source>
+        <translation>Teil umbenennen</translation>
+    </message>
+    <message>
+        <source>Rename a part</source>
+        <translation>Teil umbenennen</translation>
+    </message>
+    <message>
+        <source>New part from bar %1</source>
+        <translation>Neuer Teil ab Takt %1</translation>
+    </message>
+    <message>
+        <source>Add a part</source>
+        <translation>Teil hinzufügen</translation>
+    </message>
+    <message>
+        <source>Play from the start of this part</source>
+        <translation>Ab dem Anfang dieses Teils spielen</translation>
+    </message>
+    <message>
+        <source>New part from bar %1…</source>
+        <translation>Neuer Teil ab Takt %1…</translation>
+    </message>
+    <message>
+        <source>Delete this part</source>
+        <translation>Diesen Teil löschen</translation>
+    </message>
+    <message>
+        <source>Takes away the name only: the bars and their clips stay as they are</source>
+        <translation>Entfernt nur den Namen: Die Takte und ihre Clips bleiben, wie sie sind</translation>
+    </message>
+    <message>
+        <source>Delete a part</source>
+        <translation>Teil löschen</translation>
+    </message>
+    <message>
+        <source>Repeat this part</source>
+        <translation>Diesen Teil wiederholen</translation>
+    </message>
+    <message>
+        <source>Puts a copy of this part right after it; everything after it moves along</source>
+        <translation>Setzt eine Kopie dieses Teils direkt dahinter; alles danach rückt weiter</translation>
+    </message>
 </context>
 <context>
     <name>VuMeter</name>
@@ -5612,7 +6347,7 @@ oder Datei → Neuer Song mit frischen Ideen wählen für einen Song, in dem all
     </message>
     <message>
         <source>Nachtzug is a music program made for beginners. It lets you create electronic music, in the style of the Berlin School for example, without much prior knowledge. You don’t need to know any music theory either: Nachtzug is built so that every note automatically lands in the right scale.</source>
-        <translation>Nachtzug ist ein für Anfänger gedachtes Musikprogramm, das es ermöglicht, elektronische Musik, z. B. im Stil der Berliner Schule, ohne große Vorkenntnisse zu erstellen. Auch ist es nicht nötig, sich mit Musiktheorie auszukennen. Denn: Nachtzug ist so aufgebaut, dass alle Noten automatisch in der korrekten Tonleiter landen.</translation>
+        <translation>Nachtzug ist ein für Anfänger gedachtes Musikprogramm, das es ermöglicht, elektronische Musik, z.&#x202f;B. im Stil der Berliner Schule, ohne große Vorkenntnisse zu erstellen. Auch ist es nicht nötig, sich mit Musiktheorie auszukennen. Denn: Nachtzug ist so aufgebaut, dass alle Noten automatisch in der korrekten Tonleiter landen.</translation>
     </message>
     <message>
         <source>Language</source>
@@ -5691,8 +6426,8 @@ oder Datei → Neuer Song mit frischen Ideen wählen für einen Song, in dem all
         <translation>Nachtzugs eigene</translation>
     </message>
     <message>
-        <source>Where the cursor can show what a click will do, Nachtzug draws its own: a pencil in the note grid, scissors, a knob’s arrows</source>
-        <translation>Wo der Mauszeiger zeigen kann, was ein Klick bewirkt, zeichnet Nachtzug einen eigenen: einen Stift im Notenraster, eine Schere, die Pfeile eines Reglers</translation>
+        <source>Where the cursor can show what a click will do, Nachtzug draws its own: a knob over knobs, a pencil in the note grid, scissors …</source>
+        <translation>Wo der Mauszeiger zeigen kann, was ein Klick bewirkt, zeichnet Nachtzug einen eigenen: einen Drehknopf über Reglern, einen Stift im Notenraster, eine Schere …</translation>
     </message>
     <message>
         <source>The system’s</source>
@@ -6271,7 +7006,7 @@ oder Datei → Neuer Song mit frischen Ideen wählen für einen Song, in dem all
     </message>
     <message>
         <source>This kind of sound file is not supported (%1 channels, %2-bit). Save it as a 16- or 24-bit WAV file and try again.</source>
-        <translation>Diese Art Audiodatei wird nicht unterstützt (%1 Kanäle, %2 Bit). Als WAV-Datei mit 16 oder 24 Bit speichern und es noch einmal versuchen.</translation>
+        <translation>Diese Art Audiodatei wird nicht unterstützt (%1 Kanäle, %2&#x202f;Bit). Als WAV-Datei mit 16 oder 24&#x202f;Bit speichern und es noch einmal versuchen.</translation>
     </message>
     <message>
         <source>The sound file is empty.</source>

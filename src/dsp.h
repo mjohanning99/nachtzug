@@ -86,7 +86,7 @@ struct Osc {
 };
 
 // Four-pole zero-delay-feedback ladder with a saturating feedback path.
-// mode: 0 low-pass 24 dB, 1 low-pass 12 dB, 2 band-pass, 3 high-pass (made by mixing the stage outputs).
+// mode: 0 low-pass 24 dB, 1 low-pass 12 dB, 2 band-pass, 3 high-pass, 4 notch (made by mixing the stage outputs).
 struct Ladder {
 	float s[4] = {0, 0, 0, 0};
 	inline float process(float x, float g, float k, int mode) {
@@ -107,6 +107,8 @@ struct Ladder {
 			return 2.f * (y[0] - y[1]);
 		case 3:
 			return u0 - 2.f * y[0] + y[1];
+		case 4: // the 12 dB high-pass and low-pass added: (s² + 1) / (s + 1)², nothing left right at the cutoff
+			return u0 - 2.f * y[0] + 2.f * y[1];
 		default:
 			return y[3];
 		}
@@ -175,6 +177,7 @@ struct DelayLine {
 		b.assign(size_t(std::max(n, 4)), 0.f);
 		w = 0;
 	}
+	void clear() { std::fill(b.begin(), b.end(), 0.f); } // no allocation: safe on the audio thread
 	inline void write(float x) {
 		b[size_t(w)] = x;
 		if (++w >= int(b.size())) w = 0;
@@ -198,6 +201,163 @@ struct DelayLine {
 			i += n;
 		return b[size_t(i)];
 	}
+};
+
+// ---------------------------------------------------------------- equaliser
+
+// A track's equaliser, on every synthesiser and drum kit: a low cut (12 dB an octave), a low shelf, a bell in the
+// middle that can be moved, and a high shelf, each up to 12 dB either way. Its five settings are 0..1 like every knob,
+// in this order: low cut (0 off), low, mid, the mid's pitch, high (0.5 flat).
+constexpr float EQ_LOW_HZ = 150.f, EQ_HIGH_HZ = 5000.f, EQ_MID_Q = 0.9f;
+inline float eqDb(float v) {
+	return (v - 0.5f) * 24.f;
+} // -12 .. +12 dB
+inline float eqMidHz(float v) {
+	return 150.f * std::pow(40.f, v);
+} // 150 Hz .. 6 kHz, about 950 Hz in the middle
+inline float lowCutHz(float v) {
+	return 20.f * std::pow(40.f, v);
+} // 20 .. 800 Hz (0 is off)
+inline bool eqFlat(const float* v) {
+	return v[0] <= 0.f && v[1] == 0.5f && v[2] == 0.5f && v[4] == 0.5f;
+}
+
+// One second-order filter for two channels (transposed direct form II), with the usual cookbook shapes.
+struct Biquad {
+	float b0 = 1.f, b1 = 0.f, b2 = 0.f, a1 = 0.f, a2 = 0.f;
+	float z1[2] = {}, z2[2] = {};
+	inline float tick(float x, int c) {
+		const float y = b0 * x + z1[c];
+		z1[c] = b1 * x - a1 * y + z2[c];
+		z2[c] = b2 * x - a2 * y;
+		return y;
+	}
+	void reset() { z1[0] = z1[1] = z2[0] = z2[1] = 0.f; }
+	void set(float B0, float B1, float B2, float A0, float A1, float A2) {
+		const float k = 1.f / A0;
+		b0 = B0 * k;
+		b1 = B1 * k;
+		b2 = B2 * k;
+		a1 = A1 * k;
+		a2 = A2 * k;
+	}
+	void lowShelf(float f, float db, float sr) { shelf(f, db, sr, 1.f); }
+	void highShelf(float f, float db, float sr) { shelf(f, db, sr, -1.f); }
+	void peak(float f, float db, float q, float sr) {
+		const float A = std::pow(10.f, db / 40.f), w = TAU * std::min(f, sr * 0.45f) / sr, cs = std::cos(w),
+		            al = std::sin(w) / (2.f * q);
+		set(1.f + al * A, -2.f * cs, 1.f - al * A, 1.f + al / A, -2.f * cs, 1.f - al / A);
+	}
+	void highPass(float f, float sr) {
+		const float w = TAU * std::min(f, sr * 0.45f) / sr, cs = std::cos(w), al = std::sin(w) * 0.70710678f;
+		set((1.f + cs) * 0.5f, -(1.f + cs), (1.f + cs) * 0.5f, 1.f + al, -2.f * cs, 1.f - al);
+	}
+	// how loud a sine of frequency f comes out, in dB (for the picture)
+	float gainDb(float f, float sr) const {
+		const float w = TAU * f / sr, c1 = std::cos(w), s1 = std::sin(w), c2 = std::cos(2.f * w),
+		            s2 = std::sin(2.f * w);
+		const float nr = b0 + b1 * c1 + b2 * c2, ni = -(b1 * s1 + b2 * s2);
+		const float dr = 1.f + a1 * c1 + a2 * c2, di = -(a1 * s1 + a2 * s2);
+		return 10.f * std::log10(std::max((nr * nr + ni * ni) / std::max(dr * dr + di * di, 1e-20f), 1e-12f));
+	}
+
+private:
+	void shelf(float f, float db, float sr, float side) { // side 1: low shelf, -1: high shelf (slope 1)
+		const float A = std::pow(10.f, db / 40.f), w = TAU * std::min(f, sr * 0.45f) / sr, cs = std::cos(w) * side,
+		            sa = 2.f * std::sqrt(A) * std::sin(w) * 0.70710678f;
+		set(A * ((A + 1.f) - (A - 1.f) * cs + sa), 2.f * side * A * ((A - 1.f) - (A + 1.f) * cs),
+		    A * ((A + 1.f) - (A - 1.f) * cs - sa), (A + 1.f) + (A - 1.f) * cs + sa,
+		    -2.f * side * ((A - 1.f) + (A + 1.f) * cs), (A + 1.f) + (A - 1.f) * cs - sa);
+	}
+};
+
+// The equaliser itself. Click-free: its settings glide to where the knobs are, a little every chunk, and a band
+// that is flat is skipped; with every band flat the sound passes untouched, sample for sample, so a track that never
+// had its equaliser turned sounds exactly as it did before there was one. No allocation: safe on the audio thread.
+class Eq {
+public:
+	void reset() { // silence at once; the settings stay
+		for (Biquad& b : band)
+			b.reset();
+	}
+	// for the picture: these settings at once (no gliding), and then how loud each frequency comes out, in dB
+	void setNow(const float* v, float sr) {
+		for (int i = 0; i < 5; i++)
+			cur[i] = v[i];
+		design(sr);
+	}
+	float responseDb(float f, float sr) const {
+		float db = 0.f;
+		for (int b = 0; b < 4; b++)
+			if (on[b]) db += band[b].gainDb(f, sr);
+		return db;
+	}
+	inline void process(float* l, float* r, int n, const float* v, float sr) {
+		if (eqFlat(v) && eqFlat(cur)) return; // nothing to do, and nothing still gliding back to flat
+		for (int i = 0; i < 5; i++) {
+			const float d = v[i] - cur[i];
+			if (d != 0.f) cur[i] = std::fabs(d) < 0.0005f ? v[i] : cur[i] + d * 0.12f; // about 3 ms
+		}
+		design(sr);
+		for (int b = 0; b < 4; b++) {
+			if (!on[b]) continue;
+			Biquad& q = band[b];
+			// in locals, so the compiler keeps them in registers rather than reading them back for every sample
+			const float b0 = q.b0, b1 = q.b1, b2 = q.b2, a1 = q.a1, a2 = q.a2;
+			float zl1 = q.z1[0], zl2 = q.z2[0], zr1 = q.z1[1], zr2 = q.z2[1];
+			for (int i = 0; i < n; i++) {
+				const float xl = l[i], xr = r[i];
+				const float yl = b0 * xl + zl1, yr = b0 * xr + zr1;
+				zl1 = b1 * xl - a1 * yl + zl2;
+				zr1 = b1 * xr - a1 * yr + zr2;
+				zl2 = b2 * xl - a2 * yl;
+				zr2 = b2 * xr - a2 * yr;
+				l[i] = yl;
+				r[i] = yr;
+			}
+			q.z1[0] = zl1;
+			q.z2[0] = zl2;
+			q.z1[1] = zr1;
+			q.z2[1] = zr2;
+		}
+	}
+
+private:
+	// new coefficients for the bands whose settings moved; a band that has become flat forgets what it held
+	void design(float sr) {
+		const bool want[4] = {cur[0] > 0.f, cur[1] != 0.5f, cur[2] != 0.5f, cur[4] != 0.5f};
+		for (int b = 0; b < 4; b++) {
+			if (!want[b]) {
+				if (on[b]) band[b].reset();
+				on[b] = false;
+				continue;
+			}
+			const float a = b == 0 ? cur[0] : b == 1 ? cur[1] : b == 2 ? cur[2] : cur[4], f = b == 2 ? cur[3] : 0.f;
+			if (on[b] && a == made[b][0] && f == made[b][1] && sr == madeSr) continue;
+			switch (b) {
+			case 0:
+				band[b].highPass(lowCutHz(a), sr);
+				break;
+			case 1:
+				band[b].lowShelf(EQ_LOW_HZ, eqDb(a), sr);
+				break;
+			case 2:
+				band[b].peak(eqMidHz(f), eqDb(a), EQ_MID_Q, sr);
+				break;
+			default:
+				band[b].highShelf(EQ_HIGH_HZ, eqDb(a), sr);
+				break;
+			}
+			made[b][0] = a;
+			made[b][1] = f;
+			on[b] = true;
+		}
+		madeSr = sr;
+	}
+	float cur[5] = {0.f, 0.5f, 0.5f, 0.5f, 0.5f}; // the settings as they glide
+	Biquad band[4];                               // low cut, low, mid, high
+	bool on[4] = {};
+	float made[4][2] = {}, madeSr = 0.f; // what each band's coefficients were made from
 };
 
 // ---------------------------------------------------------------- synth
@@ -242,6 +402,18 @@ enum P {
 	P_PENV,
 	P_KEYTRK,
 	P_LFOPW,
+	// the LFO in time with the tempo, to the volume and the pan, and its slow fade-in (see lfoBeats(), lfoFadeSec())
+	P_LFOSYNC,
+	P_LFOAMP,
+	P_LFOPAN,
+	P_LFOFADE,
+	// the filter envelope's own release and the track's equaliser (see Eq below)
+	P_FR,     // 0: the filter envelope lets go with the amp's release, as before there was a knob for it
+	P_EQCUT,  // low cut: 0 off, else from 20 Hz (lowCutHz)
+	P_EQLOW,  // low shelf, 0.5 flat (eqDb)
+	P_EQMID,  // bell in the middle, 0.5 flat
+	P_EQFREQ, // where that bell sits (eqMidHz)
+	P_EQHIGH, // high shelf, 0.5 flat
 	P_COUNT
 };
 
@@ -254,6 +426,21 @@ inline float cutoffHz(float v) {
 inline float lfoHz(float v) {
 	return 0.05f * std::pow(400.f, v);
 } // 0.05 .. 20 Hz
+// The LFO in time: the rate knob picks a note value instead of a speed. Beats (quarter notes) per cycle, from eight
+// bars down to a thirty-second note; the names are LFO_SYNC_NAMES in model.cpp.
+constexpr int LFO_SYNC_STEPS = 11;
+inline int lfoSyncStep(float v) {
+	return std::clamp(int(v * float(LFO_SYNC_STEPS - 1) + 0.5f), 0, LFO_SYNC_STEPS - 1);
+}
+inline float lfoBeats(float v) {
+	static const float beats[LFO_SYNC_STEPS] = {32.f,      16.f, 8.f,       4.f,   2.f,   1.f,
+	                                            2.f / 3.f, 0.5f, 1.f / 3.f, 0.25f, 0.125f};
+	return beats[lfoSyncStep(v)];
+}
+// How long the LFO takes to fade in after a note starts (a delayed vibrato): off at 0, up to 5 seconds
+inline float lfoFadeSec(float v) {
+	return v * v * 5.f;
+}
 inline float phaserHz(float v) {
 	return 0.05f * std::pow(100.f, v);
 }
@@ -264,10 +451,12 @@ inline float glideSec(float v) {
 class Synth {
 public:
 	static constexpr int NV = 8, NU = 7; // voices, and oscillator copies per voice for unison
+	static constexpr int PARTS = 4;      // notes of a chord (Song::chordOffsets)
 
 	void init(float sampleRate) {
 		sr = sampleRate;
 		chorus.init(int(sr * 0.06f));
+		trK = coef(0.0025f, sr); // the tremolo's and the LFO pan's smoothing: a square wave without clicks
 		static const float pans[NV] = {0.f, 0.5f, -0.5f, 0.8f, -0.8f, 0.3f, -0.3f, 1.f};
 		for (int i = 0; i < NV; i++) {
 			voices[i] = Voice();
@@ -280,14 +469,26 @@ public:
 		heldN = 0;
 	}
 	void setPatch(const float* src) { std::memcpy(p, src, sizeof(p)); }
+	// The song's tempo and, while it plays, where it is (in beats, from the song's start; -1 when stopped), for an
+	// LFO in time. Set before each render(); while stopped the LFO keeps going at the tempo.
+	void setClock(double beat, float bpm) {
+		clockBeat = beat;
+		clockBpm = bpm;
+	}
 
-	void noteOn(int key, int midi, bool acc) {
+	// part: which note of a chord this is (0 to 3; a single note is 0). A Mono sound gives each part a voice of its
+	// own, so a chord plays as a chord and glides as one; with glide, a part glides from the same part's last note.
+	void noteOn(int key, int midi, bool acc, int part = 0) {
+		part = std::clamp(part, 0, PARTS - 1);
 		const float f = 440.f * std::exp2(float(midi - 69) / 12.f);
 		const float gl = glideSec(p[P_GLIDE]);
 		if (p[P_MONO] > 0.5f) {
-			Voice& v = voices[0];
-			const bool legato = v.gate && heldN > 0;
-			pushHeld(key, midi, acc);
+			Voice& v = voices[part];
+			bool partHeld = false;
+			for (int i = 0; i < heldN; i++)
+				partHeld = partHeld || held[i].part == part;
+			const bool legato = v.gate && partHeld;
+			pushHeld(key, midi, acc, part);
 			v.key = key;
 			v.midi = midi;
 			v.target = f;
@@ -303,6 +504,8 @@ public:
 				v.fe.on();
 				v.age = ++clock;
 				if (acc) v.accEnv = 1.f;
+				v.lfoAge = 0.f; // a new note, not a slide: the LFO's fade-in starts again
+				lfoAgeAll = 0.f;
 			}
 			v.gate = true;
 			return;
@@ -322,7 +525,12 @@ public:
 					if (v.age < best->age) best = &v;
 			}
 		}
+		bool anyHeld = false;
+		for (auto& o : voices)
+			anyHeld |= o.gate;
+		if (!anyHeld) lfoAgeAll = 0.f; // a new phrase: the LFO's fade-in starts again for the tremolo and pan
 		Voice& v = *best;
+		v.lfoAge = 0.f;
 		v.key = key;
 		v.midi = midi;
 		v.target = f;
@@ -330,8 +538,8 @@ public:
 		if (gl < 0.003f)
 			v.freq = f;
 		else
-			v.freq = lastFreq > 0.f ? lastFreq : f;
-		lastFreq = f;
+			v.freq = lastFreq[part] > 0.f ? lastFreq[part] : f;
+		lastFreq[part] = f;
 		v.acc = acc;
 		v.gate = true;
 		v.ae.on();
@@ -346,22 +554,29 @@ public:
 
 	void noteOff(int key) {
 		// the mono mode's list of held notes forgets this one, whatever the mode is now
-		int w = 0;
-		for (int i = 0; i < heldN; i++)
-			if (held[i].key != key) held[w++] = held[i];
+		int w = 0, part = -1;
+		for (int i = 0; i < heldN; i++) {
+			if (held[i].key != key)
+				held[w++] = held[i];
+			else
+				part = held[i].part;
+		}
 		heldN = w;
 		if (p[P_MONO] > 0.5f) {
 			// voices still sounding from before the sound was switched to mono (a preset, Roll new sound, Play: Mono)
 			for (int i = 1; i < NV; i++)
-				if (voices[i].gate && voices[i].key == key) {
+				if (i != part && voices[i].gate && voices[i].key == key) {
 					voices[i].gate = false;
 					voices[i].ae.off();
 					voices[i].fe.off();
 				}
-			Voice& v = voices[0];
+			Voice& v = voices[std::max(part, 0)];
 			if (v.key != key || !v.gate) return;
-			if (heldN > 0) { // fall back to the note still held
-				const Held& h = held[heldN - 1];
+			int last = heldN - 1; // fall back to the part's note still held
+			while (last >= 0 && held[last].part != std::max(part, 0))
+				last--;
+			if (last >= 0) {
+				const Held& h = held[last];
 				v.key = h.key;
 				v.midi = h.midi;
 				v.acc = h.acc;
@@ -406,6 +621,7 @@ public:
 			v.fe.st = 0;
 			v.f.reset();
 		}
+		eq.reset();
 	}
 
 	// Renders n (<= CHUNK) samples of stereo output, replacing l and r.
@@ -415,12 +631,16 @@ public:
 			mono[i] = side[i] = 0.f;
 		const float crate = sr / float(n);
 
-		// LFO, once per chunk
-		lfoPh += lfoHz(p[P_LFORATE]) / crate;
-		if (lfoPh >= 1.f) {
-			lfoPh -= 1.f;
-			sh = rng.next();
-		}
+		// LFO, once per chunk: at its own speed, or in time with the song
+		if (p[P_LFOSYNC] < 0.5f) {
+			lfoPh += lfoHz(p[P_LFORATE]) / crate;
+			if (lfoPh >= 1.f) {
+				lfoPh -= 1.f;
+				sh = rng.next();
+			}
+		} else
+			lfoInTime(crate);
+		const float fadeT = lfoFadeSec(p[P_LFOFADE]); // 0: no fade-in, the LFO at full depth from the start
 		const int lw = int(p[P_LFOWAVE] + 0.5f);
 		const float lfo = lw == 0 ? 1.f - 4.f * std::fabs(lfoPh - 0.5f) : lw == 1 ? (lfoPh < 0.5f ? 1.f : -1.f) : sh;
 
@@ -433,12 +653,12 @@ public:
 		const float g1 = std::min(1.f, 2.f * (1.f - p[P_MIX])), g2 = std::min(1.f, 2.f * p[P_MIX]);
 		const float gs = p[P_SUB], gn = p[P_NOISE] * 0.6f;
 		const float pw = std::clamp(0.5f - 0.42f * p[P_PW] + lfo * p[P_LFOPW] * 0.3f, 0.05f, 0.95f);
-		const int mode = std::clamp(int(p[P_SLOPE] + 0.5f), 0, 3);
+		const int mode = std::clamp(int(p[P_SLOPE] + 0.5f), 0, 4);
 		const float fm = p[P_FM] * p[P_FM] * 1.5f, width = p[P_WIDTH];
 		const float caA = coef(envTime(p[P_AA]) / 1.47f, sr), cdA = coef(envTime(p[P_AD]) / 3.f, sr),
 		            crA = coef(envTime(p[P_AR]) / 3.f, sr);
 		const float caF = coef(envTime(p[P_FA]) / 1.47f, crate), cdF = coef(envTime(p[P_FD]) / 3.f, crate),
-		            crF = coef(envTime(p[P_AR]) / 3.f, crate);
+		            crF = coef(envTime(p[P_FR] > 0.f ? p[P_FR] : p[P_AR]) / 3.f, crate);
 		const float susA = p[P_AS], susF = p[P_FS];
 		const float accDecay = std::exp(-1.f / (0.2f * crate)), accRise = coef(0.012f, crate),
 		            accFall = coef(0.35f, crate);
@@ -464,13 +684,21 @@ public:
 			v.accEnv *= accDecay;
 			v.accCv += (v.accEnv - v.accCv) * (v.accEnv > v.accCv ? accRise : accFall);
 			const float accSweep = p[P_ACCENT] * v.accCv * (1.2f + 1.8f * p[P_RES]); // more wow with more resonance
-			const float oct = p[P_CUTOFF] * 9.f + p[P_ENVAMT] * 5.f * accF * fenv + accSweep + lfo * p[P_LFOCUT] * 2.f +
+			// the LFO as this voice hears it: faded in since its note started, when a fade-in is set
+			float vl = lfo, vpitch = pitchMod, vpw = pw;
+			if (fadeT > 0.f) {
+				vl = lfo * std::min(1.f, v.lfoAge / fadeT);
+				v.lfoAge = std::min(v.lfoAge + 1.f / crate, 1000.f);
+				vpitch = std::exp2(vl * p[P_LFOPITCH] * p[P_LFOPITCH] * 100.f / 1200.f);
+				vpw = std::clamp(0.5f - 0.42f * p[P_PW] + vl * p[P_LFOPW] * 0.3f, 0.05f, 0.95f);
+			}
+			const float oct = p[P_CUTOFF] * 9.f + p[P_ENVAMT] * 5.f * accF * fenv + accSweep + vl * p[P_LFOCUT] * 2.f +
 			                  float(v.midi - 57) / 12.f * p[P_KEYTRK];
 			const float fc = std::clamp(40.f * std::exp2(oct), 20.f, sr * 0.45f);
 			const float gT = std::tan(PI * fc / sr);
 			const float gInc = (gT - v.g) / float(n);
 			const float base =
-			    v.freq * pitchMod * std::exp2(p[P_PENV] * fenv * 2.f) / sr; // pitch envelope: up to two octaves
+			    v.freq * vpitch * std::exp2(p[P_PENV] * fenv * 2.f) / sr; // pitch envelope: up to two octaves
 			float d1[NU], d2[NU];
 			for (int u = 0; u < nu; u++) {
 				d1[u] = std::min(0.45f, base * urat[u]);
@@ -482,8 +710,8 @@ public:
 				v.g += gInc;
 				float x = 0.f;
 				for (int u = 0; u < nu; u++) {
-					const float b = need2 ? v.o2[u].tick(w2, d2[u], pw) : 0.f;
-					const float a = fm > 0.f ? v.o1[u].tickPM(w1, d1[u], pw, b * fm) : v.o1[u].tick(w1, d1[u], pw);
+					const float b = need2 ? v.o2[u].tick(w2, d2[u], vpw) : 0.f;
+					const float a = fm > 0.f ? v.o1[u].tickPM(w1, d1[u], vpw, b * fm) : v.o1[u].tick(w1, d1[u], vpw);
 					x += a * g1 + b * g2;
 				}
 				x *= ugain;
@@ -539,14 +767,52 @@ public:
 			l[i] = mono[i] + cw * chorus.read(chD1) - side[i] * post;
 			r[i] = mono[i] + cw * chorus.read(chD2) + side[i] * post;
 		}
+		eq.process(l, r, n, p + P_EQCUT, sr); // as on a mixing desk's channel, before the pan
+		lfoToVolumeAndPan(l, r, n, lfo, fadeT, crate);
 	}
 
 private:
+	// The LFO in time with the song: its place in the cycle follows the song's position while it plays, so a
+	// one-bar sweep starts on the bar; while stopped it runs on at the tempo.
+	void lfoInTime(float crate) {
+		if (clockBeat >= 0.0)
+			lfoBeat = clockBeat;
+		else
+			lfoBeat += double(clockBpm) / 60.0 / double(crate);
+		const double cycles = lfoBeat / double(lfoBeats(p[P_LFORATE]));
+		const float ph = float(cycles - std::floor(cycles));
+		if (ph < lfoPh) sh = rng.next(); // a new cycle: a new random step
+		lfoPh = ph;
+	}
+	// The LFO to the volume (tremolo) and to the pan, after everything else. The gains glide over a few
+	// milliseconds, so a square wave chops without clicks. Nothing is done while both are off and settled.
+	void lfoToVolumeAndPan(float* l, float* r, int n, float lfo, float fadeT, float crate) {
+		const float amp = p[P_LFOAMP], pan = p[P_LFOPAN];
+		const float fade = fadeT > 0.f ? std::min(1.f, lfoAgeAll / fadeT) : 1.f;
+		lfoAgeAll = std::min(lfoAgeAll + 1.f / crate, 1000.f);
+		if (amp <= 0.f && pan <= 0.f) {
+			if (trL == 1.f && trR == 1.f) return;
+			if (std::fabs(trL - 1.f) < 1e-4f && std::fabs(trR - 1.f) < 1e-4f) {
+				trL = trR = 1.f;
+				return;
+			}
+		}
+		const float g = 1.f - amp * fade * 0.5f * (1.f + lfo); // down on the LFO's peaks, full on its troughs
+		const float x = pan * fade * lfo;
+		const float wl = g * std::min(1.f, 1.f - x), wr = g * std::min(1.f, 1.f + x);
+		for (int i = 0; i < n; i++) {
+			trL += (wl - trL) * trK;
+			trR += (wr - trR) * trK;
+			l[i] *= trL;
+			r[i] *= trR;
+		}
+	}
 	struct Voice {
 		Osc o1[NU], o2[NU], sub;
 		Ladder f;
 		Env ae, fe;
 		float freq = 220.f, target = 220.f, glide = 0.f, g = 0.05f, pan = 0.f;
+		float lfoAge = 0.f;              // seconds since this voice's note started, for the LFO's fade-in
 		float accEnv = 0.f, accCv = 0.f; // the accent's envelope and the charge it leaves behind
 		int key = -1, midi = 57;
 		bool gate = false, acc = false;
@@ -555,26 +821,30 @@ private:
 	struct Held {
 		int key, midi;
 		bool acc;
+		int part;
 	};
-	void pushHeld(int key, int midi, bool acc) {
+	void pushHeld(int key, int midi, bool acc, int part) {
 		if (heldN == 16) {
 			for (int i = 1; i < 16; i++)
 				held[i - 1] = held[i];
 			heldN = 15;
 		}
-		held[heldN++] = {key, midi, acc};
+		held[heldN++] = {key, midi, acc, part};
 	}
 	float sr = 48000.f, p[P_COUNT] = {};
 	Voice voices[NV];
 	Held held[16];
 	int heldN = 0;
 	uint32_t clock = 0;
-	float lastFreq = 0.f;
+	float lastFreq[PARTS] = {}; // each part's last note, for a Poly sound's glide
 	Rng rng;
 	float lfoPh = 0.f, sh = 0.f;
+	double clockBeat = -1.0, lfoBeat = 0.0;
+	float clockBpm = 120.f, lfoAgeAll = 0.f, trL = 1.f, trR = 1.f, trK = 0.01f;
 	float phPh = 0.f, phLast = 0.f, apx[4] = {}, apy[4] = {};
 	DelayLine chorus;
 	float chPh1 = 0.f, chPh2 = 0.33f, chD1 = 500.f, chD2 = 800.f;
+	Eq eq;
 };
 
 // ---------------------------------------------------------------- drums
@@ -587,8 +857,9 @@ struct SampleData {
 };
 
 enum { D_KICK, D_SNARE, D_CLAP, D_CHAT, D_OHAT, D_TOM, D_RIM, D_CYM, D_COUNT };
-// drum parameter layout: for each sound [level, tune, decay], then drive, echo send, reverb send
-enum { DP_DRIVE = D_COUNT * 3, DP_DELAY, DP_REVERB, DP_COUNT };
+// drum parameter layout: for each sound [level, tune, decay], then drive, echo send, reverb send, and the kit's
+// equaliser (low cut, low, mid, the mid's pitch, high: as the synthesiser's P_EQCUT to P_EQHIGH)
+enum { DP_DRIVE = D_COUNT * 3, DP_DELAY, DP_REVERB, DP_EQCUT, DP_EQLOW, DP_EQMID, DP_EQFREQ, DP_EQHIGH, DP_COUNT };
 
 class Drums {
 public:
@@ -633,6 +904,7 @@ public:
 	void reset() {
 		for (auto& v : t)
 			v = -1.f;
+		eq.reset();
 	}
 
 	void render(float* l, float* r, int n) {
@@ -780,6 +1052,7 @@ public:
 			l[i] = fastTanh(L * pre * 0.5f) * post * 2.f;
 			r[i] = fastTanh(R * pre * 0.5f) * post * 2.f;
 		}
+		eq.process(l, r, n, p + DP_EQCUT, sr);
 	}
 
 private:
@@ -790,34 +1063,106 @@ private:
 	float chPh[6] = {}, ohPh[6] = {}, cyPh[6] = {}; // phases of the metallic square waves
 	SVF snHp, clBp, hatHp, ohHp, cyHp, rimBp;
 	Rng rng;
+	Eq eq;
 };
 
 // ---------------------------------------------------------------- global effects
 
+// The shared echo. Ping-pong: the repeats bounce from the left to the right speaker; with spread 1 they all come
+// from the middle instead. Each repeat goes through a gentle low-pass (tone: 0.32 is the classic) and high-pass, so
+// the repeats grow darker and thinner, and through a soft limit that leaves anything below full scale untouched, so
+// the echo can never run away. A small change of time (the tempo nudged) glides like a tape echo; a jump (another
+// note value) crossfades from the old time to the new one, without a click or a swoop.
 class PingPong {
 public:
 	void init(float sampleRate) {
 		sr = sampleRate;
+		// 2.6 seconds, as ever: the lines' length decides how a read across their end is rounded, so another length
+		// would change older songs by a hair. They play every echo up to 2.5 seconds; a longer one (a half note
+		// below 48 BPM, down to 3 seconds at 40 BPM, the slowest tempo) is read from a longer pair that is written
+		// with the same samples, so the two hold the same echoes and a time moving across 2.5 seconds does not click.
 		a.init(int(sr * 2.6f));
 		b.init(int(sr * 2.6f));
+		aLong.init(int(sr * 3.1f));
+		bLong.init(int(sr * 3.1f));
 		cur = sr * 0.3f;
 	}
 	inline void process(float in, float timeSamples, float fb, float& outL, float& outR) {
-		cur += (timeSamples - cur) * 0.0004f;
-		const float d = std::clamp(cur, 8.f, sr * 2.5f);
-		const float ra = a.read(d), rb = b.read(d);
-		lp += (rb - lp) * 0.32f;
+		process(in, timeSamples, fb, 0.32f, 0.f, outL, outR);
+	}
+	inline void process(float in, float timeSamples, float fb, float tone, float spread, float& outL, float& outR) {
+		if (timeSamples != want) {
+			if (started && std::fabs(timeSamples - want) > want * 0.04f) jump = true;
+			want = timeSamples;
+		}
+		started = true;
+		if (jump && fadeLeft == 0) { // crossfade from where the echo is now to the new time
+			from = std::clamp(cur, 8.f, sr * 3.05f);
+			cur = want;
+			fadeLeft = FADE;
+			jump = false;
+		}
+		cur += (want - cur) * 0.0004f;
+		const float d = std::clamp(cur, 8.f, sr * 3.05f);
+		float ra = readA(d), rb = readB(d);
+		if (fadeLeft > 0) {
+			const float x = float(fadeLeft--) / float(FADE); // 1 -> 0: the old time fades out
+			ra += (readA(from) - ra) * x;
+			rb += (readB(from) - rb) * x;
+		}
+		mono += (spread - mono) * 0.002f; // switching ping-pong glides over a few milliseconds
+		if (std::fabs(mono - spread) < 1e-5f) mono = spread;
+		const float src = rb + (ra - rb) * mono; // ping-pong feeds the right side back, a plain echo the left
+		lp += (src - lp) * tone;
 		hpS += (lp - hpS) * 0.02f;
-		a.write(in + (lp - hpS) * fb);
+		const float back = softLimit(in + (lp - hpS) * fb);
+		a.write(back);
 		b.write(ra);
-		outL = ra;
-		outR = rb;
+		aLong.write(back);
+		bLong.write(ra);
+		const float mid = ra * 0.70710678f; // a plain echo in both speakers, as loud as one ping-pong side
+		outL = ra + (mid - ra) * mono;
+		outR = rb + (mid - rb) * mono;
+	}
+	void clear() { // the echoes fall silent at once
+		a.clear();
+		b.clear();
+		aLong.clear();
+		bLong.clear();
+		lp = hpS = 0.f;
+		fadeLeft = 0;
+	}
+	// below full scale nothing changes; above, it bends smoothly towards twice full scale and never further
+	static inline float softLimit(float x) {
+		const float ax = std::fabs(x);
+		if (ax <= 1.f) return x;
+		const float over = ax - 1.f;
+		return std::copysign(1.f + over / (1.f + over), x);
 	}
 
 private:
+	inline float readA(float d) const { return d <= sr * 2.5f ? a.read(d) : aLong.read(d); }
+	inline float readB(float d) const { return d <= sr * 2.5f ? b.read(d) : bLong.read(d); }
+	static constexpr int FADE = 2400; // samples a jump in time takes to crossfade (50 ms at 48 kHz)
 	float sr = 48000.f, cur = 1000.f, lp = 0.f, hpS = 0.f;
-	DelayLine a, b;
+	float want = 0.f, from = 0.f, mono = 0.f;
+	int fadeLeft = 0;
+	bool started = false, jump = false;
+	DelayLine a, b, aLong, bLong;
 };
+
+// How dark the echo's repeats are: 0.5 is the classic tone (a gentle low-pass near 3 kHz), darker to the left (down
+// to about 300 Hz), brighter to the right (almost open). Returns the low-pass's coefficient for PingPong::process.
+inline float echoToneCoef(float v) {
+	return std::min(1.f, 0.32f * std::exp2((v - 0.5f) * (v < 0.5f ? 6.f : 3.2f)));
+}
+// The note values the echo's time can take: beats (quarter notes) per repeat. The first five are those of older
+// songs and keep their numbers; the rest were added after, so the list shows them in another order (model.cpp).
+constexpr int ECHO_TIMES = 8;
+inline float echoBeats(int i) {
+	static const float beats[ECHO_TIMES] = {0.25f, 0.5f, 0.75f, 1.f, 1.5f, 1.f / 3.f, 2.f / 3.f, 2.f};
+	return beats[std::clamp(i, 0, ECHO_TIMES - 1)];
+}
 
 // Eight-line feedback delay network with input diffusion.
 class Reverb {
@@ -869,6 +1214,15 @@ public:
 			line[i].write(v[i] * s + ((i & 1) ? xr : xl) * 0.5f);
 		outL = (damp[0] - damp[2] + damp[4] - damp[6]) * 0.5f;
 		outR = (damp[1] - damp[3] + damp[5] - damp[7]) * 0.5f;
+	}
+	void clear() { // the room falls silent at once
+		for (auto& l : line)
+			l.clear();
+		for (auto& l : apl)
+			l.clear();
+		pre.clear();
+		for (float& d : damp)
+			d = 0.f;
 	}
 
 private:

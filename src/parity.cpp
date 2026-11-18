@@ -252,6 +252,19 @@ int writeParity(const QString& folder) {
 		}
 	}
 
+	// A long journey, each character, after the demo's end and from an empty start
+	for (int character = 0; character < 3; character++) {
+		for (int from : {8, 0}) {
+			Song s = demo;
+			std::mt19937 g(7);
+			const std::vector<JourneyPhase> plan = continueJourney(s, from, 6, character, true, g);
+			out << "journey " << character << ' ' << from << ':';
+			for (const JourneyPhase& ph : plan)
+				out << ' ' << ph.name << '/' << ph.bar << '/' << ph.bars;
+			out << ' ' << songText(s) << '\n';
+		}
+	}
+
 	out.flush();
 	return file.error() == QFileDevice::NoError ? 0 : 1;
 }

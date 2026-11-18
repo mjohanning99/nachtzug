@@ -233,7 +233,36 @@ void NoteEditor::wheelEvent(QWheelEvent* e) {
 	QAbstractScrollArea::wheelEvent(e);
 }
 
-void NoteEditor::paintEvent(QPaintEvent*) {
+// the playhead's place in the grid, while the song is in this clip (or, in the loop grid, while its cell plays)
+int NoteEditor::playheadX() const {
+	Track* t = nullptr;
+	const Clip* c = app->curClip(&t);
+	if (!c || !t) return -1;
+	const double m = app->musicalPos();
+	if (c->scene >= 0 ? (t->liveCell == c->scene && app->isPlaying()) : (m >= c->start && m < c->end())) {
+		const int x = tx(std::fmod(c->scene >= 0 ? m : m - c->start + c->offset, double(c->loopLen)));
+		if (x >= KEYW) return x;
+	}
+	return -1;
+}
+
+// Only the playhead moves while the song plays: just the strips where it was and where it is now are repainted,
+// not every note. Any change to the song repaints everything.
+void NoteEditor::repaintMoving() {
+	const int px = playheadX();
+	if (app->published() != shownSong) {
+		shownSong = app->published();
+		viewport()->update();
+	} else if (px != shownPx) {
+		QRegion r;
+		for (const int x : {shownPx, px})
+			if (x >= 0) r += QRect(x - 2, 0, 5, viewport()->height());
+		viewport()->update(r);
+	}
+	shownPx = px;
+}
+
+void NoteEditor::paintEvent(QPaintEvent* e) {
 	QPainter p(viewport());
 	const int W = viewport()->width(), H = viewport()->height();
 	p.fillRect(0, 0, W, H, theme::canvas);
@@ -288,6 +317,7 @@ void NoteEditor::paintEvent(QPaintEvent*) {
 			continue;
 		const QRect r = noteRect(nt);
 		if (r.right() < KEYW || r.left() > W || r.bottom() < RUL || r.top() > H) continue;
+		if (!e->region().intersects(r.adjusted(-6, -6, 6, 6))) continue; // with its shadow, not being repainted
 		// accented notes stand out: brighter on dark themes, deeper on light ones
 		QColor fill =
 		    theme::isLight() ? (nt.acc ? col.darker(135) : col) : (nt.acc ? col.lighter(125) : col.darker(120));
@@ -369,13 +399,9 @@ void NoteEditor::paintEvent(QPaintEvent*) {
 		                   "with record on.\nThe tinted rows are the notes of the chord: they always fit."));
 	}
 	// playhead
-	const double m = app->musicalPos();
-	if (c->scene >= 0 ? (t->liveCell == c->scene && app->isPlaying()) : (m >= c->start && m < c->end())) {
-		const int x = tx(std::fmod(c->scene >= 0 ? m : m - c->start + c->offset, double(L)));
-		if (x >= KEYW) {
-			p.setPen(QPen(theme::ink, 1));
-			p.drawLine(x, RUL, x, H);
-		}
+	if (const int x = playheadX(); x >= 0) {
+		p.setPen(QPen(theme::ink, 1));
+		p.drawLine(x, RUL, x, H);
 	}
 	if (drag == Band) {
 		p.setPen(QPen(theme::ink, 1, Qt::DashLine));
@@ -437,6 +463,7 @@ void NoteEditor::mousePressEvent(QMouseEvent* e) {
 			return;
 		}
 		drag = Erase;
+		viewport()->setCursor(theme::cursor(QStringLiteral("rubber"), Qt::ArrowCursor));
 		began = false;
 		rightPress = p;
 		eraseAt(p);
@@ -525,12 +552,22 @@ void NoteEditor::mouseMoveEvent(QMouseEvent* e) {
 	if (!c || !t) return;
 	const int L = c->loopLen, g = app->grid;
 	if (drag == None) {
-		// a note's end is dragged longer or shorter, a note moved, and a click in the empty grid draws one
+		// a click in the ruler moves the playhead (in a song clip), one on the keys plays a note; in the grid a note's
+		// end is dragged longer or shorter, a note moved, and a click in the empty grid draws one, unless the auto
+		// drummer writes the clip
+		QCursor cur(Qt::ArrowCursor);
 		bool edge = false;
-		const int hit = hitNote(p, &edge);
-		viewport()->setCursor(
-		    hit >= 0 ? (edge ? theme::cursor(QStringLiteral("handle"), Qt::SizeHorCursor) : QCursor(Qt::ArrowCursor))
-			         : theme::cursor(QStringLiteral("pencil"), Qt::ArrowCursor));
+		if (p.y() < RUL) {
+			if (p.x() >= KEYW && c->scene < 0) cur = theme::cursor(QStringLiteral("playhead"), Qt::ArrowCursor);
+		} else if (p.x() < KEYW)
+			cur = theme::cursor(QStringLiteral("finger"), Qt::ArrowCursor);
+		else if (!c->ad.on) {
+			const int hit = hitNote(p, &edge);
+			cur = hit < 0 ? theme::cursor(QStringLiteral("pencil"), Qt::ArrowCursor)
+			      : edge  ? theme::cursor(QStringLiteral("handle"), Qt::SizeHorCursor)
+			              : theme::cursor(QStringLiteral("move"), Qt::ArrowCursor);
+		}
+		viewport()->setCursor(cur);
 		return;
 	}
 	if (drag == Erase) {
@@ -1373,7 +1410,7 @@ void EditorPanel::repaintPads() {
 	if (pads->isVisible()) pads->update();
 }
 void EditorPanel::repaintView() {
-	view->viewport()->update();
+	view->repaintMoving();
 	if (pads->isVisible()) pads->update();
 }
 // 0: automatic (the keys make way in a short editor), 1: always shown, 2: hidden. Remembered between runs.
@@ -1612,6 +1649,22 @@ void EditorPanel::sync() {
 	ideas->setEnabled(t != nullptr);
 	if (c) {
 		length->blockSignals(true);
+		// a length the list doesn't offer (16 bars from Arrange for me, 3 bars recorded) gets an entry of its own,
+		// in its place by length, so the box shows it instead of nothing; the one before it goes
+		for (int i = length->count() - 1; i >= 0; i--)
+			if (length->itemData(i, Qt::UserRole + 1).toBool()) length->removeItem(i);
+		if (length->findData(c->loopLen) < 0 && c->loopLen > 0) {
+			const int bars = c->loopLen / BAR, beats = c->loopLen / BEAT;
+			const QString name = c->loopLen % BAR == 0    ? tr("%1 bars").arg(bars) // never 1: that one is in the list
+			                     : c->loopLen % BEAT != 0 ? tr("%1 sixteenths").arg(QLocale().toString(std::round(c->loopLen / 24.0 * 100.0) / 100.0, 'g', 4))
+			                     : beats == 1             ? tr("1 beat")
+			                                              : tr("%1 beats").arg(beats);
+			int at = 0;
+			while (at < length->count() && length->itemData(at).toInt() < c->loopLen)
+				at++;
+			length->insertItem(at, name, c->loopLen);
+			length->setItemData(at, true, Qt::UserRole + 1);
+		}
 		length->setCurrentIndex(length->findData(c->loopLen));
 		length->blockSignals(false);
 	}

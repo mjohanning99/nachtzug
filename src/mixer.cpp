@@ -18,6 +18,7 @@
 #include <QPushButton>
 #include <QStyle>
 #include <QVBoxLayout>
+#include <QLocale>
 
 using namespace dsp;
 
@@ -36,7 +37,7 @@ static QString panText(float x) {
 Fader::Fader(QWidget* parent) : QWidget(parent), accent(theme::amber) {
 	setMinimumSize(46, 120);
 	setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-	theme::setOwnCursor(this, QStringLiteral("turn"), Qt::SizeVerCursor);
+	theme::setOwnCursor(this, QStringLiteral("fader"), Qt::SizeVerCursor);
 	setFocusPolicy(Qt::NoFocus);
 	setToolTip(tr("Volume. Drag up or down, hold Shift for small steps, double-click to reset. The bar beside it shows "
 	              "the level."));
@@ -53,7 +54,7 @@ void Fader::setPeak(float p) {
 	p = std::clamp(p, 0.f, 1.f);
 	if (std::fabs(p - peak) > 0.004f) {
 		peak = p;
-		update();
+		update(QRect(28, 0, 10, height())); // only the level meter (x 30 to 36, with its edge), not the cap and slot
 	}
 }
 
@@ -222,6 +223,7 @@ void MixerPanel::rebuild() {
 		s.name->setToolTip(tr("Select this track: the Notes and Sound tabs then show it"));
 		connect(s.name, &QPushButton::clicked, this, [this, id] { app->selectTrack(id); });
 		v->addWidget(s.name);
+		v->addLayout(eqKnobs(s, t, at));
 		auto* mid = new QHBoxLayout;
 		mid->setSpacing(4);
 		auto* knobs = new QVBoxLayout;
@@ -285,6 +287,8 @@ void MixerPanel::rebuild() {
 			knobs->addWidget(s.pump);
 		}
 		knobs->addStretch(1);
+		for (Knob* k : {s.pan, s.echo, s.reverb, s.pump}) // their names fit on one line: room for the equaliser's row
+			if (k) k->setOneLine(true);
 		mid->addLayout(knobs);
 		s.fader = new Fader;
 		connect(s.fader, &Fader::pressed, this, [this, id] { app->paramPress(id, AP_VOLUME); });
@@ -450,7 +454,8 @@ void MixerPanel::rebuild() {
 	reverbSize = new Knob(tr("Reverb size"));
 	reverbSize->setDefault(0.55f);
 	reverbSize->setToolTip(tr("How large the shared reverb’s room sounds"));
-	reverbSize->setFormatter([](float x) { return QString::number(double(0.5f + x * x * 11.f), 'f', 1) + " s"; });
+	reverbSize->setFormatter(
+	    [](float x) { return QLocale().toString(double(0.5f + x * x * 11.f), 'f', 1) + QStringLiteral(" s"); });
 	midiMenuFor(reverbSize, app, QStringLiteral("rsize"), tr("the reverb size"));
 	connect(reverbSize, &Knob::pressed, this, [this] { app->begin(tr("Reverb size")); });
 	connect(reverbSize, &Knob::moved, this, [this](float x) {
@@ -482,10 +487,10 @@ void MixerPanel::sync() {
 		sig.push_back(t.role);
 	}
 	if (sig != signature || !masterBox) {
-		// rebuilding removes the spacer too, so start the row again
-		while (QLayoutItem* it = row->takeAt(0)) {
-			if (!it->widget()) delete it;
-		}
+		// rebuilding removes the spacer too, so start the row again; the strips themselves are deleted by rebuild(),
+		// their places in the row here (a place is not its strip: deleting it leaves the strip alone)
+		while (QLayoutItem* it = row->takeAt(0))
+			delete it;
 		row->addStretch(1);
 		rebuild();
 		signature = sig;
@@ -497,9 +502,10 @@ void MixerPanel::sync() {
 		s.name->setText(ui(t->name));
 		// the track's colour along the name's lower edge: on the rounded plate of the panel looks as wide as the rest
 		// of its border, so it follows the corners; in the flat looks a line under the name
-		s.name->setStyleSheet((theme::tactile ? QStringLiteral("border-bottom-color: %1;")
-		                                      : QStringLiteral("border-bottom: 3px solid %1;"))
-		                          .arg(col.name()));
+		const QString line = (theme::tactile ? QStringLiteral("border-bottom-color: %1;")
+		                                     : QStringLiteral("border-bottom: 3px solid %1;"))
+		                         .arg(col.name());
+		if (s.name->styleSheet() != line) s.name->setStyleSheet(line); // each one restyles the name: only when new
 		const bool sel = t->id == app->selTrack;
 		if (s.box->property("sel").toBool() != sel) {
 			s.box->setProperty("sel", sel);
@@ -511,6 +517,13 @@ void MixerPanel::sync() {
 		if (!s.reverb->isHeld()) s.reverb->setValue(t->isDrums() ? t->kit.p[DP_REVERB] : app->paramValue(*t, P_REVERB));
 		if (!s.fader->isHeld()) s.fader->setValue(app->paramValue(*t, AP_VOLUME));
 		if (s.pump && !s.pump->isHeld()) s.pump->setValue(t->duck);
+		for (int i = 0; i < 3; i++) {
+			static const int synthParam[3] = {P_EQLOW, P_EQMID, P_EQHIGH},
+			                 drumParam[3] = {DP_EQLOW, DP_EQMID, DP_EQHIGH};
+			if (!s.eq[i]->isHeld())
+				s.eq[i]->setValue(t->isDrums() ? t->kit.p[drumParam[i]] : app->paramValue(*t, synthParam[i]));
+			s.eq[i]->setAccent(col);
+		}
 		for (Knob* k : {s.pan, s.echo, s.reverb, s.pump})
 			if (k) k->setAccent(col);
 		s.fader->setAccent(col);
@@ -551,4 +564,53 @@ void MixerPanel::tick() {
 	if (masterFader)
 		masterFader->setPeak(std::max(app->engine->peakL.load(std::memory_order_relaxed),
 		                              app->engine->peakR.load(std::memory_order_relaxed)));
+}
+
+// ---------------------------------------------------------------- the equaliser
+
+// The track's equaliser in its strip: Low, Mid and High, small, in a row under the name, as on a mixing desk. On a
+// synthesiser they are its sound's knobs (knob lines, MIDI); on drums the kit's own, as Echo and Reverb are. The low
+// cut and the mid's pitch are on the Sound tab, with the curve.
+QHBoxLayout* MixerPanel::eqKnobs(Strip& s, const Track& t, int at) {
+	const int id = t.id;
+	const bool drums = t.isDrums();
+	static const int synthParam[3] = {P_EQLOW, P_EQMID, P_EQHIGH}, drumParam[3] = {DP_EQLOW, DP_EQMID, DP_EQHIGH};
+	static const char* const targets[3] = {"eqlow", "eqmid", "eqhigh"};
+	static const char* const tips[3] = {
+	    QT_TR_NOOP("Low: more or less of this track’s deep end, its weight and warmth. Double-click for flat."),
+	    QT_TR_NOOP("Mid: more or less of this track’s middle, where it sounds hollow or honking. Its pitch is on the "
+		           "Sound tab. Double-click for flat."),
+	    QT_TR_NOOP("High: more or less of this track’s top end, its air and sparkle. Double-click for flat.")};
+	static const char* const what[3] = {QT_TR_NOOP("the low end of %1"), QT_TR_NOOP("the middle of %1"),
+	                                    QT_TR_NOOP("the high end of %1")};
+	auto* row = new QHBoxLayout;
+	row->setSpacing(0);
+	row->setContentsMargins(0, 0, 0, 0);
+	for (int i = 0; i < 3; i++) {
+		const int sp = synthParam[i], dp = drumParam[i];
+		auto* k = new Knob(ui(PARAMS[sp].label));
+		k->setScale(0.7);
+		k->setOneLine(true);
+		k->setDefault(0.5f);
+		k->setFormatter([sp](float v) { return formatParam(sp, v); });
+		k->setToolTip(tr(tips[i]));
+		if (drums) {
+			connect(k, &Knob::pressed, this, [this, k] { app->begin(k->name()); });
+			connect(k, &Knob::moved, this, [this, id, dp](float x) {
+				if (Track* t2 = app->song.track(id)) {
+					t2->kit.p[dp] = x;
+					app->touch();
+				}
+			});
+		} else {
+			connect(k, &Knob::pressed, this, [this, id, sp] { app->paramPress(id, sp); });
+			connect(k, &Knob::moved, this, [this, id, sp](float x) { app->paramMove(id, sp, x); });
+			connect(k, &Knob::released, this, [this] { app->paramRelease(); });
+		}
+		midiMenuFor(k, app, QStringLiteral("%1:%2").arg(QLatin1String(targets[i])).arg(at),
+		            tr(what[i]).arg(ui(t.name)));
+		s.eq[i] = k;
+		row->addWidget(k, 0, Qt::AlignHCenter);
+	}
+	return row;
 }

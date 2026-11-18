@@ -185,6 +185,7 @@ QPushButton#segM { border-radius: 0; border-left: none; margin-left: 0; margin-r
 QFrame#soundCard { background: @field@; border: 1px solid @rule@; border-radius: 6px; }
 QFrame#soundCard[on="true"] { border: 2px solid @amber@; }
 QLabel#cardName { font-weight: 600; }
+QLabel#cardGone { color: @dim@; font-weight: 600; }
 QFrame#soundChosen { background: @wellHi@; border: 1px solid @rule@; border-radius: 6px; }
 QLabel#chosenName { font-size: 19px; font-weight: 600; }
 QPushButton#mute:checked { background: #c4361c; color: #fff8ee; border-color: #7a2010; }
@@ -336,6 +337,13 @@ QPushButton#card:hover { background: @hover@; }
 QPushButton#card:checked { background: @wellHi@; border: 2px solid @amber@; padding: 0; }
 QLabel#cardHead { color: @ink@; font-size: 15px; font-weight: 600; background: transparent; }
 QLabel#cardText { color: @dim@; font-size: 13px; background: transparent; }
+QPushButton#startCard { background: @field@; border: 1px solid @rule@; border-radius: 6px; padding: 0; min-height: 54px; max-height: 54px; text-align: left; }
+QPushButton#startCard[small="true"] { min-height: 42px; max-height: 42px; }
+QPushButton#startCard:hover { background: @hover@; }
+QPushButton#startCard:pressed { background: @wellHi@; }
+QPushButton#startCard:focus { border: 2px solid @amber@; }
+QPushButton#startCard:disabled { background: transparent; border-color: @gridBar@; }
+QLabel#startTitle { color: @ink@; font-size: 19px; font-weight: 600; }
 QPushButton#sample { padding: 0 6px; font-weight: 400; }
 QPushButton#sample[sampleOn="true"] { color: @amber@; font-weight: 600; }
 )");

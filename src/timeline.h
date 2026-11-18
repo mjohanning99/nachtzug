@@ -1,8 +1,10 @@
-// Song timeline: track headers on the left; a bar ruler, the loop row and the chord lane on top; clips you can
-// move, stretch, cut, copy and paste; and under each track an optional lane where a knob's line is drawn by hand.
+// Song timeline: track headers on the left; the named parts, a bar ruler, the loop row and the chord lane on top; clips
+// you can move, stretch, cut, copy and paste; and under each track an optional lane where a knob's line is drawn by
+// hand.
 #pragma once
 #include "model.h"
 #include <QAbstractScrollArea>
+#include <QImage>
 
 class App;
 
@@ -13,9 +15,17 @@ public:
 	void setScissors(bool on);
 	void followPlayhead();
 	void refresh();
+	void repaintMoving(); // about 30 times a second while something moves: the playhead and the header column
+	// the header column's still parts (names, keys, the rows) are kept as a picture between repaints, so while the
+	// song plays only the sliders and meters on top are drawn again; the GUI test compares it with drawing afresh
+	static inline bool keepHeader = true;
 	void zoom(double factor);
 	void showWholeSong(); // zoom out so every clip fits, from bar 1
 	void addMenu(const QPoint& global);
+	void renamePart(int bar);    // asks for a new name for the part starting at this bar
+	void addPartAt(int bar);     // asks for a name and adds a part from this bar on
+	QRect partRect(int i) const; // where the named part i is shown in the parts lane (for the tests and lessons)
+	static int heightForRows(int rows) { return TOP + rows * ROW; } // the rows on top and this many tracks
 signals:
 	void clipActivated(); // a clip was opened: show the note editor
 protected:
@@ -31,6 +41,8 @@ protected:
 
 private:
 	struct Frame;
+	int shownPx = -100;              // where repaintMoving() last saw the playhead
+	unsigned shownSong = 0;          // and how often the song had been published then
 	void paintGrid(const Frame& fr); // the track rows, the looped stretch a little lighter, and the bar lines
 	void paintClips(
 	    const Frame& fr); // each track's clips: their colour, notes, name, repeats and transitions, and its knob line
@@ -38,10 +50,16 @@ private:
 	void paintRuler(const Frame& fr);     // the bar numbers along the top, and the playhead's mark in them
 	void paintLoopRow(const Frame& fr);   // the loop row: the stretch that repeats
 	void paintChords(const Frame& fr);    // the chord lane: a block for each stretch of the same chord
+	void paintParts(const Frame& fr);     // the parts lane: a long key for each named part
 	void paintEmptyNote(const Frame& fr); // what an empty song says: how to begin
 	void paintHeaders(const Frame& fr);   // the header column: each track's name, keys and volume, and the focus line
-	static constexpr int HDR = 214, RULER = 20, LOOPROW = 16, CHORDS = 22, TOP = RULER + LOOPROW + CHORDS, ROW = 58,
-	                     LANE = 72;
+	void paintHeaderStill(QPainter& p, const Frame& fr); // its names, keys and rows: everything that does not move
+	class QTimer* partJump = nullptr; // a click on a part while playing jumps once it is not a double-click
+	QImage headPic;                                      // those, kept (see paintHeaders)
+	QString headKey;                                     // and what they were drawn from
+	// the rows on top, from the top down: the parts, the bar ruler, the loop row and the chord lane
+	static constexpr int HDR = 214, PARTS = 22, RULER = 20, LOOPROW = 16, CHORDS = 22, RULERY = PARTS,
+	                     LOOPY = RULERY + RULER, CHORDY = LOOPY + LOOPROW, TOP = CHORDY + CHORDS, ROW = 58, LANE = 72;
 	double ppt() const { return pxPerBar / BAR; }
 	int tx(double tick) const;
 	double xt(int x) const;
@@ -59,6 +77,10 @@ private:
 	QString helpAt(const QPoint& p);
 	void updateScroll();
 	void chordMenu(int bar, const QPoint& global);
+	int partUnder(int x) const;  // index of the named part under x, or -1
+	int partEdgeAt(int x) const; // index of the part whose left edge is within reach of x, or -1
+	void partMenu(int bar, const QPoint& global);
+	QString askPartName(const QString& title, const QString& current); // empty when cancelled
 	void trackMenu(int trackId, const QPoint& global);
 	void clipMenu(int clipId, int tick, const QPoint& global);
 	void laneParamMenu(int trackId, const QPoint& global);
@@ -70,7 +92,7 @@ private:
 	App* app;
 	double pxPerBar = 64;
 	bool scissors = false;
-	enum Drag { None, Seek, Loop, Move, Resize, Volume, Point } drag = None;
+	enum Drag { None, Seek, Loop, Move, Resize, Volume, Point, PartEdge } drag = None;
 	struct Orig {
 		int id, start, len;
 	};

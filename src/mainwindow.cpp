@@ -3,11 +3,14 @@
 //
 // What's here: MainWindow's constructor, buildTopBar(), buildMenus(); sync() after every change and frame() about
 // 30 times a second; arrangePanels() and the layout settings; mapKey() (the letter keys play notes); opening,
-// saving and new songs; Arrange for me, the How to guide (showHelp(), keysPage()), the lessons menu, the settings
-// and the other dialogs by name (showDialog(), for pictures and tests). Made once in main().
+// saving and new songs; Arrange for me, Continue (the long journey), the How to guide (showHelp(), keysPage()), the
+// lessons menu, the settings and the other dialogs by name (showDialog(), for pictures and tests). Made once in main().
 // Changes in the song file: none (opening and saving go through App).
 
 #include "mainwindow.h"
+#include "recent.h"
+#include "starters.h"
+#include "startwindow.h"
 #include "savesounddialog.h"
 #include "soundlibrary.h"
 #include "inspector.h"
@@ -25,6 +28,7 @@
 #include "midi.h"
 #include "samples.h"
 #include <QAbstractSpinBox>
+#include <QSpinBox>
 #include <QApplication>
 #include <QCloseEvent>
 #include <QComboBox>
@@ -72,7 +76,7 @@
 constexpr int TB_LABEL = 11, TB_GAP_TOP = 4, TB_GAP_ROWS = 6, TB_PAD = 8;
 
 MainWindow::MainWindow(App* a) : app(a) {
-	theme::loadKeyLook(); // before the panels: their keys show their symbols as set
+	theme::applyCursorLook(); // before the panels: their keys show their symbols as set, sliders get their cursor
 	resize(1560, 980);
 	buildMenus();
 
@@ -150,8 +154,10 @@ MainWindow::MainWindow(App* a) : app(a) {
 	scissors->setCheckable(true);
 	auto* cutHere = plain(tr("Cut", "key: cut the selected clips at the playhead"),
 	                      tr("Cut the selected clips in two where the playhead is (Ctrl+E)"));
-	auto* dup = plain(tr("Copy", "key: a copy of the selected clips after them"),
-	                  tr("Duplicate: put a copy of the selected clips right after them (Ctrl+D)"));
+	auto* dup = plain(
+	    tr("Copy", "key: a copy of the selected clips after them"),
+	    tr("Duplicate: put a copy of the selected clips right after them; with a part selected, a copy of the whole "
+		   "part, and everything after it moves along (Ctrl+D)"));
 	auto* del = plain(tr("Delete"), tr("Delete the selected clips (Delete key)"));
 	auto* loopSel =
 	    plain(tr("Loop", "key: put the loop round the selected clips"),
@@ -159,9 +165,13 @@ MainWindow::MainWindow(App* a) : app(a) {
 	auto* arrangeBtn =
 	    plain(tr("Arrange", "key: Arrange for me"), tr("Arrange for me: turn your patterns into a whole song, with an "
 		                                               "intro, a build-up, a main part, a break and an ending"));
-	toolKeys = {{dup, QStringLiteral("copy")},    {loopSel, QStringLiteral("loop")},
-	            {cutHere, QStringLiteral("cut")}, {scissors, QStringLiteral("scissors")},
-	            {del, QStringLiteral("delete")},  {arrangeBtn, QStringLiteral("arrange")}};
+	auto* journeyBtn = plain(tr("Continue", "key: continue the song as a long journey"),
+	                         tr("Continue for a long journey: the song goes on for as many minutes as you like, "
+	                            "growing slowly out of your patterns"));
+	toolKeys = {{dup, QStringLiteral("copy")},          {loopSel, QStringLiteral("loop")},
+	            {cutHere, QStringLiteral("cut")},       {scissors, QStringLiteral("scissors")},
+	            {del, QStringLiteral("delete")},        {arrangeBtn, QStringLiteral("arrange")},
+	            {journeyBtn, QStringLiteral("journey")}};
 	for (auto& [key, kind] : toolKeys)
 		theme::symbolKey(key, kind, key->text(), kind == QLatin1String("scissors"));
 	arrangeBtn->setProperty("lesson", "arrange");
@@ -175,10 +185,9 @@ MainWindow::MainWindow(App* a) : app(a) {
 	zoomOut->setFixedWidth(38);
 	zoomIn->setFixedWidth(38);
 	del->setProperty("flowGap", 14);
-	arrangeBtn->setProperty("flowGap", 14);
 	QWidget* zoom = group({zoomOut, zoomIn}, 18, 0);
 	zoom->setProperty("flowRight", true);
-	songTools = {group({dup, loopSel, cutHere, scissors}, 20), del, arrangeBtn, zoom};
+	songTools = {group({dup, loopSel, cutHere, scissors}, 20), del, group({arrangeBtn, journeyBtn}, 14), zoom};
 	for (QWidget* w : songTools)
 		bar->addWidget(w);
 
@@ -220,9 +229,13 @@ MainWindow::MainWindow(App* a) : app(a) {
 		const QList<QVariant> hs = QSettings().value(QStringLiteral("layout/inspectorWidth")).toList();
 		hsplit->setSizes({hs.isEmpty() ? 310 : hs.value(0).toInt(), 1200});
 	}
-	connect(hsplit, &QSplitter::splitterMoved, this, [this] {
-		QSettings().setValue(QStringLiteral("layout/inspectorWidth"), QVariantList{hsplit->sizes().value(0)});
-	});
+	// the width is remembered once the divider has rested: writing the settings on every step of a drag wrote the
+	// file to disk each time, and the window stalled while the disk caught up
+	keepWidth = new QTimer(this);
+	keepWidth->setSingleShot(true);
+	keepWidth->setInterval(400);
+	connect(keepWidth, &QTimer::timeout, this, &MainWindow::keepInspectorWidth);
+	connect(hsplit, &QSplitter::splitterMoved, keepWidth, qOverload<>(&QTimer::start));
 	{ // while the inspector is put away, a slim tab on the left edge brings it back
 		auto* row = new QHBoxLayout;
 		row->setContentsMargins(0, 0, 0, 0);
@@ -274,6 +287,7 @@ MainWindow::MainWindow(App* a) : app(a) {
 	});
 	connect(loopSel, &QPushButton::clicked, this, [this] { app->loopSelection(); });
 	connect(arrangeBtn, &QPushButton::clicked, this, [this] { arrange(); });
+	connect(journeyBtn, &QPushButton::clicked, this, [this] { continueSong(); });
 	connect(addTrack, &QPushButton::clicked, this,
 	        [this, addTrack] { timeline->addMenu(addTrack->mapToGlobal(QPoint(0, addTrack->height()))); });
 	connect(zoomOut, &QPushButton::clicked, this, [this] { timeline->zoom(1 / 1.3); });
@@ -327,7 +341,10 @@ MainWindow::MainWindow(App* a) : app(a) {
 	setInspectorShown(QSettings().value(QStringLiteral("layout/inspector"), true).toBool());
 	arrangePanels();
 	applyScrollBars();
-	QTimer::singleShot(0, this, [this] { fitTopBar(); }); // again once shown: the style sheet sets heights then
+	QTimer::singleShot(0, this, [this] {
+		fitTopBar(); // again once shown: the style sheet sets heights then
+		QTimer::singleShot(0, this, [this] { fitTimelineHeight(); }); // once the window has its size and layout
+	});
 	sync();
 	// the first time the program starts, open the guide
 	if (qEnvironmentVariable("QT_QPA_PLATFORM") != "offscreen" &&
@@ -468,7 +485,10 @@ QWidget* MainWindow::buildTopBar() {
 	};
 	auto* home = tkey("start", tr("Back to the start of the loop, or of the song (Home)"), false);
 	playBtn = tkey("play", tr("Play (Space starts and stops)"), true);
-	stopBtn = tkey("stop", tr("Stop (Space starts and stops)"), false);
+	stopBtn = tkey(
+	    "stop",
+	    tr("Stop (Space starts and stops). Pressed again: back to the start, and echoes still ringing fall silent"),
+	    false);
 	recBtn = tkey("rec",
 	              tr("Record: while this is on and the song plays, the notes you play and the knobs you turn are "
 	                 "written into the song (Ctrl+R)"),
@@ -616,9 +636,11 @@ QWidget* MainWindow::buildTopBar() {
 	});
 	connect(stopBtn, &QToolButton::clicked, this, [this] {
 		if (app->isPlaying())
-			app->stop();
-		else
+			app->stop(); // the echoes ring out
+		else {           // pressed again: back to the start, and the ringing echoes fall silent
 			app->seek(app->song.loopOn ? app->song.loopStart : 0);
+			app->hush();
+		}
 	});
 	connect(home, &QToolButton::clicked, this, [this] { app->seek(app->song.loopOn ? app->song.loopStart : 0); });
 	connect(recBtn, &QToolButton::clicked, this, [this](bool on) {
@@ -674,7 +696,14 @@ void MainWindow::buildMenus() {
 	QMenu* file = menuBar()->addMenu(tr("&File"));
 	file->addAction(tr("New song with fresh ideas"), QKeySequence::New, this, [this] { newSong(true); });
 	file->addAction(tr("New empty song"), this, [this] { newSong(false); });
+	// the start window: a finished song for each style to make one's own, and the songs of lately
+	file->addAction(tr("New from a starter song…"), this, [this] { showStart(); })
+	    ->setStatusTip(tr("A short song for each style, to listen to and start from"));
 	file->addAction(tr("Open…"), QKeySequence::Open, this, [this] { openSong(); });
+	recentMenu = file->addMenu(tr("Open recent"));
+	recentMenu->setToolTipsVisible(true); // each song's folder
+	connect(recentMenu, &QMenu::aboutToShow, this, &MainWindow::fillRecentMenu);
+	fillRecentMenu(); // something in it from the start, so a Mac shows it as a menu
 	file->addSeparator();
 	file->addAction(tr("Save"), QKeySequence::Save, this, [this] { saveSong(false); });
 	file->addAction(tr("Save as…"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S), this, [this] { saveSong(true); });
@@ -709,6 +738,7 @@ void MainWindow::buildMenus() {
 	});
 	edit->addSeparator();
 	edit->addAction(tr("Arrange the song for me…"), this, [this] { arrange(); });
+	edit->addAction(tr("Continue the song for a long journey…"), this, [this] { continueSong(); });
 
 	QMenu* play = menuBar()->addMenu(tr("&Play"));
 	play->addAction(tr("Play or stop\tSpace"), this, [this] { app->togglePlay(); });
@@ -1020,6 +1050,7 @@ void MainWindow::applyLook() {
 
 void MainWindow::setTheme(int index) {
 	theme::apply(index);
+	theme::applyCursorLook(); // the cursors in the look's accent
 	QSettings().setValue(QStringLiteral("look"), theme::name(index));
 	applyLook();
 	QApplication::setPalette(theme::palette());
@@ -1048,13 +1079,29 @@ void MainWindow::arrangePanels() {
 		if (tabs->parentWidget() != split) split->addWidget(tabs);
 		split->setOrientation(key == QLatin1String("side") ? Qt::Horizontal : Qt::Vertical);
 		split->insertWidget(0, bottomArea);
-		static const QHash<QString, QList<int>> start = {{QStringLiteral("top"), {330, 470}},
+		// the timeline starts tall enough for four tracks under the parts, bars, loop and chord rows
+		static const QHash<QString, QList<int>> start = {{QStringLiteral("top"), {352, 448}},
 		                                                 {QStringLiteral("side"), {930, 590}}};
 		split->setSizes(splitSizes.value(key, start.value(key)));
 	}
 	tabs->show();
 	bottomArea->show();
 	shownArrangement = key;
+}
+
+// The timeline on top starts with as many whole tracks as fit in a little over half the height, up to four, so the
+// divider does not cut a track's keys and slider in half on a smaller screen. Once the divider is moved, it stays.
+void MainWindow::fitTimelineHeight() {
+	if (editorWindow || !timelineTop || splitSizes.contains(QStringLiteral("top")) || !timeline->isVisible()) return;
+	const QList<int> sz = split->sizes();
+	if (sz.size() < 2) return;
+	const int total = sz[0] + sz[1];
+	const int around = bottomArea->height() - timeline->viewport()->height(); // the keys above it, its frame
+	int rows = 4;
+	while (rows > 1 && around + Timeline::heightForRows(rows) > total * 0.55)
+		rows--;
+	const int want = around + Timeline::heightForRows(rows);
+	split->setSizes({want, total - want});
 }
 
 void MainWindow::setInspectorShown(bool on) {
@@ -1113,6 +1160,7 @@ void MainWindow::resetLayout() {
 	shownArrangement.clear();
 	setInspectorShown(true);
 	hsplit->setSizes({300, std::max(600, hsplit->width() - 300)});
+	keepWidth->stop(); // a drag just before is forgotten too
 	QSettings().remove(QStringLiteral("layout/inspectorWidth"));
 	QSettings().remove(QStringLiteral("fold"));
 	editor->setPadsMode(0);
@@ -1126,6 +1174,10 @@ void MainWindow::setLoopsMode(bool on) {
 	sync();
 }
 
+void MainWindow::keepInspectorWidth() {
+	QSettings().setValue(QStringLiteral("layout/inspectorWidth"), QVariantList{hsplit->sizes().value(0)});
+}
+
 // about 30 times a second: playhead, meters, moving knobs
 void MainWindow::frame() {
 	const bool playing = app->isPlaying();
@@ -1133,16 +1185,33 @@ void MainWindow::frame() {
 	vuL->feed(app->engine->peakL.load(std::memory_order_relaxed));
 	vuR->feed(app->engine->peakR.load(std::memory_order_relaxed));
 	lcd->update();
-	if (app->song.liveMode)
+	// The timeline (or loop grid) and the note grid are repainted only while something on them moves: the song plays,
+	// a sound rings, a key is held, the playhead or the chord changed. Repainting them whole 30 times a second while
+	// nothing moved kept a quarter of a processor busy and made resizing the window sluggish. A few more frames after
+	// it all comes to rest let the meters fall and the keys go dark; any other change repaints them through sync().
+	// (quieter than 1e-5, a track's meter in the timeline is less than a pixel wide: sqrt(1e-5) of its 190 pixels)
+	const Engine& en = *app->engine;
+	bool sounding = std::max({en.peakL.load(std::memory_order_relaxed), en.peakR.load(std::memory_order_relaxed),
+	                          en.inputPeak.load(std::memory_order_relaxed)}) > 1e-5f;
+	for (const auto& pk : en.trackPeak)
+		sounding = sounding || pk.load(std::memory_order_relaxed) > 1e-5f;
+	const FrameState now{app->pos(), app->liveChord(), app->liveChordAlt(), app->liveChordPad(), app->pendingChanges()};
+	if (playing || app->recording || sounding || app->anyKeyHeld() || now != lastFrame)
+		restFrames = 0;
+	else if (restFrames <= 15)
+		restFrames++;
+	lastFrame = now;
+	const bool moving = restFrames <= 15;
+	if (moving && app->song.liveMode)
 		loops->viewport()->update();
-	else {
+	else if (moving) {
 		timeline->followPlayhead();
-		timeline->viewport()->update();
+		timeline->repaintMoving();
 	}
 	const int tab = tabs->currentIndex();
-	if (tab == 0)
-		editor->repaintView();
-	else if (tab == 1)
+	if (tab == 0) {
+		if (moving) editor->repaintView();
+	} else if (tab == 1)
 		sound->syncMoving();
 	else
 		mixer->tick();
@@ -1296,6 +1365,81 @@ void MainWindow::openSong() {
 		                     tr("%1 is not a Nachtzug song, or it could not be read.").arg(path));
 }
 
+// File > Open recent: the songs of lately, newest first, by name (the folder in the tooltip); one no longer found is
+// greyed and says so, and stays until the list is cleared or newer songs push it out
+void MainWindow::fillRecentMenu() {
+	recentMenu->clear();
+	const QStringList paths = recent::list(), names = recent::names(paths);
+	for (int i = 0; i < int(paths.size()); i++) {
+		const QString p = paths[i];
+		const bool here = recent::exists(p);
+		QString name = names[i];
+		name.replace(QLatin1Char('&'), QLatin1String("&&"));
+		// &1 to &8: with the menu open, the number opens the song
+		const QString text = QStringLiteral("&%1  %2").arg(i + 1).arg(here ? name : tr("%1 (not found)").arg(name));
+		QAction* a = recentMenu->addAction(text, this, [this, p] { openRecent(p); });
+		a->setToolTip(here ? recent::folderOf(p) : tr("No longer in %1").arg(recent::folderOf(p)));
+		a->setStatusTip(a->toolTip());
+		a->setEnabled(here);
+	}
+	if (paths.isEmpty()) recentMenu->addAction(tr("No songs yet"))->setEnabled(false);
+	recentMenu->addSeparator();
+	QAction* clear = recentMenu->addAction(tr("Clear the list"), this, [this] {
+		recent::clear();
+		fillRecentMenu();
+	});
+	clear->setToolTip(tr("Forget the songs listed here (the songs themselves stay where they are)"));
+	clear->setEnabled(!paths.isEmpty());
+}
+
+void MainWindow::openRecent(const QString& path) {
+	if (!recent::exists(path)) {
+		recent::remove(path);
+		QMessageBox::information(this, tr("Song not found"),
+		                         tr("“%1” is no longer in %2, so it was taken off the list of recent songs.")
+		                             .arg(QFileInfo(path).completeBaseName(), recent::folderOf(path)));
+		return;
+	}
+	if (path == app->filePath && !app->dirty) return; // open already
+	if (!maybeSave()) return;
+	if (!app->load(path))
+		QMessageBox::warning(this, tr("Open failed"),
+		                     tr("%1 is not a Nachtzug song, or it could not be read.").arg(path));
+}
+
+// The start window; what was chosen in it is opened here, after asking about unsaved changes
+void MainWindow::showStart() {
+	app->releaseAllKeys();
+	StartWindow sw(app, this);
+	if (sw.exec() != QDialog::Accepted) return;
+	switch (sw.choice()) {
+	case StartWindow::Starter: {
+		Song s;
+		const int i = sw.starter();
+		if (!maybeSave()) return;
+		if (!loadStarter(i, s)) return;
+		if (app->song.liveMode) setLoopsMode(false);
+		app->setSong(s, QString()); // untitled: Save asks for a name, and the starter stays as it came
+		timeline->showWholeSong();
+		emit app->status(tr("“%1” is open as a new song. Change anything you like; Save keeps it under a name of "
+		                    "your own.")
+		                     .arg(ui(starters()[size_t(i)].name)));
+		break;
+	}
+	case StartWindow::Empty:
+		newSong(false);
+		break;
+	case StartWindow::Recent:
+		openRecent(sw.recentPath());
+		break;
+	case StartWindow::OpenFile:
+		openSong();
+		break;
+	case StartWindow::Nothing:
+		break;
+	}
+}
+
 void MainWindow::newSong(bool starter) {
 	if (!maybeSave()) return;
 	Song s;
@@ -1399,6 +1543,197 @@ void MainWindow::arrange() {
 	emit app->status(tr("The song is arranged. Press Space to hear it from the start."));
 }
 
+// “Continue for … minutes”: the song goes on as a long journey (journey.cpp), after its end or after the selected
+// clips. One undo step; while the song plays it lands on the next bar line, like every other change.
+void MainWindow::continueSong() {
+	app->releaseAllKeys();
+	if (app->song.tracks.empty()) {
+		emit app->status(tr("Add a track first: the journey grows out of the patterns in the song."));
+		return;
+	}
+	QSettings st;
+	QDialog dlg(this);
+	dlg.setWindowTitle(tr("Continue the song"));
+	auto* v = new QVBoxLayout(&dlg);
+	v->setContentsMargins(20, 18, 20, 14);
+	v->setSpacing(12);
+	auto* head = new QLabel(
+	    tr("<b style=\"font-size:16px\">Continue for a long journey</b><br>"
+		   "The song goes on for as many minutes as you like, growing slowly out of your patterns: a note changes "
+		   "here and there, the filters open and close over minutes, parts come and go, and there is a breakdown "
+		   "and a return. The key and the chords stay. Undo takes it all back."));
+	head->setTextFormat(Qt::RichText);
+	head->setWordWrap(true);
+	head->setFixedWidth(540);
+	v->addWidget(head);
+
+	auto* grid = new QGridLayout;
+	grid->setHorizontalSpacing(14);
+	grid->setVerticalSpacing(8);
+	auto caption = [](const QString& t) {
+		auto* l = new QLabel(t);
+		l->setObjectName("cap");
+		return l;
+	};
+	auto dim = [] {
+		auto* l = new QLabel;
+		l->setObjectName("dim");
+		l->setWordWrap(true);
+		return l;
+	};
+	auto joined = [&dlg](QButtonGroup* group, const QStringList& words, const QStringList& tips, int checked) {
+		auto* keys = new QHBoxLayout;
+		keys->setSpacing(0);
+		for (int i = 0; i < words.size(); i++) {
+			auto* k = new QPushButton(words[i]);
+			k->setObjectName(i == 0 ? "segL" : i == words.size() - 1 ? "segR" : "segM");
+			k->setCheckable(true);
+			k->setMinimumWidth(110);
+			k->setToolTip(tips[i]);
+			group->addButton(k, i);
+			k->setChecked(i == checked);
+			keys->addWidget(k);
+		}
+		keys->addStretch(1);
+		Q_UNUSED(dlg);
+		return keys;
+	};
+	// how long
+	auto* minutes = new QSpinBox;
+	minutes->setRange(1, 60);
+	minutes->setValue(std::clamp(st.value(QStringLiteral("journey/minutes"), 10).toInt(), 1, 60));
+	minutes->setFixedWidth(64);
+	minutes->setToolTip(tr("How many minutes the journey lasts, at the song’s tempo"));
+	auto* lengthRow = new QHBoxLayout;
+	lengthRow->setSpacing(8);
+	lengthRow->addWidget(minutes);
+	lengthRow->addWidget(new QLabel(tr("minutes")));
+	lengthRow->addStretch(1);
+	grid->addWidget(caption(tr("Continue for")), 0, 0, Qt::AlignVCenter | Qt::AlignLeft);
+	grid->addLayout(lengthRow, 0, 1);
+	// how much happens
+	auto* character = new QButtonGroup(&dlg);
+	const int was = std::clamp(st.value(QStringLiteral("journey/character"), int(J_EVOLVING)).toInt(), 0, 2);
+	// the captions flush left, as in every other dialog; beside a row of keys, level with the keys rather than the line
+	// beneath them
+	QList<QPair<QLabel*, QAbstractButton*>> besideKeys;
+	auto* charCap = caption(tr("Character"));
+	grid->addWidget(charCap, 1, 0, Qt::AlignTop | Qt::AlignLeft);
+	auto* charCol = new QVBoxLayout;
+	charCol->setSpacing(4);
+	charCol->addLayout(joined(character, {tr("Calm"), tr("Evolving"), tr("Restless")},
+	                          {tr("Calm: long parts, a small change now and then, gentle filter lines"),
+	                           tr("Evolving: a note changes every sixteen bars, parts rest now and then, the filters "
+	                              "sweep"),
+	                           tr("Restless: changes every eight bars, new ideas on new ground, deep sweeps")},
+	                          was));
+	auto* charText = dim();
+	charCol->addWidget(charText);
+	grid->addLayout(charCol, 1, 1);
+	besideKeys.append({charCap, character->button(0)});
+	// where it starts
+	int selEnd = -1;
+	for (int id : app->selClips)
+		if (const Clip* c = app->song.clip(id)) selEnd = std::max(selEnd, c->end());
+	const int endBar = (app->song.endTick() + BAR - 1) / BAR, selBar = selEnd < 0 ? -1 : (selEnd + BAR - 1) / BAR;
+	auto* start = new QButtonGroup(&dlg);
+	auto* startCap = caption(tr("Start"));
+	grid->addWidget(startCap, 2, 0, Qt::AlignTop | Qt::AlignLeft);
+	auto* startCol = new QVBoxLayout;
+	startCol->setSpacing(4);
+	startCol->addLayout(joined(start, {tr("After the end"), tr("After the selection")},
+	                           {tr("The journey starts after the last clip; nothing in the song changes"),
+	                            tr("The journey starts after the selected clips and replaces everything after them")},
+	                           0));
+	besideKeys.append({startCap, start->button(0)});
+	start->button(1)->setEnabled(selBar >= 0 && selBar < endBar);
+	auto* startText = dim();
+	startCol->addWidget(startText);
+	grid->addLayout(startCol, 2, 1);
+	v->addLayout(grid);
+	for (const auto& [cap, key] : besideKeys) {
+		key->ensurePolished();
+		cap->setMinimumHeight(key->sizeHint().height());
+		cap->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+	}
+	auto* ending = new Switch(tr("End with a fade-out"), Switch::Beside);
+	ending->setChecked(st.value(QStringLiteral("journey/ending"), true).toBool());
+	ending->setToolTip(tr("At the end the parts leave one by one and the last ones fade away; switched off, the "
+	                      "journey stops at full strength, ready to be continued again"));
+	v->addWidget(ending);
+	auto* summary = dim();
+	auto* parts = dim();
+	v->addWidget(summary);
+	v->addWidget(parts);
+	auto clock = [this](int bars) {
+		const int secs = int(std::lround(bars * 4 * 60.0 / app->song.bpm));
+		return QStringLiteral("%1:%2").arg(secs / 60).arg(secs % 60, 2, 10, QLatin1Char('0'));
+	};
+	// the journey's seed, drawn when the window opens, so the parts listed are the parts it makes
+	const unsigned seed = unsigned(app->rng());
+	std::mt19937 first(seed);
+	const unsigned planSeed = unsigned(first());
+	auto describe = [=, this] {
+		const int ch = character->checkedId();
+		charText->setText(ch == J_CALM       ? tr("Long parts and slow changes, for listening far into the night.")
+		                  : ch == J_RESTLESS ? tr("More happens: new ideas, deeper sweeps, parts that come and go.")
+		                                     : tr("A change every few phrases, like a sequence that slowly turns."));
+		const bool afterSel = start->checkedId() == 1;
+		const int from = afterSel ? selBar : endBar;
+		startText->setText(afterSel ? tr("From bar %1; what comes after it now is replaced.").arg(from + 1)
+		                            : tr("From bar %1, after the last clip.").arg(from + 1));
+		const int bars = journeyBars(app->song, minutes->value());
+		bool continues = false;
+		for (const Track& t : app->song.tracks)
+			for (const Clip& c : t.clips)
+				continues |= c.start < from * BAR && (!c.notes.empty() || c.ad.on);
+		QString line =
+		    tr("%1 bars, about %2; the whole song then lasts %3.").arg(bars).arg(clock(bars)).arg(clock(from + bars));
+		if (app->isPlaying()) line += QLatin1Char(' ') + tr("It begins on the next bar line.");
+		summary->setText(line);
+		QStringList l;
+		for (const JourneyPhase& p : journeyPlan(bars, ch, continues, ending->isChecked(), planSeed))
+			l << QStringLiteral("%1 (%2)").arg(ui(p.name)).arg(p.bars);
+		parts->setText(tr("Parts, with their length in bars: %1").arg(l.join(QStringLiteral("  ·  "))));
+	};
+	describe();
+	connect(character, &QButtonGroup::idClicked, &dlg, describe);
+	connect(start, &QButtonGroup::idClicked, &dlg, describe);
+	connect(minutes, &QSpinBox::valueChanged, &dlg, describe);
+	connect(ending, &Switch::toggled, &dlg, describe);
+	auto* buttons = new QDialogButtonBox;
+	auto* go = buttons->addButton(tr("Continue"), QDialogButtonBox::AcceptRole);
+	go->setObjectName("primary");
+	go->setDefault(true);
+	go->setToolTip(tr("Write the journey into the song"));
+	buttons->addButton(QDialogButtonBox::Cancel)->setToolTip(tr("Close without changing anything"));
+	connect(buttons, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
+	connect(buttons, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
+	v->addWidget(buttons);
+	dlg.adjustSize();
+	dlg.setMinimumHeight(v->totalHeightForWidth(dlg.width()));
+	if (dlg.exec() != QDialog::Accepted) return;
+	const int mins = minutes->value(), ch = character->checkedId();
+	const bool fade = ending->isChecked();
+	const int fromBar = start->checkedId() == 1 ? selBar : -1; // -1: wherever the song ends when it lands
+	st.setValue(QStringLiteral("journey/minutes"), mins);
+	st.setValue(QStringLiteral("journey/character"), ch);
+	st.setValue(QStringLiteral("journey/ending"), fade);
+	if (app->song.liveMode) setLoopsMode(false);
+	const bool playing = app->isPlaying();
+	app->onBar(
+	    [seed, mins, ch, fade, fromBar](Song& s) {
+		    std::mt19937 g(seed);
+		    continueJourney(s, fromBar >= 0 ? fromBar : (s.endTick() + BAR - 1) / BAR, mins, ch, fade, g);
+	    },
+	    true, tr("Long journey"), true);
+	if (!playing) {
+		app->refreshSelection();
+		timeline->showWholeSong();
+		emit app->status(tr("The journey is written: %1 more minutes. Press Space to hear it.").arg(mins));
+	}
+}
+
 void MainWindow::showDialog(const QString& which) {
 	if (which == QLatin1String("settings"))
 		showSettings(0);
@@ -1412,6 +1747,15 @@ void MainWindow::showDialog(const QString& which) {
 		exportWav();
 	else if (which == QLatin1String("arrange"))
 		arrange();
+	else if (which == QLatin1String("partname")) { // for pictures: naming a part (with --arrange, renaming the first)
+		if (app->song.parts.empty())
+			timeline->addPartAt(0);
+		else
+			timeline->renamePart(app->song.parts[0].bar);
+	} else if (which == QLatin1String("start"))
+		showStart();
+	else if (which == QLatin1String("journey"))
+		continueSong();
 	else if (which == QLatin1String("library")) { // for pictures: the sound library
 		SoundLibrary lib(app, [](const mysounds::Sound&) {}, this);
 		lib.exec();
@@ -1528,6 +1872,10 @@ void MainWindow::restartProgram() {
 void MainWindow::closeEvent(QCloseEvent* e) {
 	if (maybeSave()) {
 		app->stop();
+		if (keepWidth->isActive()) { // a width not yet remembered
+			keepWidth->stop();
+			keepInspectorWidth();
+		}
 		e->accept();
 	} else
 		e->ignore();
@@ -1596,11 +1944,15 @@ QWidget* MainWindow::keysPage(const QString& style) {
 	row(key(Qt::Key_Shift) + plus + tr("drag"), tr("Select several notes, hits or clips"));
 	row(key(Qt::Key_Shift) + plus + tr("drag a note’s end"), tr("Any length, between the grid lines too"));
 	row(tr("Double-click in the timeline"), tr("A new clip on an empty spot"));
+	row(tr("Click a part in the Parts row"),
+	    tr("Select its clips and move the playhead there; double-click to rename it, drag its left edge to move it"));
 	row(tr("Right-click"),
 	    tr("More choices: on a clip (fades, filter sweeps), a track (rename), a knob (Learn MIDI control)"));
 	row(ctrl + plus + tr("wheel"), tr("Zoom"));
 	row(key(Qt::Key_Shift) + plus + tr("wheel"), tr("Scroll sideways"));
 	row(tr("Rest the mouse"), tr("A short explanation of almost anything"));
+	row(tr("The equaliser’s picture"),
+	    tr("Drag a point up, down or sideways; or Tab to pick one, the arrows to move it, Delete to put it back"));
 	end();
 	h += tr("<p>All of this, and much more, is in the operation manual.</p>");
 	auto* b = new QTextBrowser;
@@ -1623,8 +1975,9 @@ void MainWindow::showHelp() {
 	mark->setScaledContents(true);
 	mark->setFixedSize(56, 56);
 	head->addWidget(mark);
+	// the name without letter-spacing, which would switch its tz ligature off (as in the welcome window)
 	auto* title = new QLabel(
-	    tr("<span style=\"font-size:22px; font-weight:600; letter-spacing:3px\">NACHTZUG</span><br>Make a "
+	    tr("<span style=\"font-size:22px; font-weight:600\">Nachtzug</span><br>Make a "
 		   "song in five steps. Nachtzug is built so that every note automatically lands in the right scale."));
 	title->setTextFormat(Qt::RichText);
 	title->setWordWrap(true);
@@ -1685,7 +2038,12 @@ void MainWindow::showHelp() {
 		   "<b>+ Add track</b> adds a bass line, sequence, pad, lead or drums. The <b>Mixer</b> tab balances the "
 		   "tracks.</p>"
 		   "<p><b>Arrange</b>, above the timeline, turns your patterns into a whole song: an intro, a build-up, "
-		   "a main part, a break and an ending. "
+		   "a main part, a break and an ending, each named in the <b>Parts</b> row at the top of the timeline. "
+		   "Click a part to select its clips (<b>Loop</b> then repeats just that part), double-click it to rename "
+		   "it, drag its left edge to move it; right-click a part to loop it or play from it, or the row to name a part "
+		   "yourself. "
+		   "<b>Continue</b>, beside it, lets the song go on for as many minutes as you like, a long journey that "
+		   "grows slowly out of your patterns, with parts coming and going and the filters opening over minutes. "
 		   "The <b>Export</b> key at the top right saves the result as a sound file.</p>"
 		   "<h3>Trying things out</h3>"
 		   "<p>Nothing is lost by trying: the <b>↶</b> key beside the display takes back the last change, and <b>↷</b> "
@@ -1713,6 +2071,8 @@ void MainWindow::showHelp() {
 		   "<p>Rest the mouse on anything for a short explanation. Every key is on the <b>Keys and mouse</b> "
 		   "tab.</p>") +
 	    tr("<h3>More to try</h3><ul>"
+		   "<li><b>File → New from a starter song…</b> holds a short, finished song for each style, to listen to "
+		   "and make your own; <b>File → Open recent</b> has the songs you opened or saved lately.</li>"
 		   "<li><b>Lessons</b> (Help menu) walk you through a song step by step, in the real program.</li>"
 		   "<li><b>Chance</b>, <b>Repeat</b> and <b>Keep</b> in the Notes tab: notes that play only sometimes, quick "
 		   "drum rolls, and notes Vary leaves alone. Select notes first.</li>"
@@ -1721,11 +2081,21 @@ void MainWindow::showHelp() {
 		   "back.</li>"
 		   "<li><b>Pump</b> in the mixer makes a track duck on every kick. The <b>Input</b> strip plays a guitar or a "
 		   "voice through a filter.</li>"
+		   "<li>The <b>Equaliser</b> at the end of the Sound tab, and <b>Low</b>, <b>Mid</b> and <b>High</b> in the "
+		   "mixer, make a track darker, brighter or lighter in the low end. <b>Low cut</b> on everything but the bass "
+		   "and the kick clears up a muddy mix. The Simple page has a big <b>Tone</b> knob and a <b>Low cut</b> "
+		   "switch for the same.</li>"
 		   "<li>In the preset and kit lists, <b>rest the mouse</b> on a sound to hear it. <b>Track → Chop a loop "
 		   "across the drums</b> cuts a drum loop onto the pads.</li>"
 		   "<li>A <b>MIDI keyboard</b> plays along; right-click a knob and choose <b>Learn MIDI control</b> to turn it "
 		   "from a controller. <b>Export</b> also makes a file per track, or a MIDI file.</li>"
-		   "</ul>"));
+		   "</ul>") +
+	    tr("<h3>The echo and the LFO in time</h3>"
+		   "<p>The whole song shares one echo. Its <b>Echo time</b> is a note value, so the repeats stay in time "
+		   "with the song: <b>Dotted 1/8</b> makes a sequence ripple, the sound of Berlin School. <b>Echo tone</b> "
+		   "makes each repeat darker, and <b>Ping-pong</b> bounces them between the speakers. Set the LFO’s "
+		   "<b>Timing</b> to <b>In time</b> and its movement follows the beat: a filter sweep over two bars, or "
+		   "<b>LFO to volume</b> on 1/16 with the square shape for a chopped pad.</p>"));
 	tabs->addTab(text, tr("Getting started"));
 	tabs->addTab(keysPage(style), tr("Keys and mouse"));
 	v->addWidget(tabs, 1);
@@ -1737,7 +2107,7 @@ void MainWindow::showHelp() {
 	auto* lesson = buttons->addButton(tr("Start the first lesson"), QDialogButtonBox::ActionRole);
 	lesson->setObjectName("primary");
 	lesson->setToolTip(tr("A guided tour: the program points at one thing at a time and waits until you have tried it. "
-	                      "All lessons are in Help > Lessons."));
+	                      "All lessons are in Help → Lessons."));
 	bool startIt = false;
 	connect(lesson, &QPushButton::clicked, &dlg, [&] {
 		startIt = true;

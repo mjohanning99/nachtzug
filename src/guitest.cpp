@@ -5,6 +5,10 @@
 // starts a moment later, from the event loop, and ends the program with its result.
 // Changes in the song file: none.
 #include "guitest.h"
+#include <QInputDialog>
+#include "timeline.h"
+#include "starters.h"
+#include "startwindow.h"
 #include "app.h"
 #include "mainwindow.h"
 #include "inspector.h"
@@ -18,6 +22,8 @@
 #include <QApplication>
 #include <QSettings>
 #include <QTabWidget>
+#include "timeline.h"
+#include <QScrollArea>
 #include <QAbstractButton>
 #include <QAbstractSlider>
 #include <QAbstractSpinBox>
@@ -35,6 +41,9 @@
 #include <QToolButton>
 #include <QKeyEvent>
 #include <QDialog>
+#include <QDir>
+#include <QFile>
+#include <QLabel>
 #include <QLineEdit>
 #include <QThread>
 #include <cmath>
@@ -91,6 +100,80 @@ void scheduleGuiTest(App& app, MainWindow& w) {
 				all = all && k->isChecked();
 			check(all, "each row of the welcome window keeps its own choice");
 		}
+		{ // the start window: a card for each starter, each with a listen key that plays a few bars of it
+			StartWindow sw(&app, &w);
+			sw.show();
+			QApplication::processEvents();
+			QList<QPushButton*> cards = sw.findChildren<QPushButton*>(QStringLiteral("startCard"));
+			int listen = 0;
+			for (QPushButton* k : sw.findChildren<QPushButton*>())
+				if (k->property("symbol").toString() == QLatin1String("play")) listen++;
+			check(cards.size() >= int(starters().size()) && listen == int(starters().size()),
+			      "the start window shows a card with a listen key for each starter song");
+			QPushButton* play = nullptr;
+			for (QPushButton* k : sw.findChildren<QPushButton*>())
+				if (!play && k->property("symbol").toString() == QLatin1String("play")) play = k;
+			QLabel* note = nullptr;
+			for (QLabel* l : sw.findChildren<QLabel*>(QStringLiteral("dim")))
+				if (l->text().contains(QStringLiteral("listen first"))) note = l;
+			if (play && note) {
+				play->click();
+				check(play->isChecked(), "the listen key lights at once while the bars are made ready");
+				QElapsedTimer t;
+				t.start();
+				while (t.elapsed() < 20000 && !note->text().startsWith(QStringLiteral("Listening")))
+					QApplication::processEvents();
+				check(note->text().startsWith(QStringLiteral("Listening")) && play->isChecked(),
+				      "a starter can be heard before it is opened");
+				play->click();
+				check(!play->isChecked() && note->text().contains(QStringLiteral("listen first")),
+				      "pressed again, the listen key stops it");
+			} else
+				check(false, "the start window has a listen key and a line saying what to do");
+		}
+		{ // a starter chosen in the start window opens as a new, untitled song; the starter itself is not touched
+			Song starter;
+			loadStarter(0, starter);
+			auto picked = std::make_shared<bool>(false);
+			auto poll = std::make_shared<std::function<void()>>();
+			*poll = [&w, picked, again = std::weak_ptr(poll)] { // weak: the poll must not keep itself alive
+				auto* d = qobject_cast<StartWindow*>(QApplication::activeModalWidget());
+				if (!d) {
+					if (auto p = again.lock()) QTimer::singleShot(30, &w, *p);
+					return;
+				}
+				if (auto* c = d->findChild<QPushButton*>(QStringLiteral("startCard"))) c->click();
+				*picked = true;
+			};
+			QTimer::singleShot(30, &w, *poll);
+			app.dirty = false;
+			w.showStart();
+			check(*picked && app.filePath.isEmpty() && app.song.tracks.size() == starter.tracks.size() &&
+			          app.song.bpm == starter.bpm,
+			      "a starter opens from the start window as an untitled song (Save asks for a name)");
+			// Save, Open recent: the saved song is listed by name, with its folder in the tooltip
+			const QString path = QDir::temp().filePath(QStringLiteral("nachtzug-guitest-recent.nachtzug"));
+			app.save(path);
+			QMenu* recentMenu = nullptr;
+			for (QMenu* m : w.findChildren<QMenu*>())
+				if (m->title() == QStringLiteral("Open recent")) recentMenu = m;
+			if (recentMenu) {
+				emit recentMenu->aboutToShow();
+				const QList<QAction*> acts = recentMenu->actions();
+				check(!acts.isEmpty() && acts.first()->text().contains(QStringLiteral("nachtzug-guitest-recent")) &&
+				          acts.first()->toolTip() == QDir::toNativeSeparators(QDir::tempPath()),
+				      "File, Open recent lists the song just saved by name, with its folder in the tooltip");
+				check(acts.last()->text() == QStringLiteral("Clear the list") && acts.last()->isEnabled(),
+				      "Open recent ends with Clear the list");
+				acts.last()->trigger();
+				emit recentMenu->aboutToShow();
+				check(!recentMenu->actions().first()->isEnabled() && !recentMenu->actions().last()->isEnabled(),
+				      "after clearing, the list is empty");
+			} else
+				check(false, "the File menu has Open recent");
+			QFile::remove(path);
+			app.setSong(demoSong(), QString());
+		}
 		auto* sp = w.findChild<SoundPanel*>();
 		auto* tabs = w.findChild<QTabWidget*>();
 		tabs->setCurrentIndex(1);
@@ -98,6 +181,44 @@ void scheduleGuiTest(App& app, MainWindow& w) {
 		for (Track& t : app.song.tracks)
 			if (t.role == R_BASS) bass = &t;
 		app.selectTrack(bass->id);
+		// the Sound tab is as wide as the page shown needs: the Simple drums page, eight drums in a row, used to make
+		// every page wider than a laptop's window, cutting the sections off at the right
+		if (auto* sa = qobject_cast<QScrollArea*>(sp ? sp->parentWidget()->parentWidget() : nullptr)) {
+			QApplication::processEvents();
+			check(sp->minimumSizeHint().width() < 900 && sa->widget() == sp,
+			      "the Sound tab's Complete page fits a window 1280 pixels wide");
+			// the Simple page too: there Tone and Low cut move under the other big knobs when the window is narrow
+			const QSize was = w.size();
+			sp->setSimple(true);
+			for (const QSize at : {QSize(1280, 800), QSize(1560, 980)}) {
+				w.resize(at);
+				for (int k = 0; k < 4; k++)
+					QApplication::processEvents();
+				check(sp->width() <= sa->viewport()->width(),
+				      "the Sound tab's Simple page fits the window, 1280 or 1560 pixels wide");
+			}
+			sp->setSimple(false);
+			w.resize(was);
+			QApplication::processEvents();
+		}
+		// the timeline's header column drawn from its kept picture is the same, pixel for pixel, as drawn afresh
+		if (auto* tl = w.findChild<Timeline*>()) {
+			QWidget* vp = tl->viewport();
+			auto shot = [vp](const QPoint& at) {
+				QImage img(vp->size() + QSize(at.x(), at.y()), QImage::Format_ARGB32_Premultiplied);
+				img.fill(Qt::black);
+				vp->render(&img, at);
+				return img;
+			};
+			for (const QPoint at : {QPoint(0, 0), QPoint(37, 11)}) {
+				Timeline::keepHeader = false;
+				const QImage fresh = shot(at);
+				Timeline::keepHeader = true;
+				shot(at); // draws the picture
+				const QImage kept = shot(at);
+				check(kept == fresh, "the timeline's header column from its kept picture is drawn exactly as afresh");
+			}
+		}
 		// the note grid opens on the clip's notes, also when the track was chosen while the grid's tab was hidden
 		if (auto* ed = w.findChild<NoteEditor*>()) {
 			tabs->setCurrentIndex(0);
@@ -171,7 +292,7 @@ void scheduleGuiTest(App& app, MainWindow& w) {
 		QList<Knob*> big;
 		for (Knob* k : sp->findChildren<Knob*>())
 			if (k->isVisible() && k->width() > 70) big << k;
-		check(big.size() == 8, "the simple synth page has eight big knobs");
+		check(big.size() == 9, "the simple synth page has nine big knobs: eight in plain words and Tone");
 		for (Knob* k : big) {
 			const Song before = app.song;
 			const float v0 = k->value();
@@ -390,17 +511,21 @@ void scheduleGuiTest(App& app, MainWindow& w) {
 		// runs f on the next window that opens over the main one, then makes sure it is gone
 		auto onModal = [&](std::function<void(QWidget*)> f) {
 			auto tries = std::make_shared<int>(0);
+			// the waiting timer holds the poll; the poll knows itself only weakly, or the two would keep each other
+			// alive for ever
 			auto poll = std::make_shared<std::function<void()>>();
-			*poll = [&w, f, tries, poll] {
+			const std::weak_ptr<std::function<void()>> self = poll;
+			*poll = [&w, f, tries, self] {
 				QWidget* d = QApplication::activeModalWidget();
 				if (!d) {
-					if (++*tries < 100) QTimer::singleShot(30, &w, *poll);
+					if (++*tries < 100)
+						if (auto again = self.lock()) QTimer::singleShot(30, &w, [again] { (*again)(); });
 					return;
 				}
 				f(d);
 				if (d->isVisible()) d->close();
 			};
-			QTimer::singleShot(30, &w, *poll);
+			QTimer::singleShot(30, &w, [poll] { (*poll)(); });
 		};
 		auto byLessonKey = [&](const char* key) -> QWidget* {
 			for (QWidget* x : w.findChildren<QWidget*>())
@@ -470,6 +595,80 @@ void scheduleGuiTest(App& app, MainWindow& w) {
 			if (top) top->trigger();
 			settle(30);
 			check(top && side <= 1300, "with the timeline beside the tabs, the window fits a 1366 px laptop screen");
+		}
+		dbg("named parts");
+		{ // the parts lane: a click selects a part, a double-click renames it, its edge drags, each one undo step
+			auto* tl = w.findChild<Timeline*>();
+			const int wasTrack = app.selTrack, wasTab = tabs->currentIndex();
+			app.edit([&](Song& s) { arrangeSong(s, 1, true, app.rng); }, QStringLiteral("Arrange for me"), true);
+			tl->showWholeSong();
+			settle(30);
+			QWidget* vp = tl->viewport();
+			auto mouse = [&](QEvent::Type type, QPoint at, Qt::MouseButtons held) {
+				QMouseEvent ev(type, QPointF(at), vp->mapToGlobal(QPointF(at)), Qt::LeftButton, held, Qt::NoModifier);
+				QApplication::sendEvent(vp, &ev);
+			};
+			{ // a pattern length the Length list doesn't offer (the arranged 16-bar intro) still shows in the box
+				Clip* longest = nullptr;
+				for (Track& t : app.song.tracks)
+					for (Clip& c : t.clips)
+						if (!longest || c.loopLen > longest->loopLen) longest = &c;
+				QComboBox* lengthBox = nullptr;
+				for (QComboBox* b : w.findChildren<QComboBox*>())
+					if (b->toolTip() == QStringLiteral("How long the pattern is before it repeats")) lengthBox = b;
+				tabs->setCurrentIndex(0);
+				if (longest) app.selectClip(longest->id);
+				settle(30);
+				check(longest && lengthBox && longest->loopLen > 8 * BAR &&
+				          lengthBox->currentData().toInt() == longest->loopLen && !lengthBox->currentText().isEmpty(),
+				      "the Length box shows a pattern's length even when it isn't one of the usual ones");
+			}
+			const QPoint brk = tl->partRect(3).center();
+			mouse(QEvent::MouseButtonPress, brk, Qt::LeftButton);
+			mouse(QEvent::MouseButtonRelease, brk, Qt::NoButton);
+			check(app.selectedPart() == 3 && !app.selClips.isEmpty(), "a click on a part selects it and its clips");
+			check(std::abs(app.pos() - app.song.parts[3].bar * BAR) < 1.0,
+			      "a click on a part moves the playhead to its start");
+			onModal([](QWidget* d) {
+				if (auto* in = qobject_cast<QInputDialog*>(d)) {
+					in->setTextValue(QStringLiteral("Drop"));
+					in->accept();
+				}
+			});
+			mouse(QEvent::MouseButtonDblClick, brk, Qt::LeftButton);
+			mouse(QEvent::MouseButtonRelease, brk, Qt::NoButton);
+			settle(30);
+			check(app.song.parts[3].name == QStringLiteral("Drop") && app.undoName() == QStringLiteral("Rename a part"),
+			      "a double-click renames a part, choosing from the suggestions, as one undo step");
+			const int was = app.song.parts[3].bar;
+			const QPoint edge(tl->partRect(3).left() - 1, brk.y());
+			const int bar = tl->partRect(3).width() / std::max(1, app.song.partEnd(3) - was); // a bar's width
+			mouse(QEvent::MouseButtonPress, edge, Qt::LeftButton);
+			mouse(QEvent::MouseMove, edge + QPoint(bar, 0), Qt::LeftButton);
+			mouse(QEvent::MouseMove, edge + QPoint(2 * bar, 0), Qt::LeftButton);
+			mouse(QEvent::MouseButtonRelease, edge + QPoint(2 * bar, 0), Qt::NoButton);
+			check(app.song.parts[3].bar == was + 2 && app.undoName() == QStringLiteral("Move a part"),
+			      "dragging a part's left edge moves where it begins, as one undo step");
+			app.undo();
+			check(app.song.parts[3].bar == was, "one undo puts the part back");
+			{ // with the parts lane on top and a part selected, the header column's kept picture still matches
+				auto shot = [vp] {
+					QImage img(vp->size(), QImage::Format_ARGB32_Premultiplied);
+					img.fill(Qt::black);
+					vp->render(&img);
+					return img;
+				};
+				Timeline::keepHeader = false;
+				const QImage fresh = shot();
+				Timeline::keepHeader = true;
+				shot(); // draws the picture
+				check(shot() == fresh, "with named parts, the header column from its kept picture is drawn as afresh");
+			}
+			app.undo();
+			app.undo();
+			app.selectTrack(wasTrack);
+			tabs->setCurrentIndex(wasTab);
+			settle(20);
 		}
 		dbg("sections centred");
 		if (theme::tactile) { // the screwed wells: what is in a section sits as far from its top screws as its bottom
@@ -587,6 +786,33 @@ void scheduleGuiTest(App& app, MainWindow& w) {
 			app.undo();
 			for (const QString& n : samples::list())
 				if (n.startsWith(QStringLiteral("guitest beat"))) samples::remove(n);
+		}
+		dbg("long journey");
+		{
+			bool tips = true, selOff = false;
+			app.selClips.clear();
+			const int before = app.song.endTick();
+			onModal([&](QWidget* d) {
+				for (QWidget* c : d->findChildren<QWidget*>())
+					if ((qobject_cast<QAbstractButton*>(c) || qobject_cast<QSpinBox*>(c)) && c->isVisible())
+						tips &= !c->toolTip().isEmpty();
+				for (QPushButton* b : d->findChildren<QPushButton*>())
+					if (b->text() == QStringLiteral("After the selection")) selOff = !b->isEnabled();
+				if (auto* m = d->findChild<QSpinBox*>()) m->setValue(2);
+				for (QPushButton* b : d->findChildren<QPushButton*>())
+					if (b->text() == QStringLiteral("Continue")) {
+						b->click();
+						break;
+					}
+			});
+			w.showDialog(QStringLiteral("journey"));
+			check(tips, "every control in the Continue dialog has a tooltip");
+			check(selOff, "with nothing selected, the journey can only start after the end");
+			check(app.song.endTick() >= before + journeyBars(app.song, 2) * BAR &&
+			          app.undoName() == QStringLiteral("Long journey"),
+			      "Continue in the dialog writes the journey as one undo step");
+			app.undo();
+			check(app.song.endTick() == before, "Undo takes the journey back");
 		}
 		dbg("settings size and midi pages");
 		{
@@ -715,6 +941,11 @@ void scheduleTooltipCheck(App& app, MainWindow& w) {
 				sweep(QStringLiteral("simple %1").arg(tr == 0 ? "synth" : "drums"));
 			}
 			sp->setSimple(false);
+		}
+		{ // the start window
+			StartWindow sw(&app, &w);
+			sw.show();
+			sweep("start window");
 		}
 		app.setLiveMode(true);
 		sweep("loops");

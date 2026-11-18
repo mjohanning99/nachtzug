@@ -7,6 +7,7 @@
 #include <QObject>
 #include <QSet>
 #include <QTimer>
+#include <deque>
 #include <functional>
 #include <memory>
 #include <random>
@@ -21,6 +22,7 @@ public:
 	int selTrack = -1; // the track the computer keyboard plays and records to
 	QSet<int> selClips;
 	int editClip = -1; // clip shown in the note editor
+	int selPart = -1;  // the bar where the selected named part starts (its clips are selected), -1 for none
 	QString filePath;
 	bool dirty = false;
 	enum Focus { FocusArrange, FocusEditor };
@@ -112,11 +114,15 @@ public:
 
 	void play();
 	void stop();
+	void hush(); // every sound, echo and reverb silent at once (Stop pressed while stopped)
 	void togglePlay();
 	void seek(double tick);
 	double pos() const { return engine->pos.load(std::memory_order_relaxed); }
 	double musicalPos() const { return unswing(pos(), song.swing); }
 	bool isPlaying() const { return engine->playing.load(std::memory_order_relaxed); }
+	// how many times the song has been handed to the engine: every change to it, however it was made, counts one, so
+	// a view that draws only what moves can tell when to draw everything again
+	unsigned published() const { return published_; }
 
 	// bent: Shift was held, for the "right wrong note": a semitone outside the scale that leans into the key's own
 	// note (see Song::approachAlt), or in Chords mode the key's chord a semitone lower
@@ -127,6 +133,7 @@ public:
 	void midiNote(int note, int velocity, bool on);
 	class Midi* midi = nullptr; // MIDI devices, when the program has them (see midi.h)
 	bool keyHeld(int code) const { return down_.contains(code) || chordDown_.contains(code); }
+	bool anyKeyHeld() const { return !down_.isEmpty() || !chordDown_.isEmpty(); }
 	void keyUp(int code);
 	void releaseAllKeys();
 	void audition(int trackId, int deg, bool acc = false, int alt = 0);
@@ -163,7 +170,13 @@ public:
 	void cut();
 	void paste();
 	void selectAll();
-	void loopSelection(); // put the loop around the selected clips
+	void loopSelection(); // put the loop around the selected clips (around the selected part's bars, if one is)
+	// the named parts on the timeline
+	int selectedPart() const;   // index of the selected part in song.parts, or -1
+	void selectPart(int index); // selects the clips that start in that part; -1 selects nothing
+	void repeatPart(int index); // Repeat this part: a copy straight after it, the rest moves right; selects the copy
+	// moves the playhead: at once while stopped, at the next bar line while playing, so the music stays in time
+	void jumpTo(int tick);
 
 	// loop grid: cells that repeat while switched on; switching lands on the next bar
 	void setLiveMode(bool on);
@@ -229,8 +242,17 @@ private:
 	std::vector<Song> undo_, redo_;
 	std::vector<QString> undoWhat_, redoWhat_; // names of the steps, side by side with undo_ and redo_
 	QHash<QString, int> editCount_;
-	std::shared_ptr<const Song> keep_[16];
-	int keepIdx = 0;
+	std::deque<std::shared_ptr<const Song>> keep_; // the snapshots the engine may still play (see publish())
+	unsigned published_ = 0;
+
+public:
+	// whether the GUI thread still holds this snapshot, so the engine letting go of it never frees it (the self-test)
+	bool holdsSnapshot(const Song* s) const {
+		return std::any_of(keep_.begin(), keep_.end(), [s](const auto& k) { return k.get() == s; });
+	}
+	size_t keptSnapshots() const { return keep_.size(); } // how many it holds (the self-test)
+
+private:
 	struct PendingChange {
 		std::function<void(Song&)> f;
 		bool undoable;

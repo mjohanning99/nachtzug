@@ -71,6 +71,7 @@
   <div class="stop major"><span class="no">7</span><span class="dot"></span><a href="#timeline">The song timeline</a><span class="pg" data-href="#timeline"></span></div>
   <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#chords">Chords</a><span class="pg" data-href="#chords"></span></div>
   <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#arrange">Arrange for me</a><span class="pg" data-href="#arrange"></span></div>
+  <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#journey">A long journey</a><span class="pg" data-href="#journey"></span></div>
   <div class="stop major"><span class="no">8</span><span class="dot"></span><a href="#loops">The loop grid</a><span class="pg" data-href="#loops"></span></div>
   <div class="stop major"><span class="no">9</span><span class="dot"></span><a href="#mixer">Mixer, export and settings</a><span class="pg" data-href="#mixer"></span></div>
   <div class="stop minor"><span class="no"></span><span class="dot"></span><a href="#export">Exporting</a><span class="pg" data-href="#export"></span></div>
@@ -116,7 +117,7 @@
     <li><span class="dot">2</span><b>Song</b>: tempo, tap, key, scale and swing.&nbsp;<a href="#songunit">→&nbsp;2</a></li>
     <li><span class="dot">3</span><b>Output</b>: the meters, volume, the <span class="ctl">Export</span> key, the settings <span class="key">⚙</span> and the <span class="key">?</span> guide.&nbsp;<a href="#output">→&nbsp;2</a></li>
     <li><span class="dot">4</span><b>Inspector</b>: the selected track’s level and sends, its sound, how its notes are played and, for drum clips, the auto drummer.&nbsp;<a href="#inspector">→&nbsp;3</a></li>
-    <li><span class="dot">5</span><b>Song / Loops</b> and the <b>clip tools</b>: add a track, <b>Copy</b>, <b>Loop</b>, <b>Cut</b>, the scissors, <b>Delete</b> and <b>Arrange</b>.&nbsp;<a href="#timeline">→&nbsp;7</a></li>
+    <li><span class="dot">5</span><b>Song / Loops</b> and the <b>clip tools</b>: add a track, <b>Copy</b>, <b>Loop</b>, <b>Cut</b>, the scissors, <b>Delete</b>, <b>Arrange</b> and <b>Continue</b>.&nbsp;<a href="#timeline">→&nbsp;7</a></li>
     <li><span class="dot">6</span><b>Bars, Loop and Chords</b> rows of the timeline.&nbsp;<a href="#timeline">→&nbsp;7</a></li>
     <li><span class="dot">7</span><b>Tracks and clips</b>: one row per instrument.&nbsp;<a href="#timeline">→&nbsp;7</a></li>
     <li><span class="dot">8</span><b>Tabs</b>: Notes and Sound of the selected track, and the Mixer. <span class="key">⧉</span> puts them in a window of their own.&nbsp;<a href="#room">→&nbsp;below</a></li>
@@ -146,7 +147,7 @@
     <div class="stripes"></div>
   </div>
   <p class="lede">Six steps, about ten minutes. A demo song is already waiting for you the moment Nachtzug starts, so you begin by listening and then change it one part at a time.</p>
-  <p id="welcome">The very first time you start Nachtzug, it asks which <b>language</b> you’d like to use and how you’d like to begin. <b>I am new to this</b> gives the Sound tab a few big knobs in plain words and opens a short guide; <b>I know synthesisers</b> shows every knob. Below, you choose how the window looks: keys with a symbol and a word, or the symbols alone; the timeline above the notes or beside them; scroll bars hidden or shown; and Nachtzug’s own cursors, which show what a click will do (a pencil in the note grid, scissors, a knob’s arrows), or the system’s. You can change all of it later in the settings.</p>
+  <p id="welcome">The very first time you start Nachtzug, it asks which <b>language</b> you’d like to use and how you’d like to begin. <b>I am new to this</b> gives the Sound tab a few big knobs in plain words and opens a short guide; <b>I know synthesisers</b> shows every knob. Below, you choose how the window looks: keys with a symbol and a word, or the symbols alone; the timeline above the notes or beside them; scroll bars hidden or shown; and Nachtzug’s own cursors, which show what a click will do (a knob over knobs, a fader over faders, a pencil in the note grid, a rubber, scissors, the playhead over the bar ruler), or the system’s. You can change all of it later in the settings.</p>
   <figure style="width:62%; margin-left:auto; margin-right:auto"><img src="img/dlg-welcome.png" alt="The welcome window"><figcaption><b>FIG 1</b>The welcome window. You’ll only see it on the very first start.</figcaption></figure>
   <div class="task"><p><b>What you’ll do:</b> listen to the demo, give it a new bass line and a new sound, add a melody, turn it into a whole song and save it.</p><p><b>Time:</b> about ten minutes.</p></div>
   <ol class="steps">
@@ -162,6 +163,10 @@
   <h3 id="lessons">Lessons: learning by doing</h3>
   <p><b>Help → Lessons</b> holds five short guided tours: <b>Your first acid line</b>, <b>Build a beat</b>, <b>Make it move</b>, <b>Berlin School: play the chords</b> and <b>From loop to song</b>. A soft shade lies over the window, with a lit hole around the one thing to use next and a card beside it that tells you what to do. You’re working the real program the whole time: every click goes through, and the lesson moves on by itself once you’ve done the step. <span class="ctl">Skip</span> goes on without it and <span class="ctl">End lesson</span> stops. The guide (<span class="key">F1</span>) has a <span class="ctl">Start the first lesson</span> button, too.</p>
   <figure><img src="img/lesson.png" alt="A lesson step"><figcaption><b>FIG 0</b>A lesson points at <span class="ctl">New idea</span> and waits until you’ve tried it.</figcaption></figure>
+  <h3 id="startwindow">The start window: starter songs and your songs</h3>
+  <p>From the second start on, Nachtzug opens with a small window that asks <b>What would you like to play?</b> On the left are the <b>starter songs</b>, one for each style: <b>Acid</b>, <b>Berlin School</b>, <b>Motorik</b>, <b>Electro</b> and <b>Half time</b>. Each is a short, finished song of two or three minutes, made with Nachtzug’s own ideas and Arrange for me, with its tempo and key printed beside it. Press its <span class="key ico play"></span> key to hear a few bars from the middle first (press it again to stop), and click the card to open it. A starter opens as a <b>new song</b> of its own: change whatever you like, and <span class="nw"><span class="key">Ctrl</span>+<span class="key">S</span></span> asks for a name, so the starter itself always stays as it came. The starters are free to use in any way, like everything that comes with Nachtzug.</p>
+  <p>On the right are <b>your songs</b>, the ones you opened or saved lately, newest first; one that is no longer where it was is greyed out. <span class="ctl">Open…</span> picks any other song, <span class="ctl">Empty song</span> starts from nothing, and <span class="ctl">Close</span> carries on with the demo song. The window doesn’t open on the very first start (the welcome window has its turn then), nor when Nachtzug offers to bring back a song after a crash, nor when you open Nachtzug with a song. If you’d rather not see it, switch off <span class="ctl">Show this window when Nachtzug starts</span> at its foot or in the settings; <b>File → New from a starter song…</b> opens it any time.</p>
+  <figure><img src="img/dlg-start.png" alt="The start window"><figcaption><b>FIG 0</b>The start window: a starter song for each style, each with a key to listen first, and your own songs beside them.</figcaption></figure>
 </section>
 
 <!-- ======================= 2 TOP BAR ======================= -->
@@ -182,7 +187,7 @@
     <thead><tr><th>Control</th><th>What it does</th></tr></thead>
     <tr><td><span class="key ico start"></span></td><td>Goes back to the start of the loop, or of the song when Loop is off. <span class="key">Home</span></td></tr>
     <tr><td><span class="key ico play"></span></td><td>Plays. <span class="key">Space</span> starts and stops.</td></tr>
-    <tr><td><span class="key ico stop"></span></td><td>Stops.</td></tr>
+    <tr><td><span class="key ico stop"></span></td><td>Stops; the echo and the reverb ring out. Pressed again, it goes back to the start and silences everything still ringing.</td></tr>
     <tr><td><span class="key ico rec"></span></td><td id="record">Records. While it’s lit and the song is playing, the notes you play and the knobs you turn are written into the song. <span class="nw"><span class="key">Ctrl</span>+<span class="key">R</span></span></td></tr>
     <tr><td><span class="ctl">Loop</span></td><td>Repeats the stretch marked in the timeline’s Loop row. When it’s off, the whole song plays. <span class="nw"><span class="key">Ctrl</span>+<span class="key">L</span></span></td></tr>
     <tr><td><span class="ctl">Click</span></td><td id="metronome">A metronome: a tick on every beat and a higher one at the start of each bar. <span class="nw"><span class="key">Ctrl</span>+<span class="key">K</span></span></td></tr>
@@ -385,7 +390,7 @@
   <h3>Knobs</h3>
   <p>Drag a knob up or down. Hold <span class="key">Shift</span> for small steps and double-click to reset it. Rest the mouse on a knob to read its value and what it does. A small red dot on a knob means a line is moving it over time (<a href="#lines">chapter 6</a>).</p>
   <h2 id="simple"><span class="n">5.1</span>Simple or Full</h2>
-  <p>The Sound tab has two pages. You can switch between them with <b>View → Simple sound page</b> or on the General page of the settings, and Nachtzug remembers your choice. <b>Full</b> shows every knob, as described from 5.3 on. <b>Simple</b> shows eight big knobs in plain words instead. Each one moves several knobs of the Full page at once, from wherever they happen to be, so a preset keeps its character.</p>
+  <p>The Sound tab has two pages. You can switch between them with <b>View → Simple sound page</b> or on the General page of the settings, and Nachtzug remembers your choice. <b>Full</b> shows every knob, as described from 5.3 on. <b>Simple</b> shows eight big knobs in plain words instead, and a ninth, <span class="ctl">Tone</span>, with a <span class="ctl">Low cut</span> switch under it. Each one moves several knobs of the Full page at once, from wherever they happen to be, so a preset keeps its character.</p>
   <figure><img src="img/simple-sound.png" alt="The simple page of the Sound tab"><figcaption><b>FIG 9</b>The Simple page. The pictures on the left move as you turn the knobs.</figcaption></figure>
   <table class="wide1">
     <thead><tr><th>Big knob</th><th>What it moves</th></tr></thead>
@@ -397,8 +402,11 @@
     <tr><td><span class="ctl">Space</span></td><td>Dry to far away: how much goes into the reverb and the echo.</td></tr>
     <tr><td><span class="ctl">Movement</span></td><td>Still to moving: a slow filter wobble from the LFO, and chorus.</td></tr>
     <tr><td><span class="ctl">Glide</span></td><td>Jumps to slides between notes.</td></tr>
+    <tr><td><span class="ctl">Tone</span></td><td id="tone">Darker to brighter: the equaliser’s <span class="ctl">Low</span> and <span class="ctl">High</span> (<a href="#eq">5.6</a>), turned against each other. In the middle the sound is as it is.</td></tr>
   </table>
-  <p>For a drum track, the Simple page has a level knob for each drum, a <span class="key ico play"></span> to hear it, its sample button (<a href="#samples">9.4</a>) and <span class="ctl">Grit</span>, <span class="ctl">Echo</span> and <span class="ctl">Space</span> for the whole kit.</p>
+  <p>Beside the octave, the Simple page also has the shared <span class="ctl">Echo time</span> (<a href="#shared">5.6</a>): the one echo setting heard at once. <span class="ctl">Space</span> sets how much of the sound is echoed.</p>
+  <p>The <span class="ctl">Low cut</span> switch takes away the deepest rumble below about 100 Hz, so a pad or a lead leaves room for the bass and the kick drum. Leave it off on the bass itself.</p>
+  <p>For a drum track, the Simple page has a level knob for each drum, a <span class="key ico play"></span> to hear it, its sample button (<a href="#samples">9.4</a>) and <span class="ctl">Grit</span>, <span class="ctl">Echo</span>, <span class="ctl">Space</span>, <span class="ctl">Tone</span> and <span class="ctl">Low cut</span> for the whole kit.</p>
 
   <h2 id="presets"><span class="n">5.2</span>Finding a sound quickly</h2>
   <ul>
@@ -435,7 +443,7 @@
     <tr><td><span class="ctl">Pulse width</span></td><td>Thins out the pulse wave.</td></tr>
     <tr><td><span class="ctl">Sub</span>, <span class="ctl">Noise</span></td><td>A deep tone an octave below; hiss.</td></tr>
     <tr><td><span class="ctl">Voices</span></td><td id="unison">Unison: stacks up to seven slightly detuned copies for a huge sound. <span class="ctl">Unison detune</span> sets how far apart, <span class="ctl">Stereo spread</span> spreads them left and right.</td></tr>
-    <tr><td><span class="ctl">Play</span></td><td id="mono"><b>Poly</b> plays chords (up to eight notes); <b>Mono</b> plays one note at a time, as acid basslines do.</td></tr>
+    <tr><td><span class="ctl">Play</span></td><td id="mono"><b>Poly</b> plays chords (up to eight notes); <b>Mono</b> plays one note at a time, as acid basslines do; a chord from <span class="ctl">Each note plays</span> still sounds whole, its notes sliding together.</td></tr>
     <tr><td><span class="ctl">Glide</span></td><td id="glide">Slides the pitch from one note to the next.</td></tr>
   </table>
 
@@ -444,7 +452,7 @@
   <p>The filter takes part of the sound away. Sweeping it is the gesture at the heart of acid music, so this is the section I’d play with first.</p>
   <table>
     <thead><tr><th>Control</th><th>What it does</th></tr></thead>
-    <tr><td><span class="ctl">Type</span></td><td>Low-pass 24 dB or 12 dB (the classic dark-to-bright sweep), band-pass (thin and nasal), high-pass (removes the low end).</td></tr>
+    <tr><td><span class="ctl">Type</span></td><td>Low-pass 24 dB or 12 dB (the classic dark-to-bright sweep), band-pass (thin and nasal), high-pass (removes the low end), notch (takes out a narrow band at the cutoff and keeps the rest: a hollow, phaser-like sweep when you turn the cutoff).</td></tr>
     <tr><td><span class="ctl">Cutoff</span></td><td id="cutoff">Where it cuts.</td></tr>
     <tr><td><span class="ctl">Resonance</span></td><td id="resonance">Adds a squelchy peak at the cutoff.</td></tr>
     <tr><td><span class="ctl">Env amount</span></td><td>How far each note opens the filter.</td></tr>
@@ -455,16 +463,19 @@
 
   <h2 id="env"><span class="n">5.5</span>Envelopes</h2>
   <figure><img src="img/envelopes.png" alt="Filter and amp envelopes"><figcaption><b>FIG 12</b>Drag the round points in either window to shape the envelope directly.</figcaption></figure>
-  <p>An envelope is a shape that every note follows. The <b>filter envelope</b> opens and closes the filter on each note with <span class="ctl">Attack</span>, <span class="ctl">Decay</span> and <span class="ctl">Sustain</span>; <span class="ctl">To pitch</span> bends the pitch along with it, for zaps and laser sounds. The <b>amp envelope</b> sets how loud each note is over time: a short attack and decay for plucks, long ones for pads. <span class="ctl">Release</span> is how long a note rings on after it ends.</p>
+  <p>An envelope is a shape that every note follows. The <b>filter envelope</b> opens and closes the filter on each note with <span class="ctl">Attack</span>, <span class="ctl">Decay</span>, <span class="ctl">Sustain</span> and <span class="ctl">Release</span>; <span class="ctl">To pitch</span> bends the pitch along with it, for zaps and laser sounds. Its <span class="ctl">Release</span> starts all the way down, at <b>As amp</b>: then the filter closes as slowly as the note fades, as it always did. Turn it up to let the filter close on a time of its own, for example quickly, so long notes go dark as they fade. The <b>amp envelope</b> sets how loud each note is over time: a short attack and decay for plucks, long ones for pads. <span class="ctl">Release</span> is how long a note rings on after it ends.</p>
 
-  <h2 id="lfo"><span class="n">5.6</span>LFO and effects</h2>
-  <p>The <b>LFO</b> is a slow, repeating movement: a triangle, a square or random steps. You can send it to the filter (<span class="ctl">LFO to filter</span>), the pitch (<span class="ctl">Vibrato</span>) or the pulse width (<span class="ctl">LFO to width</span>). The dot in its window travels at the LFO’s speed.</p>
+  <h2 id="lfo"><span class="n">5.6</span>LFO, effects and equaliser</h2>
+  <p>The <b>LFO</b> is a slow, repeating movement: a triangle, a square or random steps. You can send it to the filter (<span class="ctl">LFO to filter</span>), the pitch (<span class="ctl">Vibrato</span>), the pulse width (<span class="ctl">LFO to width</span>), the volume (<span class="ctl">LFO to volume</span>, a tremolo; with the square shape it chops the sound) or between the speakers (<span class="ctl">LFO to pan</span>). The dot in its window travels at the LFO’s speed.</p>
+  <p>With <span class="ctl">Timing</span> set to <b>Free</b>, <span class="ctl">LFO rate</span> is a speed in hertz. Set to <b>In time</b>, the LFO follows the song’s tempo instead, and <span class="ctl">LFO rate</span> picks how long one movement lasts, as a note value from <b>8 bars</b> to <b>1/32</b>. While the song plays, the movement keeps to the bars: a one-bar sweep always starts on the first beat, and it stays in time when the tempo changes. <span class="ctl">LFO fade-in</span> lets each note begin still and the movement grow over up to five seconds: a delayed vibrato, as a singer or a violinist plays it.</p>
   <p id="effects"><b>Effects</b>: <span class="ctl">Drive</span> (distortion), <span class="ctl">Phaser</span> with its rate, <span class="ctl">Chorus</span>, and how much of the track goes into the shared <span class="ctl">Echo</span> and <span class="ctl">Reverb</span>.</p>
-  <p id="shared">The whole song shares one <b>echo and reverb</b>. <span class="ctl">Echo time</span> follows the tempo, and <span class="ctl">Echo repeats</span>, <span class="ctl">Reverb size</span> and <span class="ctl">Reverb damping</span> set their character.</p>
-  <figure><img src="img/full-sound.png" alt="The whole Sound tab"><figcaption><b>FIG 13</b>The whole Sound tab: sections numbered 1 to 4 in the order the sound flows.</figcaption></figure>
+  <p id="eq">The <b>equaliser</b> makes parts of a track’s sound louder or quieter, from the deepest on the left of its picture to the highest on the right. <span class="ctl">Low cut</span> takes away everything below its pitch (off all the way down), <span class="ctl">Low</span> and <span class="ctl">High</span> lift or lower the deep and the top end, and <span class="ctl">Mid</span> does the same for the middle, at the pitch <span class="ctl">Mid pitch</span> sets. Every knob is flat in the middle; double-click it to put it back. You can also drag the points in the picture: up for more, down for less, the low cut and the middle point sideways too. With the keyboard, <span class="key">Tab</span> picks a point, the arrow keys move it and <span class="key">Delete</span> puts it back. A track whose equaliser is flat sounds exactly as it did before there was one.</p>
+  <div class="tip"><p>When a song sounds muddy, try <span class="ctl">Low cut</span> on everything except the bass and the kick drum, and a little less <span class="ctl">Mid</span> on the pad. The mixer has <span class="ctl">Low</span>, <span class="ctl">Mid</span> and <span class="ctl">High</span> for every track too (<a href="#mixer">9.1</a>).</p></div>
+  <p id="shared">The whole song shares one <b>echo and reverb</b>; each track’s <span class="ctl">Echo</span> and <span class="ctl">Reverb</span> knobs set how much of it that track gets. <span class="ctl">Echo time</span> is a note value – 1/16, 1/8, a dotted 1/8, a quarter, the triplets and a half note – so the repeats stay in time with the song, even when the tempo changes. <span class="ctl">Echo repeats</span> sets how many repeats there are before they fade away; however far it is turned up, the echo never builds up into a howl. <span class="ctl">Echo tone</span> makes each repeat a little darker than the one before, as on an old tape echo (to the left), or keeps them bright (to the right). With <span class="ctl">Ping-pong</span> on, the repeats bounce between the left and the right speaker; off, they all come from the middle. <span class="ctl">Reverb size</span> and <span class="ctl">Reverb damping</span> set the room’s character.</p>
+  <figure><img src="img/full-sound.png" alt="The whole Sound tab"><figcaption><b>FIG 13</b>The whole Sound tab: sections numbered 1 to 5 in the order the sound flows.</figcaption></figure>
 
   <h2 id="kit"><span class="n">5.7</span>The drum kit</h2>
-  <p>For a drum track, the Sound tab shows the drum kit instead: a kit preset (<b>Machine kit</b>, <b>Soft boom kit</b> or <b>Tight acid kit</b>) and <span class="ctl">Level</span>, <span class="ctl">Tune</span> and <span class="ctl">Decay</span> for each of the eight drums, with a <span class="key ico play"></span> to hear each one. The inspector keeps the kit and its <span class="ctl">Drive</span>, <span class="ctl">Echo</span> and <span class="ctl">Reverb</span> close at hand.</p>
+  <p>For a drum track, the Sound tab shows the drum kit instead: a kit preset (<b>Machine kit</b>, <b>Soft boom kit</b> or <b>Tight acid kit</b>) and <span class="ctl">Level</span>, <span class="ctl">Tune</span> and <span class="ctl">Decay</span> for each of the eight drums, with a <span class="key ico play"></span> to hear each one. The whole kit has an <b>equaliser</b> too, which works as the synthesiser’s does (<a href="#eq">5.6</a>). The inspector keeps the kit and its <span class="ctl">Drive</span>, <span class="ctl">Echo</span> and <span class="ctl">Reverb</span> close at hand.</p>
   <figure><img src="img/drum-sound.png" alt="The drum kit on the Full page"><figcaption><b>FIG 14</b>The drum kit. The button under each <span class="key ico play"></span> says <b>Built-in</b>, or the name of the sample that drum plays.</figcaption></figure>
   <p>Every drum can play <b>a sound of your own</b> instead: click <span class="ctl">Built-in</span> under it and pick a sample, import a sound file or record one (<a href="#samples">9.4</a>). With a sample, <span class="ctl">Tune</span> plays it faster or slower, up to an octave either way, and <span class="ctl">Decay</span> shortens it; turned all the way up, the whole sample plays. Four kits are made of samples from the Nachtzug library (9.4): the <b>Night train kit</b>, <b>Tape kit</b>, <b>Electro kit</b> and <b>Hand percussion kit</b>. Choosing another kit brings that kit’s sounds, but a drum that plays one of your own samples keeps it.</p>
 </section>
@@ -500,8 +511,9 @@
     <h1>The song timeline</h1>
     <div class="stripes"></div>
   </div>
-  <p>In <span class="ctl">Song</span> mode, the timeline shows your whole song. Time runs from left to right in bars, with one row per track. Three rows sit at the top:</p>
+  <p>In <span class="ctl">Song</span> mode, the timeline shows your whole song. Time runs from left to right in bars, with one row per track. Four rows sit at the top:</p>
   <ul>
+    <li id="parts-row"><b>Parts</b>: the named parts of the song, such as <b>Intro</b> or <b>Break</b> (<a href="#parts">see below</a>).</li>
     <li><b>Bars</b>: click or drag to move the playhead.</li>
     <li id="loop"><b>Loop</b>: the coloured bar marks the stretch that repeats while <span class="ctl">Loop</span> is on. Drag in the row to mark another; click it to switch looping on or off. <span class="ctl">Loop</span> puts the loop around the selected clips.</li>
     <li><b>Chords</b>: the chord of each bar.</li>
@@ -544,8 +556,44 @@
     <tr><td><b>Main part 2</b></td><td>Everything again, with the lead, a busier drummer and slightly varied patterns.</td></tr>
     <tr><td><b>Outro</b></td><td>The drummer winds down; the parts fade out with their filters closing.</td></tr>
   </table>
-  <figure><img src="img/arranged.png" alt="An arranged song"><figcaption><b>FIG 17</b>A song after <b>Arrange for me</b>: the wedges are fades and filter sweeps.</figcaption></figure>
+  <figure><img src="img/arranged.png" alt="An arranged song"><figcaption><b>FIG 17</b>A song after <b>Arrange for me</b>: its parts are named along the top, and the wedges are fades and filter sweeps.</figcaption></figure>
   <p>If the lead track is still empty, it gets a melody of its own. Whatever was in the timeline before is replaced, but <span class="key">↶</span> brings it back. Afterwards, everything is made of ordinary clips: move them, lengthen them and change them as you like, and use the loop to work on one part at a time.</p>
+  <h3 id="parts">The parts</h3>
+  <p>Each part <b>Arrange for me</b> makes is named in the <b>Parts</b> row at the top of the timeline, so the song’s shape can be seen at a glance; the display shows the part the song is in while it plays. The names are only labels: they change no note, and deleting one leaves the bars and clips as they are. A song of your own can be given parts just the same.</p>
+  <table class="wide1">
+    <thead><tr><th>To do this</th><th>Do this</th></tr></thead>
+    <tr><td>Select a part</td><td>Click it. Its clips are selected and the playhead goes to its start (while the song plays, at the next bar line, so the music stays in time). <span class="ctl">Loop</span> then repeats exactly that part, and <span class="ctl">Delete</span> or <span class="nw"><span class="key">Ctrl</span>+<span class="key">C</span></span> work on its clips.</td></tr>
+    <tr><td>Rename it</td><td>Double-click it, and choose a name (Intro, Build-up, Main part, Break, Drop, Breakdown, Outro…) or type your own.</td></tr>
+    <tr><td>Move where it begins</td><td>Drag its left edge; it snaps to whole bars.</td></tr>
+    <tr><td>Add a part</td><td>Double-click an empty spot of the row, or right-click → <b>New part from bar …</b>. A part runs until the next one; the last runs to the end of the song.</td></tr>
+    <tr><td>Repeat it</td><td>Right-click it → <b>Repeat this part</b>, or press <span class="ctl">Copy</span> with the part selected. A copy of the part, with its clips, chord changes and knob lines, is put straight after it; everything after it moves right by its length, so nothing is covered. The copy is named like the part with a number (Break 2) and is selected; one <b>Undo</b> takes it back.</td></tr>
+    <tr><td>More</td><td>Right-click a part: <b>Rename…</b>, <b>Play from the start of this part</b>, <b>Loop this part</b>, <b>Repeat this part</b> and <b>Delete this part</b>.</td></tr>
+  </table>
+  <div class="note"><p>To export a single part, loop it (click it, then <span class="ctl">Loop</span>) and choose <b>The loop</b> in the export window.</p></div>
+
+  <h2 id="journey"><span class="n">7.4</span>A long journey</h2>
+  <p>Berlin School pieces often last twenty or thirty minutes, and they hold the listener by changing slowly: a sequence turns one note at a time, a filter opens over minutes, parts come in and leave again. <span class="ctl">Continue</span>, beside <span class="ctl">Arrange</span> above the timeline (or <b>Edit → Continue the song for a long journey…</b>), lets the song go on in that way for as many minutes as you like, growing out of the patterns that are already there.</p>
+  <figure style="width:62%; margin-left:auto; margin-right:auto"><img src="img/dlg-journey.png" alt="Continue for a long journey"><figcaption><b>FIG 0</b>The Continue window: how many minutes, the character, where to start and whether to fade out; below, the bars, the length of the whole song and the parts the journey will have.</figcaption></figure>
+  <ul>
+    <li><b>Continue for … minutes</b>: from 1 to 60, at the song’s tempo. The window shows how many bars that is, how long the whole song will be, and the parts the journey will have.</li>
+    <li><b>Character</b>: <b>Calm</b> has long parts and changes rarely; <b>Evolving</b> changes a note every sixteen bars and lets parts rest now and then; <b>Restless</b> changes every eight bars, brings new ideas and sweeps the filters deeper.</li>
+    <li><b>Start</b>: <b>After the end</b> leaves the song as it is and adds the journey after the last clip. <b>After the selection</b> starts after the selected clips and replaces everything that came after them.</li>
+    <li><b>End with a fade-out</b>: at the end the parts leave one by one and the last ones fade away. Switched off, the journey stops at full strength, so it can be continued again later.</li>
+  </ul>
+  <p>The whole journey follows one arc: it holds back at first, with fewer parts and darker filters, builds slowly to a single peak about two thirds of the way in, and then settles. On the way it passes through these parts, chosen afresh for every journey and never in the same order twice running, each named in the <b>Parts</b> row of the timeline after the parts already there (see <a href="#parts">The parts</a>):</p>
+  <table class="wide1">
+    <thead><tr><th>Part</th><th>What happens</th></tr></thead>
+    <tr><td><b>Drifting in</b></td><td>Only when starting from nothing: the sequence and the pad fade in with their filters closed.</td></tr>
+    <tr><td><b>Rising</b></td><td>Parts come in one by one, the bass with its filter opening, the drummer building up.</td></tr>
+    <tr><td><b>Cruising</b></td><td>The parts the arc allows play; a filter sweep goes up and back, and now and then a part rests for a while or the drummer plays more lightly.</td></tr>
+    <tr><td><b>New ground</b></td><td>The sequence takes a bigger step, the pad may step aside, and now and then the lead comes in with a phrase that changes each time it returns.</td></tr>
+    <tr><td><b>Breather</b></td><td>A short moment where only the drums, only the bass, or the pad steps out.</td></tr>
+    <tr><td><b>Breakdown</b></td><td>Once, just before the peak: the sequence alone, the pad joining halfway, the filter closed right down while the echo and the resonance rise.</td></tr>
+    <tr><td><b>Return</b>, <b>Peak</b></td><td>Everything comes back. At the peak the filters are at their brightest, the drummer at its busiest, and the lead plays.</td></tr>
+    <tr><td><b>Afterglow</b></td><td>After the peak the journey settles, a little calmer and darker with each part.</td></tr>
+    <tr><td><b>Fading out</b></td><td>The lead leaves first, then the drums, then the bass; the sequence and the pad fade away with their filters closing.</td></tr>
+  </table>
+  <p>The key and the chords stay as they are, so every note still fits. The patterns change a note at a time and the changes add up, so the sequence late in the piece is clearly related to the one at the start, but no longer the same (each note stays within an octave of where it began, and the rhythm stays); once in the first half a part goes off on a new idea for a while and comes home at the peak. the filter, resonance and echo move along long knob lines (<a href="#lines">→&nbsp;6</a>), which can be seen and changed with <span class="ctl">Lines</span> on each track. Everything is ordinary clips and lines afterwards, and one <span class="key">↶</span> takes the whole journey back. While the song plays, the journey begins at the next bar line, so the music doesn’t stumble.</p>
 </section>
 
 <!-- ======================= 8 LOOPS ======================= -->
@@ -584,7 +632,7 @@
   </div>
   <h2><span class="n">9.1</span>The mixer</h2>
   <figure><img src="img/mixer.png" alt="The mixer"><figcaption><b>FIG 19</b>One strip per track, the Input strip, and the Whole song strip on the right.</figcaption></figure>
-  <p>The <span class="ctl">Mixer</span> tab shows one strip per track, each screwed into its own well: <span class="ctl">Pan</span>, <span class="ctl">Echo</span> and <span class="ctl">Reverb</span> knobs, a volume <b>fader</b> with the track’s level next to it, and <span class="ctl">Mute</span> and <span class="ctl">Solo</span>. Double-click a fader to reset it. The <span class="ctl">Whole song</span> strip holds the master volume, the echo repeats and the reverb size.</p>
+  <p>The <span class="ctl">Mixer</span> tab shows one strip per track, each screwed into its own well: the equaliser’s <span class="ctl">Low</span>, <span class="ctl">Mid</span> and <span class="ctl">High</span> in a row under the name (<a href="#eq">5.6</a>), <span class="ctl">Pan</span>, <span class="ctl">Echo</span> and <span class="ctl">Reverb</span> knobs, a volume <b>fader</b> with the track’s level next to it, and <span class="ctl">Mute</span> and <span class="ctl">Solo</span>. Double-click a fader to reset it. The <span class="ctl">Whole song</span> strip holds the master volume, the echo repeats and the reverb size.</p>
   <p id="pump"><span class="ctl">Pump</span>, on every track except the drums, ducks the track on each kick drum and lets it swell back within about a third of a beat: the breathing sound of so much dance music. Try it on a pad or a bass line, you’ll hear it straight away! The kick drives it even when the drum track is muted.</p>
   <p id="input">The <span class="ctl">Input</span> strip plays the sound card’s input live through Nachtzug: a guitar, a voice, another synthesiser. Press <span class="ctl">Input</span> to open it (the device is chosen on the Sound card page of the settings). <span class="ctl">Gain</span> sets how loud it comes in, <span class="ctl">Filter</span> and <span class="ctl">Squelch</span> work like the synthesiser’s filter, <span class="ctl">Wah</span> opens the filter as you play louder, like a wah pedal, and <span class="ctl">Drive</span>, <span class="ctl">Pump</span>, <span class="ctl">Echo</span> and <span class="ctl">Reverb</span> do what they do on the tracks. The input is never part of an export.</p>
   <div class="warn"><p>With a microphone, please use <b>headphones</b>! Through speakers, the sound would feed back into the microphone and howl.</p></div>
@@ -595,7 +643,9 @@
     <thead><tr><th>Menu entry</th><th>What it does</th></tr></thead>
     <tr><td>New song with fresh ideas <span class="nw"><span class="key">Ctrl</span>+<span class="key">N</span></span></td><td>Drums, bass, sequence and pad, and a random chord progression.</td></tr>
     <tr><td>New empty song</td><td>A song with no tracks.</td></tr>
+    <tr><td>New from a starter song…</td><td>The start window: a short song for each style to start from, and your recent songs (<a href="#startwindow">1</a>).</td></tr>
     <tr><td>Open… <span class="nw"><span class="key">Ctrl</span>+<span class="key">O</span></span></td><td>Opens a <code>.nachtzug</code> song.</td></tr>
+    <tr id="recent"><td>Open recent</td><td>The last eight songs you opened or saved, newest first; with the menu open, the number in front of a song opens it. Point at a song to see its folder. A song that was moved or deleted is greyed out with <i>(not found)</i>; <span class="ctl">Clear the list</span> forgets them all (the songs themselves stay where they are).</td></tr>
     <tr><td>Save <span class="nw"><span class="key">Ctrl</span>+<span class="key">S</span></span></td><td>Saves the song. Save as… adds <span class="key">Shift</span>.</td></tr>
     <tr><td>Export: sound file, tracks or MIDI… <span class="nw"><span class="key">Ctrl</span>+<span class="key">Shift</span>+<span class="key">E</span></span></td><td>The same as the <span class="ctl">Export</span> key (below).</td></tr>
     <tr><td>Sound library…</td><td>Every ready-made sound and every sound of your own, to listen to and choose from (5.2).</td></tr>
@@ -625,7 +675,7 @@
   <p>The <span class="key">⚙</span> key in the Output unit, or <b>File → Settings…</b> (<span class="nw"><span class="key">Ctrl</span>+<span class="key">,</span></span>), opens the settings. Every change counts straight away.</p>
   <table class="wide1">
     <thead><tr><th>Page</th><th>What you can set</th></tr></thead>
-    <tr><td><b>General</b></td><td>Language (from the next start), colours, <span class="ctl">Size</span>, whether the Sound tab opens Simple or Full, <span class="ctl">Keys</span> (symbol and word, or symbols only), <span class="ctl">Window</span> (the timeline above or beside the notes), the on-screen keys, the Undo note, the scroll bars, Nachtzug’s own cursors and the welcome window.</td></tr>
+    <tr><td><b>General</b></td><td>Language (from the next start), colours, <span class="ctl">Size</span>, whether the Sound tab opens Simple or Full, <span class="ctl">Keys</span> (symbol and word, or symbols only), <span class="ctl">Window</span> (the timeline above or beside the notes), the on-screen keys, the Undo note, the scroll bars, Nachtzug’s own cursors, the start window and the welcome window.</td></tr>
     <tr><td><b>Sound card</b></td><td><span class="ctl">Sound system</span> (Automatic picks the best one; on Linux also PipeWire, PulseAudio, ALSA or JACK), <span class="ctl">Play through</span> (which speakers or headphones), <span class="ctl">Sample rate</span> and <span class="ctl">Buffer</span>. A line under them says what is running. <span class="ctl">Play a test tone</span> checks that sound comes out. <span class="ctl">Record from</span> picks the input, for recording samples and for the mixer’s Input strip.</td></tr>
     <tr><td><b>Samples</b></td><td>Your sample library (9.4).</td></tr>
     <tr><td><b>MIDI</b></td><td>Keyboards, controllers and clock (9.6).</td></tr>
@@ -815,13 +865,13 @@
     <tr><td>Tracks</td><td>Up to 12; bass, sequence, pad, lead or drums</td></tr>
     <tr><td>Synth voices</td><td>8 per track, mono or poly, with glide</td></tr>
     <tr><td>Oscillators</td><td>2 per voice (saw, pulse, triangle, sine), sub, noise, FM, unison up to 7 copies</td></tr>
-    <tr><td>Filter</td><td>Resonant ladder; low-pass 24 / 12 dB, band-pass, high-pass; key tracking, accent</td></tr>
-    <tr><td>Envelopes</td><td>Filter ADS with pitch amount; amp ADSR</td></tr>
-    <tr><td>LFO</td><td>Triangle, square, random; to filter, pitch, pulse width</td></tr>
-    <tr><td>Effects</td><td>Per track: drive, phaser, chorus. Shared: tempo echo, reverb. Output limiter</td></tr>
+    <tr><td>Filter</td><td>Resonant ladder; low-pass 24 / 12 dB, band-pass, high-pass, notch; key tracking, accent</td></tr>
+    <tr><td>Envelopes</td><td>Filter ADSR with pitch amount (its release follows the amp’s unless set); amp ADSR</td></tr>
+    <tr><td>LFO</td><td>Triangle, square, random; free or in time (8 bars to 1/32); to filter, pitch, pulse width, volume, pan; fade-in up to 5 s</td></tr>
+    <tr><td>Effects</td><td>Per track: drive, phaser, chorus, equaliser (low cut, low and high shelves, a movable mid, ±12 dB). Shared: echo in note values (with triplets) with tone and ping-pong, reverb. Output limiter</td></tr>
     <tr><td>Drums</td><td>8 synthesised drums, each can play a sample instead; 3 synthesised and 4 sampled kits; auto drummer with 7 styles; loops chopped across the pads</td></tr>
     <tr><td>Notes</td><td>Accent, slide, chance (100, 75, 50, 25 %), 1 to 4 quick repeats, keep</td></tr>
-    <tr><td>Mixer</td><td>Per track: volume, pan, echo, reverb, pump (ducking from the kick), mute, solo. A live input strip with filter, wah, drive, pump and sends</td></tr>
+    <tr><td>Mixer</td><td>Per track: equaliser low, mid and high, volume, pan, echo, reverb, pump (ducking from the kick), mute, solo. A live input strip with filter, wah, drive, pump and sends</td></tr>
     <tr><td>Presets</td><td>18 synth sounds, plus a random sound generator</td></tr>
     <tr><td>Scales</td><td>8; every key</td></tr>
     <tr><td>Patterns</td><td>½ to 8 bars; grid ¼ to 1/32 with triplets</td></tr>
@@ -903,6 +953,7 @@
     <div class="e"><a href="#ideas">Clips</a></div>
     <div class="e"><a href="#clock">Clock (MIDI)</a></div>
     <div class="e"><a href="#colours">Colours</a></div>
+    <div class="e"><a href="#journey">Continue (a long journey)</a></div>
     <div class="e"><a href="#cutoff">Cutoff</a></div>
     <div class="letter">D</div>
     <div class="e"><a href="#kit">Drum kit</a></div>
@@ -911,6 +962,7 @@
     <div class="e"><a href="#shared">Echo</a></div>
     <div class="e"><a href="#effects">Effects</a></div>
     <div class="e"><a href="#energy">Energy</a></div>
+    <div class="e"><a href="#eq">Equaliser</a></div>
     <div class="e"><a href="#env">Envelopes</a></div>
     <div class="e"><a href="#export">Export</a></div>
     <div class="letter">F</div>
@@ -936,9 +988,11 @@
     <div class="e"><a href="#learn">Learn MIDI control</a></div>
     <div class="e"><a href="#lessons">Lessons</a></div>
     <div class="e"><a href="#credits">Licences</a></div>
+    <div class="e"><a href="#eq">Low cut</a></div>
     <div class="e"><a href="#lfo">LFO</a></div>
     <div class="e"><a href="#limiter">Limiter</a></div>
     <div class="e"><a href="#lines">Lines</a></div>
+    <div class="e"><a href="#journey">Long journey</a></div>
     <div class="e"><a href="#loop">Loop</a></div>
     <div class="e"><a href="#loops">Loop grid</a></div>
     <div class="letter">M</div>
@@ -962,6 +1016,7 @@
     <div class="e"><a href="#presets">Presets, hearing</a></div>
     <div class="e"><a href="#pump">Pump (ducking)</a></div>
     <div class="letter">R</div>
+    <div class="e"><a href="#recent">Recent songs</a></div>
     <div class="e"><a href="#jam">Recording a jam</a></div>
     <div class="e"><a href="#recordsample">Recording a sample</a></div>
     <div class="e"><a href="#recknob">Recording knobs</a></div>
@@ -987,12 +1042,14 @@
     <div class="e"><a href="#sound">Sound tab</a></div>
     <div class="e"><a href="#spec">Specifications</a></div>
     <div class="e"><a href="#stamp">Stamp a bar (right-click)</a></div>
+    <div class="e"><a href="#startwindow">Start window, starter songs</a></div>
     <div class="e"><a href="#stems">Stems</a></div>
     <div class="e"><a href="#swing">Swing</a></div>
     <div class="letter">T</div>
     <div class="e"><a href="#tap">Tap tempo</a></div>
     <div class="e"><a href="#tempo">Tempo</a></div>
     <div class="e"><a href="#timeline">Timeline</a></div>
+    <div class="e"><a href="#tone">Tone</a></div>
     <div class="e"><a href="#tracks">Tracks</a></div>
     <div class="e"><a href="#transport">Transport</a></div>
     <div class="e"><a href="#trouble">Troubleshooting</a></div>
@@ -1017,15 +1074,19 @@
     <div class="grp"><div class="gt">Unison</div><i class="sel" data-opts="1|2|3|5|7" data-on="-1">Voices</i><i class="knob" data-v="-1">Detune</i><i class="knob" data-v="-1">Spread</i></div>
   </div>
   <div class="panelrow">
-    <div class="grp"><div class="gt">2 · Filter</div><i class="sel" data-opts="LP24|LP12|BP|HP" data-on="-1">Type</i><i class="knob" data-v="-1">Cutoff</i><i class="knob" data-v="-1">Resonance</i><i class="knob" data-v="-1">Env amount</i><i class="knob" data-v="-1">Key track</i><i class="knob" data-v="-1">Accent</i></div>
+    <div class="grp"><div class="gt">2 · Filter</div><i class="sel" data-opts="LP24|LP12|BP|HP|Notch" data-on="-1">Type</i><i class="knob" data-v="-1">Cutoff</i><i class="knob" data-v="-1">Resonance</i><i class="knob" data-v="-1">Env amount</i><i class="knob" data-v="-1">Key track</i><i class="knob" data-v="-1">Accent</i></div>
   </div>
   <div class="panelrow">
-    <div class="grp"><div class="gt">Filter envelope</div><i class="knob" data-v="-1">Attack</i><i class="knob" data-v="-1">Decay</i><i class="knob" data-v="-1">Sustain</i><i class="knob" data-v="-1">To pitch</i></div>
+    <div class="grp"><div class="gt">Filter envelope</div><i class="knob" data-v="-1">Attack</i><i class="knob" data-v="-1">Decay</i><i class="knob" data-v="-1">Sustain</i><i class="knob" data-v="-1">Release</i><i class="knob" data-v="-1">To pitch</i></div>
     <div class="grp"><div class="gt">3 · Amp envelope</div><i class="knob" data-v="-1">Attack</i><i class="knob" data-v="-1">Decay</i><i class="knob" data-v="-1">Sustain</i><i class="knob" data-v="-1">Release</i></div>
   </div>
   <div class="panelrow">
-    <div class="grp"><div class="gt">LFO</div><i class="sel" data-opts="Tri|Sqr|Rnd" data-on="-1">Shape</i><i class="knob" data-v="-1">Rate</i><i class="knob" data-v="-1">To filter</i><i class="knob" data-v="-1">Vibrato</i><i class="knob" data-v="-1">To width</i></div>
+    <div class="grp"><div class="gt">LFO</div><i class="sel" data-opts="Tri|Sqr|Rnd" data-on="-1">Shape</i><i class="sel" data-opts="Free|In time" data-on="-1">Timing</i><i class="knob" data-v="-1">Rate</i><i class="knob" data-v="-1">Fade-in</i><i class="knob" data-v="-1">To filter</i><i class="knob" data-v="-1">Vibrato</i></div>
     <div class="grp"><div class="gt">Voices</div><i class="sel" data-opts="Poly|Mono" data-on="-1">Play</i><i class="knob" data-v="-1">Glide</i></div>
+  </div>
+  <div class="panelrow">
+    <div class="grp wide"><div class="gt">&nbsp;</div><i class="knob" data-v="-1">To width</i><i class="knob" data-v="-1">To volume</i><i class="knob" data-v="-1">To pan</i></div>
+    <div class="grp"><div class="gt">5 · Equaliser</div><i class="knob" data-v="-1">Low cut</i><i class="knob" data-v="-1">Low</i><i class="knob" data-v="-1">Mid</i><i class="knob" data-v="-1">Mid pitch</i><i class="knob" data-v="-1">High</i></div>
   </div>
   <div class="panelrow">
     <div class="grp"><div class="gt">4 · Effects</div><i class="knob" data-v="-1">Drive</i><i class="knob" data-v="-1">Phaser</i><i class="knob" data-v="-1">Phaser rate</i><i class="knob" data-v="-1">Chorus</i><i class="knob" data-v="-1">Echo</i><i class="knob" data-v="-1">Reverb</i></div>

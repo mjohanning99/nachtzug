@@ -32,6 +32,9 @@ public:
 	// justify: every row is stretched to the full width (the extra shared by the items that can grow, in proportion
 	// to their width) and its items get the same height, so the sections of a page end on one line
 	void setJustify(bool on) { justify_ = on; }
+	// balance: when the items need more than one row, as many on each row as on the others (four and four, not six
+	// and two)
+	void setBalance(bool on) { balance_ = on; }
 	~FlowLayout() override {
 		while (QLayoutItem* it = takeAt(0))
 			delete it;
@@ -61,7 +64,7 @@ private:
 	QSize itemSize(QLayoutItem* it, int width) const;
 	QList<QLayoutItem*> items_;
 	int h_, v_;
-	bool justify_ = false;
+	bool justify_ = false, balance_ = false;
 };
 
 // Colours of the current theme. apply() fills them in; everything paints from these.
@@ -92,9 +95,9 @@ QIcon appIcon();
 QIcon ledIcon(const QColor& lit);         // a small indicator light: dark when off, lit when the button is on
 QIcon transportIcon(const QString& kind); // "start", "play", "stop", "rec": symbols for the transport keys
 // The keys' symbols, drawn on an 18-unit grid with round ends: "copy", "loop", "cut", "scissors", "delete",
-// "arrange" (above the timeline), "mute", "solo", "lines", "stop", "idea", "vary", "clean", "clear", "accent",
-// "slide", "chance", "repeat", "lean", "keep", "dice", "mutate", "stopall", "column", "play", "savesound". accent: the
-// red or amber parts.
+// "arrange" and "journey" (above the timeline), "mute", "solo", "lines", "stop", "idea", "vary", "clean", "clear",
+// "accent", "slide", "chance", "repeat", "lean", "keep", "dice", "mutate", "stopall", "column", "play", "savesound".
+// accent: the red or amber parts.
 void drawSymbol(QPainter& p, const QString& kind, const QRectF& box, const QColor& ink, const QColor& accent);
 // a symbol as an icon: in the ink (or, dark: the dark keys' ink), in the accent's ink on a lit key, faint when disabled
 QIcon symbolIcon(const QString& kind, bool dark = false);
@@ -109,14 +112,17 @@ inline bool symbolsOnly = false;
 void loadKeyLook(); // reads "keys" and "ownCursors" from the settings into symbolsOnly and ownCursors
 void symbolKey(QAbstractButton* b, const QString& kind, const QString& word, bool alone = false);
 void dressSymbolKeys(QWidget* root);
-// Nachtzug's own cursors, where a cursor can say what a click will do: "pencil" (a click in the note grid draws a
-// note), "scissors" (a click cuts the clip), "turn" (a knob or fader goes up or down as the mouse does), "handle" (the
-// end of a note or clip, dragged). On unless Settings or the welcome window turned them off ("ownCursors"); then the
+// Nachtzug's own cursors, where a cursor can say what a click will do, in the look's accent and at the size of the
+// system's: "knob" (dragged up or down), "fader" and "slider" (a fader standing or lying; every QSlider has one),
+// "pencil" (a click in the note grid draws a note), "rubber" (the right button rubs notes out), "move" (a note or clip
+// dragged), "handle" (the end of a note or clip, or a cut, dragged), "scissors" (a click cuts the clip), "aim" (a click
+// adds a point to a knob line), "point" (a point dragged), "playhead" (a click in the ruler moves it), "finger" (a
+// switch or a key pressed). On unless Settings or the welcome window turned them off ("ownCursors"); then the
 // system's own shape. setOwnCursor() remembers the kind, so switching changes every such widget at once.
 inline bool ownCursors = true;
 QCursor cursor(const QString& kind, Qt::CursorShape system);
 void setOwnCursor(QWidget* w, const QString& kind, Qt::CursorShape system);
-void applyCursorLook(); // after the setting changed
+void applyCursorLook(); // at the start, and after the setting or the look changed
 void loadFonts();
 QFont lcdFont(int pixelSize, bool bold = false);
 // Drawing helpers for the instrument look; in the flat themes they draw the plain versions.
@@ -170,6 +176,7 @@ public:
 	void setDefault(float v) { def = v; }
 	void setFormatter(std::function<QString(float)> f) { fmt = std::move(f); }
 	void setAccent(const QColor& c) {
+		if (c == accent) return; // set on every change of the song: repaint only when it is another colour
 		accent = c;
 		update();
 	}

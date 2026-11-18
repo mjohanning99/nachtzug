@@ -20,6 +20,11 @@ case "$MODE" in baseline) OUT=$ROOT/build-parity/baseline ;; check) OUT=$ROOT/bu
 export QT_QPA_PLATFORM=offscreen SDL_AUDIODRIVER=dummy
 rm -rf "$OUT"
 mkdir -p "$OUT"
+# The program's settings and data in a fresh folder of their own, the same for the baseline and the check: the
+# pictures then don't depend on what the program was last set to on this computer, or on another run at the same time.
+SETTINGS=$(mktemp -d)
+trap 'rm -rf "$SETTINGS"' EXIT
+export XDG_CONFIG_HOME="$SETTINGS/config" XDG_DATA_HOME="$SETTINGS/data" TMPDIR="$SETTINGS"
 
 echo "The song code"
 "$EXE" --parity "$OUT"

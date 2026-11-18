@@ -272,8 +272,8 @@ QWidget* SettingsDialog::generalPage() {
 		if (hooks.scrollBars) hooks.scrollBars(on);
 	});
 	v->addWidget(bars);
-	auto* cursors =
-	    new Switch(tr("Nachtzug’s own cursors (a pencil in the note grid, scissors, a knob’s arrows)"), Switch::Beside);
+	auto* cursors = new Switch(tr("Nachtzug’s own cursors (a knob over knobs, a pencil in the note grid, scissors …)"),
+	                           Switch::Beside);
 	cursors->setToolTip(tr("Where the cursor can show what a click will do, Nachtzug draws its own. Switched off, "
 	                       "the cursors are the system’s everywhere."));
 	cursors->setChecked(theme::ownCursors);
@@ -282,7 +282,14 @@ QWidget* SettingsDialog::generalPage() {
 		theme::applyCursorLook();
 	});
 	v->addWidget(cursors);
-	auto* welcome = new QPushButton(tr("Show the welcome window next time"));
+	auto* start = new Switch(tr("When Nachtzug opens, show the starter songs and recent songs"), Switch::Beside);
+	start->setToolTip(tr("The window with a starter song for each style and your recent songs. File → New from a "
+	                     "starter song… opens it any time."));
+	start->setChecked(QSettings().value(QStringLiteral("startWindow"), true).toBool());
+	connect(start, &QAbstractButton::toggled, this,
+	        [](bool on) { QSettings().setValue(QStringLiteral("startWindow"), on); });
+	v->addWidget(start);
+	auto* welcome = new QPushButton(tr("Show the first-time welcome again"));
 	welcome->setToolTip(tr("The window that asks how you would like to start, shown the first time Nachtzug opens"));
 	connect(welcome, &QPushButton::clicked, this, [welcome] {
 		QSettings().setValue(QStringLiteral("welcomed"), false);
@@ -295,6 +302,22 @@ QWidget* SettingsDialog::generalPage() {
 	v->addLayout(wr);
 	v->addStretch(1);
 	return w;
+}
+
+// the labels of every form on a page as wide as the widest, so the boxes of its sections line up (as the
+// inspector's do)
+static void lineUpLabels(QWidget* page) {
+	QList<QLabel*> labels;
+	int widest = 0;
+	for (QFormLayout* form : page->findChildren<QFormLayout*>())
+		for (int row = 0; row < form->rowCount(); row++)
+			if (QLayoutItem* item = form->itemAt(row, QFormLayout::LabelRole))
+				if (auto* label = qobject_cast<QLabel*>(item->widget())) {
+					widest = std::max(widest, label->sizeHint().width());
+					labels << label;
+				}
+	for (QLabel* label : labels)
+		label->setMinimumWidth(widest);
 }
 
 // ---------------------------------------------------------------- sound card
@@ -317,11 +340,11 @@ QWidget* SettingsDialog::audioPage() {
 	    tr("The sound system of your computer that Nachtzug plays through. Automatic picks the best one."));
 	output->setToolTip(tr("Which speakers or headphones the sound comes out of"));
 	rate->setToolTip(
-	    tr("How many samples per second. 48 kHz suits almost everything; the sound card may pick its own."));
+	    tr("How many samples per second. 48 kHz suits almost everything; the sound card may pick its own."));
 	buffer->setToolTip(
 	    tr("How much sound is prepared ahead. Smaller reacts faster to the keys; larger is safer against crackles."));
 	for (int r : {44100, 48000, 88200, 96000})
-		rate->addItem(QStringLiteral("%1 kHz").arg(QLocale().toString(r / 1000.0, 'g', 3)), r);
+		rate->addItem(QStringLiteral("%1 kHz").arg(QLocale().toString(r / 1000.0, 'g', 3)), r);
 	for (int b : {64, 128, 256, 512, 1024, 2048})
 		buffer->addItem(QString(), b);
 	form->addRow(tr("Sound system"), driver);
@@ -360,6 +383,7 @@ QWidget* SettingsDialog::audioPage() {
 	connect(input, &QComboBox::activated, this,
 	        [this] { QSettings().setValue(QStringLiteral("audio/input"), input->currentData().toString()); });
 	connect(test, &QPushButton::clicked, this, [this] { app->testTone(); });
+	lineUpLabels(w); // the boxes of both sections in one column
 	return w;
 }
 
@@ -384,7 +408,7 @@ void SettingsDialog::fillAudio() {
 	const int sr = app->audioRunning() ? app->audioRate() : s.rate;
 	for (int i = 0; i < buffer->count(); i++) {
 		const int b = buffer->itemData(i).toInt();
-		buffer->setItemText(i, tr("%1 samples (%2 ms)").arg(b).arg(QLocale().toString(1000.0 * b / sr, 'f', 1)));
+		buffer->setItemText(i, tr("%1 samples (%2 ms)").arg(b).arg(QLocale().toString(1000.0 * b / sr, 'f', 1)));
 	}
 	buffer->setCurrentIndex(std::max(0, buffer->findData(s.buffer)));
 	const QString wantIn = QSettings().value(QStringLiteral("audio/input")).toString();
@@ -394,7 +418,7 @@ void SettingsDialog::fillAudio() {
 		input->addItem(d, d);
 	input->setCurrentIndex(std::max(0, input->findData(wantIn)));
 	if (app->audioRunning())
-		audioState->setText(tr("Playing through %1 at %2 Hz, %3 samples ahead (%4 ms).")
+		audioState->setText(tr("Playing through %1 at %2 Hz, %3 samples ahead (%4 ms).")
 		                        .arg(app->audioDriver())
 		                        .arg(app->audioRate())
 		                        .arg(app->audioBuffer())
@@ -560,6 +584,7 @@ QWidget* SettingsDialog::midiPage() {
 	connect(forget, &QPushButton::clicked, this, [m] { m->forgetAll(); });
 	connect(m, &Midi::mappingsChanged, this, fill);
 	connect(m, &Midi::heard, heard, [heard](const QString& what) { heard->setText(tr("Heard: %1").arg(what)); });
+	lineUpLabels(w); // the boxes of both sections in one column
 	return w;
 }
 
@@ -705,7 +730,7 @@ void SettingsDialog::fillSamples(const QString& select) {
 	const bool first = sampleList->topLevelItemCount() == 0;
 	sampleList->clear();
 	auto secs = [](double v) {
-		return v > 0 ? QStringLiteral("%1 s").arg(QLocale().toString(v, 'f', v < 10 ? 2 : 1)) : tr("cannot be read");
+		return v > 0 ? QStringLiteral("%1 s").arg(QLocale().toString(v, 'f', v < 10 ? 2 : 1)) : tr("cannot be read");
 	};
 	QTreeWidgetItem* selectItem = nullptr;
 	auto bold = [](QTreeWidgetItem* it) {
@@ -783,7 +808,7 @@ RecordDialog::RecordDialog(App* a, QWidget* parent) : QDialog(parent), app(a) {
 	form->addRow(tr("Record from"), input);
 	level = new LevelBar;
 	form->addRow(tr("Level"), level);
-	timeLabel = new QLabel(QStringLiteral("0.0 s"));
+	timeLabel = new QLabel(QStringLiteral("%1 s").arg(QLocale().toString(0.0, 'f', 1)));
 	timeLabel->setFont(theme::lcdFont(18, true));
 	form->addRow(tr("Length"), timeLabel);
 	name = new QLineEdit(tr("Recording"));
@@ -807,7 +832,7 @@ RecordDialog::RecordDialog(App* a, QWidget* parent) : QDialog(parent), app(a) {
 		if (!recording) return;
 		level->setLevel(app->captureLevel());
 		const double secs = app->captureSeconds();
-		timeLabel->setText(QStringLiteral("%1 s").arg(QLocale().toString(secs, 'f', 1)));
+		timeLabel->setText(QStringLiteral("%1 s").arg(QLocale().toString(secs, 'f', 1)));
 		if (secs >= 119.5) stop();
 	});
 	timer->start(40);
@@ -863,10 +888,10 @@ void RecordDialog::stop() {
 		hint->setText(tr(
 		    "That was almost silent. Is the right input chosen, and is it turned up in your system’s sound settings?"));
 	else if (peak > 0.99f)
-		hint->setText(tr("Recorded %1 s. It was so loud it clipped; turn the input down for a cleaner take.")
+		hint->setText(tr("Recorded %1 s. It was so loud it clipped; turn the input down for a cleaner take.")
 		                  .arg(QLocale().toString(double(take.size()) / takeRate, 'f', 1)));
 	else
-		hint->setText(tr("Recorded %1 s. Save it, or record again.")
+		hint->setText(tr("Recorded %1 s. Save it, or record again.")
 		                  .arg(QLocale().toString(double(take.size()) / takeRate, 'f', 1)));
 }
 

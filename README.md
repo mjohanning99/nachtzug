@@ -34,9 +34,9 @@ Nachtzug is made for the kind of music that’s built from repeating synthesiser
 - **Play along on your computer keyboard.** Three rows of letter keys play three octaves, and every key fits the song. A MIDI keyboard works too.
 - **Ideas at the press of a button.** Acid lines, Berlin School sequences, chords, melodies and beats, with **Vary** to change just a note or two and **Clean up** to tidy what you played in.
 - **An auto drummer** with seven styles. Pick one and how hard it plays; it adds the fills by itself.
-- **A real synthesiser on every track**, with live pictures of what each knob does, and a **Simple** page with eight big knobs in plain words if you’d rather not see them all.
+- **A real synthesiser on every track**, with live pictures of what each knob does, an equaliser, and a **Simple** page with nine big knobs in plain words if you’d rather not see them all.
 - **Sounds that move.** Draw a line for any knob, or record your knob turns while the song plays.
-- **From a loop to a song.** Arrange clips on a timeline, jam with the loop grid, or press **Arrange** and get an intro, a build-up, a break and an ending.
+- **From a loop to a song.** Arrange clips on a timeline, jam with the loop grid, or press **Arrange** and get an intro, a build-up, a break and an ending, named on the timeline. **Continue** lets the song run on for as long as you like.
 - **Your own sounds.** A library of 65 sounds made for Nachtzug (nine of them from a night train!), your own samples, or a drum loop chopped across the pads. Any sound you make can be kept under a name of your own and found again in the sound library.
 - **Learn as you go.** Five short lessons walk you through the real program, one step at a time, and almost everything explains itself when you rest the mouse on it.
 - **Share it.** Export your song as a WAV file, as one file per track, or as MIDI for other music programs.
@@ -50,7 +50,7 @@ Nachtzug is made for the kind of music that’s built from repeating synthesiser
 | ![The loop grid](docs/screenshots/loops.png) | ![The mixer](docs/screenshots/mixer.png) |
 | **The loop grid**, for jamming like a live set. | **The mixer**, for balancing the tracks. |
 | ![The Simple sound page](docs/screenshots/simple-sound.png) | ![An arranged song](docs/screenshots/arranged.png) |
-| **Simple**: eight big knobs in plain words. | **Arrange** turns your patterns into a song. |
+| **Simple**: nine big knobs in plain words. | **Arrange** turns your patterns into a song. |
 | ![A lesson](docs/screenshots/lesson.png) | ![Chopping a loop](docs/screenshots/chop.png) |
 | **Lessons** show you one thing at a time. | **Chop a loop** across the drum pads. |
 | ![The Ember colours](docs/screenshots/dark-theme.png) | ![The built-in guide](docs/screenshots/guide.png) |

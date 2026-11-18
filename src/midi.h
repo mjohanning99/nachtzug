@@ -51,7 +51,8 @@ public:
 	// for tests: a message as if it came from a device (any thread), and a stand-in for the output; a test can say
 	// when it arrived (seconds on the steady clock), so a clock's tempo doesn't depend on how busy the machine is
 	void incoming(const uint8_t* bytes, int length, double when = -1);
-	std::function<void(const uint8_t*, int)> sendHook;
+	// in place of the device, for the self-test: each message, with when it was due (secondsNow()'s clock)
+	std::function<void(const uint8_t*, int, double)> sendHook;
 
 signals:
 	void heard(const QString& what); // something came in (for the light on the settings page)
@@ -66,7 +67,7 @@ private:
 	void startClockThread();
 	void stopClockThread();
 	void save();
-	void out(const uint8_t* b, int n);
+	void out(const uint8_t* b, int n, double when = -1); // when: the moment it was due, if not now
 	App* app;
 	MidiIO io_;
 	bool remember_;

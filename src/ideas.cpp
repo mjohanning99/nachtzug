@@ -5,7 +5,7 @@
 // demoSong(), arrangePlan(), arrangeSong(); used by the New idea menu, Vary, Add track, Arrange and the tests.
 // Every random choice comes from the generator it is given, so the same seed gives the same pattern (on one
 // system: AGENTS.md).
-// Changes in the song file: none.
+// Changes in the song file: none of its own; Arrange for me writes the song's named parts ("parts").
 #include "model.h"
 #include "patterns.h"
 #include <QCoreApplication>
@@ -548,6 +548,14 @@ std::vector<ArrangePart> arrangeSong(Song& s, int length, bool writeLead, std::m
 		at += part.bars * BAR;
 	}
 	s.loopOn = false;
+	// the parts it made, named on the timeline (in English, shown translated)
+	std::vector<SongPart> named;
+	int bar = 0;
+	for (const ArrangePart& part : plan) {
+		named.push_back({bar, QString::fromLatin1(part.name)});
+		bar += part.bars;
+	}
+	s.setParts(std::move(named));
 	refreshAutoDrums(s);
 	return plan;
 }

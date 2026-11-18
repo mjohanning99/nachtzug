@@ -2,8 +2,9 @@
 //
 // What's here: Song::toJson() and Song::fromJson(), used by App (saving, opening, the spare copy, the clipboard)
 // and the self-test.
-// Changes in the song file: all of them. Every song saved by an earlier version must still open: a new field needs
-// a default in fromJson, and a saved field is never renamed or given a new meaning (AGENTS.md).
+// Changes in the song file: all of them. 0.3.6 added "parts", the named parts ({bar, name}; none if missing). Every
+// song saved by an earlier version must still open: a new field needs a default in fromJson, and a saved field is never
+// renamed or given a new meaning (AGENTS.md).
 #include "model.h"
 #include <QJsonArray>
 #include <algorithm>
@@ -141,6 +142,8 @@ QJsonObject Song::toJson() const {
 	o["dfb"] = double(dfb);
 	o["rsize"] = double(rsize);
 	o["rdamp"] = double(rdamp);
+	o["echoTone"] = double(echoTone); // older songs have neither: the classic tone, ping-pong
+	o["echoPingPong"] = echoPingPong;
 	o["loopStart"] = loopStart;
 	o["loopEnd"] = loopEnd;
 	o["loopOn"] = loopOn;
@@ -170,6 +173,12 @@ QJsonObject Song::toJson() const {
 		for (size_t i = 0; i < chords.size(); i++)
 			ca.append(i < chordAlts.size() ? chordAlts[i] : 0);
 		o["chordAlts"] = ca;
+	}
+	if (!parts.empty()) { // older programs leave this out, and their songs have no parts
+		QJsonArray pa;
+		for (const SongPart& pt : parts)
+			pa.append(QJsonObject{{"bar", pt.bar}, {"name", pt.name}});
+		o["parts"] = pa;
 	}
 	QJsonArray ts;
 	for (const Track& t : tracks) {
@@ -235,10 +244,12 @@ bool Song::fromJson(const QJsonObject& o, Song& s) {
 	s.master = float(std::clamp(o["master"].toDouble(0.8), 0.0, 1.0));
 	s.root = std::clamp(o["root"].toInt(9), 0, 11);
 	s.scale = std::clamp(o["scale"].toInt(0), 0, NUM_SCALES - 1);
-	s.dtime = std::clamp(o["dtime"].toInt(2), 0, 4);
+	s.dtime = std::clamp(o["dtime"].toInt(2), 0, ECHO_TIMES - 1);
 	s.dfb = float(std::clamp(o["dfb"].toDouble(0.45), 0.0, 1.0));
 	s.rsize = float(std::clamp(o["rsize"].toDouble(0.55), 0.0, 1.0));
 	s.rdamp = float(std::clamp(o["rdamp"].toDouble(0.45), 0.0, 1.0));
+	s.echoTone = float(std::clamp(o["echoTone"].toDouble(0.5), 0.0, 1.0));
+	s.echoPingPong = o["echoPingPong"].toBool(true);
 	s.loopStart = std::max(0, o["loopStart"].toInt(0));
 	s.loopEnd = std::max(s.loopStart + BAR, o["loopEnd"].toInt(8 * BAR));
 	s.loopOn = o["loopOn"].toBool(true);
@@ -267,6 +278,13 @@ bool Song::fromJson(const QJsonObject& o, Song& s) {
 	s.chordAlts.clear();
 	for (const auto& v : o["chordAlts"].toArray())
 		s.chordAlts.push_back(std::clamp(v.toInt(), -1, 1));
+	std::vector<SongPart> parts; // none in a song from before 0.3.6
+	for (const auto& v : o["parts"].toArray()) {
+		const QJsonObject pj = v.toObject();
+		const QString name = pj["name"].toString().trimmed();
+		if (!name.isEmpty()) parts.push_back({std::clamp(pj["bar"].toInt(), 0, 100000), name.left(60)});
+	}
+	s.setParts(std::move(parts));
 	int maxId = 0;
 	for (const auto& tv : o["tracks"].toArray()) {
 		if (int(s.tracks.size()) >= MAX_TRACKS) break;

@@ -108,7 +108,7 @@ img, g = run(['--lesson', 'acid:3', '--track', '1'], 'lesson')
 t = g['tabs']; cut(img, (0, t[1], 780, t[1] + 300), 'lesson')
 
 # windows on their own
-for d in ['welcome', 'export', 'arrange', 'soundcard', 'samples', 'settings', 'chop']:
+for d in ['welcome', 'start', 'export', 'arrange', 'journey', 'soundcard', 'samples', 'settings', 'chop']:
     img, _ = run(['--dialog', d], d); save(img, 'dlg-' + d)
 img, _ = run(['--guide'], 'guide'); save(img, 'guide')
 

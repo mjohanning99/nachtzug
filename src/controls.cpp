@@ -17,7 +17,7 @@
 
 Knob::Knob(const QString& l, QWidget* parent) : QWidget(parent), label(l) {
 	setFixedSize(sizeHint());
-	theme::setOwnCursor(this, QStringLiteral("turn"), Qt::SizeVerCursor);
+	theme::setOwnCursor(this, QStringLiteral("knob"), Qt::SizeVerCursor);
 	setFocusPolicy(Qt::NoFocus);
 	setToolTip(tr("Drag up or down. Hold Shift for small steps. Double-click to reset."));
 }
@@ -215,8 +215,8 @@ void Knob::leaveEvent(QEvent*) {
 
 Lcd::Lcd(App* a, QWidget* parent) : QWidget(parent), app(a) {
 	setMinimumSize(210, 58);
-	setToolTip(tr("The display: where the song is (bar and beat), which track the letter keys play, and short "
-	              "messages. The wave on the left is what you hear."));
+	setToolTip(tr("The display: where the song is (bar and beat, and the part of the song), which track the "
+	              "letter keys play, and short messages. The wave on the left is what you hear."));
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
@@ -296,6 +296,13 @@ void Lcd::paintEvent(QPaintEvent*) {
 		line2 = tr("PRESS SPACE TO PLAY");
 	else if (const Track* t = app->song.track(app->selTrack))
 		line2 = tr("KEYS PLAY: %1").arg(ui(t->name).toUpper());
+	// the named part the playhead is in, first, when no message is more pressing
+	if (const int part = app->song.partAt(bar - 1);
+	    part >= 0 && bar - 1 < app->song.partEnd(size_t(part)) && QDateTime::currentMSecsSinceEpoch() >= messageUntil &&
+	    app->pendingChanges() == 0 && !app->recording && (everPlayed || app->isPlaying())) {
+		const QString name = partName(app->song.parts[size_t(part)].name).toUpper();
+		line2 = line2.isEmpty() ? name : name + QStringLiteral("  ·  ") + line2;
+	}
 	if (app->isPlaying()) everPlayed = true;
 	const int tx = wide ? sr.right() + 13 : 12;
 	const int tw = width() - tx - 13; // keep clear of the level meter on the right
@@ -348,7 +355,10 @@ void VuMeter::feed(float peak) {
 	// decibels from -20 to +3 along the scale; the needle rises fast and falls slowly
 	const float db = 20.f * std::log10(std::max(peak, 1e-4f));
 	const float target = std::clamp((db + 20.f) / 23.f, 0.f, 1.f);
-	needle = target > needle ? needle + (target - needle) * 0.55f : needle + (target - needle) * 0.12f;
+	float next = target > needle ? needle + (target - needle) * 0.55f : needle + (target - needle) * 0.12f;
+	if (std::fabs(target - next) < 0.002f) next = target; // close enough to come to rest
+	if (next == needle) return;                           // standing still: nothing to repaint
+	needle = next;
 	update();
 }
 
@@ -437,7 +447,7 @@ Switch::Switch(const QString& l, Label where, QWidget* parent)
     : QAbstractButton(parent), where_(where), slide_(new QVariantAnimation(this)) {
 	setText(l);
 	setCheckable(true);
-	setCursor(Qt::PointingHandCursor);
+	theme::setOwnCursor(this, QStringLiteral("finger"), Qt::PointingHandCursor);
 	setFocusPolicy(Qt::NoFocus);
 	if (where_ == Above)
 		setFixedSize(sizeHint());
@@ -603,7 +613,7 @@ void Toast::mouseMoveEvent(QMouseEvent* e) {
 	const bool h = actionRect().contains(e->pos());
 	if (h != hoverAction) {
 		hoverAction = h;
-		setCursor(h ? Qt::PointingHandCursor : Qt::ArrowCursor);
+		setCursor(h ? theme::cursor(QStringLiteral("finger"), Qt::PointingHandCursor) : QCursor(Qt::ArrowCursor));
 		update();
 	}
 }
@@ -676,6 +686,16 @@ int FlowLayout::place(const QRect& r, bool apply) const {
 		}
 		x += (rows.back().empty() ? 0 : gapBefore(it)) + w;
 		rows.back().push_back(it);
+	}
+	if (balance_ && rows.size() > 1) {
+		std::vector<QLayoutItem*> all;
+		for (const auto& row : rows)
+			all.insert(all.end(), row.begin(), row.end());
+		const size_t per = (all.size() + rows.size() - 1) / rows.size();
+		std::vector<std::vector<QLayoutItem*>> even((all.size() + per - 1) / per);
+		for (size_t i = 0; i < all.size(); i++)
+			even[i / per].push_back(all[i]);
+		rows = std::move(even);
 	}
 	int y = area.y();
 	for (const auto& row : rows) {

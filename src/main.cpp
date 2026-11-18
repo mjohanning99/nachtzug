@@ -15,6 +15,7 @@
 #include "welcome.h"
 #include "autosave.h"
 #include "midi.h"
+#include "starters.h"
 #include <QApplication>
 #include <QLibraryInfo>
 #include <QLocale>
@@ -165,7 +166,9 @@ int main(int argc, char** argv) {
 	qa.setStyleSheet(theme::styleSheet());
 
 	// the very first start: ask for the language and how to begin
+	bool welcomedNow = false; // then the start window waits for the next start, so only one window greets
 	if (!testRun && o.renderPath.isEmpty() && !QSettings().value(QStringLiteral("welcomed"), false).toBool()) {
+		welcomedNow = true;
 		WelcomeDialog welcome([&](const QString& code) {
 			QApplication::removeTranslator(&own);
 			QApplication::removeTranslator(&qtbase);
@@ -192,6 +195,11 @@ int main(int argc, char** argv) {
 
 	if (o.selftest) return selfTest();
 	if (!o.parityDir.isEmpty()) return writeParity(o.parityDir);
+	if (!o.startersDir.isEmpty()) {
+		const int n = writeStarters(o.startersDir);
+		std::printf("%d starter songs written to %s\n", n, qPrintable(o.startersDir));
+		return n == int(starters().size()) ? 0 : 1;
+	}
 	if (!o.renderPath.isEmpty()) return renderSong(o);
 
 	if (o.dialogName == QLatin1String("welcome") && !o.shotPath.isEmpty()) return pictureOfWelcome(o);
@@ -208,6 +216,8 @@ int main(int argc, char** argv) {
 	if (!o.songPath.isEmpty() && !app.load(o.songPath))
 		std::fprintf(stderr, "Could not read the song %s\n", qPrintable(o.songPath));
 	preparePicture(app, o);
+	// the guide opens by itself until it has been seen once: then the start window waits, as after the welcome
+	const bool guideComing = !QSettings().value(QStringLiteral("seenGuide"), false).toBool();
 	MainWindow w(&app);
 	FileOpener opener(&app, &w);
 	qa.installEventFilter(&opener);
@@ -249,7 +259,14 @@ int main(int argc, char** argv) {
 	if (!testRun) { // a spare copy of unsaved work, and the one a crash left behind
 		auto* autosave = new Autosave(&app);
 		QObject::connect(&qa, &QApplication::aboutToQuit, autosave, &Autosave::finish);
-		QTimer::singleShot(300, &w, [autosave, &w] { autosave->offerRecovery(&w); });
+		// a song a crash left behind comes first; otherwise the start window, unless a song was named to open, the
+		// welcome or the guide greets this time, or it was switched off
+		const bool start = o.songPath.isEmpty() && !welcomedNow && !guideComing &&
+		                   QSettings().value(QStringLiteral("startWindow"), true).toBool();
+		QTimer::singleShot(300, &w, [autosave, &w, &app, start] {
+			// (a song opened from the Finder meanwhile arrives as a FileOpen event: no start window over it)
+			if (!autosave->offerRecovery(&w) && start && app.filePath.isEmpty()) w.showStart();
+		});
 	}
 	scheduleViews(w, o);
 	if (o.guiTest) scheduleGuiTest(app, w);

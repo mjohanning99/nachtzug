@@ -7,14 +7,16 @@
 #include <memory>
 
 struct EngineEvent {
-	enum Type { NoteOn, NoteOff, Audition, Play, Stop, Seek, Panic } type = NoteOn;
+	// Hush: every sound, echo and reverb silent at once, after a fade of a few milliseconds
+	enum Type { NoteOn, NoteOff, Audition, Play, Stop, Seek, Panic, Hush } type = NoteOn;
 	int track = 0; // track id
 	int deg = 0;
 	int key = 0; // identifies a held note between NoteOn and NoteOff
 	bool acc = false;
 	int alt = 0; // NoteOn, Audition: semitones off the scale note (a passing note)
 	double tick = 0;
-	int quant = 0; // NoteOn only: if > 0 and the song is playing, the note waits for this grid (in ticks)
+	int quant = 0; // NoteOn: if > 0 and the song is playing, the note waits for this grid (in ticks). Seek: if > 0
+	               // and the song is playing, the jump waits for the next bar line, so the music stays in time
 };
 
 // A note that sounded, written down by an engine that is asked to (see Engine::log): for the MIDI export and the tests.
@@ -71,6 +73,15 @@ public:
 	std::atomic<float> peakL{0.f}, peakR{0.f};
 	std::atomic<float> trackPeak[MAX_TRACKS];
 	// the live input: the capture thread writes into the ring, the audio thread reads it (see pushInput)
+	// the song snapshot process() plays now, so the GUI thread knows which older ones it may let go (only compared,
+	// never read through)
+	std::atomic<const Song*> songNow{nullptr};
+	// only while no sound device runs (its callback is then the only other user): lets go of the snapshot the engine
+	// played last, here on the GUI thread, so the App may free it and the next callback takes the newest
+	void dropPlaying() {
+		cur_.reset();
+		songNow.store(nullptr, std::memory_order_release);
+	}
 	std::atomic<bool> inputOn{false};
 	std::atomic<float> inputPeak{0.f};
 	void pushInput(const float* mono, int n); // capture thread
@@ -123,13 +134,14 @@ private:
 	void noteIn(Slot& sl, const Track& tr, int key, int deg, bool acc, bool on, int alt = 0);
 	void addActive(Slot& sl, const Track& tr, int key, double samples, bool seq);
 	void releaseSequenced();
+	void silenceAll(); // every sound, echo and reverb cut at once (at the end of a Hush's fade)
 	void fire(double m0, double m1);
 	void fireClip(Slot& sl, const Track& tr, const Clip& c, double m0, double m1, double start, double len);
 	void trigger(Slot& sl, const Track& tr, const Clip& c, const Note& n, double tAbs, double clipEnd, int sub);
 	bool plays(const Clip& c, size_t idx, long iter) const;
 	// every note that sounds goes through these three
-	void synOn(Slot& sl, int key, int midi, bool acc) {
-		sl.synth.noteOn(key, midi, acc);
+	void synOn(Slot& sl, int key, int midi, bool acc, int part = 0) { // part: which note of a chord
+		sl.synth.noteOn(key, midi, acc, part);
 		if (log && sl.audible) log->push_back({clock_ + chunkAt_, sl.id, key, midi, true, false, acc});
 	}
 	void synOff(Slot& sl, int key) {
@@ -163,12 +175,14 @@ private:
 	Pending pend[16];
 	int nPend = 0;
 	bool playing_ = false, loop_ = false;
-	double pos_ = 0.0, tps = 0.01; // ticks per sample
+	double pos_ = 0.0, tps = 0.01;        // ticks per sample
+	double jumpAt_ = -1.0, jumpTo_ = 0.0; // a jump waiting for the bar line at jumpAt_ (-1: none), and where to
 	int keyCounter = 0;
 	uint32_t pass_ = 0;  // counts plays and passes through the loop, for notes with a chance
 	double clock_ = 0.0; // samples processed before this block
 	int chunkAt_ = 0;    // where in the block the current chunk starts
 	float duckT_ = 10.f; // seconds since the last kick
+	int hushLeft_ = -1;  // a Hush fading out: samples left of the fade (0: faded, silence at the chunk's end); -1 none
 	dsp::PingPong delay;
 	dsp::Reverb reverb;
 	dsp::Limiter limiter;

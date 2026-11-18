@@ -66,7 +66,7 @@ LessonOverlay::LessonOverlay(QWidget* window) : QWidget(window) {
 	next_ = new QPushButton(tr("Next"));
 	for (QPushButton* b : {end_, back_, next_})
 		b->setFocusPolicy(Qt::NoFocus); // the letter keys and Space stay with the music
-	end_->setToolTip(tr("Stop the lesson. You can start it again from Help > Lessons."));
+	end_->setToolTip(tr("Stop the lesson. You can start it again from Help → Lessons."));
 	back_->setToolTip(tr("Go back to the step before"));
 	next_->setObjectName("primary");
 	buttons->addWidget(end_);
@@ -416,7 +416,7 @@ std::vector<Lesson> makeLessons(App* app, QWidget* win) {
 		l.steps.push_back(
 		    turnKnob(dsp::P_RES, LessonOverlay::tr("Now turn up <b>Resonance</b> (<b>Squelch</b> on the simple page). "
 			                                       "The filter starts to ring and squeal on every note.")));
-		l.steps.push_back(info(LessonOverlay::tr("That is an acid line. Save it with <b>File ▸ Save</b> (Ctrl+S), or "
+		l.steps.push_back(info(LessonOverlay::tr("That is an acid line. Save it with <b>File → Save</b> (Ctrl+S), or "
 		                                         "carry on with the next lesson, <b>Build a beat</b>.")));
 		out.push_back(l);
 	}

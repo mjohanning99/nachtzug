@@ -228,6 +228,17 @@ void Midi::control(int cc, int value) {
 	apply(it.value(), float(value) / 127.f);
 }
 
+// a mixer strip's equaliser knob ("eqlow:2", "eqmid:2", "eqhigh:2"): which setting it turns, on a synthesiser or a
+// drum kit; -1 for any other target
+static int eqTarget(const QString& target, bool drums) {
+	static const char* const names[3] = {"eqlow:", "eqmid:", "eqhigh:"};
+	static const int synth[3] = {dsp::P_EQLOW, dsp::P_EQMID, dsp::P_EQHIGH},
+	                 kit[3] = {dsp::DP_EQLOW, dsp::DP_EQMID, dsp::DP_EQHIGH};
+	for (int i = 0; i < 3; i++)
+		if (target.startsWith(QLatin1String(names[i]))) return drums ? kit[i] : synth[i];
+	return -1;
+}
+
 // One turn of a controller knob is one undo step, and with Record on it is written into the song like a turn
 // of the knob on screen.
 void Midi::apply(const QString& target, float v) {
@@ -247,6 +258,8 @@ void Midi::apply(const QString& target, float v) {
 		           trackAt(target) && !trackAt(target)->isDrums()) {
 			app->paramPress(trackAt(target)->id,
 			                target.startsWith(QLatin1String("echo:")) ? dsp::P_DELAY : dsp::P_REVERB);
+		} else if (eqTarget(target, false) >= 0 && trackAt(target) && !trackAt(target)->isDrums()) {
+			app->paramPress(trackAt(target)->id, eqTarget(target, false));
 		} else
 			app->begin(target == QLatin1String("master")  ? tr("Volume")
 			           : target == QLatin1String("swing") ? tr("Swing")
@@ -284,6 +297,14 @@ void Midi::apply(const QString& target, float v) {
 			} else
 				app->paramMove(t->id, echo ? dsp::P_DELAY : dsp::P_REVERB, v);
 		}
+	} else if (eqTarget(target, false) >= 0) {
+		if (Track* t = trackAt(target)) {
+			if (t->isDrums()) {
+				t->kit.p[eqTarget(target, true)] = v;
+				app->touch();
+			} else
+				app->paramMove(t->id, eqTarget(target, false), v);
+		}
 	} else if (target.startsWith(QLatin1String("in:"))) {
 		LiveInput& li = app->song.input;
 		const QString f = target.mid(3);
@@ -303,6 +324,9 @@ void Midi::apply(const QString& target, float v) {
 		}
 	} else if (target == QLatin1String("dfb")) {
 		app->song.dfb = v;
+		app->touch();
+	} else if (target == QLatin1String("dtone")) { // the shared echo's tone
+		app->song.echoTone = v;
 		app->touch();
 	} else if (target == QLatin1String("rsize")) {
 		app->song.rsize = v;
@@ -368,9 +392,11 @@ void Midi::startClockThread() {
 			}
 			phase += (now - last) * double(e->bpmNow.load(std::memory_order_relaxed)) * 24.0 / 60.0;
 			last = now;
+			const double perSecond = double(e->bpmNow.load(std::memory_order_relaxed)) * 24.0 / 60.0;
 			for (int guard = 0; phase >= 0.0 && guard < 8; guard++) {
 				const uint8_t f8 = 0xf8;
-				out(&f8, 1);
+				// the moment this clock was due: on a busy machine it goes out late, but it says when it belonged
+				out(&f8, 1, perSecond > 0.0 ? now - phase / perSecond : now);
 				phase -= 1.0;
 			}
 			std::this_thread::sleep_for(std::chrono::microseconds(500));
@@ -378,9 +404,9 @@ void Midi::startClockThread() {
 	});
 }
 
-void Midi::out(const uint8_t* b, int n) {
+void Midi::out(const uint8_t* b, int n, double when) {
 	if (sendHook)
-		sendHook(b, n);
+		sendHook(b, n, when);
 	else
 		io_.send(b, n);
 }

@@ -144,7 +144,7 @@ void ChopView::mouseMoveEvent(QMouseEvent* e) {
 	const int x = int(e->position().x());
 	if (drag_ < 0) {
 		setCursor(cutNear(x) > 0 ? theme::cursor(QStringLiteral("handle"), Qt::SizeHorCursor)
-		                         : QCursor(Qt::PointingHandCursor));
+		                         : theme::cursor(QStringLiteral("finger"), Qt::PointingHandCursor));
 		return;
 	}
 	if (!data_ || data_->frames() < 256) return; // too short to move cuts in
@@ -200,7 +200,7 @@ ChopDialog::ChopDialog(App* a, std::shared_ptr<const dsp::SampleData> s, const Q
 		return l;
 	};
 	int row = 0;
-	grid->addWidget(caption(tr("Cut at")), row, 0, Qt::AlignRight);
+	grid->addWidget(caption(tr("Cut at")), row, 0, Qt::AlignLeft);
 	how = new QButtonGroup(this);
 	auto* atHits = new QPushButton(tr("The hits it finds"));
 	auto* atEqual = new QPushButton(tr("Equal pieces"));
@@ -242,7 +242,7 @@ ChopDialog::ChopDialog(App* a, std::shared_ptr<const dsp::SampleData> s, const Q
 	hitsRow->addStretch(1);
 	grid->addLayout(hitsRow, row++, 1);
 
-	grid->addWidget(caption(tr("Length")), row, 0, Qt::AlignRight);
+	grid->addWidget(caption(tr("Length")), row, 0, Qt::AlignLeft);
 	auto* barsRow = new QHBoxLayout;
 	barsRow->setSpacing(8);
 	bars = new QComboBox;
@@ -263,7 +263,7 @@ ChopDialog::ChopDialog(App* a, std::shared_ptr<const dsp::SampleData> s, const Q
 	barsRow->addStretch(1);
 	grid->addLayout(barsRow, row++, 1);
 
-	grid->addWidget(caption(tr("Name")), row, 0, Qt::AlignRight);
+	grid->addWidget(caption(tr("Name")), row, 0, Qt::AlignLeft);
 	name = new QLineEdit(soundName);
 	name->setToolTip(tr("The pieces are saved in your sample library under this name, numbered 1, 2, 3 …"));
 	grid->addWidget(name, row++, 1);

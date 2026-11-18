@@ -3,10 +3,12 @@
 //
 // What's here: SCALES and the other tables, formatParam(), paramTip(), paramLabel(), the Song, Track and AutoLane
 // functions, unswing(), swingPos(), pitchName(), ui(), resolveSamples(). Saving and opening are in songfile.cpp,
-// the sounds in sounds.cpp, the ideas and Arrange in ideas.cpp, the drummer in drummer.cpp, Clean up in
-// cleanup.cpp.
+// the sounds in sounds.cpp, the ideas and Arrange in ideas.cpp, the long journey in journey.cpp, the drummer in
+// drummer.cpp, Clean up in cleanup.cpp.
 // Changes in the song file: none here (songfile.cpp).
 #include "model.h"
+#include <QRegularExpression>
+#include <QLocale>
 #include "samples.h"
 #include <QCoreApplication>
 #include <algorithm>
@@ -46,10 +48,22 @@ const char* const ARP_NAMES[6] = {QT_TRANSLATE_NOOP("Model", "Off"),    QT_TRANS
                                   QT_TRANSLATE_NOOP("Model", "Random"), QT_TRANSLATE_NOOP("Model", "As played")};
 const char* const RATE_NAMES[4] = {"1/8", "1/8 triplet", "1/16", "1/32"};
 const int RATE_TICKS[4] = {48, 32, 24, 12};
-const char* const DTIME_NAMES[5] = {QT_TRANSLATE_NOOP("Model", "1/16"), QT_TRANSLATE_NOOP("Model", "1/8"),
-                                    QT_TRANSLATE_NOOP("Model", "Dotted 1/8"), QT_TRANSLATE_NOOP("Model", "1/4"),
-                                    QT_TRANSLATE_NOOP("Model", "Dotted 1/4")};
-const float DTIME_BEATS[5] = {0.25f, 0.5f, 0.75f, 1.f, 1.5f};
+// the echo's times: the first five keep the numbers older songs saved them under, the triplets and the half note
+// came later (their lengths are dsp::echoBeats())
+const char* const DTIME_NAMES[ECHO_TIMES] = {
+    QT_TRANSLATE_NOOP("Model", "1/16"),        QT_TRANSLATE_NOOP("Model", "1/8"),
+    QT_TRANSLATE_NOOP("Model", "Dotted 1/8"),  QT_TRANSLATE_NOOP("Model", "1/4"),
+    QT_TRANSLATE_NOOP("Model", "Dotted 1/4"),  QT_TRANSLATE_NOOP("Model", "1/8 triplet"),
+    QT_TRANSLATE_NOOP("Model", "1/4 triplet"), QT_TRANSLATE_NOOP("Model", "1/2")};
+const int DTIME_ORDER[ECHO_TIMES] = {0, 5, 1, 6, 2, 3, 4, 7};
+// the LFO's note values when it runs in time (dsp::lfoBeats())
+const char* const LFO_SYNC_NAMES[LFO_SYNC_STEPS] = {
+    QT_TRANSLATE_NOOP("Model", "8 bars"),      QT_TRANSLATE_NOOP("Model", "4 bars"),
+    QT_TRANSLATE_NOOP("Model", "2 bars"),      QT_TRANSLATE_NOOP("Model", "1 bar"),
+    QT_TRANSLATE_NOOP("Model", "1/2"),         QT_TRANSLATE_NOOP("Model", "1/4"),
+    QT_TRANSLATE_NOOP("Model", "1/4 triplet"), QT_TRANSLATE_NOOP("Model", "1/8"),
+    QT_TRANSLATE_NOOP("Model", "1/8 triplet"), QT_TRANSLATE_NOOP("Model", "1/16"),
+    QT_TRANSLATE_NOOP("Model", "1/32")};
 const char* const ROLE_NAMES[R_COUNT] = {QT_TRANSLATE_NOOP("Model", "Bass"), QT_TRANSLATE_NOOP("Model", "Sequence"),
                                          QT_TRANSLATE_NOOP("Model", "Pad"), QT_TRANSLATE_NOOP("Model", "Lead"),
                                          QT_TRANSLATE_NOOP("Model", "Drums")};
@@ -69,7 +83,7 @@ const ParamDef PARAMS[P_COUNT] = {
     {"envAmt", QT_TRANSLATE_NOOP("Model", "Env amount"), 0.4f, K_PCT, nullptr},
     {"accent", QT_TRANSLATE_NOOP("Model", "Accent"), 0.5f, K_PCT, nullptr},
     {"slope", QT_TRANSLATE_NOOP("Model", "Type"), 0, K_CHOICE,
-	 QT_TRANSLATE_NOOP("Model", "Low-pass 24 dB|Low-pass 12 dB|Band-pass|High-pass")},
+	 QT_TRANSLATE_NOOP("Model", "Low-pass 24 dB|Low-pass 12 dB|Band-pass|High-pass|Notch")},
     {"fA", QT_TRANSLATE_NOOP("Model", "Attack"), 0, K_TIME, nullptr},
     {"fD", QT_TRANSLATE_NOOP("Model", "Decay"), 0.5f, K_TIME, nullptr},
     {"fS", QT_TRANSLATE_NOOP("Model", "Sustain"), 0.2f, K_PCT, nullptr},
@@ -97,12 +111,31 @@ const ParamDef PARAMS[P_COUNT] = {
     {"pitchEnv", QT_TRANSLATE_NOOP("Model", "To pitch"), 0, K_PCT, nullptr},
     {"keyTrack", QT_TRANSLATE_NOOP("Model", "Key tracking"), 0.35f, K_PCT, nullptr},
     {"lfoPw", QT_TRANSLATE_NOOP("Model", "LFO to width"), 0, K_PCT, nullptr},
+    // the LFO in time, to the volume and the pan, and its fade-in
+    {"lfoSync", QT_TRANSLATE_NOOP("Model", "LFO timing"), 0, K_CHOICE, QT_TRANSLATE_NOOP("Model", "Free|In time")},
+    {"lfoAmp", QT_TRANSLATE_NOOP("Model", "LFO to volume"), 0, K_PCT, nullptr},
+    {"lfoPan", QT_TRANSLATE_NOOP("Model", "LFO to pan"), 0, K_PCT, nullptr},
+    {"lfoFade", QT_TRANSLATE_NOOP("Model", "LFO fade-in"), 0, K_FADE, nullptr},
+    // the filter envelope's release and the equaliser
+    {"fR", QT_TRANSLATE_NOOP("Model", "Release"), 0, K_FRELEASE, nullptr},
+    {"eqCut", QT_TRANSLATE_NOOP("Model", "Low cut"), 0, K_LOWCUT, nullptr},
+    {"eqLow", QT_TRANSLATE_NOOP("Model", "Low"), 0.5f, K_DB, nullptr},
+    {"eqMid", QT_TRANSLATE_NOOP("Model", "Mid"), 0.5f, K_DB, nullptr},
+    {"eqFreq", QT_TRANSLATE_NOOP("Model", "Mid pitch"), 0.5f, K_MIDHZ, nullptr},
+    {"eqHigh", QT_TRANSLATE_NOOP("Model", "High"), 0.5f, K_DB, nullptr},
 };
 
+// a number and its unit, joined by a narrow no-break space; decimals as the language writes them (2,5 in German)
+static QString withUnit(double v, int decimals, const char* unit) {
+	QLocale loc;
+	loc.setNumberOptions(QLocale::OmitGroupSeparator);
+	return loc.toString(v, 'f', decimals) + QChar(0x202F) + QLatin1String(unit);
+}
+
 static QString hz(float h) {
-	if (h < 10.f) return QString::number(double(h), 'f', 2) + " Hz";
-	if (h < 1000.f) return QString::number(int(std::lround(h))) + " Hz";
-	return QString::number(double(h) / 1000.0, 'f', 1) + " kHz";
+	if (h < 10.f) return withUnit(double(h), 2, "Hz");
+	if (h < 1000.f) return withUnit(std::round(double(h)), 0, "Hz");
+	return withUnit(double(h) / 1000.0, 1, "kHz");
 }
 
 QString formatParam(int param, float v) {
@@ -110,8 +143,7 @@ QString formatParam(int param, float v) {
 	switch (d.kind) {
 	case K_TIME: {
 		const float s = envTime(v);
-		return s < 1.f ? QString::number(int(std::lround(s * 1000.f))) + " ms"
-		               : QString::number(double(s), 'f', 1) + " s";
+		return s < 1.f ? withUnit(std::round(double(s) * 1000.0), 0, "ms") : withUnit(double(s), 1, "s");
 	}
 	case K_CUTOFF:
 		return hz(std::min(cutoffHz(v), 20000.f));
@@ -120,14 +152,42 @@ QString formatParam(int param, float v) {
 	case K_PHASER:
 		return hz(phaserHz(v));
 	case K_CENTS:
-		return QString::number(int(std::lround(v * 40.f))) + " cents";
+		return ui(QT_TRANSLATE_NOOP("Model", "%1 cents")).arg(int(std::lround(v * 40.f)));
 	case K_GLIDE:
-		return QString::number(int(std::lround(glideSec(v) * 1000.f))) + " ms";
+		return withUnit(std::round(double(glideSec(v)) * 1000.0), 0, "ms");
 	case K_CHOICE:
 		return ui(d.choices).split('|').value(int(v + 0.5f));
+	case K_FADE:
+		return v <= 0.f ? ui(QT_TRANSLATE_NOOP("Model", "Off")) : withUnit(double(lfoFadeSec(v)), 1, "s");
+	case K_FRELEASE:
+		return v > 0.f ? formatParam(P_AR, v) : ui(QT_TRANSLATE_NOOP("Model", "As amp"));
+	case K_DB: {
+		const float db = eqDb(v);
+		if (std::fabs(db) < 0.05f) return withUnit(0, 0, "dB");
+		return (db > 0 ? QStringLiteral("+") : QStringLiteral("−")) + withUnit(double(std::fabs(db)), 1, "dB");
+	}
+	case K_MIDHZ:
+		return hz(eqMidHz(v));
+	case K_LOWCUT:
+		return v > 0.f ? hz(lowCutHz(v)) : ui(QT_TRANSLATE_NOOP("Model", "Off"));
 	default:
 		return QString::number(int(std::lround(v * 100.f))) + "%";
 	}
+}
+
+QString lfoRateText(float v, bool inTime) {
+	return inTime ? ui(LFO_SYNC_NAMES[lfoSyncStep(v)]) : hz(lfoHz(v));
+}
+
+QString formatParam(int param, float v, const Patch& patch) {
+	if (param == P_LFORATE) return lfoRateText(v, patch.p[P_LFOSYNC] > 0.5f);
+	return formatParam(param, v);
+}
+
+QString echoToneText(float v) { // the repeats' low-pass, as a frequency (at 48 kHz)
+	const float a = echoToneCoef(v);
+	if (a >= 0.999f) return ui(QT_TRANSLATE_NOOP("Model", "open"));
+	return hz(-std::log(1.f - a) * 48000.f / TAU);
 }
 
 QString paramTip(int param) {
@@ -152,7 +212,7 @@ QString paramTip(int param) {
 	    QT_TRANSLATE_NOOP("Model", "How far each note opens the filter, following the filter envelope."),
 	    QT_TRANSLATE_NOOP("Model", "How much louder and brighter accented notes are."),
 	    QT_TRANSLATE_NOOP("Model", "The filter type. Low-pass removes the highs; band-pass keeps a narrow middle band; "
-		                           "high-pass removes the lows."),
+		                           "high-pass removes the lows; notch takes out a narrow band and keeps the rest."),
 	    QT_TRANSLATE_NOOP("Model", "How quickly the filter opens when a note starts."),
 	    QT_TRANSLATE_NOOP(
 	        "Model", "How quickly the filter closes again after opening. Short gives plucks, long gives slow sweeps."),
@@ -168,7 +228,7 @@ QString paramTip(int param) {
 	    QT_TRANSLATE_NOOP(
 	        "Model",
 	        "The shape of the LFO’s slow movement: smooth up and down, a jump between two values, or random steps."),
-	    QT_TRANSLATE_NOOP("Model", "How fast the LFO moves."),
+	    QT_TRANSLATE_NOOP("Model", "How fast the LFO moves. In time, how long one sweep lasts, as a note value."),
 	    QT_TRANSLATE_NOOP("Model", "How much the LFO moves the filter: slow sweeps or a wobble."),
 	    QT_TRANSLATE_NOOP("Model", "How much the LFO moves the pitch: vibrato."),
 	    QT_TRANSLATE_NOOP("Model", "Distortion: warms the sound up at first, makes it grittier further up."),
@@ -187,6 +247,25 @@ QString paramTip(int param) {
 	    QT_TRANSLATE_NOOP("Model", "Makes higher notes brighter and lower notes darker, as on acoustic instruments."),
 	    QT_TRANSLATE_NOOP("Model",
 		                  "How much the LFO moves the pulse width, for a slowly shifting, chorus-like pulse sound."),
+	    QT_TRANSLATE_NOOP("Model",
+		                  "Free: the LFO moves at its own speed. In time: it follows the song’s tempo, and the "
+		                  "rate knob picks a note value, from eight bars to a thirty-second note."),
+	    QT_TRANSLATE_NOOP("Model", "How much the LFO moves the volume: a gentle throb, or a chopped, stuttering sound "
+		                           "with the square shape."),
+	    QT_TRANSLATE_NOOP("Model", "How much the LFO moves the sound between the left and the right speaker."),
+	    QT_TRANSLATE_NOOP("Model", "How slowly the LFO fades in after a note starts, so a held note begins still and "
+		                           "then starts to sway: a delayed vibrato."),
+	    // the filter envelope's release and the equaliser
+	    QT_TRANSLATE_NOOP("Model", "How quickly the filter closes after a note ends. All the way down, it follows the "
+		                           "amp envelope’s release, as it always did."),
+	    QT_TRANSLATE_NOOP("Model", "Takes away the deepest notes and rumble below this pitch, so the track leaves room "
+		                           "for the bass and the kick. Off all the way down."),
+	    QT_TRANSLATE_NOOP("Model", "More or less of the low end: weight and warmth. Flat in the middle."),
+	    QT_TRANSLATE_NOOP("Model", "More or less of the middle, where a sound is hollow or honking. Flat in the "
+		                           "middle; Mid pitch says where."),
+	    QT_TRANSLATE_NOOP("Model", "Where the Mid knob lifts or lowers: low for body, high for bite."),
+	    QT_TRANSLATE_NOOP("Model", "More or less of the top end: air and sparkle, or a softer, darker sound. Flat in "
+		                           "the middle."),
 	};
 	return param >= 0 && param < P_COUNT ? ui(tips[param]) : QString();
 }
@@ -202,6 +281,14 @@ QString paramLabel(int param) {
 	    QT_TRANSLATE_NOOP("Model", "Amp release")};
 	if (param >= P_FA && param <= P_FS) return ui(env[param - P_FA]);
 	if (param >= P_AA && param <= P_AR) return ui(env[3 + param - P_AA]);
+	if (param == P_FR) return ui(QT_TRANSLATE_NOOP("Model", "Filter release"));
+	if (param >= P_EQCUT && param <= P_EQHIGH) { // the equaliser's knobs, named as the timeline's lines show them
+		static const char* const eq[5] = {QT_TRANSLATE_NOOP("Model", "EQ low cut"),
+		                                  QT_TRANSLATE_NOOP("Model", "EQ low"), QT_TRANSLATE_NOOP("Model", "EQ mid"),
+		                                  QT_TRANSLATE_NOOP("Model", "EQ mid pitch"),
+		                                  QT_TRANSLATE_NOOP("Model", "EQ high")};
+		return ui(eq[param - P_EQCUT]);
+	}
 	return ui(PARAMS[param].label);
 }
 
@@ -348,6 +435,144 @@ int Song::endTick() const {
 			e = std::max(e, c.end());
 	return e;
 }
+void Song::setParts(std::vector<SongPart> list) {
+	for (SongPart& pt : list)
+		pt.bar = std::max(0, pt.bar);
+	std::stable_sort(list.begin(), list.end(), [](const SongPart& a, const SongPart& b) { return a.bar < b.bar; });
+	// one part to a bar: of two at the same bar the later one wins, as addPart() would have it
+	std::vector<SongPart> kept;
+	for (SongPart& pt : list) {
+		if (!kept.empty() && kept.back().bar == pt.bar)
+			kept.back() = std::move(pt);
+		else
+			kept.push_back(std::move(pt));
+	}
+	parts = std::move(kept);
+}
+void Song::addPart(int bar, const QString& name) {
+	bar = std::max(0, bar);
+	if (const int i = partIndex(bar); i >= 0) {
+		parts[size_t(i)].name = name;
+		return;
+	}
+	const auto at =
+	    std::upper_bound(parts.begin(), parts.end(), bar, [](int b, const SongPart& pt) { return b < pt.bar; });
+	parts.insert(at, SongPart{bar, name});
+}
+bool Song::removePart(int bar) {
+	const int i = partIndex(bar);
+	if (i < 0) return false;
+	parts.erase(parts.begin() + i);
+	return true;
+}
+int Song::partAt(int bar) const {
+	int found = -1;
+	for (size_t i = 0; i < parts.size() && parts[i].bar <= bar; i++)
+		found = int(i);
+	return found;
+}
+int Song::partIndex(int bar) const {
+	for (size_t i = 0; i < parts.size(); i++)
+		if (parts[i].bar == bar) return int(i);
+	return -1;
+}
+int Song::partEnd(size_t i) const {
+	if (i + 1 < parts.size()) return parts[i + 1].bar;
+	return std::max(i < parts.size() ? parts[i].bar + 1 : 1, (endTick() + BAR - 1) / BAR);
+}
+int Song::repeatPart(size_t i) {
+	if (i >= parts.size()) return -1;
+	const int a = parts[i].bar, b = partEnd(i), n = b - a;
+	if (n <= 0) return -1;
+	const int ta = a * BAR, tb = b * BAR, shift = n * BAR;
+	// the chords repeat across the song, so write them out bar by bar first; then the copy's bars go in
+	if (chords.size() > 1 || !chordAlts.empty()) {
+		const int want = std::max(b, (std::max(endTick(), loopEnd) + BAR - 1) / BAR);
+		std::vector<int> all(static_cast<size_t>(want)), alts(static_cast<size_t>(want));
+		for (int k = 0; k < want; k++) {
+			all[size_t(k)] = chordAt(k);
+			alts[size_t(k)] = chordAltAt(k);
+		}
+		const std::vector<int> allPart(all.begin() + a, all.begin() + b), altsPart(alts.begin() + a, alts.begin() + b);
+		all.insert(all.begin() + b, allPart.begin(), allPart.end());
+		alts.insert(alts.begin() + b, altsPart.begin(), altsPart.end());
+		chords = std::move(all);
+		chordAlts = std::move(alts);
+	}
+	// a clip that runs across the part's start or end is cut in two there first (as App::splitClip cuts one, the
+	// pattern carrying on where it was), so the part's own bars are copied, and nothing outside it is doubled
+	for (Track& t : tracks)
+		for (const int cut : {ta, tb})
+			for (size_t k = 0; k < t.clips.size(); k++) {
+				Clip& c = t.clips[k];
+				if (cut <= c.start || cut >= c.end()) continue;
+				Clip right = c;
+				right.id = newId();
+				right.start = cut;
+				right.len = c.end() - cut;
+				right.offset = c.loopLen > 0 ? (c.offset + (cut - c.start)) % c.loopLen : c.offset;
+				right.inKind = 0; // the transitions stay at the outer ends
+				c.outKind = 0;
+				c.len = cut - c.start;
+				t.clips.push_back(right); // c is invalid from here on
+			}
+	for (Track& t : tracks) {
+		std::vector<Clip> copies;
+		for (Clip& c : t.clips) {
+			if (c.start >= tb)
+				c.start += shift;
+			else if (c.start >= ta) {
+				Clip d = c;
+				d.id = newId();
+				d.start += shift;
+				copies.push_back(std::move(d));
+			}
+		}
+		t.clips.insert(t.clips.end(), copies.begin(), copies.end());
+		for (AutoLane& l : t.lanes) {
+			if (l.loop > 0) continue; // a shape that repeats on its own stays as it is
+			if (!l.pts.empty()) {
+				// pin the line at the part's two ends first, so the copy starts where the part starts and the part
+				// still ends where it ended, whichever points happen to lie around them
+				const float va = l.valueAt(ta, 0.f), vb = l.valueAt(tb - 1, 0.f);
+				auto pin = [&l](int tick, float v) {
+					for (const AutoPoint& p : l.pts)
+						if (p.tick == tick) return;
+					l.pts.push_back({tick, v});
+				};
+				pin(ta, va);
+				pin(tb - 1, vb);
+				std::stable_sort(l.pts.begin(), l.pts.end(),
+				                 [](const AutoPoint& x, const AutoPoint& y) { return x.tick < y.tick; });
+			}
+			std::vector<AutoPoint> out;
+			for (const AutoPoint& p : l.pts) {
+				out.push_back({p.tick >= tb ? p.tick + shift : p.tick, p.v});
+				if (p.tick >= ta && p.tick < tb) out.push_back({p.tick + shift, p.v});
+			}
+			std::stable_sort(out.begin(), out.end(),
+			                 [](const AutoPoint& x, const AutoPoint& y) { return x.tick < y.tick; });
+			l.pts = std::move(out);
+		}
+	}
+	if (loopStart >= tb) loopStart += shift;
+	if (loopEnd > tb) loopEnd += shift;
+	for (SongPart& pt : parts)
+		if (pt.bar >= b) pt.bar += n;
+	// the name: without a number at its end, then the first number from 2 that no part has
+	QString base = parts[i].name;
+	static const QRegularExpression tail(QStringLiteral("\\s+\\d+$"));
+	base.remove(tail);
+	int num = 2;
+	for (bool taken = true; taken;) {
+		taken = false;
+		for (const SongPart& pt : parts)
+			if (pt.name == base + QLatin1Char(' ') + QString::number(num)) taken = true;
+		if (taken) num++;
+	}
+	addPart(b, base + QLatin1Char(' ') + QString::number(num));
+	return partIndex(b);
+}
 bool Song::anySolo() const {
 	for (auto& t : tracks)
 		if (t.solo) return true;
@@ -380,6 +605,16 @@ QString ui(const char* text) {
 }
 QString ui(const QString& text) {
 	return text.isEmpty() ? text : QCoreApplication::translate("Model", text.toUtf8().constData());
+}
+QString partName(const QString& name) {
+	const QString whole = ui(name);
+	if (whole != name) return whole;
+	// a copy of a suggested part ("Rising 2", from Repeat this part): the name in the program's language, its number
+	static const QRegularExpression numbered(QStringLiteral("^(.*\\S)\\s+(\\d+)$"));
+	const QRegularExpressionMatch m = numbered.match(name);
+	if (!m.hasMatch()) return name;
+	const QString base = ui(m.captured(1));
+	return base == m.captured(1) ? name : base + QLatin1Char(' ') + m.captured(2);
 }
 
 QStringList resolveSamples(Song& s) {

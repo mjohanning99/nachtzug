@@ -83,6 +83,13 @@ Patch presetByName(const QString& name) {
 	return presets()[0];
 }
 
+// a kit's equaliser flat and its low cut off
+static void flatEq(DrumKit& k) {
+	k.p[DP_EQCUT] = 0.f;
+	for (int i = DP_EQLOW; i <= DP_EQHIGH; i++)
+		k.p[i] = 0.5f;
+}
+
 const std::vector<DrumKit>& drumKits() {
 	static const std::vector<DrumKit> list = [] {
 		auto kit = [](const char* name, std::initializer_list<float> v, float drive, float delay, float reverb) {
@@ -94,6 +101,7 @@ const std::vector<DrumKit>& drumKits() {
 			k.p[DP_DRIVE] = drive;
 			k.p[DP_DELAY] = delay;
 			k.p[DP_REVERB] = reverb;
+			flatEq(k);
 			return k;
 		};
 		auto sampled = [](const char* name, std::initializer_list<const char*> files,
@@ -113,6 +121,7 @@ const std::vector<DrumKit>& drumKits() {
 			k.p[DP_DRIVE] = drive;
 			k.p[DP_DELAY] = delay;
 			k.p[DP_REVERB] = reverb;
+			flatEq(k);
 			return k;
 		};
 		// clang-format off: the levels line up under the drum names
@@ -243,10 +252,27 @@ Patch rollPatch(int role, std::mt19937& g) {
 
 Patch mutatePatch(const Patch& src, std::mt19937& g) {
 	Patch p = src;
-	for (int i = 0; i < P_COUNT; i++)
+	for (int i = 0; i < P_COUNT; i++) {
+		// not the filter release or the equaliser: set by hand, or left alone
+		if (i >= P_FR && i <= P_EQHIGH) continue;
+		// the LFO's volume, pan and fade-in are nudged only once they are in use: off, they stay off
+		if (i >= P_LFOAMP && i <= P_LFOFADE && p.p[i] <= 0.f) continue;
 		if (PARAMS[i].kind != K_CHOICE) p.p[i] = std::clamp(p.p[i] + rr(g, -.09f, .09f), 0.f, 1.f);
+	}
 	if (!p.name.endsWith(" (mutated)")) p.name += " (mutated)";
 	return p;
+}
+
+Patch keepEq(Patch next, const Patch& current) {
+	for (int i = P_EQCUT; i <= P_EQHIGH; i++)
+		next.p[i] = current.p[i];
+	return next;
+}
+
+DrumKit keepEq(DrumKit next, const DrumKit& current) {
+	for (int i = DP_EQCUT; i <= DP_EQHIGH; i++)
+		next.p[i] = current.p[i];
+	return next;
 }
 
 DrumKit chooseKit(const DrumKit& current, const DrumKit& preset) {

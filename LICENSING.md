@@ -6,14 +6,14 @@ Nachtzug is free. You may use it, share it and change it, and you never have to 
 
 Everything you make with Nachtzug belongs to you, completely: your songs, your patterns, your sounds and every WAV or MIDI file you export. You can release it, sell it, put it in a game or a film, and you don’t have to mention Nachtzug (though I’d be delighted if you did!).
 
-That goes for the built-in sounds, too. The sample library and the demo songs are given away with no strings attached, so use them in your music however you like.
+That goes for the built-in sounds, too. The sample library, the demo songs and the starter songs are given away with no strings attached, so use them in your music however you like.
 
 ## Which licence covers what
 
 | Part | Licence | What that means |
 |---|---|---|
 | The program: everything in `src/`, `tools/`, the build files and the website’s code | [GNU GPL, version 3 or later](LICENSE) | Use it for anything, share it, change it. If you hand on a changed version, hand on its source code too, under the same licence. Nobody may turn Nachtzug into a closed program. |
-| The sample library (`assets/samples/`) and the example songs | [CC0 1.0](LICENSES/CC0-1.0.txt) | In the public domain: do whatever you like with them, no credit needed. Every sound is made by `tools/samplegen`; nothing is recorded or copied from anywhere. |
+| The sample library (`assets/samples/`), the starter songs (`assets/starters/`) and the example songs | [CC0 1.0](LICENSES/CC0-1.0.txt) | In the public domain: do whatever you like with them, no credit needed. Every sound is made by `tools/samplegen`; nothing is recorded or copied from anywhere. |
 | The manuals, the README, the pictures and the screenshots (`docs/`, `site/`’s texts and images) | [CC BY-SA 4.0](LICENSES/CC-BY-SA-4.0.txt) | Share and adapt them freely, as long as you name Nachtzug as the source and keep your version under the same licence. |
 | The fonts (`assets/fonts/`) | SIL Open Font License 1.1 | Free to use, change and share, but not to sell on their own. Each font folder has its licence (`OFL*.txt`). |
 

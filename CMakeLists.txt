@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(nachtzug VERSION 0.3.5 LANGUAGES CXX)
+project(nachtzug VERSION 0.4.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -54,6 +54,13 @@ endif()
 # there when a packager builds with link-time optimisation (-flto, the default for openSUSE and Fedora packages), so
 # the build stopped with "No data signature found"; at about 10 MB the samples don't need it
 qt_add_resources(nachtzug "sample_library" PREFIX "/samples" BASE assets/samples FILES ${NACHTZUG_SAMPLES})
+
+# the starter songs of the start window (src/starters.h), CC0: built in as :/starters/<id>.nachtzug
+file(GLOB NACHTZUG_STARTERS CONFIGURE_DEPENDS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/assets/starters assets/starters/*.nachtzug)
+list(TRANSFORM NACHTZUG_STARTERS PREPEND assets/starters/)
+if(NACHTZUG_STARTERS)
+  qt_add_resources(nachtzug "starter_songs" PREFIX "/starters" BASE assets/starters FILES ${NACHTZUG_STARTERS})
+endif()
 
 qt_add_translations(nachtzug TS_FILES i18n/nachtzug_de.ts RESOURCE_PREFIX /i18n LUPDATE_OPTIONS -no-obsolete -locations none)
 

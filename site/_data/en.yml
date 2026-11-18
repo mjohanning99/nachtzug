@@ -57,21 +57,21 @@ stations:
   - { time: "22:58", stop: "Keyboard Hbf", icon: keys, title: "Play along on your keyboard", short: "Three rows of letter keys play three octaves, every key a note of the song’s scale." }
   - { time: "23:06", stop: "Ideenfeld Ost", icon: idea, title: "Ideas at a press", short: "<b>New idea</b> writes an acid line, a Berlin School sequence, chords or a beat; <b>Vary</b> changes a note or two." }
   - { time: "23:14", stop: "Drummersdorf Süd", icon: drum, title: "A tireless drummer", short: "Pick a style and how hard it plays; it adds fills by itself." }
-  - { time: "23:21", stop: "Knob Street West", icon: knob, title: "A real synthesiser", short: "On every track, with live pictures of what each knob does, or a <b>Simple</b> page of eight big knobs." }
+  - { time: "23:21", stop: "Knob Street West", icon: knob, title: "A real synthesiser", short: "On every track, with live pictures of what each knob does and an equaliser at the end, or a <b>Simple</b> page of nine big knobs." }
   - { time: "23:40", stop: "Loop Grid Abstellbahnhof", icon: grid, title: "Jam like a live set", short: "Start and stop patterns while it plays; every change waits for the next bar." }
-  - { time: "23:52", stop: "Arrangement Viaduct Nord", icon: arrange, title: "From a loop to a song", short: "Lay out clips yourself, or let <b>Arrange</b> make an intro, a build-up, a break and an ending." }
+  - { time: "23:52", stop: "Arrangement Viaduct Nord", icon: arrange, title: "From a loop to a song", short: "Lay out clips yourself, or let <b>Arrange</b> make an intro, a build-up, a break and an ending, each named on the timeline. <b>Continue</b> lets it run on for as long as you like." }
   - { time: "00:15", stop: "Sample Gbf", icon: wave, title: "Your own sounds", short: "65 sounds made for Nachtzug, nine of them from a night train, your samples, or a chopped drum loop. And the sounds you make, kept under your own names." }
   - { time: "00:51", stop: "Berliner Schule Hbf", icon: export, title: "Take it with you", short: "Export a WAV, a file per track or MIDI. MIDI keyboards, knobs and clock all work." }
 
 gallery:
   - { img: notes.png, wide: true, title: "The notes", text: "A grid where every row is a note of the scale; the inspector on the left keeps the track’s sound in reach.", alt: "The note grid with a bass line, the inspector on the left and the timeline above" }
-  - { img: sound.png, title: "The sound", text: "Oscillators, filter, envelopes and effects, laid out in the order the sound flows.", alt: "The Sound tab: oscillators, filter, envelopes and effects" }
-  - { img: mixer.png, title: "The mixer", text: "Volume, pan, echo, reverb and Pump for every track, with meters that tell you when it gets too loud.", alt: "The mixer with a strip per track" }
+  - { img: sound.png, title: "The sound", text: "Oscillators, filter, envelopes, effects and an equaliser, laid out in the order the sound flows.", alt: "The Sound tab: oscillators, filter, envelopes and effects" }
+  - { img: mixer.png, title: "The mixer", text: "Volume, pan, echo, reverb, Pump and a three-knob equaliser for every track, with meters that tell you when it gets too loud.", alt: "The mixer with a strip per track" }
   - { img: loops.png, wide: true, title: "The loop grid", text: "A row of patterns for every track, to switch on and off like a live set.", alt: "The loop grid: rows of patterns, one row per track" }
 
 more_title: "And on board too"
 more:
-  - { icon: lesson, title: "Five lessons", short: "Walk you through the real program, one step at a time." }
+  - { icon: lesson, title: "Lessons and starter songs", short: "Five lessons walk you through the real program; five finished songs, one for each style, are there to make your own." }
   - { icon: undo, title: "Nothing breaks", short: "Every change can be undone, and a spare copy is kept in case of a crash." }
   - { icon: palette, title: "Six colour schemes", short: "From Bakelite, the warm enamel here, to Ember for late nights." }
   - { icon: book, title: "A printed manual", short: "An A5 booklet with pictures, sound recipes and patch sheets, in English and German." }

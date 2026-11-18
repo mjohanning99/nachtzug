@@ -16,6 +16,8 @@ class QStackedWidget;
 class QGroupBox;
 class QHBoxLayout;
 class FlowLayout;
+class QGridLayout;
+class EqCurve;
 
 class SoundPanel : public QWidget {
 	Q_OBJECT
@@ -51,8 +53,22 @@ private:
 	QWidget* buildSynthPage();
 	QWidget* buildDrumPage();
 	QWidget* buildSimpleSynth();
+	// the Simple page's Tone knob and Low cut switch: a fifth column beside the other big knobs where the window is
+	// wide enough, else a row of their own under them, so the page never runs past the window's right edge
+	void placeTone();
+	bool eventFilter(QObject* watched, QEvent* e) override;
+	void showEvent(QShowEvent* e) override;
+	QWidget* simpleSynthPage = nullptr;
+	QGridLayout* simpleGrid = nullptr;
+	QWidget *toneCell = nullptr, *lowCutCell = nullptr;
+	bool toneBeside = true;
+	int toneWide = 0; // how wide the page wanted to be with Tone beside the others
 	QWidget* buildSimpleDrums();
 	QGroupBox* buildMaster();
+	// the shared echo's own controls (on the Complete pages and, the time, on the Simple one)
+	QComboBox* echoTimeCombo();
+	Knob* echoToneKnob();
+	Switch* pingPongSwitch();
 	Knob* kitKnob(const QString& label, int idx, float def);
 	void spread(QWidget* page);
 	void rollSound();
@@ -86,4 +102,15 @@ private:
 	std::vector<ComboBind> combos;
 	std::vector<std::pair<int, Knob*>> patchKnobs; // (parameter, knob) for the moving display
 	std::vector<QWidget*> graphs;
+	std::vector<Switch*> pingPongs; // the echo's ping-pong switch, one on the synth page and one on the drums'
+
+	// the equaliser (soundpanel.cpp, at the end): its section on the Complete pages, and Tone and Low cut on the
+	// Simple ones
+	QGroupBox* buildEq(bool drums);
+	QWidget* toneKnob(bool drums); // one big knob, darker to brighter, with its ends written under it
+	Switch* lowCutSwitch(bool drums);
+	void syncEq(bool moving); // after every change; while playing, only the pictures and knobs that follow lines
+	std::vector<EqCurve*> eqCurves;
+	std::vector<std::pair<Switch*, bool>> lowCuts; // (switch, on a drum page)
+	std::vector<float> toneBase;                   // low and high when the Tone knob was pressed
 };

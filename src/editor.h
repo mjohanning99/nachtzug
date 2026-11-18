@@ -23,6 +23,7 @@ public:
 	explicit NoteEditor(App* app, QWidget* parent = nullptr);
 	void clipChanged(bool recentre);
 	bool notesInView() const; // every note of the clip is on a row the grid shows (the GUI test asks)
+	void repaintMoving();     // about 30 times a second while something moves: the playhead
 
 protected:
 	void paintEvent(QPaintEvent*) override;
@@ -36,6 +37,9 @@ protected:
 
 private:
 	static constexpr int KEYW = 76, RUL = 20;
+	int playheadX() const;  // where the playhead is drawn, or -1 when this clip is not playing
+	int shownPx = -1;       // where repaintMoving() last saw it
+	unsigned shownSong = 0; // and how often the song had been published then
 	QString helpAt(const QPoint& p) const;
 	bool drums() const;
 	int rows() const { return drums() ? dsp::D_COUNT : DEG_MAX - DEG_MIN + 1; }

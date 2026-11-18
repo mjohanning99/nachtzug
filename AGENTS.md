@@ -56,13 +56,14 @@ from) and **Changes in the song file**. Read the note before the file; a new fil
 | `model.*` | The song, its tracks, clips and notes; scales, chords, the synth settings’ names and explanations | no |
 | `songfile.cpp` | Saving and opening `.nachtzug` files, with the defaults for older songs | no |
 | `sounds.cpp` | The presets, drum kits, rolled and mutated sounds | no |
-| `ideas.cpp`, `drummer.cpp`, `cleanup.cpp`, `patterns.h` | The pattern generators, Vary, new tracks, the demo song and Arrange; the auto drummer; Clean up; their shared helpers | no |
+| `ideas.cpp`, `journey.cpp`, `drummer.cpp`, `cleanup.cpp`, `patterns.h` | The pattern generators, Vary, new tracks, the demo song and Arrange; the long journey (Continue); the auto drummer; Clean up; their shared helpers | no |
 | `engine.*` | The audio engine (the audio thread) and rendering to WAV, stems and the note log | no |
 | `samples.*` | The built-in sample library and your own: reading WAV and AIFF, importing, recording, chopping | no |
 | `mysounds.*` | Your own sounds as `.nzsound` files, stars and “used lately” | no |
 | `midiio.*`, `midi.*`, `midifile.*` | MIDI on each system’s own service; notes, learned knobs and the clock; the MIDI file export | `midi.cpp` adds the knobs’ menus |
 | `app.*` | The App: the one place the song is changed (undo, `onBar()`), the transport, recording, the loop grid’s launching, the sound card | no |
 | `autosave.*` | The spare copy of unsaved work | asks at start-up |
+| `recent.*`, `starters.*` | The recent songs (File > Open recent); the starter songs built into the program (`assets/starters/`, made by `--write-starters`) | no |
 | `main.cpp`, `cli.*` | Starting the program; the command line, `--render` and the pictures | |
 | `selftest.*`, `guitest.*`, `parity.*` | The self-test, the GUI test and tooltip check, the parity record | |
 | `mainwindow.*` | The window: top bar, menus, how the panels are arranged, the letter keys as an instrument, the guide | yes |
@@ -73,7 +74,7 @@ from) and **Changes in the song file**. Read the note before the file; a new fil
 | `timeline.*`, `loops.*` | The song timeline with its knob lines, and the loop grid | yes |
 | `widgets.h`, `theme.cpp`, `drawing.cpp`, `panels.cpp`, `controls.cpp` | The look: themes and style sheet; painted parts and icons; wells and folding sections; knobs, switches, meters, the display | yes |
 | `soundlibrary.*`, `savesounddialog.*` | The sound library (the card index) and “Save sound…” | yes |
-| `exportdialog.*`, `settingsdialog.*`, `chopdialog.*`, `welcome.*` | Export; Settings and recording a sample; chopping a loop; the first-start window | yes |
+| `exportdialog.*`, `settingsdialog.*`, `chopdialog.*`, `welcome.*`, `startwindow.*` | Export; Settings and recording a sample; chopping a loop; the first-start window; the start window (starter songs and recent songs) | yes |
 | `lessons.*` | The guided lessons over the real window | yes |
 
 ### Short names

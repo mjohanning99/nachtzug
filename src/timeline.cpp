@@ -2,10 +2,14 @@
 //
 // What's here: Timeline, made by the main window: the paint functions in the order they are drawn, the mouse
 // (moving, stretching and cutting clips, drawing knob lines, the loop row and the chord lane), and the menus of a
-// clip, a chord, a track, a knob lane and Add track. The editing itself goes through App.
-// Changes in the song file: none.
+// clip, a chord, a track, a knob lane and Add track; the named parts (selected, renamed, moved, added and deleted
+// in the parts lane). The editing itself goes through App.
+// Changes in the song file: none of its own (the parts are Song::parts, see songfile.cpp).
 
 #include "timeline.h"
+#include <QRegularExpression>
+#include <QApplication>
+#include <QTimer>
 #include "app.h"
 #include "widgets.h"
 #include <QContextMenuEvent>
@@ -13,6 +17,7 @@
 #include <QInputDialog>
 #include <QLineEdit>
 #include <QMenu>
+#include <QPaintEngine>
 #include <QPainter>
 #include <QPainterPath>
 #include <QScrollBar>
@@ -20,8 +25,16 @@
 #include <climits>
 #include <cmath>
 
-static QString valueText(int param, float v) {
-	return param == AP_VOLUME ? QString::number(int(std::lround(v * 100.f))) + "%" : formatParam(param, v);
+// the names suggested for a part, in the order a song often has them; kept in English in the song, shown translated
+static const char* const PART_NAMES[] = {
+    QT_TRANSLATE_NOOP("Model", "Intro"),     QT_TRANSLATE_NOOP("Model", "Build-up"),
+    QT_TRANSLATE_NOOP("Model", "Main part"), QT_TRANSLATE_NOOP("Model", "Break"),
+    QT_TRANSLATE_NOOP("Model", "Drop"),      QT_TRANSLATE_NOOP("Model", "Main part 2"),
+    QT_TRANSLATE_NOOP("Model", "Breakdown"), QT_TRANSLATE_NOOP("Model", "Outro")};
+
+// the LFO's rate reads as a note value when that track's LFO runs in time
+static QString valueText(const Track& t, int param, float v) {
+	return param == AP_VOLUME ? QString::number(int(std::lround(v * 100.f))) + "%" : formatParam(param, v, t.patch);
 }
 
 Timeline::Timeline(App* a, QWidget* parent) : QAbstractScrollArea(parent), app(a) {
@@ -109,7 +122,9 @@ int Timeline::lanePointAt(int row, const QPoint& p, int* base) const {
 }
 
 void Timeline::updateScroll() {
-	const int total = std::max(app->song.endTick(), app->song.loopEnd) + 8 * BAR;
+	int total = std::max(app->song.endTick(), app->song.loopEnd) + 8 * BAR;
+	if (!app->song.parts.empty())
+		total = std::max(total, (app->song.parts.back().bar + 9) * BAR); // a part past the end
 	const int nt = int(app->song.tracks.size());
 	const int w = int(total * ppt()), h = rowY(nt) + verticalScrollBar()->value() - TOP + ROW;
 	horizontalScrollBar()->setRange(0, std::max(0, w - (viewport()->width() - HDR)));
@@ -163,9 +178,27 @@ struct Timeline::Frame {
 	int firstBar, lastBar, nt, lanesBottom;
 	double mNow;
 	int px, cy;
+	const QRegion& dirty; // what is being repainted: parts entirely outside it are skipped
 };
 
-void Timeline::paintEvent(QPaintEvent*) {
+// What moves while the song plays is only the playhead (with its mark in the ruler) and the header column (the
+// meters, the volume sliders and line values that follow the knob lines): only they are repainted 30 times a second,
+// not every clip. Any change to the song repaints everything, as do scrolling, zooming and resizing.
+void Timeline::repaintMoving() {
+	const int px = tx(app->pos()), H = viewport()->height();
+	if (app->published() != shownSong) {
+		shownSong = app->published();
+		viewport()->update();
+	} else {
+		QRegion r(0, 0, HDR, H);
+		for (const int x : {shownPx, px})
+			r += QRect(x - 6, 0, 13, H);
+		viewport()->update(r);
+	}
+	shownPx = px;
+}
+
+void Timeline::paintEvent(QPaintEvent* e) {
 	QPainter p(viewport());
 	const int W = viewport()->width(), H = viewport()->height();
 	const Song& s = app->song;
@@ -182,13 +215,15 @@ void Timeline::paintEvent(QPaintEvent*) {
 	const int nt = int(s.tracks.size());
 	const int lanesBottom = std::min(H, rowY(nt));
 	const double mNow = app->musicalPos();
-	const Frame fr{p, W, H, s, f, fs, fb, firstBar, lastBar, nt, lanesBottom, mNow, tx(app->pos()), RULER + LOOPROW};
+	const Frame fr{p,      W,          H, s, f, fs, fb, firstBar, lastBar, nt, lanesBottom, mNow, tx(app->pos()),
+	               CHORDY, e->region()};
 	paintGrid(fr);
 	paintClips(fr);
 	paintPlayhead(fr);
 	paintRuler(fr);
 	paintLoopRow(fr);
 	paintChords(fr);
+	paintParts(fr);
 	paintEmptyNote(fr);
 	paintHeaders(fr);
 }
@@ -242,6 +277,7 @@ void Timeline::paintClips(const Frame& fr) {
 		for (const Clip& c : t.clips) {
 			const QRect r = clipRect(c, i);
 			if (r.right() < HDR || r.left() > W) continue;
+			if (!fr.dirty.intersects(r.adjusted(-6, -6, 6, 6))) continue; // with its shadow, not being repainted
 			const bool sel = app->selClips.contains(c.id), shown = c.id == app->editClip;
 			const QColor fill = theme::blockFill(col, sel, false);
 			theme::drawBlock(p, r, fill, theme::tactile ? 5 : 3);
@@ -284,7 +320,8 @@ void Timeline::paintClips(const Frame& fr) {
 						if (at < 0 || at >= c.len) continue;
 						const int x = tx(c.start + at), w = std::max(2, int((t.isDrums() ? 10 : n.len) * ppt()));
 						const int yy = r.bottom() - 5 - int((n.deg - lo) / span * (r.height() - 22));
-						p.drawRect(x, yy, w, 2);
+						const QRect nr(x, yy, w, 2);
+						if (fr.dirty.intersects(nr)) p.drawRect(nr); // while playing, only those by the playhead
 					}
 			}
 			p.setClipRect(inside);
@@ -406,22 +443,22 @@ void Timeline::paintRuler(const Frame& fr) {
 	const int lastBar = fr.lastBar;
 	const int px = fr.px;
 	// bar ruler
-	p.fillRect(HDR, 0, W - HDR, RULER, theme::well);
+	p.fillRect(HDR, RULERY, W - HDR, RULER, theme::well);
 	p.setFont(f);
 	const int every = pxPerBar >= 44 ? 1 : pxPerBar >= 22 ? 2 : 4;
 	for (int bar = firstBar; bar <= lastBar; bar++) {
 		const int x = tx(bar * BAR);
 		if (x < HDR - 20) continue;
 		p.setPen(theme::gridBar);
-		p.drawLine(x, RULER - 6, x, RULER);
+		p.drawLine(x, RULERY + RULER - 6, x, RULERY + RULER);
 		if (bar % every == 0) {
 			p.setPen(theme::dim);
-			p.drawText(x + 4, 14, QString::number(bar + 1));
+			p.drawText(x + 4, RULERY + 14, QString::number(bar + 1));
 		}
 	}
 	if (px >= HDR) {
 		QPolygon tri;
-		tri << QPoint(px - 5, 0) << QPoint(px + 5, 0) << QPoint(px, 8);
+		tri << QPoint(px - 5, RULERY) << QPoint(px + 5, RULERY) << QPoint(px, RULERY + 8);
 		p.setPen(Qt::NoPen);
 		p.setBrush(theme::ink);
 		p.drawPolygon(tri);
@@ -435,18 +472,18 @@ void Timeline::paintLoopRow(const Frame& fr) {
 	const Song& s = fr.s;
 	const QFont& fs = fr.fs;
 	// loop row
-	p.fillRect(HDR, RULER, W - HDR, LOOPROW, theme::canvas);
+	p.fillRect(HDR, LOOPY, W - HDR, LOOPROW, theme::canvas);
 	{
 		const int a = tx(s.loopStart), b = tx(s.loopEnd);
 		QColor lc = theme::amber;
 		lc.setAlpha(s.loopOn ? 255 : 70);
 		p.setPen(Qt::NoPen);
 		p.setBrush(lc);
-		p.drawRoundedRect(QRect(a, RULER + 2, std::max(4, b - a), LOOPROW - 4), 3, 3);
+		p.drawRoundedRect(QRect(a, LOOPY + 2, std::max(4, b - a), LOOPROW - 4), 3, 3);
 		if (b - a > 70) {
 			p.setFont(fs);
 			p.setPen(s.loopOn ? theme::accentInk : theme::dim);
-			p.drawText(QRect(a + 6, RULER + 2, b - a - 8, LOOPROW - 4), Qt::AlignVCenter | Qt::AlignLeft,
+			p.drawText(QRect(a + 6, LOOPY + 2, b - a - 8, LOOPROW - 4), Qt::AlignVCenter | Qt::AlignLeft,
 			           s.loopOn ? tr("LOOP") : tr("LOOP (OFF)"));
 		}
 	}
@@ -506,6 +543,45 @@ void Timeline::paintChords(const Frame& fr) {
 	}
 }
 
+// the parts lane: a long key for each named part, lit when it is selected, its name kept in view when it begins
+// left of the window
+void Timeline::paintParts(const Frame& fr) {
+	QPainter& p = fr.p;
+	const int W = fr.W;
+	const Song& s = fr.s;
+	const QRect lane(HDR, 0, W - HDR, PARTS);
+	if (!fr.dirty.intersects(lane)) return;
+	p.fillRect(lane, theme::wellHi);
+	p.setFont(fr.f);
+	if (s.parts.empty()) {
+		p.setPen(theme::dim);
+		p.drawText(lane.adjusted(10, 0, -10, 0), Qt::AlignVCenter | Qt::AlignLeft,
+		           p.fontMetrics().elidedText(tr("No parts named yet: right-click here to name one, such as "
+		                                         "“Intro” or “Break”"),
+		                                      Qt::ElideRight, lane.width() - 20));
+		return;
+	}
+	const int sel = app->selectedPart();
+	p.save();
+	p.setClipRect(lane);
+	for (size_t i = 0; i < s.parts.size(); i++) {
+		const int x0 = tx(s.parts[i].bar * BAR), x1 = tx(s.partEnd(i) * BAR);
+		if (x1 < HDR || x0 > W) continue;
+		const bool on = int(i) == sel;
+		const QRectF r(x0 + 1, 2, std::max(3, x1 - x0 - 2), PARTS - 4);
+		theme::drawKey(p, r, QString(), on, theme::amber);
+		// the key's face, as drawKey() draws it: a lit key sits lower and loses its lip
+		const QRectF face = r.adjusted(0, theme::tactile && on ? 1.5 : 0, 0, theme::tactile ? (on ? -1.0 : -2.5) : 0);
+		const double left = std::max(face.left() + 6, double(HDR + 6)), room = face.right() - 5 - left;
+		if (room < 10) continue;
+		const QString shown = p.fontMetrics().elidedText(partName(s.parts[i].name), Qt::ElideRight, int(room));
+		if (shown == QStringLiteral("…")) continue;
+		p.setPen(on ? theme::accentInk : theme::ink);
+		p.drawText(QRectF(left, face.top(), room, face.height()), Qt::AlignVCenter | Qt::AlignLeft, shown);
+	}
+	p.restore();
+}
+
 // what an empty song says: how to begin
 void Timeline::paintEmptyNote(const Frame& fr) {
 	QPainter& p = fr.p;
@@ -525,22 +601,101 @@ void Timeline::paintEmptyNote(const Frame& fr) {
 // the header column: each track's name, keys and volume, and the focus line
 void Timeline::paintHeaders(const Frame& fr) {
 	QPainter& p = fr.p;
-	const int W = fr.W;
+	theme::drawSunken(p, QRectF(HDR, TOP, fr.W - HDR, fr.H - TOP));
+	// The still parts come from a picture kept between repaints when nothing they show has changed: drawn in the
+	// same place on the screen as here, with the same transformation, so it holds exactly the pixels drawing them
+	// afresh would give (the header column is opaque). Only where that cannot be had, they are drawn afresh.
+	QImage* target = nullptr;
+	if (QPaintEngine* engine = p.paintEngine())
+		if (engine->paintDevice() && engine->paintDevice()->devType() == QInternal::Image)
+			target = static_cast<QImage*>(engine->paintDevice());
+	const QTransform dt = p.deviceTransform();
+	const QRect dev = dt.mapRect(QRect(0, 0, HDR, fr.H));
+	bool kept = false;
+	if (keepHeader && target && dt.type() <= QTransform::TxScale && dev.left() >= 0 && dev.top() >= 0) {
+		const Song& s = fr.s;
+		const QString key =
+		    QStringLiteral("%1 %2 %3 %4 %5 %6 %7 %8 %9")
+		        .arg(app->published())
+		        .arg(app->selTrack)
+		        .arg(rowY(0))
+		        .arg(fr.H)
+		        .arg(QString::number(dt.m11()) + QLatin1Char(',') + QString::number(dt.dx()) + QLatin1Char(',') +
+				     QString::number(dt.dy()))
+		        .arg(int(target->format()))
+		        .arg(theme::tactile * 2 + theme::symbolsOnly)
+		        .arg(QString::number(theme::panel.rgba()) + QLatin1Char(',') + QString::number(theme::well.rgba()) +
+				     QLatin1Char(',') + QString::number(theme::wellHi.rgba()) + QLatin1Char(',') +
+				     QString::number(theme::ink.rgba()) + QLatin1Char(',') + QString::number(theme::amber.rgba()))
+		        .arg(font().key() + tr("BARS") + tr("Lines") + QString::number(s.tracks.size()) +
+				     QString::number(theme::trackColor(R_BASS).rgba() ^ theme::trackColor(R_PAD).rgba()));
+		if (key != headKey || headPic.isNull()) {
+			headPic = QImage(dev.right() + 1, dev.bottom() + 1, target->format());
+			headPic.setDevicePixelRatio(target->devicePixelRatio());
+			QPainter q(&headPic);
+			q.setRenderHints(p.renderHints());
+			q.setTransform(dt *
+			               QTransform::fromScale(1.0 / target->devicePixelRatio(), 1.0 / target->devicePixelRatio()));
+			if (q.deviceTransform() == dt) {
+				q.setFont(p.font());
+				paintHeaderStill(q, fr);
+				headKey = key;
+			} else
+				headKey.clear(); // not the same transformation: draw them afresh, always
+		}
+		if (!headKey.isEmpty()) {
+			p.drawImage(QRectF(0, 0, HDR, fr.H), headPic, QRectF(dev)); // one picture pixel to one screen pixel
+			kept = true;
+		}
+	}
+	if (!kept) paintHeaderStill(p, fr);
+
+	// what moves: each track's volume slider and level meter, and an open line's value
+	const int nt = fr.nt;
+	const Song& s = fr.s;
+	p.setClipRect(QRect(0, TOP, HDR, fr.H - TOP));
+	for (int i = 0; i < nt; i++) {
+		const int y = rowY(i);
+		if (y + rowH(i) < TOP || y > fr.H) continue;
+		const Track& t = s.tracks[size_t(i)];
+		const QColor col = theme::trackColor(t.role);
+		const QRect vr(12, y + 32, HDR - 24, 8);
+		const float vol = app->paramValue(t, AP_VOLUME);
+		theme::drawSlider(p, QRectF(vr).adjusted(4, 1, -4, -1), vol, col);
+		const float pk =
+		    std::clamp(app->engine->trackPeak[std::min(i, MAX_TRACKS - 1)].load(std::memory_order_relaxed), 0.f, 1.f);
+		p.fillRect(QRect(12, y + 45, int((HDR - 24) * std::sqrt(pk)), 3), theme::ink);
+		if (t.laneOpen) {
+			const AutoLane* l = t.lane(t.laneParam);
+			const float now = l ? l->valueAt(fr.mNow, t.laneParam == AP_VOLUME ? t.vol : t.patch.p[t.laneParam])
+			                    : (t.laneParam == AP_VOLUME ? t.vol : t.patch.p[t.laneParam]);
+			p.setFont(fr.fs);
+			p.setPen(theme::dim);
+			p.drawText(QRect(HDR - 70, y + ROW - 13, 62, 12), Qt::AlignRight | Qt::AlignVCenter,
+			           valueText(t, t.laneParam, now));
+			p.setFont(fr.f);
+		}
+	}
+	p.setClipping(false);
+	if (app->focus == App::FocusArrange) p.fillRect(0, 0, fr.W, 2, theme::amber); // Edit-menu commands act on this view
+}
+
+// the header column without what moves: the labels at the top, and each track's row with its colour, symbol,
+// name, Mute, Solo and Lines, and an open line lane's two keys
+void Timeline::paintHeaderStill(QPainter& p, const Frame& fr) {
 	const int H = fr.H;
 	const Song& s = fr.s;
 	const QFont& f = fr.f;
 	const QFont& fs = fr.fs;
 	const QFont& fb = fr.fb;
 	const int nt = fr.nt;
-	const double mNow = fr.mNow;
 	const int cy = fr.cy;
-	theme::drawSunken(p, QRectF(HDR, TOP, W - HDR, H - TOP));
-	// header column
 	p.fillRect(0, 0, HDR, H, theme::panel);
 	p.setPen(theme::dim);
 	p.setFont(fs);
-	p.drawText(QRect(12, 0, HDR - 16, RULER), Qt::AlignVCenter | Qt::AlignLeft, tr("BARS"));
-	p.drawText(QRect(12, RULER, HDR - 16, LOOPROW), Qt::AlignVCenter | Qt::AlignLeft, tr("LOOP"));
+	p.drawText(QRect(12, 0, HDR - 16, PARTS), Qt::AlignVCenter | Qt::AlignLeft, tr("PARTS"));
+	p.drawText(QRect(12, RULERY, HDR - 16, RULER), Qt::AlignVCenter | Qt::AlignLeft, tr("BARS"));
+	p.drawText(QRect(12, LOOPY, HDR - 16, LOOPROW), Qt::AlignVCenter | Qt::AlignLeft, tr("LOOP"));
 	p.drawText(QRect(12, cy, HDR - 16, CHORDS), Qt::AlignVCenter | Qt::AlignLeft, tr("CHORDS"));
 	p.setClipRect(QRect(0, TOP, HDR, H - TOP));
 	auto keyFace = [&](const QRect& r, const QString& text, bool on, const QColor& onCol, const QString& symbol = {}) {
@@ -563,45 +718,45 @@ void Timeline::paintHeaders(const Frame& fr) {
 		keyFace(QRect(HDR - 114, y + 6, 24, 18), QString(), t.mute, QColor(0xc4, 0x36, 0x1c), QStringLiteral("mute"));
 		keyFace(QRect(HDR - 86, y + 6, 24, 18), QString(), t.solo, theme::amber, QStringLiteral("solo"));
 		keyFace(QRect(HDR - 58, y + 6, 48, 18), theme::symbolsOnly ? QString() : tr("Lines"), t.laneOpen, theme::amber,
-		     QStringLiteral("lines"));
-		// volume slider with the level meter underneath
-		const QRect vr(12, y + 32, HDR - 24, 8);
-		const float vol = app->paramValue(t, AP_VOLUME);
-		theme::drawSlider(p, QRectF(vr).adjusted(4, 1, -4, -1), vol, col);
-		const float pk =
-		    std::clamp(app->engine->trackPeak[std::min(i, MAX_TRACKS - 1)].load(std::memory_order_relaxed), 0.f, 1.f);
-		p.fillRect(QRect(12, y + 45, int((HDR - 24) * std::sqrt(pk)), 3), theme::ink);
+		        QStringLiteral("lines"));
 		if (t.laneOpen) {
 			const AutoLane* l = t.lane(t.laneParam);
-			const float now = l ? l->valueAt(mNow, t.laneParam == AP_VOLUME ? t.vol : t.patch.p[t.laneParam])
-			                    : (t.laneParam == AP_VOLUME ? t.vol : t.patch.p[t.laneParam]);
 			keyFace(QRect(12, y + ROW + 8, HDR - 24, 24), tr("Line: %1  ▾").arg(paramLabel(t.laneParam)), false,
-			     theme::key);
+			        theme::key);
 			const int lp = l ? l->loop : 0;
 			keyFace(QRect(12, y + ROW + 38, HDR - 24, 24),
-			     (lp == 0         ? tr("Follows the song")
-			      : lp == BAR / 2 ? tr("Repeats every ½ bar")
-			      : lp == BAR     ? tr("Repeats every bar")
-			                      : tr("Repeats every %1 bars").arg(lp / BAR)) +
-			         QStringLiteral("  ▾"),
-			     false, theme::key);
-			p.setFont(fs);
-			p.setPen(theme::dim);
-			p.drawText(QRect(HDR - 70, y + ROW - 13, 62, 12), Qt::AlignRight | Qt::AlignVCenter,
-			           valueText(t.laneParam, now));
-			p.setFont(f);
+			        (lp == 0         ? tr("Follows the song")
+			         : lp == BAR / 2 ? tr("Repeats every ½ bar")
+			         : lp == BAR     ? tr("Repeats every bar")
+			                         : tr("Repeats every %1 bars").arg(lp / BAR)) +
+			            QStringLiteral("  ▾"),
+			        false, theme::key);
 		}
 	}
 	p.setClipping(false);
-	if (app->focus == App::FocusArrange) p.fillRect(0, 0, W, 2, theme::amber); // Edit-menu commands act on this view
 }
 
 // ---------------------------------------------------------------- help
 
 QString Timeline::helpAt(const QPoint& p) {
 	const int nt = int(app->song.tracks.size());
-	if (p.y() < RULER) return tr("Bar numbers. Click or drag here to move the playhead; the song plays from there.");
-	if (p.y() < RULER + LOOPROW)
+	if (p.y() < RULERY) {
+		if (p.x() < HDR)
+			return tr("The song’s parts: Intro, Build-up, Break… Click a part to select it, double-click to rename "
+			          "it, right-click for more.");
+		const int i = partUnder(p.x()), edge = partEdgeAt(p.x());
+		if (edge >= 0) return tr("Drag to move where “%1” begins.").arg(partName(app->song.parts[size_t(edge)].name));
+		if (i < 0)
+			return tr("Right-click or double-click to name a part of the song from this bar on, for example "
+			          "“Intro” or “Break”. Arrange for me names its parts by itself.");
+		return tr("%1, bars %2 to %3. Click to select its clips (Loop then repeats just this part) and move the "
+		          "playhead there; while the song plays, it jumps there at the next bar. Double-click to rename it, "
+		          "drag its left edge to move it, right-click for more.")
+		    .arg(partName(app->song.parts[size_t(i)].name), QString::number(app->song.parts[size_t(i)].bar + 1),
+		         QString::number(app->song.partEnd(size_t(i)))); // in one go: a "%2" in a name stays as it is
+	}
+	if (p.y() < LOOPY) return tr("Bar numbers. Click or drag here to move the playhead; the song plays from there.");
+	if (p.y() < CHORDY)
 		return tr("The amber bar is the loop: while Loop is on, the song keeps repeating this stretch. Drag here to "
 		          "mark a different stretch. Click to switch looping on or off.");
 	if (p.y() < TOP) {
@@ -686,7 +841,7 @@ void Timeline::dragPoint(QMouseEvent* e) {
 		began = true;
 	}
 	l->pts[size_t(pointIdx)] = {tick, v};
-	QToolTip::showText(e->globalPosition().toPoint(), paramLabel(t.laneParam) + ": " + valueText(t.laneParam, v),
+	QToolTip::showText(e->globalPosition().toPoint(), paramLabel(t.laneParam) + ": " + valueText(t, t.laneParam, v),
 	                   viewport());
 	app->touch();
 }
@@ -714,12 +869,38 @@ void Timeline::mousePressEvent(QMouseEvent* e) {
 	began = false;
 	moved = false;
 	lastDt = 0;
-	if (p.x() >= HDR && p.y() < RULER) {
+	if (p.x() >= HDR && p.y() < RULERY) { // a part: its boundary dragged, or the part selected
+		const int edge = partEdgeAt(p.x());
+		if (edge >= 0) {
+			drag = PartEdge;
+			dragTrack = app->song.parts[size_t(edge)].bar; // where the part began when the drag started
+			return;
+		}
+		const int i = partUnder(p.x());
+		app->selectPart(i);
+		if (i < 0) return;
+		const int to = app->song.parts[size_t(i)].bar * BAR;
+		if (!app->isPlaying()) {
+			app->jumpTo(to);
+			return;
+		}
+		// while playing, the jump waits until the click is known not to be the first half of a double-click (which
+		// renames the part and should not move the music)
+		if (!partJump) {
+			partJump = new QTimer(this);
+			partJump->setSingleShot(true);
+		}
+		partJump->disconnect();
+		connect(partJump, &QTimer::timeout, this, [this, to] { app->jumpTo(to); });
+		partJump->start(QApplication::doubleClickInterval());
+		return;
+	}
+	if (p.x() >= HDR && p.y() < LOOPY) {
 		drag = Seek;
 		app->seek(std::max(0.0, std::round(pressTick / 24.0) * 24.0));
 		return;
 	}
-	if (p.x() >= HDR && p.y() < RULER + LOOPROW) {
+	if (p.x() >= HDR && p.y() < CHORDY) {
 		drag = Loop;
 		return;
 	}
@@ -840,12 +1021,24 @@ void Timeline::mouseMoveEvent(QMouseEvent* e) {
 		if (scissors) return;
 		bool edge = false, inLane = false;
 		const int row = rowAt(p.y(), &inLane);
-		if (inLane && row >= 0 && row < int(app->song.tracks.size()) && p.x() >= HDR)
-			viewport()->setCursor(lanePointAt(row, p, nullptr) >= 0 ? Qt::SizeAllCursor : Qt::CrossCursor);
-		else
-			viewport()->setCursor(clipAt(p, nullptr, &edge) && edge
-			                          ? theme::cursor(QStringLiteral("handle"), Qt::SizeHorCursor)
-									  : QCursor(Qt::ArrowCursor));
+		const int nt = int(app->song.tracks.size());
+		QCursor cur(Qt::ArrowCursor);
+		if (p.x() >= HDR && p.y() < RULERY) // the parts: a boundary moved, or a part chosen
+			cur = partEdgeAt(p.x()) >= 0  ? theme::cursor(QStringLiteral("handle"), Qt::SizeHorCursor)
+			      : partUnder(p.x()) >= 0 ? theme::cursor(QStringLiteral("finger"), Qt::PointingHandCursor)
+			                              : QCursor(Qt::ArrowCursor);
+		else if (p.x() >= HDR && p.y() < LOOPY) // the bar ruler moves the playhead
+			cur = theme::cursor(QStringLiteral("playhead"), Qt::ArrowCursor);
+		else if (inLane && row >= 0 && row < nt && p.x() >= HDR) // a knob line: a point moved, or one added
+			cur = lanePointAt(row, p, nullptr) >= 0 ? theme::cursor(QStringLiteral("point"), Qt::SizeAllCursor)
+			                                        : theme::cursor(QStringLiteral("aim"), Qt::CrossCursor);
+		else if (!inLane && row >= 0 && row < nt && p.x() < HDR) { // the track's volume slider
+			if (p.y() >= rowY(row) + 27 && p.y() <= rowY(row) + 44)
+				cur = theme::cursor(QStringLiteral("slider"), Qt::ArrowCursor);
+		} else if (p.x() >= HDR && p.y() >= TOP && clipAt(p, nullptr, &edge)) // a clip's end, or the clip moved
+			cur = edge ? theme::cursor(QStringLiteral("handle"), Qt::SizeHorCursor)
+			           : theme::cursor(QStringLiteral("move"), Qt::ArrowCursor);
+		viewport()->setCursor(cur);
 		return;
 	}
 	if (drag == Volume) {
@@ -854,6 +1047,27 @@ void Timeline::mouseMoveEvent(QMouseEvent* e) {
 	}
 	if (drag == Point) {
 		dragPoint(e);
+		return;
+	}
+	if (drag == PartEdge) {
+		const int i = app->song.partIndex(dragTrack);
+		if (i < 0) return;
+		const auto& parts = app->song.parts;
+		const int lo = i > 0 ? parts[size_t(i - 1)].bar + 1 : 0;
+		const int hi = size_t(i) + 1 < parts.size() ? parts[size_t(i + 1)].bar - 1 : INT_MAX;
+		const int bar = std::clamp(int(std::lround(xt(p.x()) / BAR)), lo, std::max(lo, hi));
+		if (bar == dragTrack) return;
+		if (!began) {
+			app->begin(tr("Move a part"));
+			began = true;
+		}
+		if (app->selPart == dragTrack) app->selPart = bar;
+		app->song.parts[size_t(i)].bar = bar;
+		dragTrack = bar;
+		QToolTip::showText(e->globalPosition().toPoint(),
+		                   tr("%1 begins in bar %2").arg(partName(parts[size_t(i)].name), QString::number(bar + 1)),
+		                   viewport());
+		app->touch();
 		return;
 	}
 	if (drag == Seek) {
@@ -923,7 +1137,8 @@ void Timeline::mouseReleaseEvent(QMouseEvent*) {
 		app->edit([](Song& s) { s.loopOn = !s.loopOn; }); // a plain click switches looping on or off
 	if (drag == Volume) app->paramRelease();
 	if (drag == Move && began) emit app->selectionChanged();
-	if (drag == Point) QToolTip::hideText();
+	if (drag == Point || drag == PartEdge) QToolTip::hideText();
+	if (drag == PartEdge && began && app->selPart >= 0) app->selectPart(app->song.partIndex(app->selPart));
 	drag = None;
 	dragTrack = -1;
 	pointIdx = -1;
@@ -934,6 +1149,16 @@ void Timeline::mouseReleaseEvent(QMouseEvent*) {
 void Timeline::mouseDoubleClickEvent(QMouseEvent* e) {
 	if (e->button() != Qt::LeftButton) return;
 	const QPoint p = e->pos();
+	if (p.x() >= HDR && p.y() < RULERY) { // a part renamed, or a new one named
+		drag = None;
+		if (partJump) partJump->stop(); // the first click's jump is not wanted
+		const int i = partUnder(p.x());
+		if (i >= 0)
+			renamePart(app->song.parts[size_t(i)].bar);
+		else
+			addPartAt(std::max(0, int(xt(p.x()))) / BAR);
+		return;
+	}
 	bool inLane = false;
 	const int row = rowAt(p.y(), &inLane), nt = int(app->song.tracks.size());
 	if (row < 0 || row >= nt || inLane) return;
@@ -976,7 +1201,11 @@ void Timeline::wheelEvent(QWheelEvent* e) {
 void Timeline::contextMenuEvent(QContextMenuEvent* e) {
 	const QPoint p = e->pos();
 	app->focus = App::FocusArrange;
-	if (p.x() >= HDR && p.y() >= RULER + LOOPROW && p.y() < TOP) {
+	if (p.x() >= HDR && p.y() < RULERY) {
+		partMenu(std::max(0, int(xt(p.x()))) / BAR, e->globalPos());
+		return;
+	}
+	if (p.x() >= HDR && p.y() >= CHORDY && p.y() < TOP) {
 		chordMenu(std::max(0, int(xt(p.x()))) / BAR, e->globalPos());
 		return;
 	}
@@ -1151,6 +1380,122 @@ void Timeline::chordMenu(int bar, const QPoint& global) {
 	}
 	const int d = int(picks.indexOf(got));
 	if (d >= 0) app->onBar([bar, d](Song& sg) { sg.setChord(bar, d); });
+}
+
+// ---------------------------------------------------------------- the named parts
+
+QRect Timeline::partRect(int i) const {
+	if (i < 0 || i >= int(app->song.parts.size())) return {};
+	const int x0 = tx(app->song.parts[size_t(i)].bar * BAR), x1 = tx(app->song.partEnd(size_t(i)) * BAR);
+	return QRect(x0 + 1, 2, std::max(3, x1 - x0 - 2), PARTS - 4);
+}
+
+int Timeline::partUnder(int x) const {
+	if (x < HDR) return -1;
+	const int bar = int(std::floor(xt(x) / BAR)), i = app->song.partAt(bar);
+	return i >= 0 && bar < app->song.partEnd(size_t(i)) ? i : -1;
+}
+
+int Timeline::partEdgeAt(int x) const {
+	const auto& parts = app->song.parts;
+	for (size_t i = 0; i < parts.size(); i++) {
+		const int e = tx(parts[i].bar * BAR);
+		if (e >= HDR && std::abs(e - x) <= 4) return int(i);
+	}
+	return -1;
+}
+
+QString Timeline::askPartName(const QString& title, const QString& current) {
+	QStringList names;
+	for (const char* n : PART_NAMES)
+		names << ui(n);
+	QInputDialog dlg(this);
+	dlg.setObjectName(QStringLiteral("partName"));
+	dlg.setMinimumWidth(360);
+	dlg.setWindowTitle(title);
+	dlg.setLabelText(tr("Name of the part: choose one or type your own"));
+	dlg.setComboBoxItems(names);
+	dlg.setComboBoxEditable(true);
+	dlg.setTextValue(partName(current));
+	if (dlg.exec() != QDialog::Accepted) return {};
+	const QString name = dlg.textValue().trimmed().left(60);
+	// a suggested name is kept in English, so the song shows it in any language; with a number too ("Aufstieg 2")
+	static const QRegularExpression numbered(QStringLiteral("^(.*\\S)\\s+(\\d+)$"));
+	const QRegularExpressionMatch m = numbered.match(name);
+	for (const char* n : PART_NAMES) {
+		if (name == ui(n)) return QString::fromLatin1(n);
+		if (m.hasMatch() && m.captured(1) == ui(n)) return QString::fromLatin1(n) + QLatin1Char(' ') + m.captured(2);
+	}
+	return name;
+}
+
+void Timeline::renamePart(int bar) {
+	const int i = app->song.partIndex(bar);
+	if (i < 0) return;
+	const QString was = app->song.parts[size_t(i)].name, name = askPartName(tr("Rename part"), was);
+	if (name.isEmpty() || name == was) return;
+	app->edit([&](Song& s) { s.addPart(bar, name); }, tr("Rename a part"));
+}
+
+void Timeline::addPartAt(int bar) {
+	const Song& s = app->song;
+	// a guess at the name: the one that usually follows the part before it
+	QString guess = QString::fromLatin1(PART_NAMES[0]);
+	if (const int before = s.partAt(bar); before >= 0) {
+		guess = QString::fromLatin1(PART_NAMES[2]);
+		const int n = int(std::size(PART_NAMES));
+		for (int k = 0; k < n; k++)
+			if (s.parts[size_t(before)].name == QLatin1String(PART_NAMES[k]))
+				guess = QString::fromLatin1(PART_NAMES[std::min(k + 1, n - 1)]);
+	}
+	const QString name = askPartName(tr("New part from bar %1").arg(bar + 1), guess);
+	if (name.isEmpty()) return;
+	app->edit([&](Song& sg) { sg.addPart(bar, name); }, tr("Add a part"));
+	app->selectPart(app->song.partIndex(bar));
+}
+
+void Timeline::partMenu(int bar, const QPoint& global) {
+	const Song& s = app->song;
+	int i = s.partAt(bar);
+	if (i >= 0 && bar >= s.partEnd(size_t(i))) i = -1;
+	QMenu menu(this);
+	QAction *rename = nullptr, *loop = nullptr, *play = nullptr, *del = nullptr, *repeat = nullptr;
+	if (i >= 0) {
+		menu.addSection(partName(s.parts[size_t(i)].name));
+		rename = menu.addAction(tr("Rename…"));
+		play = menu.addAction(tr("Play from the start of this part"));
+		loop = menu.addAction(tr("Loop this part"));
+		repeat = menu.addAction(tr("Repeat this part"));
+		repeat->setToolTip(tr("Puts a copy of this part right after it; everything after it moves along"));
+		repeat->setStatusTip(repeat->toolTip());
+		menu.addSeparator();
+	}
+	QAction* add = menu.addAction(tr("New part from bar %1…").arg(bar + 1));
+	add->setEnabled(s.partIndex(bar) < 0);
+	if (i >= 0) {
+		del = menu.addAction(tr("Delete this part"));
+		del->setToolTip(tr("Takes away the name only: the bars and their clips stay as they are"));
+	}
+	menu.setToolTipsVisible(true);
+	QAction* got = menu.exec(global);
+	if (!got) return;
+	if (got == add) {
+		addPartAt(bar);
+		return;
+	}
+	const int start = s.parts[size_t(i)].bar;
+	if (got == rename)
+		renamePart(start);
+	else if (got == loop) {
+		app->selectPart(i);
+		app->loopSelection();
+	} else if (got == repeat)
+		app->repeatPart(i);
+	else if (got == play) {
+		app->jumpTo(start * BAR);
+		if (!app->isPlaying()) app->play();
+	} else if (got == del)
+		app->edit([start](Song& sg) { sg.removePart(start); }, tr("Delete a part"));
 }
 
 void Timeline::laneParamMenu(int trackId, const QPoint& global) {

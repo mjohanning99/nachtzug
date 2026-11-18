@@ -47,10 +47,10 @@ struct Quality {
 	const char* name;
 };
 static const Quality QUALITIES[] = {
-    {44100.f, 16, QT_TRANSLATE_NOOP("ExportDialog", "CD quality: 44.1 kHz, 16-bit (plays everywhere)")},
-    {48000.f, 16, QT_TRANSLATE_NOOP("ExportDialog", "48 kHz, 16-bit (for video)")},
-    {48000.f, 24, QT_TRANSLATE_NOOP("ExportDialog", "Studio: 48 kHz, 24-bit (for mastering)")},
-    {96000.f, 24, QT_TRANSLATE_NOOP("ExportDialog", "High resolution: 96 kHz, 24-bit")},
+    {44100.f, 16, QT_TRANSLATE_NOOP("ExportDialog", "CD quality: 44.1 kHz, 16-bit (plays everywhere)")},
+    {48000.f, 16, QT_TRANSLATE_NOOP("ExportDialog", "48 kHz, 16-bit (for video)")},
+    {48000.f, 24, QT_TRANSLATE_NOOP("ExportDialog", "Studio: 48 kHz, 24-bit (for mastering)")},
+    {96000.f, 24, QT_TRANSLATE_NOOP("ExportDialog", "High resolution: 96 kHz, 24-bit")},
 };
 
 ExportDialog::ExportDialog(App* a, QWidget* parent) : QDialog(parent), app(a) {
@@ -75,7 +75,11 @@ ExportDialog::ExportDialog(App* a, QWidget* parent) : QDialog(parent), app(a) {
 	};
 	int row = 0;
 	// the kind of file
-	grid->addWidget(caption(tr("Make")), row, 0, Qt::AlignTop | Qt::AlignRight);
+	// the captions flush left, as in every other dialog; beside a row of keys, level with the keys rather than the line
+	// beneath them
+	QList<QPair<QLabel*, QWidget*>> besideKeys;
+	auto* makeCap = caption(tr("Make"));
+	grid->addWidget(makeCap, row, 0, Qt::AlignTop | Qt::AlignLeft);
 	format = new QButtonGroup(this);
 	{
 		// joined keys, as in the welcome window; what the chosen kind does is said in a soft line beneath
@@ -97,6 +101,7 @@ ExportDialog::ExportDialog(App* a, QWidget* parent) : QDialog(parent), app(a) {
 			k->setToolTip(tr(tips[i]));
 			format->addButton(k, i);
 			keys->addWidget(k);
+			if (i == 0) besideKeys.append({makeCap, k});
 		}
 		keys->addStretch(1);
 		col->addLayout(keys);
@@ -111,9 +116,11 @@ ExportDialog::ExportDialog(App* a, QWidget* parent) : QDialog(parent), app(a) {
 		connect(format, &QButtonGroup::idClicked, this, say);
 	}
 	// what to write: the whole song or the loop, with how many times; the bars and the length beneath
-	grid->addWidget(caption(tr("What")), row, 0, Qt::AlignTop | Qt::AlignRight);
+	auto* whatCap = caption(tr("What"));
+	grid->addWidget(whatCap, row, 0, Qt::AlignTop | Qt::AlignLeft);
 	what = new QButtonGroup(this);
 	auto* whole = new QPushButton(tr("The whole song"));
+	besideKeys.append({whatCap, whole});
 	auto* loopOnly = new QPushButton(tr("The loop"));
 	whole->setObjectName("segL");
 	loopOnly->setObjectName("segR");
@@ -153,9 +160,10 @@ ExportDialog::ExportDialog(App* a, QWidget* parent) : QDialog(parent), app(a) {
 	(st.value(QStringLiteral("export/loop"), false).toBool() && hasLoop ? loopOnly : whole)->setChecked(true);
 	// how it ends
 	endingCap = caption(tr("Ending"));
-	grid->addWidget(endingCap, row, 0, Qt::AlignTop | Qt::AlignRight);
+	grid->addWidget(endingCap, row, 0, Qt::AlignTop | Qt::AlignLeft);
 	ending = new QButtonGroup(this);
 	auto* ring = new QPushButton(tr("Let it ring out"));
+	besideKeys.append({endingCap, ring});
 	auto* fade = new QPushButton(tr("Fade out"));
 	ring->setToolTip(tr("Let the echoes and reverb ring out after the last note"));
 	fade->setToolTip(tr("Fade out over the last bars"));
@@ -178,7 +186,7 @@ ExportDialog::ExportDialog(App* a, QWidget* parent) : QDialog(parent), app(a) {
 	grid->addWidget(endingBox, row++, 1);
 	// quality
 	qualityCap = caption(tr("Quality"));
-	grid->addWidget(qualityCap, row, 0, Qt::AlignRight);
+	grid->addWidget(qualityCap, row, 0, Qt::AlignLeft);
 	quality = new QComboBox;
 	for (const Quality& q : QUALITIES)
 		quality->addItem(tr(q.name));
@@ -188,7 +196,7 @@ ExportDialog::ExportDialog(App* a, QWidget* parent) : QDialog(parent), app(a) {
 	qualityBox = quality;
 	grid->addWidget(quality, row++, 1);
 	// where
-	grid->addWidget(caption(tr("Save as")), row, 0, Qt::AlignRight);
+	grid->addWidget(caption(tr("Save as")), row, 0, Qt::AlignLeft);
 	auto* where = new QHBoxLayout;
 	where->setSpacing(6);
 	path = new QLineEdit;
@@ -204,6 +212,11 @@ ExportDialog::ExportDialog(App* a, QWidget* parent) : QDialog(parent), app(a) {
 	grid->addLayout(where, row++, 1);
 	grid->setColumnStretch(1, 1);
 	v->addLayout(grid);
+	for (const auto& [cap, key] : besideKeys) {
+		key->ensurePolished();
+		cap->setMinimumHeight(key->sizeHint().height());
+		cap->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+	}
 
 	info = new QLabel;
 	info->setObjectName("dim");

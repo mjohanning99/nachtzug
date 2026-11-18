@@ -213,7 +213,7 @@ public:
 				hot_ = over;
 				g_->update(); // a folded key lights up
 				if (over)
-					g_->setCursor(Qt::PointingHandCursor);
+					g_->setCursor(theme::cursor(QStringLiteral("finger"), Qt::PointingHandCursor));
 				else
 					g_->unsetCursor();
 			}

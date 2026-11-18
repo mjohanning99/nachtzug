@@ -7,6 +7,7 @@
 
 class App;
 struct LiveInput;
+struct Track;
 class Knob;
 class QFrame;
 class QHBoxLayout;
@@ -19,6 +20,7 @@ public:
 	void setValue(float v);
 	void setPeak(float p);
 	void setAccent(const QColor& c) {
+		if (c == accent) return; // set on every change of the song: repaint only when it is another colour
 		accent = c;
 		update();
 	}
@@ -58,7 +60,9 @@ private:
 		QPushButton *name, *mute, *solo;
 		Knob *pan, *echo, *reverb, *pump;
 		Fader* fader;
+		Knob* eq[3]; // the equaliser's Low, Mid and High (mixer.cpp, eqKnobs)
 	};
+	QHBoxLayout* eqKnobs(Strip& s, const Track& t, int at); // the three, in a row under the name
 	void rebuild();
 	App* app;
 	QHBoxLayout* row;

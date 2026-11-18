@@ -266,11 +266,10 @@ td .key, li .key, p .key { line-height: 1; }
 .sheet-page h1 { font-size: 12pt; letter-spacing: .26em; }
 .sheet-page .fields { display: flex; gap: 3mm; }
 .sheet-page .fields span { font: 600 5.6pt "Jost"; letter-spacing: .18em; text-transform: uppercase; color: var(--soft); width: 22mm; border-bottom: .5pt solid var(--line); padding-bottom: 3.6mm; }
-.sheet-page .panelrow { margin-bottom: 2.4mm; }
 .sheet-page .grp.wide { flex: 0 0 auto; }
-.sheet-page .kn { width: 10.6mm; } .sheet-page .kn svg { width: 9mm; height: 9mm; }
-.sheet-page .panelrow { margin-bottom: 1.8mm; }
-.sheet-notes { margin-top: 2mm; height: 28mm; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='24'><rect y='23' width='10' height='1' fill='%23cbbfac'/></svg>") repeat; background-size: 4mm 6.4mm; }
+.sheet-page .kn { width: 10.2mm; } .sheet-page .kn svg { width: 8.2mm; height: 8.2mm; }
+.sheet-page .panelrow { margin-bottom: 1.4mm; }
+.sheet-notes { margin-top: 2mm; height: 20mm; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='24'><rect y='23' width='10' height='1' fill='%23cbbfac'/></svg>") repeat; background-size: 4mm 6.4mm; }
 .sheet-notes span { font: 600 5.6pt "Jost"; letter-spacing: .18em; text-transform: uppercase; color: var(--soft); }
 
 /* the sample library list: a narrow column for the kind, the sounds get the room */

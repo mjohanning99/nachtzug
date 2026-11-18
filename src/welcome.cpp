@@ -208,8 +208,8 @@ void WelcomeDialog::retranslate() {
 	barsShown->setText(tr("Shown"));
 	cursorsLabel->setText(tr("Cursors"));
 	cursorsOwn->setText(tr("Nachtzug’s own"));
-	cursorsOwn->setToolTip(tr("Where the cursor can show what a click will do, Nachtzug draws its own: a pencil in the "
-	                          "note grid, scissors, a knob’s arrows"));
+	cursorsOwn->setToolTip(tr("Where the cursor can show what a click will do, Nachtzug draws its own: a knob over "
+	                          "knobs, a pencil in the note grid, scissors …"));
 	cursorsSystem->setText(tr("The system’s"));
 	cursorsSystem->setToolTip(tr("The cursors of your computer, everywhere"));
 	note->setText(tr("You can change all of these any time in Settings (the ⚙ key at the top right)."));

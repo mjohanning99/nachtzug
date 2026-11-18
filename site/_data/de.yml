@@ -21,7 +21,7 @@ nav:
   back: "Zurück zum Bahnsteig ↑"
 
 hero:
-  lead: "Nachtzug ist ein für Anfänger gedachtes Musikprogramm, das es ermöglicht, elektronische Musik, z. B. im Stil der Berliner Schule, ohne große Vorkenntnisse zu erstellen. Auch ist es nicht nötig, sich mit Musiktheorie auszukennen. Denn: Nachtzug ist so aufgebaut, dass alle Noten automatisch in der korrekten Tonleiter landen."
+  lead: "Nachtzug ist ein für Anfänger gedachtes Musikprogramm, das es ermöglicht, elektronische Musik, z. B. im Stil der Berliner Schule, ohne große Vorkenntnisse zu erstellen. Auch ist es nicht nötig, sich mit Musiktheorie auszukennen. Denn: Nachtzug ist so aufgebaut, dass alle Noten automatisch in der korrekten Tonleiter landen."
   cta: "Einsteigen, bitte!"
   cta_sub: "Nachtzug herunterladen, kostenlos"
   cta_for: "Für %system%, kostenlos"   # when the page knows your computer (site.js)
@@ -57,21 +57,21 @@ stations:
   - { time: "22:58", stop: "Tastenkreuz Hbf", icon: keys, title: "Auf der Tastatur mitspielen", short: "Drei Reihen Buchstabentasten spielen drei Oktaven, jede Taste eine Note der Tonleiter des Songs." }
   - { time: "23:06", stop: "Ideenfeld Ost", icon: idea, title: "Ideen auf Knopfdruck", short: "<b>Neue Idee</b> schreibt eine Acid-Linie, eine Sequenz der Berliner Schule, Akkorde oder einen Beat; <b>Variieren</b> ändert ein, zwei Noten." }
   - { time: "23:14", stop: "Trommlers Ruh Süd", icon: drum, title: "Ein unermüdlicher Drummer", short: "Stil und Spielstärke wählen – Fills spielt er von selbst." }
-  - { time: "23:21", stop: "Reglerstraße West", icon: knob, title: "Ein echter Synthesizer", short: "Auf jeder Spur, mit Live-Bildern von jedem Regler – oder eine Seite <b>Einfach</b> mit acht großen Reglern." }
+  - { time: "23:21", stop: "Reglerstraße West", icon: knob, title: "Ein echter Synthesizer", short: "Auf jeder Spur, mit Live-Bildern von jedem Regler und einem Equalizer am Ende – oder eine Seite <b>Einfach</b> mit neun großen Reglern." }
   - { time: "23:40", stop: "Loops Abstellbahnhof", icon: grid, title: "Jammen wie in einem Live-Set", short: "Patterns starten und stoppen, während es spielt; jede Änderung wartet auf den nächsten Takt." }
-  - { time: "23:52", stop: "Arrangement-Viadukt Nord", icon: arrange, title: "Vom Loop zum Song", short: "Die Clips lassen sich von Hand anlegen, oder <b>Arrangieren</b> macht ein Intro, einen Aufbau, einen Break und ein Ende." }
+  - { time: "23:52", stop: "Arrangement-Viadukt Nord", icon: arrange, title: "Vom Loop zum Song", short: "Die Clips lassen sich von Hand anlegen, oder <b>Arrangieren</b> macht ein Intro, einen Aufbau, einen Break und ein Ende, jeweils benannt auf der Zeitleiste. <b>Fortsetzen</b> lässt den Song so lange weiterlaufen wie gewünscht." }
   - { time: "00:15", stop: "Sample Gbf", icon: wave, title: "Eigene Klänge", short: "65 Klänge, eigens für Nachtzug gemacht, neun davon aus einem Nachtzug, eigene Samples oder ein zerlegter Drumloop. Dazu die selbst gebauten Klänge, unter eigenem Namen aufbewahrt." }
   - { time: "00:51", stop: "Berliner Schule Hbf", icon: export, title: "Zum Mitnehmen", short: "Export als WAV, eine Datei pro Spur oder MIDI. MIDI-Keyboards, Regler und Clock funktionieren alle." }
 
 gallery:
   - { img: notes.png, wide: true, title: "Die Noten", text: "Ein Raster, in dem jede Zeile eine Note der Tonleiter ist; der Inspektor links hält den Klang der Spur griffbereit.", alt: "Das Notenraster mit einer Basslinie, links der Inspektor, darüber die Zeitleiste" }
-  - { img: sound.png, title: "Der Sound", text: "Oszillatoren, Filter, Hüllkurven und Effekte, in der Reihenfolge, in der der Klang fließt.", alt: "Der Reiter Sound: Oszillatoren, Filter, Hüllkurven und Effekte" }
-  - { img: mixer.png, title: "Der Mixer", text: "Lautstärke, Panorama, Echo, Hall und Pumpen für jede Spur, mit Anzeigen, die zeigen, wann es zu laut wird.", alt: "Der Mixer mit einem Kanal pro Spur" }
+  - { img: sound.png, title: "Der Sound", text: "Oszillatoren, Filter, Hüllkurven, Effekte und ein Equalizer, in der Reihenfolge, in der der Klang fließt.", alt: "Der Reiter Sound: Oszillatoren, Filter, Hüllkurven und Effekte" }
+  - { img: mixer.png, title: "Der Mixer", text: "Lautstärke, Panorama, Echo, Hall, Pumpen und ein Equalizer mit drei Reglern für jede Spur, mit Anzeigen, die zeigen, wann es zu laut wird.", alt: "Der Mixer mit einem Kanal pro Spur" }
   - { img: loops.png, wide: true, title: "Das Loopraster", text: "Eine Reihe Patterns für jede Spur, zum Ein- und Ausschalten wie bei einem Live-Set.", alt: "Das Loopraster: Reihen von Patterns, eine Reihe pro Spur" }
 
 more_title: "Außerdem an Bord"
 more:
-  - { icon: lesson, title: "Fünf Lektionen", short: "Führen Schritt für Schritt durch das echte Programm." }
+  - { icon: lesson, title: "Lektionen und Startersongs", short: "Fünf Lektionen führen Schritt für Schritt durch das echte Programm; fünf fertige Songs, einer für jeden Stil, warten darauf, zu eigenen zu werden." }
   - { icon: undo, title: "Nichts geht kaputt", short: "Jede Änderung lässt sich rückgängig machen, und für den Fall eines Absturzes liegt eine Ersatzkopie bereit." }
   - { icon: palette, title: "Sechs Farbschemata", short: "Von Bakelit, dem warmen Emaille hier, bis Glut für späte Nächte." }
   - { icon: book, title: "Ein gedrucktes Handbuch", short: "Ein A5-Heft mit Bildern, Klangrezepten und Patchbögen, auf Deutsch und Englisch." }

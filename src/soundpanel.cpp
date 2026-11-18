@@ -7,6 +7,7 @@
 // Changes in the song file: none (a track saves its sound's values, songfile.cpp).
 
 #include "soundpanel.h"
+#include "eqcurve.h"
 #include "savesounddialog.h"
 #include "soundlibrary.h"
 #include <QFormLayout>
@@ -26,9 +27,11 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QPushButton>
+#include <QShowEvent>
 #include <QStackedWidget>
 #include <QStandardItemModel>
 #include <QVBoxLayout>
+#include <QLocale>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QMessageBox>
@@ -96,14 +99,15 @@ public:
 		setFocusPolicy(Qt::NoFocus);
 		setMouseTracking(true);
 		if (kind == Filter) {
-			setCursor(Qt::CrossCursor);
-			setToolTip(SoundPanel::tr("Which pitches the filter lets through, from 20 Hz on the left to 20 kHz on the "
+			theme::setOwnCursor(this, QStringLiteral("point"), Qt::CrossCursor);
+			setToolTip(SoundPanel::tr("Which pitches the filter lets through, from 20 Hz on the left to 20 kHz on the "
 			                          "right.\nDrag here: left and right move the cutoff, up and down the resonance."));
 		} else if (kind == Wave)
 			setToolTip(SoundPanel::tr("The waveform the oscillators make together"));
 		else if (kind == Lfo)
 			setToolTip(SoundPanel::tr(
-			    "The LFO: a slow, repeating movement you can send to the filter, the pitch or the pulse width"));
+			    "The LFO: a slow, repeating movement you can send to the filter, the pitch, the pulse width, the "
+			    "volume or the pan"));
 		else
 			setToolTip(
 			    SoundPanel::tr("The envelope: how the sound rises when a note starts (A), falls to its held level (D, "
@@ -116,6 +120,12 @@ protected:
 		return t ? app->paramValue(*t, param) : PARAMS[param].def;
 	}
 	bool amp() const { return kind == AmpEnv; }
+	double lfoSpeed() const { // cycles a second, at the song's tempo when the LFO runs in time
+		return pv(P_LFOSYNC) > 0.5f ? double(app->song.bpm) / 60.0 / double(lfoBeats(pv(P_LFORATE)))
+		                            : double(lfoHz(pv(P_LFORATE)));
+	}
+	// the release this envelope uses: the filter's own, or the amp's while the filter's knob is all the way down
+	int releaseParam() const { return !amp() && pv(P_FR) > 0.f ? P_FR : P_AR; }
 
 	// ---- envelope geometry, shared by drawing and dragging
 	static double squeeze(double sec) { return std::pow(sec, 0.35); } // 1 ms .. 8 s brought into view
@@ -132,14 +142,14 @@ protected:
 	double unit() const {
 		if (frozenUnit > 0) return frozenUnit;
 		const double total = squeeze(envTime(pv(amp() ? P_AA : P_FA))) + squeeze(envTime(pv(amp() ? P_AD : P_FD))) +
-		                     0.5 + squeeze(envTime(pv(P_AR)));
+		                     0.5 + squeeze(envTime(pv(releaseParam())));
 		return area().width() / std::max(total * 1.12, 1.6);
 	}
 	// the four points: end of attack, end of decay (on the sustain level), end of the held part, end of release
 	std::array<QPointF, 4> envPoints() const {
 		const QRectF in = area();
-		const double a = envTime(pv(amp() ? P_AA : P_FA)), d = envTime(pv(amp() ? P_AD : P_FD)), r = envTime(pv(P_AR)),
-		             sus = pv(amp() ? P_AS : P_FS);
+		const double a = envTime(pv(amp() ? P_AA : P_FA)), d = envTime(pv(amp() ? P_AD : P_FD)),
+		             r = envTime(pv(releaseParam())), sus = pv(amp() ? P_AS : P_FS);
 		const double u = unit(), xa = in.left() + squeeze(a) * u, xd = xa + squeeze(d) * u, xh = xd + 0.5 * u,
 		             xr = xh + squeeze(r) * u;
 		const double ys = in.bottom() - sus * in.height();
@@ -237,13 +247,14 @@ protected:
 			}
 		} else if (kind == Filter) {
 			const float wc = std::min(cutoffHz(pv(P_CUTOFF)), 20000.f), k = pv(P_RES) * 4.15f;
-			const int mode = std::clamp(int(pv(P_SLOPE) + 0.5f), 0, 3);
+			const int mode = std::clamp(int(pv(P_SLOPE) + 0.5f), 0, 4);
 			for (int x = 0; x <= int(W); x++) {
 				const float f = 20.f * std::pow(1000.f, float(x) / float(W)); // 20 Hz .. 20 kHz
 				const std::complex<float> G = 1.f / std::complex<float>(1.f, f / wc), G2 = G * G, G4 = G2 * G2;
 				const std::complex<float> num = mode == 1   ? G2
 				                                : mode == 2 ? 2.f * (G - G2)
 				                                : mode == 3 ? (1.f - G) * (1.f - G)
+				                                : mode == 4 ? 1.f - 2.f * G + 2.f * G2
 				                                            : G4;
 				const float mag = std::abs(num / (1.f + k * G4)) * (1.f + 0.45f * k);
 				const float db = std::clamp(20.f * std::log10(std::max(mag, 1e-4f)), -40.f, 24.f);
@@ -265,10 +276,16 @@ protected:
 			baseline = in.center().y();
 			const int shape = int(pv(P_LFOWAVE) + 0.5f);
 			const float cycles = 1.f + pv(P_LFORATE) * 5.f;
-			const float depth = 0.25f + 0.75f * std::max({pv(P_LFOCUT), pv(P_LFOPITCH), pv(P_LFOPW)});
+			const float depth =
+			    0.25f + 0.75f * std::max({pv(P_LFOCUT), pv(P_LFOPITCH), pv(P_LFOPW), pv(P_LFOAMP), pv(P_LFOPAN)});
+			// the fade-in: the movement grows from nothing over that many seconds of the cycles shown
+			const double shown = double(cycles) / lfoSpeed();
+			const double fadeW = lfoFadeSec(pv(P_LFOFADE)) / std::max(0.001, shown);
 			dsp::Rng steps;
 			float held = steps.next();
 			int lastCycle = 0;
+			std::vector<double> ys; // the curve's height at each x, for the dot below
+			ys.reserve(size_t(W) + 1);
 			auto value = [&](float ph) {
 				const float fr = ph - std::floor(ph);
 				return shape == 0 ? 1.f - 4.f * std::fabs(fr - 0.5f) : shape == 1 ? (fr < 0.5f ? 1.f : -1.f) : held;
@@ -279,20 +296,24 @@ protected:
 					lastCycle = int(ph);
 					held = steps.next();
 				}
-				const QPointF pt(X + x, baseline - double(value(ph) * depth) * H * 0.42);
+				const double grow = fadeW > 0.0 ? std::min(1.0, double(x) / (double(W) * fadeW)) : 1.0;
+				const QPointF pt(X + x, baseline - double(value(ph) * depth) * grow * H * 0.42);
+				ys.push_back(pt.y());
 				if (x == 0)
 					path.moveTo(pt);
 				else
 					path.lineTo(pt);
 			}
 			if (tactile) { // a dot running along the movement, at the LFO's real speed
-				const double hz = lfoHz(pv(P_LFORATE));
+				const double hz = lfoSpeed();
 				const double frac = std::fmod(double(QDateTime::currentMSecsSinceEpoch()) / 1000.0 * hz / cycles, 1.0);
 				const double x = X + frac * W;
-				const QPointF at = path.pointAtPercent(std::clamp(frac, 0.0, 1.0));
+				// the height at this x, not pointAtPercent(): that goes by length along the line, and a square's
+				// upright edges are long, so the dot would run ahead of x and sit off the curve
+				const double y = ys[std::min(size_t(std::lround(frac * W)), ys.size() - 1)];
 				p.setPen(QPen(ink, 1.2));
 				p.setBrush(col);
-				p.drawEllipse(QPointF(x, at.y()), 3.6, 3.6);
+				p.drawEllipse(QPointF(x, y), 3.6, 3.6);
 			}
 		}
 		if (kind == Filter || kind == FilterEnv ||
@@ -330,7 +351,7 @@ protected:
 			} else if (kind == FilterEnv || kind == AmpEnv) {
 				const auto pts = envPoints();
 				const char* names = "ADSR";
-				const int count = amp() ? 4 : 3; // the filter envelope's release is the amp's release
+				const int count = 4;
 				for (int i = 0; i < count; i++) {
 					const bool hot = i == hover || i == dragging;
 					p.setPen(Qt::NoPen);
@@ -349,7 +370,7 @@ protected:
 			} else if (kind == Lfo) {
 				p.setPen(labelInk);
 				p.drawText(QRectF(paper.left(), paper.top() + 2, paper.width() - 4, 9),
-				           Qt::AlignRight | Qt::AlignVCenter, formatParam(P_LFORATE, pv(P_LFORATE)));
+				           Qt::AlignRight | Qt::AlignVCenter, lfoRateText(pv(P_LFORATE), pv(P_LFOSYNC) > 0.5f));
 			} else {
 				static const char* names[4] = {QT_TRANSLATE_NOOP("Model", "SAW"), QT_TRANSLATE_NOOP("Model", "PULSE"),
 				                               QT_TRANSLATE_NOOP("Model", "TRIANGLE"),
@@ -372,7 +393,7 @@ protected:
 	int envPointAt(const QPointF& pos) const {
 		if (kind != FilterEnv && kind != AmpEnv) return -1;
 		const auto pts = envPoints();
-		const int count = amp() ? 4 : 3;
+		const int count = 4;
 		int best = -1;
 		double bestD = 9.0;
 		for (int i = 0; i < count; i++) {
@@ -403,8 +424,8 @@ protected:
 		case 2:
 			pp[amp() ? P_AS : P_FS] = sus;
 			break;
-		default:
-			pp[P_AR] = timeToParam(unsqueeze((pos.x() - pts[2].x()) / u));
+		default: // the filter's release point gives the filter a release of its own
+			pp[amp() ? P_AR : P_FR] = std::max(0.0005f, timeToParam(unsqueeze((pos.x() - pts[2].x()) / u)));
 			break;
 		}
 		t->patch.name = SoundPanel::tr("Custom sound");
@@ -445,7 +466,9 @@ protected:
 			const int h = envPointAt(e->position());
 			if (h != hover) {
 				hover = h;
-				setCursor(h >= 0 ? Qt::SizeAllCursor : (kind == Filter ? Qt::CrossCursor : Qt::ArrowCursor));
+				setCursor(h >= 0           ? theme::cursor(QStringLiteral("point"), Qt::SizeAllCursor)
+				          : kind == Filter ? theme::cursor(QStringLiteral("point"), Qt::CrossCursor)
+				                           : QCursor(Qt::ArrowCursor));
 				update();
 			}
 		}
@@ -497,7 +520,10 @@ Knob* SoundPanel::patchKnob(int param) {
 	k->setProperty("param", param); // the lessons find knobs by what they turn
 	if (PARAMS[param].kind != K_CHOICE) k->setProperty("midiTarget", Midi::targetForParam(param));
 	k->setDefault(PARAMS[param].def);
-	k->setFormatter([param](float v) { return formatParam(param, v); });
+	k->setFormatter([this, param](float v) { // the LFO's rate as a note value when it runs in time
+		const Track* t = app->curTrack();
+		return t ? formatParam(param, v, t->patch) : formatParam(param, v);
+	});
 	k->setToolTip(paramTip(param) + tr("\n\nDrag up or down, Shift for small steps, double-click to reset. Right-click "
 	                                   "to draw how it changes over time."));
 	connect(k, &Knob::pressed, this, [this, param] { app->paramPress(app->selTrack, param); });
@@ -755,7 +781,7 @@ QWidget* SoundPanel::buildSynthPage() {
 	add(group(tr("Filter envelope"), &l), "fenv");
 	l->addWidget(graph(Graph::FilterEnv));
 	l->addSpacing(6);
-	for (int p : {P_FA, P_FD, P_FS, P_PENV})
+	for (int p : {P_FA, P_FD, P_FS, P_FR, P_PENV})
 		l->addWidget(patchKnob(p));
 	add(group(tr("3 · Amp envelope"), &l), "aenv");
 	l->addWidget(graph(Graph::AmpEnv));
@@ -765,12 +791,13 @@ QWidget* SoundPanel::buildSynthPage() {
 	add(group(tr("LFO"), &l), "lfo");
 	l->addWidget(graph(Graph::Lfo));
 	l->addSpacing(6);
-	l->addWidget(stacked({{tr("Shape"), patchCombo(P_LFOWAVE)}}));
-	for (int p : {P_LFORATE, P_LFOCUT, P_LFOPITCH, P_LFOPW})
+	l->addWidget(stacked({{tr("Shape"), patchCombo(P_LFOWAVE)}, {tr("Timing"), patchCombo(P_LFOSYNC)}}));
+	for (int p : {P_LFORATE, P_LFOFADE, P_LFOCUT, P_LFOPITCH, P_LFOPW, P_LFOAMP, P_LFOPAN})
 		l->addWidget(patchKnob(p));
 	add(group(tr("4 · Effects"), &l), "fx");
 	for (int p : {P_DRIVE, P_PHASER, P_PHRATE, P_CHORUS, P_DELAY, P_REVERB})
 		l->addWidget(patchKnob(p));
+	add(buildEq(false), "eq");
 	add(buildMaster(), "master");
 	spread(page);
 	return page;
@@ -811,6 +838,7 @@ QWidget* SoundPanel::buildDrumPage() {
 	l->addWidget(kitKnob(tr("Drive"), DP_DRIVE, 0.2f));
 	l->addWidget(kitKnob(tr("Echo"), DP_DELAY, 0.05f));
 	l->addWidget(kitKnob(tr("Reverb"), DP_REVERB, 0.12f));
+	add(buildEq(true), QStringLiteral("eq"));
 	add(buildMaster(), QStringLiteral("master"));
 	spread(page);
 	return page;
@@ -855,7 +883,7 @@ void SoundPanel::spread(QWidget* page) {
 void SoundPanel::rollSound() {
 	app->edit(
 	    [&](Song& s) {
-		    if (Track* t = s.track(app->selTrack)) t->patch = rollPatch(t->role, app->rng);
+		    if (Track* t = s.track(app->selTrack)) t->patch = keepEq(rollPatch(t->role, app->rng), t->patch);
 	    },
 	    tr("Roll new sound"), true);
 }
@@ -951,24 +979,16 @@ QGroupBox* SoundPanel::buildMaster() {
 	auto* g = group(tr("Shared echo and reverb"), &l);
 	g->setToolTip(tr("One echo and one reverb for the whole song. Each track’s Echo and Reverb knobs set how much of "
 	                 "it that track gets."));
-	QStringList times;
-	for (const char* c : DTIME_NAMES)
-		times << ui(c);
-	auto* et = new QVBoxLayout;
-	et->setSpacing(4); // label above the box keeps this group narrow
-	et->addWidget(dimLabel(tr("Echo time")));
-	et->addWidget(combo(
-	    times, [this] { return app->song.dtime; }, [this](int i) { app->song.dtime = i; },
-	    tr("Echo time, locked to the tempo")));
-	et->addStretch(1);
-	l->addLayout(et);
-	l->addSpacing(4);
-	l->addWidget(freeKnob(
+	l->addWidget(stacked({{tr("Echo time"), echoTimeCombo()}, {QString(), pingPongSwitch()}}));
+	Knob* repeats = freeKnob(
 	    tr("Echo repeats"), [this] { return app->song.dfb; }, [this](float x) { app->song.dfb = x; }, pct, 0.45f,
-	    tr("How many times the echo repeats before it fades away")));
+	    tr("How many times the echo repeats before it fades away"));
+	midiMenuFor(repeats, app, QStringLiteral("dfb"), tr("the echo repeats"));
+	l->addWidget(repeats);
+	l->addWidget(echoToneKnob());
 	l->addWidget(freeKnob(
 	    tr("Reverb size"), [this] { return app->song.rsize; }, [this](float x) { app->song.rsize = x; },
-	    [](float x) { return QString::number(double(0.5f + x * x * 11.f), 'f', 1) + " s"; }, 0.55f,
+	    [](float x) { return QLocale().toString(double(0.5f + x * x * 11.f), 'f', 1) + QStringLiteral(" s"); }, 0.55f,
 	    tr("How large the room sounds: from a small room to a huge hall")));
 	l->addWidget(freeKnob(
 	    tr("Reverb damping"), [this] { return app->song.rdamp; }, [this](float x) { app->song.rdamp = x; }, pct, 0.45f,
@@ -976,9 +996,57 @@ QGroupBox* SoundPanel::buildMaster() {
 	return g;
 }
 
+// The echo's time: a note value, locked to the tempo. The list goes from the shortest to the longest; the song
+// keeps the numbers older songs used (DTIME_ORDER).
+QComboBox* SoundPanel::echoTimeCombo() {
+	QStringList times;
+	for (int i : DTIME_ORDER)
+		times << ui(DTIME_NAMES[i]);
+	return combo(
+	    times,
+	    [this] {
+		    const int* at = std::find(std::begin(DTIME_ORDER), std::end(DTIME_ORDER), app->song.dtime);
+		    return at == std::end(DTIME_ORDER) ? 0 : int(at - std::begin(DTIME_ORDER));
+	    },
+	    [this](int i) { app->song.dtime = DTIME_ORDER[std::clamp(i, 0, ECHO_TIMES - 1)]; },
+	    tr("How far apart the echo’s repeats are, as a note value, so they stay in time with the song, also when "
+		   "the tempo changes. Shared by every track."));
+}
+
+// How dark the echo's repeats are: each repeat a little darker than the one before
+Knob* SoundPanel::echoToneKnob() {
+	Knob* k = freeKnob(
+	    tr("Echo tone"), [this] { return app->song.echoTone; }, [this](float x) { app->song.echoTone = x; },
+	    echoToneText, 0.5f,
+	    tr("How dark the echo’s repeats are: to the left each repeat sounds darker and further away than the one "
+		   "before, as on an old tape echo; to the right they stay bright."));
+	k->setProperty("midiTarget", QStringLiteral("dtone"));
+	midiMenuFor(k, app, QStringLiteral("dtone"), tr("the echo tone"));
+	return k;
+}
+
+// Ping-pong: the echo's repeats bounce between the left and the right speaker, or all come from the middle
+Switch* SoundPanel::pingPongSwitch() {
+	auto* s = new Switch(tr("Ping-pong"), Switch::Beside);
+	s->setFocusPolicy(Qt::NoFocus);
+	s->setToolTip(tr("On: the echo’s repeats bounce between the left and the right speaker. Off: they all come from "
+	                 "the middle."));
+	connect(s, &QAbstractButton::clicked, this,
+	        [this](bool on) { app->edit([&](Song& song) { song.echoPingPong = on; }, tr("Ping-pong")); });
+	pingPongs.push_back(s);
+	return s;
+}
+
 void SoundPanel::sync() {
 	Track* t = app->curTrack();
 	pages->setCurrentIndex((t && t->isDrums() ? 1 : 0) + (simple ? 2 : 0));
+	// the tab is as wide and tall as the page shown needs, not as the largest of the four: the Simple page for the
+	// drums pushed every page past the right edge of a laptop's window, where the sections were cut off
+	for (int i = 0; i < pages->count(); i++) {
+		const QSizePolicy::Policy pol = i == pages->currentIndex() ? QSizePolicy::Preferred : QSizePolicy::Ignored;
+		pages->widget(i)->setSizePolicy(pol, pol);
+	}
+	placeTone();
 	if (quickPages) quickPages->setCurrentIndex(t && t->isDrums() ? 1 : 0);
 	if (howGroup) howGroup->setVisible(t && !t->isDrums());
 	pages->setEnabled(t != nullptr);
@@ -1022,18 +1090,22 @@ void SoundPanel::sync() {
 			              .arg(samples::displayName(n))
 					: tr("This drum plays the sample %1. Tune changes its speed, Decay shortens it. Click to change.")
 					      .arg(samples::displayName(n)));
-			b->setProperty("sampleOn", !n.isEmpty());
-			b->style()->unpolish(b);
-			b->style()->polish(b);
+			if (b->property("sampleOn").toBool() != !n.isEmpty()) { // restyled only when it changes
+				b->setProperty("sampleOn", !n.isEmpty());
+				b->style()->unpolish(b);
+				b->style()->polish(b);
+			}
 		}
 		follow->setChecked(t->follow);
+		for (Switch* s : pingPongs)
+			s->setChecked(app->song.echoPingPong);
 		resume->setVisible(t->bypass != 0);
 		const QColor col = theme::trackColor(t->role);
 		for (auto& b : knobs)
 			b.k->setAccent(col);
 		for (auto& [param, k] : patchKnobs)
 			k->setMarked(t->hasMoves(param));
-
+		syncEq(false);
 	} else
 		resume->setVisible(false);
 }
@@ -1044,6 +1116,7 @@ void SoundPanel::syncMoving() {
 	for (QWidget* g : graphs)
 		g->update(); // the LFO dot runs all the time; the curves follow knob lines
 	if (t->lanes.empty()) return;
+	syncEq(true);
 	for (auto& [param, k] : patchKnobs)
 		if (!k->isHeld() && t->hasMoves(param)) k->setValue(app->paramValue(*t, param));
 
@@ -1118,7 +1191,7 @@ QComboBox* SoundPanel::makePresetBox() {
 		} else if (idx >= 0 && idx < int(presets().size()))
 			app->edit(
 			    [&](Song& s) {
-				    if (Track* t = s.track(app->selTrack)) t->patch = presets()[size_t(idx)];
+				    if (Track* t = s.track(app->selTrack)) t->patch = keepEq(presets()[size_t(idx)], t->patch);
 			    },
 			    tr("Preset"));
 	});
@@ -1240,7 +1313,7 @@ QComboBox* SoundPanel::makeKitBox() {
 		    [&](Song& s) {
 			    Track* t = s.track(app->selTrack);
 			    if (!t) return;
-			    t->kit = chooseKit(t->kit, drumKits()[size_t(idx)]);
+			    t->kit = keepEq(chooseKit(t->kit, drumKits()[size_t(idx)]), t->kit);
 		    },
 		    tr("Drum kit"));
 	});
@@ -1463,7 +1536,7 @@ QWidget* SoundPanel::buildSimpleSynth() {
 	connect(roll, &QPushButton::clicked, this, [this] {
 		app->edit(
 		    [&](Song& s) {
-			    if (Track* t = s.track(app->selTrack)) t->patch = rollPatch(t->role, app->rng);
+			    if (Track* t = s.track(app->selTrack)) t->patch = keepEq(rollPatch(t->role, app->rng), t->patch);
 		    },
 		    tr("Roll new sound"), true);
 	});
@@ -1488,6 +1561,10 @@ QWidget* SoundPanel::buildSimpleSynth() {
 		    if (Track* t = app->curTrack()) t->octave = i - 2;
 	    },
 	    tr("Moves this track’s notes, and the letter keys, up or down by whole octaves")));
+	// the one echo setting a beginner hears at once: how far apart the repeats are (the Space knob sets how much)
+	l->addSpacing(16);
+	l->addWidget(dimLabel(tr("Echo time")));
+	l->addWidget(echoTimeCombo());
 	l->addStretch(1);
 	v->addLayout(top);
 
@@ -1549,6 +1626,12 @@ QWidget* SoundPanel::buildSimpleSynth() {
 	};
 	for (size_t i = 0; i < cells.size(); i++)
 		grid->addWidget(cells[i], int(i / 4), int(i % 4), Qt::AlignHCenter);
+	// the equaliser's two: Tone as a fifth big knob, Low cut under it (or both in a row of their own: placeTone())
+	simpleGrid = grid;
+	toneCell = toneKnob(false);
+	lowCutCell = lowCutSwitch(false);
+	grid->addWidget(toneCell, 0, 4, Qt::AlignHCenter);
+	grid->addWidget(lowCutCell, 1, 4, Qt::AlignHCenter | Qt::AlignTop);
 	l->addLayout(grid, 1);
 	body->addWidget(knobsBox, 1);
 	v->addLayout(body);
@@ -1557,7 +1640,46 @@ QWidget* SoundPanel::buildSimpleSynth() {
 	hint->setWordWrap(true);
 	v->addWidget(hint);
 	v->addStretch(1);
+	simpleSynthPage = page;
 	return page;
+}
+
+void SoundPanel::showEvent(QShowEvent* e) {
+	QWidget::showEvent(e);
+	// the scroll area's viewport says how wide the tab really is (this panel is never narrower than it needs)
+	if (QWidget* port = parentWidget(); port && !port->property("nzToneWatch").toBool()) {
+		port->installEventFilter(this);
+		port->setProperty("nzToneWatch", true);
+	}
+	placeTone();
+}
+
+bool SoundPanel::eventFilter(QObject* watched, QEvent* e) {
+	if (watched == parentWidget() && e->type() == QEvent::Resize) placeTone();
+	return QWidget::eventFilter(watched, e);
+}
+
+void SoundPanel::placeTone() {
+	if (!simpleGrid || !parentWidget() || pages->currentWidget() != simpleSynthPage) return;
+	// the room for the page: the viewport, less what this panel puts around its pages
+	const int room = parentWidget()->width() - std::max(0, width() - pages->width());
+	if (toneBeside && simpleSynthPage->minimumSizeHint().width() > room) {
+		toneWide = simpleSynthPage->minimumSizeHint().width();
+		toneBeside = false;
+		simpleGrid->removeWidget(toneCell);
+		simpleGrid->removeWidget(lowCutCell);
+		simpleGrid->addWidget(toneCell, 2, 0, Qt::AlignHCenter);
+		simpleGrid->addWidget(lowCutCell, 2, 1, Qt::AlignLeft | Qt::AlignVCenter);
+	} else if (!toneBeside && room >= toneWide) {
+		toneBeside = true;
+		simpleGrid->removeWidget(toneCell);
+		simpleGrid->removeWidget(lowCutCell);
+		simpleGrid->addWidget(toneCell, 0, 4, Qt::AlignHCenter);
+		simpleGrid->addWidget(lowCutCell, 1, 4, Qt::AlignHCenter | Qt::AlignTop);
+	} else
+		return;
+	simpleSynthPage->updateGeometry();
+	updateGeometry();
 }
 
 QWidget* SoundPanel::buildSimpleDrums() {
@@ -1575,10 +1697,18 @@ QWidget* SoundPanel::buildSimpleDrums() {
 	l->addStretch(1);
 	v->addLayout(top);
 
+	// the eight drums side by side, or in two rows of four where the window is too narrow for one
 	auto* drums = group(tr("How loud each drum is"), &l);
-	l->setSpacing(6);
+	auto* eight = new QWidget;
+	auto* flow = new FlowLayout(eight, 6, 10);
+	flow->setJustify(true);
+	flow->setBalance(true);
+	l->setAlignment(Qt::Alignment()); // all of the section's height for the rows
+	l->addWidget(eight);
 	for (int d = 0; d < D_COUNT; d++) {
-		auto* col = new QVBoxLayout;
+		auto* cell = new QWidget;
+		auto* col = new QVBoxLayout(cell);
+		col->setContentsMargins(0, 0, 0, 0);
 		col->setSpacing(4);
 		auto* k = freeKnob(
 		    ui(DRUM_NAMES[d]),
@@ -1606,7 +1736,7 @@ QWidget* SoundPanel::buildSimpleDrums() {
 		row->addStretch(1);
 		col->addLayout(row);
 		col->addStretch(1);
-		l->addLayout(col, 1);
+		flow->addWidget(cell);
 	}
 	v->addWidget(drums);
 
@@ -1637,6 +1767,8 @@ QWidget* SoundPanel::buildSimpleDrums() {
 	                      tr("lots")));
 	l->addWidget(kitMacro(tr("Space"), DP_REVERB, 0.12f, tr("How much of the kit goes to the shared reverb."),
 	                      tr("dry"), tr("far away")));
+	l->addWidget(toneKnob(true));
+	l->addWidget(lowCutSwitch(true));
 	l->addStretch(1);
 	v->addWidget(feel);
 	auto* hint = dimLabel(tr("Every drum can play your own sound: click Built-in under it. Full, at the top right, has "
@@ -1645,4 +1777,120 @@ QWidget* SoundPanel::buildSimpleDrums() {
 	v->addWidget(hint);
 	v->addStretch(1);
 	return page;
+}
+
+// ---------------------------------------------------------------- the equaliser
+
+// The equaliser's section on a Complete page: its curve to drag, and a knob for each of its five settings. On the
+// synthesiser they are ordinary sound knobs (knob lines, MIDI); on the drum kit they are the kit's own, as its Drive,
+// Echo and Reverb are.
+QGroupBox* SoundPanel::buildEq(bool drums) {
+	QHBoxLayout* l = nullptr;
+	QGroupBox* g = group(drums ? tr("Equaliser") : tr("5 · Equaliser"), &l);
+	auto* curve = new EqCurve(app);
+	eqCurves.push_back(curve);
+	l->addWidget(curve);
+	l->addSpacing(6);
+	for (int i = 0; i < 5; i++) {
+		const int param = P_EQCUT + i;
+		if (!drums) {
+			l->addWidget(patchKnob(param));
+			continue;
+		}
+		const int idx = DP_EQCUT + i;
+		l->addWidget(freeKnob(
+		    ui(PARAMS[param].label),
+		    [this, idx] {
+			    Track* t = app->curTrack();
+			    return t && t->isDrums() ? t->kit.p[idx] : PARAMS[P_EQCUT + idx - DP_EQCUT].def;
+		    },
+		    [this, idx](float x) {
+			    if (Track* t = app->curTrack()) t->kit.p[idx] = x;
+		    },
+		    [param](float v) { return formatParam(param, v); }, PARAMS[param].def, paramTip(param)));
+	}
+	return g;
+}
+
+// Tone: the equaliser's Low and High turned against each other, darker to the left, brighter to the right; the knob
+// shows how far they lean, and moves them from where they were, so a Mid or a lean set on the Complete page stays
+static constexpr float TONE_REACH = 0.5f; // the whole turn moves Low and High each by half their range (±6 dB)
+
+QWidget* SoundPanel::toneKnob(bool drums) {
+	const int lo = drums ? int(DP_EQLOW) : int(P_EQLOW), hi = drums ? int(DP_EQHIGH) : int(P_EQHIGH);
+	auto value = [this, drums, lo, hi] {
+		Track* t = app->curTrack();
+		if (!t || t->isDrums() != drums) return 0.5f;
+		const float l = drums ? t->kit.p[lo] : app->paramValue(*t, lo),
+		            h = drums ? t->kit.p[hi] : app->paramValue(*t, hi);
+		return std::clamp(0.5f + (h - l) / (4.f * TONE_REACH), 0.f, 1.f);
+	};
+	auto* k = new Knob(tr("Tone"));
+	k->setScale(1.45);
+	k->setProperty("param", hi);
+	if (!drums) midiMenuFor(k, app, Midi::targetForParam(P_EQHIGH), tr("Tone")); // a controller turns its High
+	k->setDefault(0.5f);
+	k->setFormatter([](float v) {
+		const int amount = int(std::lround(std::fabs(v - 0.5f) * 200.f));
+		return amount == 0 ? tr("Neutral") : v < 0.5f ? tr("Darker %1%").arg(amount) : tr("Brighter %1%").arg(amount);
+	});
+	k->setToolTip(tr("Darker or brighter: turns the deep and the high end against each other, like the tone knob on "
+	                 "a radio. In the middle the sound is as it is.") +
+	              tr("\n\nDrag up or down, Shift for small steps, double-click to reset."));
+	auto start = std::make_shared<float>(0.f);
+	connect(k, &Knob::pressed, this, [this, k, drums, lo, hi, start] {
+		Track* t = app->curTrack();
+		if (!t) return;
+		app->begin(k->name());
+		toneBase = {drums ? t->kit.p[lo] : t->patch.p[lo], drums ? t->kit.p[hi] : t->patch.p[hi]};
+		*start = k->value();
+	});
+	connect(k, &Knob::moved, this, [this, drums, lo, hi, start](float v) {
+		Track* t = app->curTrack();
+		if (!t || toneBase.size() != 2) return;
+		// back to the middle is flat again, exactly, so the equaliser can rest
+		const float d = (v - *start) * 2.f * TONE_REACH;
+		float l = std::clamp(toneBase[0] - d, 0.f, 1.f), h = std::clamp(toneBase[1] + d, 0.f, 1.f);
+		if (std::fabs(v - 0.5f) < 0.004f && std::fabs(toneBase[0] + toneBase[1] - 1.f) < 0.004f) l = h = 0.5f;
+		float* p = drums ? t->kit.p : t->patch.p;
+		p[lo] = l;
+		p[hi] = h;
+		if (!drums)
+			for (int param : {lo, hi})
+				if (t->hasMoves(param)) t->bypass |= quint64(1) << param; // set by hand: its line pauses
+		app->touch();
+	});
+	knobs.push_back({k, value});
+	return withEnds(k, tr("darker"), tr("brighter"));
+}
+
+// Low cut on the Simple pages: the equaliser's low cut at about 100 Hz, or off
+Switch* SoundPanel::lowCutSwitch(bool drums) {
+	auto* sw = new Switch(tr("Low cut"), Switch::Beside);
+	sw->setFocusPolicy(Qt::NoFocus);
+	sw->setToolTip(
+	    tr("Takes away the deepest rumble below about 100 Hz, so this track leaves room for the bass and the "
+		   "kick drum. Best left off on the bass itself."));
+	connect(sw, &QAbstractButton::clicked, this, [this, drums](bool on) {
+		const int id = app->selTrack;
+		app->edit(
+		    [&](Song& s) {
+			    if (Track* t = s.track(id))
+				    (drums ? t->kit.p[int(DP_EQCUT)] : t->patch.p[int(P_EQCUT)]) = on ? 0.44f : 0.f;
+		    },
+		    tr("Low cut"));
+	});
+	lowCuts.push_back({sw, drums});
+	return sw;
+}
+
+void SoundPanel::syncEq(bool moving) {
+	for (EqCurve* c : eqCurves)
+		c->refresh();
+	if (moving) return; // the knobs that follow lines are patchKnobs, done by syncMoving()
+	const Track* t = app->curTrack();
+	for (auto& [sw, drums] : lowCuts) {
+		const bool on = t && t->isDrums() == drums && (drums ? t->kit.p[DP_EQCUT] : t->patch.p[P_EQCUT]) > 0.f;
+		if (sw->isChecked() != on) sw->setChecked(on);
+	}
 }

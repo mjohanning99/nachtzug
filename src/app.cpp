@@ -9,8 +9,10 @@
 // Changes in the song file: none here (songfile.cpp); save() and load() write and read the file through it.
 
 #include "app.h"
+#include "recent.h"
 #include "samples.h"
 #include "midi.h"
+#include <algorithm>
 #include <QFile>
 #include <QJsonDocument>
 #include <QSettings>
@@ -108,6 +110,7 @@ bool App::openAudio(const AudioSetup& s) {
 		SDL_CloseAudioDevice(audioDev);
 		audioDev = 0;
 	} // waits until the audio thread has left the engine
+	engine->dropPlaying(); // nothing plays it now; the App may free it with the rest
 	audioError.clear();
 	// a different sound system (driver) means starting SDL's audio part again
 	if (!sdlUp || s.driver != setup_.driver) {
@@ -265,6 +268,7 @@ int App::chopOntoDrums(const dsp::SampleData& src, const std::vector<size_t>& cu
 		t->clips.push_back(c);
 		editClip = c.id;
 		selClips = {c.id};
+		selPart = -1;
 	}
 	selTrack = tid;
 	touch();
@@ -462,8 +466,20 @@ std::vector<float> App::stopCapture(int& rate) {
 void App::publish() {
 	resolveSamples(song);
 	auto snap = std::make_shared<const Song>(song);
-	keep_[keepIdx++ % 16] = snap; // the GUI thread, not the audio thread, frees old snapshots
+	// The GUI thread, never the audio thread, frees old snapshots: each is kept until the engine plays a newer one.
+	// (A fixed number of them was not enough: a knob turned fast with a large sound buffer publishes more than that
+	// between two buffers, and the engine then freed a whole song in the middle of the sound.) With no sound card
+	// running, the engine takes none, and only the newest are kept.
+	keep_.push_back(snap);
 	engine->setSong(std::move(snap));
+	published_++;
+	const Song* playing = engine->songNow.load(std::memory_order_acquire);
+	const auto it = std::find_if(keep_.begin(), keep_.end(), [playing](const auto& k) { return k.get() == playing; });
+	if (it != keep_.end()) keep_.erase(keep_.begin(), it);
+	// a cap for when no sound card takes them; not the one the engine plays (it is then the oldest kept), unless the
+	// callback seems to have stopped altogether (a sound card unplugged): then memory must not grow with every edit
+	while (keep_.size() > 64 && (keep_.front().get() != playing || keep_.size() > 256))
+		keep_.pop_front();
 }
 
 void App::begin(const QString& what, bool announce) {
@@ -584,6 +600,7 @@ void App::fixSelection() {
 	for (int id : selClips)
 		if (song.clip(id)) keep.insert(id);
 	selClips = keep;
+	if (selPart >= 0 && song.partIndex(selPart) < 0) selPart = -1; // the part was moved or deleted
 	if (editClip < 0) {
 		if (Track* t = curTrack(); t && !t->clips.empty()) editClip = t->clips[0].id;
 	}
@@ -645,6 +662,7 @@ void App::setSong(const Song& s, const QString& path) {
 	selTrack = -1;
 	editClip = -1;
 	selClips.clear();
+	selPart = -1;
 	fixSelection();
 	seek(0);
 	touch();
@@ -658,6 +676,7 @@ bool App::save(const QString& path) {
 	f.close();
 	filePath = path;
 	dirty = false;
+	recent::add(path); // File > Open recent (a spare copy of autosave is left out)
 	emit changed();
 	return true;
 }
@@ -669,6 +688,7 @@ bool App::load(const QString& path) {
 	if (!Song::fromJson(QJsonDocument::fromJson(f.readAll()).object(), s)) return false;
 	const QStringList missing = resolveSamples(s);
 	setSong(s, path);
+	recent::add(path);
 	if (!missing.isEmpty())
 		emit status(tr("Some samples this song uses are not in the sample library: %1. Their drums play the built-in "
 		               "sound instead.")
@@ -696,6 +716,7 @@ void App::selectTrack(int id) {
 }
 
 void App::selectClip(int id, bool add) {
+	selPart = -1;
 	if (!add) selClips.clear();
 	if (id >= 0) {
 		if (add && selClips.contains(id))
@@ -733,6 +754,11 @@ void App::play() {
 void App::stop() {
 	EngineEvent e;
 	e.type = EngineEvent::Stop;
+	engine->push(e);
+}
+void App::hush() {
+	EngineEvent e;
+	e.type = EngineEvent::Hush;
 	engine->push(e);
 }
 void App::togglePlay() {
@@ -1092,6 +1118,7 @@ int App::addTrack(int role) {
 	if (Track* t = song.track(id); t && !t->clips.empty()) {
 		editClip = t->clips[0].id;
 		selClips = {editClip};
+		selPart = -1;
 	}
 	touch();
 	emit selectionChanged();
@@ -1166,6 +1193,7 @@ void App::splitAtPlayhead() {
 }
 
 void App::selectAll() {
+	selPart = -1;
 	if (focus == FocusEditor) {
 		if (Clip* c = curClip()) {
 			for (Note& n : c->notes)
@@ -1242,6 +1270,7 @@ void App::deleteSelection() {
 			});
 		}
 		selClips.clear();
+		selPart = -1;
 		fixSelection();
 		touch();
 		emit selectionChanged();
@@ -1253,7 +1282,67 @@ void App::cut() {
 	deleteSelection();
 }
 
+int App::selectedPart() const {
+	return selPart < 0 ? -1 : song.partIndex(selPart);
+}
+
+void App::selectPart(int index) {
+	selClips.clear();
+	selPart = -1;
+	if (index >= 0 && index < int(song.parts.size())) {
+		const int a = song.parts[size_t(index)].bar * BAR, b = song.partEnd(size_t(index)) * BAR;
+		for (const Track& t : song.tracks)
+			for (const Clip& c : t.clips)
+				if (c.start >= a && c.start < b) selClips.insert(c.id);
+		selPart = song.parts[size_t(index)].bar;
+		// the editor shows the selected track's clip in the part, if it has one; the track stays selected either way
+		if (const Track* t = curTrack())
+			for (const Clip& c : t->clips)
+				if (selClips.contains(c.id)) {
+					editClip = c.id;
+					break;
+				}
+	}
+	emit selectionChanged();
+}
+
+void App::repeatPart(int index) {
+	if (index < 0 || index >= int(song.parts.size())) return;
+	const int bar = song.parts[size_t(index)].bar; // by its bar: a change that waits for the bar line finds it again
+	onBar(
+	    [this, bar](Song& s) {
+		    const int i = s.partIndex(bar);
+		    const int copy = i >= 0 ? s.repeatPart(size_t(i)) : -1;
+		    if (copy >= 0) selectPart(copy);
+	    },
+	    true, tr("Repeat a part"), true);
+}
+
+void App::jumpTo(int tick) {
+	if (!isPlaying()) {
+		seek(tick);
+		return;
+	}
+	EngineEvent e;
+	e.type = EngineEvent::Seek;
+	e.tick = std::max(0, tick);
+	e.quant = BAR;
+	engine->push(e);
+}
+
 void App::loopSelection() {
+	if (const int i = selectedPart(); i >= 0) { // the part's own bars, whatever its clips do
+		const int a = song.parts[size_t(i)].bar * BAR, b = song.partEnd(size_t(i)) * BAR;
+		edit(
+		    [&](Song& s) {
+			    s.loopStart = a;
+			    s.loopEnd = b;
+			    s.loopOn = true;
+		    },
+		    tr("Loop this part"));
+		if (pos() < song.loopStart || pos() >= song.loopEnd) jumpTo(song.loopStart);
+		return;
+	}
 	int lo = INT_MAX, hi = 0;
 	for (const Track& t : song.tracks)
 		for (const Clip& c : t.clips)
@@ -1313,6 +1402,7 @@ void App::paste() {
 		}
 		begin(tr("Paste"));
 		selClips.clear();
+		selPart = -1;
 		for (auto& pc : clipClips_) {
 			if (pc.first != t->isDrums()) continue;
 			Clip c = pc.second;
@@ -1351,6 +1441,10 @@ void App::duplicateSelection() {
 		c->notes.insert(c->notes.end(), extra.begin(), extra.end());
 		touch();
 	} else {
+		if (const int part = selectedPart(); part >= 0) { // a selected part is repeated whole, not clip by clip
+			repeatPart(part);
+			return;
+		}
 		if (selClips.isEmpty()) return;
 		begin(tr("Duplicate"));
 		QSet<int> fresh;
@@ -1367,6 +1461,7 @@ void App::duplicateSelection() {
 			t.clips.insert(t.clips.end(), extra.begin(), extra.end());
 		}
 		selClips = fresh;
+		selPart = -1;
 		touch();
 		emit selectionChanged();
 	}

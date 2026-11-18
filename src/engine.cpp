@@ -21,6 +21,7 @@ using namespace dsp;
 
 static constexpr int LIVE_BASE = 100000;   // keys of notes played by hand
 static constexpr int ARP_BASE = 200000000; // keys of notes the arpeggiator plays
+static constexpr float HUSH_FADE = 0.012f; // seconds a Hush takes to fade everything out
 
 Engine::Engine(float sampleRate) : sr(sampleRate) {
 	for (auto& s : rt_) {
@@ -131,7 +132,7 @@ void Engine::noteIn(Slot& sl, const Track& tr, int key, int deg, bool acc, bool 
 					sl.arp[sl.nArp++] = {k, d, alt};
 				}
 			} else
-				synOn(sl, k, cur_->midiOf(tr, d) + alt, acc);
+				synOn(sl, k, cur_->midiOf(tr, d) + alt, acc, i);
 		}
 	} else {
 		for (int i = 0; i < 4; i++) {
@@ -160,23 +161,63 @@ void Engine::releaseSequenced() {
 	}
 }
 
+// Every sound stops where it is, without a release; the echo and the reverb forget what they hold. The live input
+// keeps going (someone may be playing into it).
+void Engine::silenceAll() {
+	nPend = 0;
+	for (auto& sl : rt_) {
+		sl.synth.reset();
+		sl.drums.reset();
+		sl.nActive = 0;
+		sl.nArp = 0;
+		sl.arpKey = -1;
+		sl.arpIdx = 0;
+	}
+	phr_ = nullptr;
+	nPhrOn_ = 0;
+	phrSynth.reset();
+	phrDrums.reset();
+	prev_ = nullptr;
+	clickEnv = 0.f;
+	pingLeft = 0;
+	delay.clear();
+	reverb.clear();
+}
+
 void Engine::handle(const EngineEvent& e) {
 	const Song& song = *cur_;
 	switch (e.type) {
 	case EngineEvent::Play:
+		if (hushLeft_ >= 0) { // started again while a Hush fades: finish it now, before the first notes
+			silenceAll();
+			hushLeft_ = -1;
+		}
 		pos_ = std::max(0.0, e.tick);
 		playing_ = true;
 		pass_++;
+		jumpAt_ = -1.0;
 		break;
 	case EngineEvent::Stop:
 		playing_ = false;
+		jumpAt_ = -1.0;
 		nPend = 0;
 		releaseSequenced();
 		break;
 	case EngineEvent::Seek:
+		if (e.quant > 0 && playing_) { // at the next bar line (before the loop comes round)
+			jumpAt_ = std::floor(pos_ / BAR + 1.0) * BAR;
+			if (loop_ && pos_ < song.loopEnd) jumpAt_ = std::min(jumpAt_, double(song.loopEnd));
+			jumpTo_ = std::max(0.0, e.tick);
+			break;
+		}
+		jumpAt_ = -1.0;
 		pos_ = std::max(0.0, e.tick);
 		nPend = 0;
 		releaseSequenced();
+		break;
+	case EngineEvent::Hush:
+		// a few milliseconds' fade first, so the cut does not click
+		if (hushLeft_ < 0) hushLeft_ = std::max(1, int(sr * HUSH_FADE));
 		break;
 	case EngineEvent::Panic:
 		nPend = 0;
@@ -400,9 +441,12 @@ void Engine::process(float* out, int frames) {
 #endif
 	if (!songLock_.test_and_set(std::memory_order_acquire)) { // busy: keep playing the song we have
 		const bool changed = song_ != cur_;
-		if (changed) cur_ = song_;
+		if (changed) cur_ = song_; // the GUI thread still holds the one let go here, so it is not freed here
 		songLock_.clear(std::memory_order_release);
-		if (changed) remap();
+		if (changed) {
+			songNow.store(cur_.get(), std::memory_order_release);
+			remap();
+		}
 	}
 	if (!cur_) {
 		std::memset(out, 0, sizeof(float) * size_t(frames) * 2);
@@ -504,7 +548,8 @@ void Engine::process(float* out, int frames) {
 	}
 	// Pump: after each kick the tracks dip and swell back up within about a third of a beat
 	const float duckAttack = 0.004f, duckRelease = std::clamp(0.36f * 60.f / song.bpm, 0.07f, 0.4f);
-	const float delaySamples = 60.f / song.bpm * DTIME_BEATS[std::clamp(song.dtime, 0, 4)] * sr;
+	const float delaySamples = 60.f / song.bpm * echoBeats(song.dtime) * sr;
+	const float echoTone = echoToneCoef(song.echoTone), echoSpread = song.echoPingPong ? 0.f : 1.f;
 	const float master = song.master * song.master * 1.3f;
 	const float limRelease = 1.f - std::exp(-1.f / (0.25f * sr));
 
@@ -532,10 +577,17 @@ void Engine::process(float* out, int frames) {
 			}
 		}
 
+		const double beatNow = playing_ ? unswing(pos_, song.swing) / PPQ : -1.0; // for an LFO in time
 		if (playing_) {
 			const double p0 = pos_;
 			double p1 = p0 + n * tps;
-			if (loop && p0 < song.loopEnd && p1 >= song.loopEnd) {
+			if (jumpAt_ >= 0.0 && p0 < jumpAt_ && p1 >= jumpAt_) { // a jump waiting for this bar line
+				fire(unswing(p0, song.swing), jumpAt_);
+				p1 = jumpTo_ + (p1 - jumpAt_);
+				pass_++;
+				fire(jumpTo_, unswing(p1, song.swing));
+				jumpAt_ = -1.0;
+			} else if (loop && p0 < song.loopEnd && p1 >= song.loopEnd) {
 				fire(unswing(p0, song.swing), double(song.loopEnd));
 				p1 = song.loopStart + (p1 - song.loopEnd);
 				pass_++; // notes with a chance roll again
@@ -578,8 +630,10 @@ void Engine::process(float* out, int frames) {
 			float l[CHUNK], r[CHUNK];
 			if (tr.isDrums())
 				sl.drums.render(l, r, n);
-			else
+			else {
+				sl.synth.setClock(beatNow, song.bpm);
 				sl.synth.render(l, r, n);
+			}
 			const float g = sl.audible ? sl.vol * sl.vol * 1.15f : 0.f;
 			const float tl = g * std::min(1.f, 1.f - tr.pan), trr = g * std::min(1.f, 1.f + tr.pan);
 			const float ds = sl.dsend, rs = sl.rsend, dk = sl.duck * 0.9f;
@@ -670,8 +724,10 @@ void Engine::process(float* out, int frames) {
 			const bool drumsNow = phr_ ? phr_->drums : !phrDrums.silent();
 			if (drumsNow)
 				phrDrums.render(l, r, n);
-			else
+			else {
+				phrSynth.setClock(-1.0, song.bpm);
 				phrSynth.render(l, r, n);
+			}
 			const float g = 0.62f;
 			for (int i = 0; i < n; i++) {
 				const float a = l[i] * g, b = r[i] * g;
@@ -696,7 +752,7 @@ void Engine::process(float* out, int frames) {
 		int sw = scopeW.load(std::memory_order_relaxed);
 		for (int i = 0; i < n; i++) {
 			float dl, dr, vl, vr;
-			delay.process(dS[i], delaySamples, song.dfb * 0.85f, dl, dr);
+			delay.process(dS[i], delaySamples, song.dfb * 0.85f, echoTone, echoSpread, dl, dr);
 			reverb.process(rL[i] + dl * 0.15f, rR[i] + dr * 0.15f, vl, vr);
 			float L = mL[i] + dl + vl * 0.8f, R = mR[i] + dr + vr * 0.8f;
 			if (clickEnv > 0.001f) {
@@ -728,6 +784,12 @@ void Engine::process(float* out, int frames) {
 				limiter.process(L, R, limRelease);
 				if (limGainOut) limGainOut[off + i] = limiter.gain;
 			}
+			if (hushLeft_ >= 0) { // fading out for a Hush; silent once faded, until the chunk ends
+				const float g = float(hushLeft_) / (sr * HUSH_FADE);
+				L *= g;
+				R *= g;
+				if (hushLeft_ > 0) hushLeft_--;
+			}
 			out[(off + i) * 2] = L;
 			out[(off + i) * 2 + 1] = R;
 			pkL = std::max(pkL * 0.9997f, std::fabs(L));
@@ -736,6 +798,10 @@ void Engine::process(float* out, int frames) {
 			sw = (sw + 1) % SCOPE_N;
 		}
 		scopeW.store(sw, std::memory_order_relaxed);
+		if (hushLeft_ == 0) { // faded out: now everything can stop without a click
+			silenceAll();
+			hushLeft_ = -1;
+		}
 		off += n;
 	}
 	clock_ += frames;

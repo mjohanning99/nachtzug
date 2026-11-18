@@ -40,7 +40,7 @@ Where things live:
 | Website, manual | `site/assets/css/style.scss`, `docs/manual/manual.css` |
 
 To see the program: `QT_QPA_PLATFORM=offscreen SDL_AUDIODRIVER=dummy ./build/nachtzug --screenshot /tmp/x.png
---size 1560x980 --lang en` (also `--dialog welcome|settings|savesound|library|export`, `--tab 1`, `--theme NAME`).
+--size 1560x980 --lang en` (also `--dialog welcome|start|settings|savesound|library|export`, `--tab 1`, `--theme NAME`).
 
 ## 2. Design philosophy and principles
 
@@ -551,7 +551,8 @@ Disabled: the name and border `rule`.
 ### 6.4 Knobs
 
 `Knob` (`controls.cpp`): drag up or down (170 px for the whole range; Shift 700 px for small steps), double-click to
-reset, no keyboard focus; the cursor is a vertical size cursor; its default tooltip says so. Its size is 58×78 px
+reset, no keyboard focus; the cursor is Nachtzug’s own knob cursor (a knob with up and down, `theme::cursor("knob")`),
+or the system’s vertical size cursor when those are switched off; its default tooltip says so. Its size is 58×78 px
 (50 high when its name is in a caption above; 64 high, drawn 2 px lower, when every knob of its section has a
 one-line name, see 6.7), or ×`scale` for the Sound tab’s simple page (`setScale`).
 
@@ -667,7 +668,8 @@ the output. Per-track and per-strip levels are the thin bars described in 6.12 a
 
 `QFrame#strip` (138 px wide; the input strip 196, the whole-song strip 138): a screwed well with the strip’s name on an
 ivory plate (`QPushButton#stripName`, radius 5, 2 px `rule` bezel, 24 px high, margin `4 6 0 6`, the display’s ivory
-gradient, the track icon beside a 700-weight name), three or more knobs, the fader, and Mute and Solo keys between
+gradient, the track icon beside a 700-weight name), the equaliser's Low, Mid and High as a row of small knobs
+(`setScale(0.7)`, one line of name) under the plate, three or more knobs, the fader, and Mute and Solo keys between
 the lower screws. The selected strip has a 2 px accent ring inside its edge (`[sel="true"]`). The coloured edge
 under the name follows the plate’s corners. Layout: margins 8, spacing 6.
 
@@ -682,6 +684,12 @@ under the name follows the plate’s corners. Layout: margins 8, spacing 6.
   the one on (`[on="true"]`); a **normal key with the ▶ symbol (30×26) to listen** (not round), the sound’s name in `#cardName` (600) and
   its group as soft `dim` text on the right. Words to find a sound by are soft text, never chips. Its actions are normal keys in a
   column, the main one `#primary`.
+- **Start window** (`startwindow.cpp`): the starters and the recent songs as clickable cards (`QPushButton#startCard`:
+  `field`, 1 px `rule`, radius 6, `hover` under the mouse, a 2 px accent border with the keyboard’s focus; 56 px high,
+  44 with `[small="true"]`, set in the style sheet since a style sheet’s height wins over the widget’s), each in a
+  screwed section; a starter card has the library’s ▶ listen key (30×26, lit while it is heard), its name in
+  `#cardName`, a `dim` line and its tempo and key as an `#engraved` caption. A song no longer found is a disabled
+  card with its name in `#cardGone`.
 
 ### 6.15 Dialogs
 
@@ -724,12 +732,17 @@ only for a change that can be taken back.
   `gridBar` every fourth bar, `grid` otherwise; ruler on `well` with the bar numbers in `dim`; the playhead is a 1 px
   `ink` line with a small triangle (10 px wide, 8 high) in the ruler; the focused view gets a 2 px accent line along its top.
 - The loop bar is accent; the chord row shows each chord in a box (radius 2.5) with alternate runs tinted.
+- The parts row (top, 22 px on `wellHi`) shows each named part as a long painted key (`drawKey`), lit in the accent
+  when selected; its name is kept in view at the left edge when the part begins left of the window.
 - Clips and cells: section 3.3 and 5.5. A playing cell sits pressed in.
 - The note editor’s key column looks like a keyboard in Bakelite: cream (`#f4efe5`) keys with a darker edge, the root note’s key black (`cap`, with `capInk` text).
 - The envelope, filter, wave and LFO pictures (`soundpanel.cpp`) sit in a deep frame (outer gradient `#e3dacb` to `#9f917f`, a 3 px bevel, radius
   6 and 4.5) over graph paper (`#f7f0de`, lines `#c98f5a` at alpha 0.15, every fifth stronger at 0.42), the curve in
   `#2b2623` 1.6 px with the track colour at alpha 72 underneath, draggable points of radius 3.8 (4.6 hot) and
   letters in 8 px Courier Prime `#5f4a37`. In the flat themes: a 4-radius `canvas` box and a 2 px curve in the track colour.
+- The equaliser's picture (`EqCurve`, `eqcurve.cpp`) is made the same way, 200×84 (flat 168×70), with a dashed 0 dB
+  line, the fill between the curve and that line, and its points also in the flat themes; it is the only picture
+  that takes the keyboard's focus (Tab), shown by a 2 px accent ring round the chosen point and the value tag.
 
 ## 7. Iconography
 

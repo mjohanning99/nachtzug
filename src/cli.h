@@ -7,6 +7,7 @@
 //   nachtzug --guitest                       drive the window's own controls and report problems
 //   nachtzug --check-tooltips                list every visible control that has no tooltip
 //   nachtzug --parity folder                 write what the song code does with fixed seeds (tools/parity.sh)
+//   nachtzug --write-starters folder         make the starter songs afresh (assets/starters, see starters.h)
 //   nachtzug --screenshot out.png [song]     save a picture of the window and quit; what it shows: --tab 0|1|2,
 //                                            --track N, --theme NAME, --loops, --lines, --guide, --simple,
 //                                            --arrange 0|1|2, --chord-keys, --lesson ID:STEP, --size WxH,
@@ -25,9 +26,13 @@ struct Options {
 	QString songPath; // a song to open, or to render
 
 	// runs without a window
-	QString renderPath, parityDir;
+	QString renderPath, parityDir, startersDir;
 	QString kitName;     // --render and pictures: the drum kit
 	int arrangeLen = -1; // --render and pictures: arranged first (0 short, 1 medium, 2 long)
+	int partIndex = -1;  // pictures, with --arrange: this named part selected (--part N, from 0)
+	// --render and pictures: then continued for this many minutes after the end (--journey MINUTES[:CHARACTER], the
+	// character 0 calm, 1 evolving, 2 restless)
+	int journeyMin = 0, journeyChar = 1;
 	bool selftest = false, guiTest = false, tipCheck = false;
 
 	// pictures

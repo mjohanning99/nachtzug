@@ -30,10 +30,27 @@ extern const char* const CHORD_NAMES[7];
 extern const char* const ARP_NAMES[6];
 extern const char* const RATE_NAMES[4];
 extern const int RATE_TICKS[4];
-extern const char* const DTIME_NAMES[5];
-extern const float DTIME_BEATS[5];
+extern const char* const DTIME_NAMES[dsp::ECHO_TIMES];
+extern const int DTIME_ORDER[dsp::ECHO_TIMES]; // the echo times from shortest to longest, as the list shows them
+extern const char* const LFO_SYNC_NAMES[dsp::LFO_SYNC_STEPS];
+QString echoToneText(float v); // the echo's tone as the knob shows it
 
-enum ParamKind { K_PCT, K_TIME, K_CUTOFF, K_LFO, K_PHASER, K_CENTS, K_GLIDE, K_CHOICE };
+enum ParamKind {
+	K_PCT,
+	K_TIME,
+	K_CUTOFF,
+	K_LFO,
+	K_PHASER,
+	K_CENTS,
+	K_GLIDE,
+	K_CHOICE,
+	K_FADE, // the LFO's fade-in: off, or seconds
+	// the filter release and the equaliser
+	K_FRELEASE, // a time, or (at 0) the amp's release
+	K_DB,       // -12 .. +12 dB, flat in the middle
+	K_MIDHZ,    // the equaliser's middle
+	K_LOWCUT,   // off, or 20 .. 800 Hz
+};
 struct ParamDef {
 	const char* id;
 	const char* label;
@@ -42,10 +59,15 @@ struct ParamDef {
 	const char* choices;
 };
 extern const ParamDef PARAMS[dsp::P_COUNT];
+static_assert(dsp::P_COUNT < AP_VOLUME, "the knob lines tell the track volume from a synth setting by AP_VOLUME");
 QString formatParam(int param, float v);
+QString lfoRateText(float v, bool inTime); // the LFO's rate: a speed, or a note value when it runs in time
+struct Patch;
+QString formatParam(int param, float v, const Patch& patch); // the same, knowing the sound (the LFO's rate in time)
 // Text from the tables here is kept in English in the song; ui() translates it where it is shown.
 QString ui(const char* text);
 QString ui(const QString& text);
+QString partName(const QString& name); // a part's name as shown: suggested names in the program's language
 QString pitchName(int pc);     // C, C♯, … B; in German the last one is H, as German musicians name it
 QString paramTip(int param);   // what a synth setting does, in a sentence or two
 QString paramLabel(int param); // also knows AP_VOLUME
@@ -173,12 +195,24 @@ struct LiveInput {
 	bool operator==(const LiveInput&) const = default;
 };
 
+// A named part of the song (Intro, Build-up, Break…), shown in the timeline's parts lane. It starts at its bar and
+// runs to the next part's start; the last one runs to the song's end. The name is kept as written; a suggested
+// name is kept in English, so it shows translated (ui()).
+struct SongPart {
+	int bar = 0;
+	QString name;
+	bool operator==(const SongPart&) const = default;
+};
+
 struct Song {
 	float bpm = 118.f, swing = 0.f, master = 0.8f;
 	LiveInput input;
 	int root = 9, scale = 0;
-	int dtime = 2;
+	int dtime = 2; // the echo's time: a note value, an index into DTIME_NAMES (dsp::echoBeats())
 	float dfb = 0.45f, rsize = 0.55f, rdamp = 0.45f;
+	// the echo's tone (0.5 is the classic, lower is darker) and whether its repeats bounce left and right
+	float echoTone = 0.5f;
+	bool echoPingPong = true;
 	int loopStart = 0, loopEnd = 8 * BAR;
 	bool loopOn = true;
 	bool liveMode = false;      // true: the loop grid plays instead of the timeline; not saved
@@ -187,6 +221,7 @@ struct Song {
 	// a chord moved a semitone down (-1) or up (+1) out of the scale, per bar of chords; shorter or empty: none
 	std::vector<int> chordAlts;
 	std::vector<Track> tracks;
+	std::vector<SongPart> parts; // the named parts, in order of their bars; none in older songs
 	int nextId = 1;
 
 	const ScaleDef& sc() const { return SCALES[std::clamp(scale, 0, NUM_SCALES - 1)]; }
@@ -223,6 +258,18 @@ struct Song {
 	int trackIndex(int id) const;
 	int endTick() const;
 	bool anySolo() const;
+	// the named parts. setParts() and addPart() keep them in order, one part to a bar; anything that writes parts
+	// (Arrange for me, the timeline) goes through them
+	void setParts(std::vector<SongPart> list);  // replaces all of them
+	void addPart(int bar, const QString& name); // a new part from this bar on, or renames the one starting there
+	bool removePart(int bar);                   // the part starting at this bar; false if there is none
+	int partAt(int bar) const;                  // index of the part this bar lies in, or -1 (before the first)
+	int partIndex(int bar) const;               // index of the part starting at this bar, or -1
+	int partEnd(size_t i) const;                // the bar after part i: the next one's start, or the song's end
+	// Repeat this part: a copy of part i (its clips, chord changes and knob-line points) is put straight after it;
+	// everything from its end on moves right by its length. The copy becomes a part named like it plus a number.
+	// Returns the copy's index in parts, or -1 if there is no such part.
+	int repeatPart(size_t i);
 
 	QJsonObject toJson() const;
 	static bool fromJson(const QJsonObject& o, Song& out);
@@ -243,6 +290,9 @@ DrumKit chooseKit(const DrumKit& current, const DrumKit& preset);
 Patch presetByName(const QString& name);
 Patch rollPatch(int role, std::mt19937& rng);
 Patch mutatePatch(const Patch& p, std::mt19937& rng);
+// A new sound or kit replacing the current one keeps the equaliser the track had: set by hand, not part of the sound
+Patch keepEq(Patch next, const Patch& current);
+DrumKit keepEq(DrumKit next, const DrumKit& current);
 
 struct GenDef {
 	const char* name;
@@ -281,6 +331,28 @@ struct ArrangePart {
 };
 std::vector<ArrangePart> arrangePlan(int length);
 std::vector<ArrangePart> arrangeSong(Song& s, int length, bool writeLead, std::mt19937& rng);
+
+// "A long journey" (journey.cpp): the song goes on for minutes from a bar, growing slowly out of each track's pattern
+// along one arc: it holds back at first, builds to a single peak about two thirds of the way in and then settles;
+// small steps a note at a time that add up over the piece, long knob lines on the filter, resonance and echo, parts
+// coming and going at phrase lines, one big breakdown and smaller breathers; the key and the chords stay. Everything
+// from that bar on is replaced.
+enum JourneyCharacter { J_CALM, J_EVOLVING, J_RESTLESS };
+enum JourneyPhaseType { J_DRIFT, J_RISE, J_CRUISE, J_SHIFT, J_BREAK, J_RETURN, J_PEAK, J_FADE, J_LULL, J_GLOW };
+struct JourneyPhase { // a stretch of the journey, as named parts on the timeline could show it
+	int bar;          // where it starts (from the song's start)
+	int bars;
+	int type; // JourneyPhaseType
+	const char* name;
+	float energy = 0.f; // where it stands on the journey's arc, 0 (sparse, dark) to 1 (the peak)
+	int variant = 0;    // a breather: which parts step out (0 the drums, 1 the bass, 2 the pad and the lead)
+};
+int journeyBars(const Song& s, int minutes); // the journey's length at the song's tempo, whole phrases
+// the phases for a journey of that many bars, counted from 0; continues: the song already plays before it. The
+// seed is the first number continueJourney() draws from its generator, so a preview can show the same plan.
+std::vector<JourneyPhase> journeyPlan(int bars, int character, bool continues, bool ending, unsigned seed);
+std::vector<JourneyPhase> continueJourney(Song& s, int fromBar, int minutes, int character, bool ending,
+                                          std::mt19937& rng);
 
 // Loads the samples the drum kits name from the sample library; returns the names it could not find.
 QStringList resolveSamples(Song& s);

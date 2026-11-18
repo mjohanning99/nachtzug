@@ -7,6 +7,8 @@
 // called from main(), in that order.
 // Changes in the song file: none (--render reads a song, the pictures change only the copy in memory).
 #include "cli.h"
+#include "recent.h"
+#include <QDir>
 #include <QAction>
 #include "app.h"
 #include "mainwindow.h"
@@ -68,7 +70,13 @@ Options parseOptions(int argc, char** argv) {
 			o.kitName = QString::fromLocal8Bit(argv[++i]);
 		else if (a == "--arrange" && i + 1 < argc)
 			o.arrangeLen = QString::fromLocal8Bit(argv[++i]).toInt();
-		else if (a == "--dialog" && i + 1 < argc)
+		else if (a == "--part" && i + 1 < argc)
+			o.partIndex = QString::fromLocal8Bit(argv[++i]).toInt();
+		else if (a == "--journey" && i + 1 < argc) {
+			const QStringList mc = QString::fromLocal8Bit(argv[++i]).split(':');
+			o.journeyMin = mc[0].toInt();
+			if (mc.size() > 1) o.journeyChar = std::clamp(mc[1].toInt(), 0, 2);
+		} else if (a == "--dialog" && i + 1 < argc)
 			o.dialogName = QString::fromLocal8Bit(argv[++i]);
 		else if (a == "--loops")
 			o.loopsView = true;
@@ -82,6 +90,8 @@ Options parseOptions(int argc, char** argv) {
 			o.selftest = true;
 		else if (a == "--guitest")
 			o.guiTest = true;
+		else if (a == "--write-starters" && i + 1 < argc)
+			o.startersDir = QString::fromLocal8Bit(argv[++i]);
 		else if (a == "--parity" && i + 1 < argc)
 			o.parityDir = QString::fromLocal8Bit(argv[++i]);
 		else if (!a.startsWith("--"))
@@ -91,11 +101,12 @@ Options parseOptions(int argc, char** argv) {
 }
 
 bool Options::windowless() const {
-	return !renderPath.isEmpty() || !shotPath.isEmpty() || selftest || tipCheck || guiTest || !parityDir.isEmpty();
+	return !renderPath.isEmpty() || !shotPath.isEmpty() || selftest || tipCheck || guiTest || !parityDir.isEmpty() ||
+	       !startersDir.isEmpty();
 }
 
 bool Options::testRun() const {
-	return !shotPath.isEmpty() || selftest || tipCheck || guiTest || !parityDir.isEmpty();
+	return !shotPath.isEmpty() || selftest || tipCheck || guiTest || !parityDir.isEmpty() || !startersDir.isEmpty();
 }
 
 int renderSong(const Options& o) {
@@ -110,6 +121,10 @@ int renderSong(const Options& o) {
 	if (o.arrangeLen >= 0) {
 		std::mt19937 g(7);
 		arrangeSong(s, o.arrangeLen, true, g);
+	}
+	if (o.journeyMin > 0) {
+		std::mt19937 g(7);
+		continueJourney(s, (s.endTick() + BAR - 1) / BAR, o.journeyMin, o.journeyChar, true, g);
 	}
 	for (const DrumKit& k : drumKits())
 		if (k.name == o.kitName)
@@ -132,6 +147,19 @@ int pictureOfWelcome(const Options& o) {
 }
 
 void preparePicture(App& app, const Options& o) {
+	if (o.dialogName == QLatin1String("start")) { // for pictures: a few songs of one's own, one of them gone missing
+		const QString dir = QDir::temp().filePath(QStringLiteral("Nachtzug pictures/My songs"));
+		QDir().mkpath(dir);
+		recent::clear();
+		recent::add(QDir::temp().filePath(QStringLiteral("Nachtzug pictures/USB stick/Old idea.nachtzug")));
+		for (const char* name : {"Sunday sequence", "First acid try", "Night drive"}) {
+			const QString path = QDir(dir).filePath(QLatin1String(name) + QStringLiteral(".nachtzug"));
+			QFile f(path);
+			if (f.open(QIODevice::WriteOnly)) f.write(QJsonDocument(demoSong().toJson()).toJson());
+			f.close();
+			recent::add(path);
+		}
+	}
 	if (o.trackIndex >= 0 && o.trackIndex < int(app.song.tracks.size()))
 		app.selectTrack(app.song.tracks[size_t(o.trackIndex)].id);
 	if (o.linesView &&
@@ -171,7 +199,15 @@ void preparePicture(App& app, const Options& o) {
 		app.editClip = -1;
 		app.touch();
 		app.refreshSelection();
+		if (o.partIndex >= 0) app.selectPart(o.partIndex); // --part N: that named part selected
 	} // for test pictures
+	if (o.journeyMin > 0) {
+		std::mt19937 g(7);
+		continueJourney(app.song, (app.song.endTick() + BAR - 1) / BAR, o.journeyMin, o.journeyChar, true, g);
+		app.editClip = -1;
+		app.touch();
+		app.refreshSelection();
+	}
 	for (const DrumKit& k : drumKits())
 		if (k.name == o.kitName) {
 			for (Track& t : app.song.tracks)
@@ -196,7 +232,7 @@ void setUpWindow(App& app, MainWindow& w, const Options& o) {
 }
 
 void scheduleViews(MainWindow& w, const Options& o) {
-	if (o.arrangeLen >= 0)
+	if (o.arrangeLen >= 0 || o.journeyMin > 0)
 		QTimer::singleShot(400, &w, [&] {
 			if (auto* tl = w.findChild<Timeline*>()) tl->showWholeSong();
 		});
