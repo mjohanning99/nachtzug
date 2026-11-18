@@ -2167,14 +2167,17 @@ void Test::recentSongs() {
 	check(recent::list().size() == 1, "a missing song can be taken off the list");
 	{ // as on a Mac, where the temporary folder /var/… is a link to /private/var/…: saved through a link, then gone
 		QDir().mkpath(at(QStringLiteral("real")));
-		QFile::link(at(QStringLiteral("real")), at(QStringLiteral("linked")));
-		const QString viaLink = at(QStringLiteral("linked/Third.nachtzug"));
-		check(app.save(viaLink), "a song saves into a folder reached through a link");
-		const qsizetype before = recent::list().size();
-		QFile::remove(viaLink);
-		recent::remove(viaLink);
-		check(recent::list().size() == before - 1,
-		      "a missing song saved through a linked folder can still be taken off the list by that path");
+		// on Windows QFile::link makes a shortcut file, not a folder one can save into: there, nothing to check
+		if (QFile::link(at(QStringLiteral("real")), at(QStringLiteral("linked"))) &&
+		    QFileInfo(at(QStringLiteral("linked"))).isDir()) {
+			const QString viaLink = at(QStringLiteral("linked/Third.nachtzug"));
+			check(app.save(viaLink), "a song saves into a folder reached through a link");
+			const qsizetype before = recent::list().size();
+			QFile::remove(viaLink);
+			recent::remove(viaLink);
+			check(recent::list().size() == before - 1,
+			      "a missing song saved through a linked folder can still be taken off the list by that path");
+		}
 	}
 	recent::clear();
 	app.setSong(demoSong(), QString());

@@ -1,6 +1,6 @@
 # Changes
 
-## 0.4.0 (18 November 2026)
+## 0.4.1 (18 November 2026)
 
 - **Named parts on the timeline.** Arrange for me always made an intro, a build-up, a main part, a break and an ending, but didn’t show them; now they are named in a Parts row at the top of the timeline, and the display shows the part the song is in. Click a part to select its clips and go to its start (while the song plays, at the next bar line, so it stays in time); Loop then repeats exactly that part. Double-click a part to rename it, with names to choose from, drag its left edge to move it, or right-click the row to add a part to a song of your own. Songs from earlier versions open as before, with no parts.
 - **Repeat this part.** Right-click a part in the Parts row and choose Repeat this part (or press Copy with the part selected): a copy of the part, with its clips, chord changes and knob lines, goes straight after it, and everything after it moves right by its length instead of being covered. The copy is a part of its own, named like the original with a number (Break 2), and is selected. It is one step to undo, and while the song plays it lands on the next bar line.
